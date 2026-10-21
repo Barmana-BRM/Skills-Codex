@@ -1,0 +1,602 @@
+// CLI invocation tests — spawn bun to exercise argument parsing and commands
+
+import { describe, it, expect, setDefaultTimeout, afterAll } from "bun:test";
+import { spawnSync } from "child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
+import pkg from "../package.json";
+
+setDefaultTimeout(10_000);
+
+const CLI = "src/cli.ts";
+
+// Isolated HOME so commands that spawn a broker (e.g. `health`) never touch the
+// real ~/.codex-collab, plus a short broker idle timeout so any detached broker
+// self-exits in seconds instead of lingering for 30 min and orphaning across runs.
+const TEST_HOME = mkdtempSync(join(tmpdir(), "codex-collab-cli-home-"));
+
+afterAll(() => {
+  rmSync(TEST_HOME, { recursive: true, force: true });
+});
+
+function run(...args: string[]): { stdout: string; stderr: string; exitCode: number } {
+  const result = spawnSync("bun", ["run", CLI, ...args], {
+    encoding: "utf-8",
+    cwd: import.meta.dir + "/..",
+    stdio: ["pipe", "pipe", "pipe"],
+    timeout: 5000,
+    // No-update-check: run/review/health would otherwise do a live GitHub
+    // fetch (and stamp update-check state) on their first spawn per test HOME.
+    // Codex's and Claude Code's configs (`health` reads the folders each
+    // trusts) are the test HOME's, whatever the environment names.
+    env: { ...process.env, HOME: TEST_HOME, CODEX_HOME: join(TEST_HOME, ".codex"), CODEX_COLLAB_CLAUDE_CONFIG: join(TEST_HOME, ".claude.json"), CODEX_COLLAB_BROKER_IDLE_TIMEOUT_MS: "5000", CODEX_COLLAB_NO_UPDATE_CHECK: "1" },
+  });
+  return {
+    stdout: (result.stdout ?? "") as string,
+    stderr: (result.stderr ?? "") as string,
+    exitCode: result.status ?? 1,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Valid commands
+// ---------------------------------------------------------------------------
+
+describe("CLI version", () => {
+  const expected = `codex-collab ${pkg.version}`;
+
+  it("--version prints version and exits 0", () => {
+    const { stdout, exitCode } = run("--version");
+    expect(exitCode).toBe(0);
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("-v prints version and exits 0", () => {
+    const { stdout, exitCode } = run("-v");
+    expect(exitCode).toBe(0);
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("version command prints version and exits 0", () => {
+    const { stdout, exitCode } = run("version");
+    expect(exitCode).toBe(0);
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("-v after a command is an unknown option, not a silent version no-op", () => {
+    // Regression: `run "prompt" -v` used to print the version and exit 0
+    // without running anything — dangerous in scripts expecting the run.
+    const { stderr, exitCode } = run("run", "test prompt", "-v");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Unknown option: -v");
+  });
+});
+
+describe("CLI valid commands", () => {
+  it("--help prints usage and exits 0", () => {
+    const { stdout, exitCode } = run("--help");
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("codex-collab");
+    expect(stdout).toContain("Usage:");
+  });
+
+  it("send, peers, task and tasks --help print the page for working with Claude Code; other commands print the general help", () => {
+    for (const command of ["send", "peers", "task", "tasks"]) {
+      const { stdout, exitCode } = run(command, "--help");
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain("Claude Code sessions, from Codex");
+      // Which session a message reaches, the forms side by side.
+      expect(stdout).toContain("Which session send reaches");
+      expect(stdout).toContain("the user's\n                        own, if that is the one live");
+      expect(stdout).toContain('send --new "…"        A new session of codex-collab\'s own');
+      expect(stdout).toContain("--fresh is the same");
+      expect(stdout).toContain("5  a session codex-collab started stopped at a prompt nobody could answer,\n     or one the user could answer through Remote Control and had not for the\n     linger;");
+      expect(stdout).not.toContain("Usage: codex-collab <command>");
+      // Fits a narrow terminal.
+      for (const line of stdout.split("\n")) expect(line.length).toBeLessThanOrEqual(80);
+    }
+    const general = run("run", "--help");
+    expect(general.stdout).toContain("Usage: codex-collab <command>");
+    expect(general.stdout).toContain("'codex-collab send --help' covers");
+  });
+
+  it("no args prints help and exits 0", () => {
+    const { stdout, exitCode } = run();
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("Usage:");
+  });
+
+  it("health command runs without crashing", () => {
+    // May fail if codex not installed, but should not crash with unhandled exception.
+    // Exit code 143 = SIGTERM during app-server cleanup (our signal handler).
+    const { exitCode } = run("health");
+    expect([0, 1, 143]).toContain(exitCode);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Flag parsing
+// ---------------------------------------------------------------------------
+
+describe("CLI flag parsing", () => {
+  it("--all does not error", () => {
+    // Use 'health' instead of 'run' to avoid starting app server (hangs if codex installed)
+    const { stderr } = run("health", "--all");
+    expect(stderr).not.toContain("Unknown option");
+  });
+
+  it("--content-only does not error", () => {
+    // Use 'health' instead of 'run' to avoid starting app server (hangs if codex installed)
+    const { stderr } = run("health", "--content-only");
+    expect(stderr).not.toContain("Unknown option");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Invalid inputs
+// ---------------------------------------------------------------------------
+
+describe("CLI invalid inputs", () => {
+  it("unknown command exits 1", () => {
+    const { stderr, exitCode } = run("nonexistent");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Unknown command");
+  });
+
+  it("invalid reasoning level exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--reasoning", "invalid");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Invalid reasoning level");
+  });
+
+  it("invalid sandbox mode exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--sandbox", "invalid");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Invalid sandbox mode");
+  });
+
+  // review rejects flags that parse but cannot take effect (#22). The guard
+  // fires before any client connection, so these are hermetic. Even values
+  // matching the forced behavior are rejected: accepting `-s read-only`
+  // would teach that the flag does something.
+  it("review -s exits 1 explaining reviews are read-only", () => {
+    const { stderr, exitCode } = run("review", "-s", "read-only");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("review always runs read-only");
+  });
+
+  it("review --approval exits 1 explaining Codex forces never", () => {
+    const { stderr, exitCode } = run("review", "--approval", "auto");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain('locks review sub-agents to approval policy "never"');
+  });
+
+  it("review --resume rejects the same flags", () => {
+    const { stderr, exitCode } = run("review", "--resume", "abc123", "--approval", "never");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("--approval");
+  });
+
+  it("review rejects --goal and --budget (only run reads them)", () => {
+    const goal = run("review", "--goal", "ship it");
+    expect(goal.exitCode).toBe(1);
+    expect(goal.stderr).toContain("apply to run only");
+
+    const budget = run("review", "--budget", "1000");
+    expect(budget.exitCode).toBe(1);
+    expect(budget.stderr).toContain("apply to run only");
+  });
+
+  it("run without prompt exits with error message", () => {
+    const { stderr, exitCode } = run("run");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("No prompt provided");
+  });
+
+  it("unknown option exits 1", () => {
+    const { stderr, exitCode } = run("--bogus");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Unknown option");
+  });
+
+  it("--model without value exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--model");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("--model requires a value");
+  });
+
+  it("--model with shell metacharacters exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--model", "foo;rm -rf /");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Invalid model name");
+  });
+
+  it("--reasoning without value exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--reasoning");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("--reasoning requires a value");
+  });
+
+  it("--dir without value exits 1", () => {
+    const { stderr, exitCode } = run("run", "test", "--dir");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("--dir requires a value");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Global options placed before the command
+// ---------------------------------------------------------------------------
+
+describe("CLI global options before command", () => {
+  // Pre-scan regression: with a naive `break on first flag`, args like
+  // `codex-collab --dir /repo run "…"` were misread as a bare flag invocation
+  // and rejected with "Unknown option". The pre-scan now skips known value-
+  // flag/value pairs (and known boolean flags) when locating the command, so
+  // these legacy invocation forms still route to the right subcommand.
+
+  it("--dir <value> before health does not report Unknown option", () => {
+    // 'health' is the only command we can safely run without spawning an
+    // app-server; it exercises the routing path without side effects.
+    const { stderr } = run("--dir", import.meta.dir + "/..", "health");
+    expect(stderr).not.toContain("Unknown option");
+    expect(stderr).not.toContain("Unknown command");
+  });
+
+  it("--content-only (boolean) before health does not report Unknown option", () => {
+    const { stderr } = run("--content-only", "health");
+    expect(stderr).not.toContain("Unknown option");
+    expect(stderr).not.toContain("Unknown command");
+  });
+
+  it("bare known value-flag with no command falls through to help without unknown-option error", () => {
+    // `codex-collab --dir /tmp` (no subcommand) should not say "Unknown
+    // option: --dir" — --dir is known; the user just didn't supply a command.
+    const { stderr, stdout, exitCode } = run("--dir", "/tmp");
+    expect(stderr).not.toContain("Unknown option");
+    // Either help is printed (exit 0) or another command-missing path fires
+    // (exit 1) — both are acceptable; what's NOT acceptable is misclassifying
+    // --dir as unknown.
+    expect([0, 1]).toContain(exitCode);
+    if (exitCode === 0) expect(stdout).toContain("Usage:");
+  });
+
+  it("pre-command flags are forwarded to the command's parseOptions", () => {
+    // Without preserving pre-command args, `--reasoning invalid` would be
+    // silently discarded and the command would run with default reasoning.
+    // parseOptions rejects "invalid" with a specific error, so observing that
+    // error proves the flag actually made it through.
+    const { stderr, exitCode } = run("--reasoning", "invalid", "run", "prompt");
+    expect(exitCode).toBe(1);
+    expect(stderr).toContain("Invalid reasoning level");
+  });
+
+  it("--goal <objective> before the command is skipped by the pre-scan and forwarded", () => {
+    // If --goal were missing from VALUE_FLAGS, "  " would be taken as the
+    // command ("Unknown command"). parseOptions rejecting the blank objective
+    // proves the pair was both skipped by the pre-scan and forwarded intact.
+    const { stderr, exitCode } = run("--goal", "  ", "run", "prompt");
+    expect(exitCode).toBe(1);
+    expect(stderr).not.toContain("Unknown command");
+    expect(stderr).toContain("--goal objective is empty");
+  });
+
+  it("--budget <tokens> before the command is skipped by the pre-scan and forwarded", () => {
+    const { stderr, exitCode } = run("--budget", "0", "run", "prompt");
+    expect(exitCode).toBe(1);
+    expect(stderr).not.toContain("Unknown command");
+    expect(stderr).toContain("Invalid budget");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Pre-scan flag sets stay in sync with parseOptions
+// ---------------------------------------------------------------------------
+
+describe("CLI pre-scan flag sets", () => {
+  // VALUE_FLAGS/BOOLEAN_FLAGS in cli.ts must mirror the branches of
+  // parseOptions in commands/shared.ts, or pre-command invocations break for
+  // the drifted flag (a value flag's argument gets misread as the command).
+  // cli.ts runs main() on import, so compare the two at the source level:
+  // parseOptions branches are uniform enough that value-taking ones are
+  // exactly those calling hasFlagValue().
+
+  const cliSrc = readFileSync(join(import.meta.dir, "cli.ts"), "utf-8");
+  const sharedSrc = readFileSync(join(import.meta.dir, "commands", "shared.ts"), "utf-8");
+
+  function declaredSet(name: string): string[] {
+    const m = cliSrc.match(new RegExp(`const ${name} = new Set\\(\\[([\\s\\S]*?)\\]\\)`));
+    expect(m).not.toBeNull(); // cli.ts must declare the set
+    return [...m![1].matchAll(/"([^"]+)"/g)].map((f) => f[1]).sort();
+  }
+
+  function parseOptionsFlags(): { value: string[]; boolean: string[] } {
+    const start = sharedSrc.indexOf("export function parseOptions");
+    const end = sharedSrc.indexOf("\nexport function", start + 1);
+    expect(start).toBeGreaterThan(-1);
+    const body = sharedSrc.slice(start, end === -1 ? undefined : end);
+
+    const branchRe = /if \((arg === "[^"]+"(?:\s*\|\|\s*arg === "[^"]+")*)\)/g;
+    const branches = [...body.matchAll(branchRe)];
+    expect(branches.length).toBeGreaterThan(20); // parseOptions found and parsed
+
+    const value: string[] = [];
+    const boolean: string[] = [];
+    for (let i = 0; i < branches.length; i++) {
+      const flags = [...branches[i][1].matchAll(/"([^"]+)"/g)].map((f) => f[1]);
+      const bodyEnd = i + 1 < branches.length ? branches[i + 1].index : body.length;
+      const branchBody = body.slice(branches[i].index, bodyEnd);
+      const isValue = branchBody.includes("hasFlagValue(");
+      for (const flag of flags) {
+        // "--" (end of options) and -h/--help (handled by extractCommand's
+        // own early-exit path) are deliberately in neither pre-scan set.
+        if (flag === "--" || flag === "-h" || flag === "--help") continue;
+        (isValue ? value : boolean).push(flag);
+      }
+    }
+    return { value: value.sort(), boolean: boolean.sort() };
+  }
+
+  it("VALUE_FLAGS matches parseOptions' value-taking branches", () => {
+    expect(declaredSet("VALUE_FLAGS")).toEqual(parseOptionsFlags().value);
+  });
+
+  it("BOOLEAN_FLAGS matches parseOptions' boolean branches", () => {
+    expect(declaredSet("BOOLEAN_FLAGS")).toEqual(parseOptionsFlags().boolean);
+  });
+});
+
+describe("CLI questions <id>", () => {
+  it("prints the full multiline question without truncation", () => {
+    // Isolated TMPDIR so the mailbox scan can't touch (or pollute) the real
+    // workspace mailbox; findQuestion's cross-mailbox fallback locates the
+    // record whatever the workspace key resolves to.
+    const tmp = mkdtempSync(join(tmpdir(), "codex-collab-mb-"));
+    try {
+      const uid = typeof process.getuid === "function" ? String(process.getuid()) : "u";
+      const mailboxDir = join(tmp, `codex-collab-${uid}`, "ws-testkey", "questions");
+      mkdirSync(mailboxDir, { recursive: true });
+      const longQuestion = Array.from({ length: 10 }, (_, i) => `question line ${i + 1}`).join("\n");
+      writeFileSync(join(mailboxDir, "q1234abc.json"), JSON.stringify({
+        id: "q1234abc", question: longQuestion,
+        askedAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 600_000).toISOString(),
+        workspaceDir: tmp, pid: process.pid,
+      }), { mode: 0o600 });
+
+      const result = spawnSync("bun", ["run", CLI, "questions", "q1234abc"], {
+        encoding: "utf-8",
+        cwd: import.meta.dir + "/..",
+        stdio: ["pipe", "pipe", "pipe"],
+        timeout: 5000,
+        // TMPDIR steers os.tmpdir() on POSIX; TEMP/TMP do the same on Windows.
+        env: { ...process.env, HOME: TEST_HOME, TMPDIR: tmp, TEMP: tmp, TMP: tmp },
+      });
+      const stdout = (result.stdout ?? "") as string;
+      expect(result.status).toBe(0);
+      // The live prompt clips at 6 lines and the list view at 100 chars —
+      // this path is the escape hatch, so every line must be present.
+      expect(stdout).toContain("Question q1234abc");
+      expect(stdout).toContain("question line 1");
+      expect(stdout).toContain("question line 10");
+      expect(stdout).toContain('Answer with: codex-collab answer q1234abc');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it("unknown id exits nonzero with a pointer to the list", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "codex-collab-mb-"));
+    try {
+      const result = spawnSync("bun", ["run", CLI, "questions", "qdead999"], {
+        encoding: "utf-8",
+        cwd: import.meta.dir + "/..",
+        stdio: ["pipe", "pipe", "pipe"],
+        timeout: 5000,
+        // TMPDIR steers os.tmpdir() on POSIX; TEMP/TMP do the same on Windows.
+        env: { ...process.env, HOME: TEST_HOME, TMPDIR: tmp, TEMP: tmp, TMP: tmp },
+      });
+      expect(result.status).toBe(1);
+      expect((result.stderr ?? "") as string).toContain("No pending question");
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// skill render --codex
+// ---------------------------------------------------------------------------
+
+describe("CLI skill render --codex", () => {
+  it("prints the Codex-side skill, distinct from Claude's", () => {
+    const codex = run("skill", "render", "--codex");
+    expect(codex.exitCode).toBe(0);
+    expect(codex.stdout).toContain("name: claude-collab");
+    expect(codex.stdout).toContain("codex-collab send");
+    expect(codex.stdout).not.toContain("<!-- TEMPLATES -->");
+    const claude = run("skill", "render");
+    expect(claude.stdout).not.toBe(codex.stdout);
+    // Common to both render modes (the peer-only block is absent without a
+    // capable claude on PATH, and always on Windows).
+    expect(claude.stdout).toContain("name: codex-collab");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// skill sync and the opt-in Codex rule
+// ---------------------------------------------------------------------------
+
+describe.skipIf(process.platform === "win32")("CLI skill sync and config codex-rule", () => {
+  const dirs = mkdtempSync(join(tmpdir(), "codex-collab-sync-"));
+  const home = join(dirs, "home");
+  const claudeDir = join(dirs, "claude-skill");
+  const codexDir = join(dirs, "codex-skill");
+  const rulesPath = join(dirs, "codex-rules", "codex-collab.rules");
+  afterAll(() => rmSync(dirs, { recursive: true, force: true }));
+
+  function cliIn(env: { home: string; rules: string }, ...args: string[]): { stdout: string; stderr: string; exitCode: number } {
+    const result = spawnSync("bun", ["run", CLI, ...args], {
+      encoding: "utf-8",
+      cwd: import.meta.dir + "/..",
+      stdio: ["pipe", "pipe", "pipe"],
+      timeout: 10_000,
+      env: {
+        ...process.env,
+        HOME: env.home,
+        CODEX_COLLAB_NO_UPDATE_CHECK: "1",
+        CODEX_COLLAB_SKILL_DIR: claudeDir,
+        CODEX_COLLAB_CODEX_SKILL_DIR: codexDir,
+        CODEX_COLLAB_CODEX_RULES_PATH: env.rules,
+      },
+    });
+    return { stdout: (result.stdout ?? "") as string, stderr: (result.stderr ?? "") as string, exitCode: result.status ?? 1 };
+  }
+  const cli = (...args: string[]) => cliIn({ home, rules: rulesPath }, ...args);
+
+  it("sync creates a missing Codex skill only with consent, and never writes the rule unasked", () => {
+    mkdirSync(claudeDir, { recursive: true });
+    writeFileSync(join(claudeDir, "SKILL.md"), cli("skill", "render").stdout);
+    const dry = cli("skill", "sync");
+    expect(dry.exitCode).toBe(1);
+    expect(dry.stdout).toContain(`Codex SKILL.md is not installed — it will be created at ${join(codexDir, "SKILL.md")}`);
+    expect(dry.stderr).toContain("Not applied");
+    expect(existsSync(join(codexDir, "SKILL.md"))).toBe(false);
+    const applied = cli("skill", "sync", "--yes");
+    expect(applied.exitCode).toBe(0);
+    expect(readFileSync(join(codexDir, "SKILL.md"), "utf-8")).toBe(cli("skill", "render", "--codex").stdout);
+    const again = cli("skill", "sync");
+    expect(again.exitCode).toBe(0);
+    expect(again.stdout).toContain("already up to date");
+    expect(existsSync(rulesPath)).toBe(false);
+  });
+
+  it("models --claude lists what a started session can run on, and config spawn-model / spawn-effort set its default", () => {
+    // Needs no app-server: a Codex session runs it inside its sandbox.
+    const listed = cli("models", "--claude");
+    expect(listed.exitCode).toBe(0);
+    for (const alias of ["fable", "opus", "sonnet"]) expect(listed.stdout).toMatch(new RegExp(`^  ${alias} +\\S`, "m"));
+    // A model the list leaves out is still a model `--model` takes.
+    expect(listed.stdout).not.toContain("haiku");
+    expect(listed.stdout).toContain("Effort, lowest first: low, medium, high, xhigh, max");
+    expect(listed.stdout).toContain("On a model without xhigh or max (claude-opus-4-6, for one), Claude Code runs those at high.");
+    expect(listed.stdout).toContain("With nothing chosen, a started session runs on: the user's Claude Code default model, high effort");
+
+    expect(cli("config", "spawn-model", "sonnet").exitCode).toBe(0);
+    expect(cli("config", "spawn-effort", "medium").exitCode).toBe(0);
+    expect(cli("models", "--claude").stdout).toContain("With nothing chosen, a started session runs on: sonnet, medium effort");
+    // `auto` leaves the effort to the user's Claude Code settings.
+    expect(cli("config", "spawn-effort", "auto").exitCode).toBe(0);
+    expect(cli("models", "--claude").stdout).toContain("With nothing chosen, a started session runs on: sonnet, the user's Claude Code default effort");
+    // A full model name is as good as an alias; an effort must be Claude's.
+    expect(cli("config", "spawn-model", "claude-opus-5[1m]").exitCode).toBe(0);
+    const badEffort = cli("config", "spawn-effort", "ultra");
+    expect(badEffort.exitCode).toBe(1);
+    expect(badEffort.stderr).toContain("low, medium, high, xhigh, max, or auto");
+    expect(cli("config", "spawn-model", "rm -rf /").exitCode).toBe(1);
+    // Specific versions are the user's to offer; the aliases name none.
+    expect(listed.stdout).not.toContain("Specific versions the user also offers");
+    expect(cli("config", "spawn-models", "claude-opus-4-6, claude-sonnet-4-6").exitCode).toBe(0);
+    expect(cli("models", "--claude").stdout).toMatch(/Specific versions the user also offers:\n  claude-opus-4-6\n  claude-sonnet-4-6\n/);
+    expect(cli("config", "spawn-models", "claude-opus-4-6,rm -rf /").exitCode).toBe(1);
+    expect(cli("config", "spawn-models", "--unset").exitCode).toBe(0);
+    // How long a stopped session stays resumable: seconds, or off.
+    expect(cli("config", "spawn-resume", "3600").exitCode).toBe(0);
+    expect(cli("config", "spawn-resume", "off").exitCode).toBe(0);
+    for (const bad of ["soon", "0", "-5", "1.5"]) expect(cli("config", "spawn-resume", bad).exitCode).toBe(1);
+    expect(cli("config", "spawn-resume", "--unset").exitCode).toBe(0);
+    // Unset: back to the user's Claude Code default model, at high effort.
+    expect(cli("config", "spawn-model", "--unset").exitCode).toBe(0);
+    expect(cli("config", "spawn-effort", "--unset").exitCode).toBe(0);
+    expect(cli("models", "--claude").stdout).toContain("the user's Claude Code default model, high effort");
+  });
+
+  it("config codex-rule on writes the rule, sync keeps it current, off removes it", () => {
+    const on = cli("config", "codex-rule", "on");
+    expect(on.exitCode).toBe(0);
+    expect(on.stdout).toContain(`Wrote ${rulesPath}`);
+    expect(readFileSync(rulesPath, "utf-8")).toBe(cli("skill", "render", "--rules").stdout);
+    writeFileSync(rulesPath, "stale\n");
+    expect(cli("skill", "sync").stdout).toContain(`Codex rule at ${rulesPath}`);
+    expect(cli("skill", "sync", "--yes").exitCode).toBe(0);
+    expect(readFileSync(rulesPath, "utf-8")).toBe(cli("skill", "render", "--rules").stdout);
+    const off = cli("config", "codex-rule", "off");
+    expect(off.exitCode).toBe(0);
+    expect(off.stdout).toContain(`Removed ${rulesPath}`);
+    expect(existsSync(rulesPath)).toBe(false);
+    expect(cli("skill", "sync").stdout).toContain("already up to date");
+    // --unset removes it too.
+    cli("config", "codex-rule", "on");
+    expect(existsSync(rulesPath)).toBe(true);
+    expect(cli("config", "codex-rule", "--unset").exitCode).toBe(0);
+    expect(existsSync(rulesPath)).toBe(false);
+  });
+
+  it("a rule the config cannot record is undone, and one it cannot forget is put back", () => {
+    // ~/.codex-collab is a file here, so the config can never be saved.
+    const stuck = join(dirs, "home-unsaveable");
+    mkdirSync(stuck, { recursive: true });
+    writeFileSync(join(stuck, ".codex-collab"), "not a directory\n");
+    const rules = join(dirs, "codex-rules-unsaveable", "codex-collab.rules");
+    const on = cliIn({ home: stuck, rules }, "config", "codex-rule", "on");
+    expect(on.exitCode).toBe(1);
+    expect(on.stderr).toContain("Could not save config");
+    expect(on.stderr).toContain("the rule was removed again");
+    expect(existsSync(rules)).toBe(false);
+    // The reverse: a rule in place that `off` removed is restored when the
+    // setting cannot be saved, so Codex keeps the behaviour the config claims.
+    mkdirSync(join(dirs, "codex-rules-unsaveable"), { recursive: true });
+    writeFileSync(rules, cli("skill", "render", "--rules").stdout);
+    const off = cliIn({ home: stuck, rules }, "config", "codex-rule", "off");
+    expect(off.exitCode).toBe(1);
+    expect(off.stderr).toContain("the rule was put back");
+    expect(existsSync(rules)).toBe(true);
+  });
+
+  it("--codex and --rules are refused on sync", () => {
+    const r = cli("skill", "sync", "--rules");
+    expect(r.exitCode).toBe(1);
+    expect(r.stderr).toContain("apply to `skill render`");
+  });
+});
+
+describe("health: the Codex-side lines", () => {
+  it("describeCodexSkill: installed and current, stale, or missing", async () => {
+    const { describeCodexSkill } = await import("./commands/config");
+    const dir = join("/h", ".codex", "skills", "claude-collab");
+    const file = join(dir, "SKILL.md"); // platform separators, as the line prints them
+    expect(describeCodexSkill(true, dir)).toBe(`${file} (up to date)`);
+    expect(describeCodexSkill(false, dir)).toContain("out of date — run 'codex-collab skill sync'");
+    expect(describeCodexSkill(null, dir)).toContain(`not installed — 'codex-collab skill sync' installs it at ${file}`);
+  });
+
+  it("describeCodexRule: off says Codex asks; on reports the file's state", async () => {
+    const { describeCodexRule } = await import("./commands/config");
+    const path = "/h/.codex/rules/codex-collab.rules";
+    expect(describeCodexRule(false, null, path)).toContain("off — Codex asks before each `codex-collab send` and `peers stop`");
+    expect(describeCodexRule(false, true, path)).toContain("codex-collab config codex-rule on");
+    // Everything the rule lets Codex do without asking is named: the user
+    // consents to what is said here.
+    expect(describeCodexRule(true, true, path)).toBe("on (/h/.codex/rules/codex-collab.rules) — Codex runs `codex-collab send` and `peers stop` without asking");
+    expect(describeCodexRule(true, false, path)).toContain("out of date — run 'codex-collab skill sync'");
+    expect(describeCodexRule(true, null, path)).toContain("is missing — run 'codex-collab skill sync'");
+  });
+
+  it("describeClaudeTrust: whether send can start a session here, and what spawn-trust makes of Codex's trust", async () => {
+    const { describeClaudeTrust } = await import("./commands/config");
+    const ws = "/w/proj";
+    expect(describeClaudeTrust(ws, true, undefined, undefined)).toBe("/w/proj is trusted in Claude Code");
+    expect(describeClaudeTrust(ws, undefined, "trusted", "codex")).toContain("could not be read");
+    // Not trusted: what it takes, and how Codex's trust stands.
+    const refused = "/w/proj is not trusted in Claude Code, so `send` cannot start a session here until it is ('claude' run there once, with its trust prompt accepted)";
+    expect(describeClaudeTrust(ws, false, undefined, "codex")).toBe(`${refused}; Codex has not trusted it either`);
+    expect(describeClaudeTrust(ws, false, "untrusted", undefined)).toBe(`${refused}; Codex has it as untrusted`);
+    expect(describeClaudeTrust(ws, false, "trusted", undefined)).toBe(`${refused}. Codex trusts it: 'codex-collab config spawn-trust codex' has \`send\` carry that over`);
+    expect(describeClaudeTrust(ws, false, "trusted", "codex")).toBe("/w/proj is not trusted in Claude Code yet; Codex trusts it, so `send` marks it trusted when it starts a session here (spawn-trust codex)");
+    // The home directory, or a folder above it, is never carried over to.
+    for (const setting of ["codex", undefined]) {
+      expect(describeClaudeTrust(ws, false, "trusted", setting, true)).toBe(`${refused}; Codex trusts it, but codex-collab carries no trust over to the home directory or a folder above it`);
+    }
+  });
+});

@@ -1,0 +1,284 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T14:22:03.977Z",
+    "slug": "eis-its-global-conventions",
+    "source_url": "https://github.com/EIS-ITS/vss-cli/tree/main/.claude/skills/global-conventions",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2dbdf3268b134db44dd5df76d2963429a1d0d41dfeb6471758d527e1cac37334",
+    "tree_hash": "150303f21ff7052915d594c885f009c63d46c7fcd0887717fb08b9b972be0a63",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "global-conventions",
+    "description": "Guides teams in applying project-wide conventions for repository structure, Git workflows, documentation, environment configuration, dependencies, feature flags, releases, and code review.",
+    "summary": "Apply consistent repository, workflow, documentation, and configuration conventions across a project.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "EIS-ITS",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "project-conventions",
+      "git-workflow",
+      "documentation",
+      "configuration",
+      "code-review"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The audit confirms one filesystem-boundary risk: SKILL.md line 29 points to a parent-directory documentation file outside the scanned skill package. The .env reference on line 16 is a safe contextual use case, not an instruction to read or expose secrets. No prompt injection or additional semantic issue was found in the reviewed file.",
+    "remediation": [
+      {
+        "issue": "Parent-directory documentation link",
+        "suggestion": "Package the referenced conventions inside the skill directory, or replace the ../../../ link with reviewed inline guidance.",
+        "severity": "high"
+      },
+      {
+        "issue": "Broad secret-handling context",
+        "suggestion": "Add explicit guidance to document secret names and handling rules without reading, copying, or exposing secret values.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:SKILL.md:29:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "[global conventions](../../../agent-os/standards/global/conventions.md)"
+      },
+      {
+        "id": "sensitive:SKILL.md:16:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "- When working with .env files, config files, or secrets management"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:SKILL.md:29:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "SKILL.md line 29 directs the agent to a ../../../ parent-directory file outside the scanned skill package. That can bypass marketplace review of referenced instructions and may cause filesystem access outside the installed skill boundary.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:SKILL.md:16:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "SKILL.md line 16 lists .env files, config files, or secrets management as a context for applying conventions. It does not instruct the agent to read, reveal, transmit, or modify secrets."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Path traversal sequence",
+        "description": "[global conventions](../../../agent-os/standards/global/conventions.md)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "SKILL.md line 29 directs the agent to a ../../../ parent-directory file outside the scanned skill package. That can bypass marketplace review of referenced instructions and may cause filesystem access outside the installed skill boundary."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 30,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T14:22:03.977Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Standardize Project Conventions",
+    "value_statement": "Project teams often lose consistency across branches, documentation, configuration, and reviews. This skill gives Claude, Codex, and Claude Code shared guidance for development conventions.",
+    "seo_keywords": [
+      "Claude project conventions",
+      "Codex workflow standards",
+      "Claude Code repository guidance",
+      "Git branch conventions",
+      "commit message standards",
+      "README documentation",
+      "environment configuration",
+      "dependency management",
+      "code review process",
+      "release notes workflow"
+    ],
+    "actual_capabilities": [
+      "Guides project file and directory organization.",
+      "Supports commit messages, pull requests, and branch workflow consistency.",
+      "Helps maintain README, contribution, changelog, and release documentation.",
+      "Advises on environment variables, settings files, secrets management, and feature flags.",
+      "Supports dependency file updates and testing requirements before merges."
+    ],
+    "limitations": [
+      "Provides conventions only; it does not include executable automation or validation scripts.",
+      "Depends on a referenced conventions document outside the skill file.",
+      "Does not define language-specific coding standards beyond project organization topics.",
+      "Does not replace team approval for secret handling or release decisions."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare a New Repository",
+        "description": "Set up directory structure, README content, dependency files, and review expectations before the first merge.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Keep Team Workflow Consistent",
+        "description": "Apply shared rules for branches, commit messages, pull requests, tests, and changelog updates.",
+        "target_user": "Developer"
+      },
+      {
+        "title": "Document Configuration Practices",
+        "description": "Create guidance for environment variables, feature flags, and settings files without exposing secret values.",
+        "target_user": "DevOps engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Organize Project Files",
+        "scenario": "Beginner repository setup",
+        "prompt": "Review this repository structure and suggest changes that match the global-conventions skill. Focus on directories, README coverage, and dependency files."
+      },
+      {
+        "title": "Standardize Git Workflow",
+        "scenario": "Intermediate team workflow",
+        "prompt": "Help me write branch, commit, pull request, testing, and changelog conventions for this project."
+      },
+      {
+        "title": "Plan Configuration Governance",
+        "scenario": "Advanced configuration policy",
+        "prompt": "Create a convention plan for environment variables, settings files, feature flags, and secrets handling. Include review checkpoints and documentation owners."
+      },
+      {
+        "title": "Audit Release Readiness",
+        "scenario": "Advanced pre-release review",
+        "prompt": "Assess whether this project follows global conventions before release. Review documentation, dependencies, tests, branching rules, and release notes. List gaps by priority."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review our repository organization before onboarding new developers.",
+        "output": [
+          "Recommended a clearer folder layout for source, tests, documentation, and configuration.",
+          "Identified missing README sections for setup, contribution steps, and dependency updates."
+        ]
+      },
+      {
+        "input": "Create pull request conventions for a small service team.",
+        "output": [
+          "A concise workflow covering branch names, commit messages, review expectations, test evidence, and changelog updates.",
+          "A checklist that reviewers can apply before merge approval."
+        ]
+      },
+      {
+        "input": "Document configuration and secret handling rules.",
+        "output": [
+          "Guidance separates public settings from sensitive values.",
+          "Secret names, ownership, and rotation expectations are documented without exposing actual secret values."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Keep conventions near the workflows they govern and review them with code changes.",
+      "Treat secrets as sensitive values; document names and purpose without copying values.",
+      "Update README, changelog, and dependency notes in the same change when behavior shifts."
+    ],
+    "anti_patterns": [
+      "Linking to unreviewed parent-directory files instead of packaging required guidance.",
+      "Mixing team workflow policy with private secret values or local-only settings.",
+      "Letting branch, commit, and review rules drift across repositories."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help with?",
+        "answer": "It helps teams apply consistent conventions for repository structure, Git workflow, documentation, configuration, dependencies, and reviews."
+      },
+      {
+        "question": "Does it run commands?",
+        "answer": "No. The visible skill provides written guidance, not scripts or automation."
+      },
+      {
+        "question": "Can it manage secrets?",
+        "answer": "It can help document safe handling practices, but it should not reveal or copy secret values."
+      },
+      {
+        "question": "Which tools are supported?",
+        "answer": "It declares support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Does it include all referenced guidance?",
+        "answer": "No. It points to a parent-directory conventions file, so package completeness should be checked."
+      },
+      {
+        "question": "Is it language-specific?",
+        "answer": "No. It covers repository and team workflow conventions rather than a specific programming language."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 30
+    }
+  ]
+}

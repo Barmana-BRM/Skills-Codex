@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-amazon-aba-research",
+      "title": "Amazon ABA 搜索词分析",
+      "description": "Amazon ABA 搜索词分析。用于对齐完整周或完整月，分析搜索频率排名与点击和转化份额变化。输入需明确站点、报告周期、关键词或 ASIN、筛选条件；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "ss",
+      "route": "卖家精灵直连",
+      "capabilities": [
+        {
+          "provider": "sellersprite_open",
+          "tool": "aba_research_weekly",
+          "validation": "local_interface"
+        },
+        {
+          "provider": "sellersprite_open",
+          "tool": "aba_research_monthly",
+          "validation": "local_interface"
+        },
+        {
+          "provider": "sellersprite_open",
+          "tool": "aba_research_trends",
+          "validation": "local_interface"
+        }
+      ],
+      "limitation": "排名数值下降才是排名提升；转化份额不是 CVR；不同周期不能直接相加；来源覆盖年限以实际数据为准",
+      "legacy_path": "sealeap-athena-amazon-aba-research",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-aba-research/workflow.md",
+      "playbook_path": "references/capabilities/amazon-aba-research/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-aba-research/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-traffic-keywords",
+      "title": "Amazon 流量词拆解",
+      "description": "Amazon 流量词拆解。用于反查流量关键词并区分自然和广告代理信号，按相关性整理词群。输入需明确站点、ASIN、时间窗、父子体范围；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "ss",
+      "route": "卖家精灵直连",
+      "capabilities": [
+        {
+          "provider": "sellersprite_open",
+          "tool": "traffic_keyword",
+          "validation": "local_interface"
+        },
+        {
+          "provider": "sellersprite_open",
+          "tool": "traffic_source",
+          "validation": "local_interface"
+        }
+      ],
+      "limitation": "工具流量估计不等于后台点击；不能把建议竞价当实际 CPC",
+      "legacy_path": "sealeap-athena-amazon-traffic-keywords",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-traffic-keywords/workflow.md",
+      "playbook_path": "references/capabilities/amazon-traffic-keywords/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-traffic-keywords/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-keyword-competition",
+      "title": "Amazon 关键词竞争度",
+      "description": "Amazon 关键词竞争度。用于对齐搜索需求与结果样本，比较相关竞品密度和竞争格局。输入需明确站点、关键词、同一周期的需求与供给数据；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_detail",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "keyword_search_results",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "limitation": "月供需比不能使用周搜索量分母；结果数量不完整时不输出伪精确供需比",
+      "legacy_path": "sealeap-athena-amazon-keyword-competition",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-keyword-competition/workflow.md",
+      "playbook_path": "references/capabilities/amazon-keyword-competition/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-keyword-competition/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-reverse-keyword-check",
+      "title": "Amazon 反查词交叉核验",
+      "description": "Amazon 反查词交叉核验。用于反查搜索曝光词并与同窗已有词表比对，解释来源差异。输入需明确站点、ASIN、期间、已有词表；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "product_traffic_terms",
+          "validation": "tool_schema",
+          "required_fields": [
+            "asin"
+          ]
+        }
+      ],
+      "limitation": "各源覆盖范围不同；未出现不等于没有排名",
+      "legacy_path": "sealeap-athena-amazon-reverse-keyword-check",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-reverse-keyword-check/workflow.md",
+      "playbook_path": "references/capabilities/amazon-reverse-keyword-check/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-reverse-keyword-check/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-keyword-expansion",
+      "title": "Amazon 长尾关键词拓展",
+      "description": "Amazon 长尾关键词拓展。用于拓展关键词后按需求、相关性和使用场景分组。输入需明确站点、种子词、用途、排除词和期间；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_extends",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "keyword_detail",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "limitation": "词的翻译相关不代表搜索意图相同；建议竞价不是实际 CPC",
+      "legacy_path": "sealeap-athena-amazon-keyword-expansion",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-keyword-expansion/workflow.md",
+      "playbook_path": "references/capabilities/amazon-keyword-expansion/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-keyword-expansion/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-keyword-history",
+      "title": "Amazon 搜索需求历史",
+      "description": "Amazon 搜索需求历史。用于核对历史需求和排名趋势，标注旺淡季与数据缺口。输入需明确站点、关键词、时间窗、频率；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_trend",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "keyword_detail",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "limitation": "搜索排名与搜索次数不同；混合周月频率先对齐",
+      "legacy_path": "sealeap-athena-amazon-keyword-history",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-keyword-history/workflow.md",
+      "playbook_path": "references/capabilities/amazon-keyword-history/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-keyword-history/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-brand-search-visibility",
+      "title": "Amazon 品牌搜索可见度",
+      "description": "Amazon 品牌搜索可见度。用于在固定 SERP 样本内统计各品牌出现占比，核对品牌归属。输入需明确站点、关键词、样本页数、时间和品牌归属；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_search_results",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "limitation": "样本出现占比不是点击声量份额；无 SoV 数据源时明确能力差异",
+      "legacy_path": "sealeap-athena-amazon-brand-search-visibility",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-brand-search-visibility/workflow.md",
+      "playbook_path": "references/capabilities/amazon-brand-search-visibility/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-brand-search-visibility/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-keyword-demand-insight",
+      "title": "Amazon 关键词需求洞察",
+      "description": "Amazon 关键词需求洞察。用于把需求趋势、相关商品和竞争样本合并为可检验机会假设。输入需明确站点、关键词、期间、需求假设；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_detail",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "keyword_trend",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "keyword_search_results",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        }
+      ],
+      "limitation": "缺转化数据时不直接称为高转化词；热度与盈利分开",
+      "legacy_path": "sealeap-athena-amazon-keyword-demand-insight",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-keyword-demand-insight/workflow.md",
+      "playbook_path": "references/capabilities/amazon-keyword-demand-insight/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-keyword-demand-insight/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-asin-keywords",
+      "title": "ASIN 搜索词反查",
+      "description": "ASIN 搜索词反查。用于通过已授权 SIF 直连反查关键词，再核对自然和广告位置与商品相关性。输入需明确站点、ASIN、期间和关键词筛选；边界见执行手册。",
+      "category": "ASIN",
+      "mode": "sif",
+      "route": "SIF 直连",
+      "capabilities": [
+        {
+          "provider": "sif",
+          "tool": "asin_keyword_list",
+          "validation": "local_interface"
+        }
+      ],
+      "limitation": "必须读取原始响应成功状态；登录过期不能当空结果；不能用词表推算真实订单",
+      "legacy_path": "sealeap-athena-amazon-asin-keywords",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-asin-keywords/workflow.md",
+      "playbook_path": "references/capabilities/amazon-asin-keywords/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-asin-keywords/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-serp-footprint",
+      "title": "ASIN 搜索曝光概览",
+      "description": "ASIN 搜索曝光概览。用于读取搜索页面占位与曝光代理分布，解释自然和广告的差异。输入需明确站点、ASIN、日期、父子变体范围；边界见执行手册。",
+      "category": "ASIN",
+      "mode": "sif",
+      "route": "SIF 直连",
+      "capabilities": [
+        {
+          "provider": "sif",
+          "tool": "listing_asin_summary",
+          "validation": "local_interface"
+        }
+      ],
+      "limitation": "搜索卡位统计不是商品销量快览；不同曝光评分不能当绝对流量相加",
+      "legacy_path": "sealeap-athena-amazon-serp-footprint",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-serp-footprint/workflow.md",
+      "playbook_path": "references/capabilities/amazon-serp-footprint/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-serp-footprint/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-keyword-traffic-mix",
+      "title": "关键词下竞品流量结构",
+      "description": "关键词下竞品流量结构。用于先取得关键词结果，再关联竞品曝光数据并分自然与已验证广告位。输入需明确站点、关键词、目标 ASIN、期间、所需广告位；边界见执行手册。",
+      "category": "关键词下竞品流量结构",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "keyword_search_results",
+          "validation": "tool_schema",
+          "required_fields": [
+            "keyword"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "product_traffic_terms",
+          "validation": "tool_schema",
+          "required_fields": [
+            "asin"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "competitor_product_keywords",
+          "validation": "tool_schema",
+          "required_fields": [
+            "asin"
+          ]
+        }
+      ],
+      "limitation": "当前替代工具的自然曝光不能补出 SP/SB/SBV 推荐位；商品级评分不冒充关键词级评分",
+      "legacy_path": "sealeap-athena-amazon-keyword-traffic-mix",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-keyword-traffic-mix/workflow.md",
+      "playbook_path": "references/capabilities/amazon-keyword-traffic-mix/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-keyword-traffic-mix/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-shopping-answer-audit",
+      "title": "Amazon 对话购物结果核验",
+      "description": "Amazon 对话购物结果核验。用于将购物需求拆为条件，观察实际可访问的问答结果并回查商品事实。输入需明确购物问题、市场、目标人群、可观察结果；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "web",
+      "route": "公开网页或授权接口",
+      "capabilities": [
+        {
+          "provider": "public-primary-sources",
+          "tool": "web",
+          "validation": "runtime_discovery"
+        }
+      ],
+      "limitation": "普通网页搜索不能伪装专属购物助手响应；不可访问则交付测试清单",
+      "legacy_path": "sealeap-athena-amazon-shopping-answer-audit",
+      "entrypoint": "sealeap-athena-amazon-keyword-traffic",
+      "guide_path": "references/capabilities/amazon-shopping-answer-audit/workflow.md",
+      "playbook_path": "references/capabilities/amazon-shopping-answer-audit/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-shopping-answer-audit/tool-routing.md"
+    }
+  ]
+}

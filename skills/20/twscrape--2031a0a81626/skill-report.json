@@ -1,0 +1,512 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-18T09:24:44.475Z",
+    "slug": "2025emma-twscrape",
+    "source_url": "https://github.com/2025Emma/vibe-coding-cn/tree/main/i18n/zh/skills/twscrape",
+    "source_ref": "main",
+    "model": "claude",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2031a0a81626329b9a5279b88bdad635686bc3281b30789ec9079a41ba36559d",
+    "tree_hash": "c37bf8dba2926e6bdc85d18475cf5bca7a782a9add8ba50ebfb09aa0fe84ebaf",
+    "provenance": {
+      "model_effective": "claude",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "failed",
+          "error": "2026-07-18T09:24:44.625333Z ERROR codex_models_manager::manager: failed to refresh available models: Missing environment variable: `HELM_API_KEY`.\n2026-07-18T09:24:44.646672Z ERROR codex_models_manage…"
+        },
+        {
+          "agent": "claude",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "twscrape",
+    "description": "Guide for using twscrape to collect public Twitter/X data through its GraphQL interface, asynchronous queries, and account session management.",
+    "summary": "Collect public Twitter/X data with twscrape queries, account sessions, and asynchronous workflows.",
+    "icon": "📦",
+    "author": "2025Emma",
+    "license": "MIT",
+    "tags": [
+      "twitter-x",
+      "social-media-data",
+      "graphql",
+      "python",
+      "async-scraping"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem"
+    ],
+    "category": "data"
+  },
+  "security_audit": {
+    "risk_level": "low",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static detections are benign documentation examples for local proxies, local files, SQLite paths, and public installation URLs. Manual review found no prompt injection or hidden payload, but the skill promotes account rotation to bypass platform limits and demonstrates direct handling of account credentials and session cookies.",
+    "remediation": [
+      {
+        "issue": "The skill describes account rotation as a way to bypass Twitter/X API limitations.",
+        "suggestion": "Reframe this feature for authorized accounts and compliant rate-limit handling. Add a clear requirement to follow Twitter/X terms and obtain permission for collection.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Examples place passwords and session cookies directly in Python strings.",
+        "suggestion": "Use environment variables or a secrets manager in examples, redact values in logs, and document restrictive permissions for the local accounts database.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 247,
+            "line_end": 247
+          },
+          {
+            "file": "references/examples.md",
+            "line_start": 255,
+            "line_end": 255
+          },
+          {
+            "file": "references/examples.md",
+            "line_start": 255,
+            "line_end": 255
+          },
+          {
+            "file": "references/installation.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 161,
+            "line_end": 161
+          },
+          {
+            "file": "references/examples.md",
+            "line_start": 320,
+            "line_end": 320
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:references/examples.md:247:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/examples.md",
+        "line_start": 247,
+        "line_end": 247,
+        "snippet": "proxy = \"http://user:pass@proxy.example.com:8080\""
+      },
+      {
+        "id": "network:references/examples.md:255:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/examples.md",
+        "line_start": 255,
+        "line_end": 255,
+        "snippet": "api.proxy = \"socks5://user:pass@127.0.0.1:1080\""
+      },
+      {
+        "id": "network:references/examples.md:255:socks-proxy",
+        "category": "network",
+        "severity": "high",
+        "pattern": "SOCKS proxy",
+        "file": "references/examples.md",
+        "line_start": 255,
+        "line_end": 255,
+        "snippet": "api.proxy = \"socks5://user:pass@127.0.0.1:1080\""
+      },
+      {
+        "id": "filesystem:references/examples.md:161:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/examples.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "with open(output_file, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "filesystem:references/examples.md:320:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/examples.md",
+        "line_start": 320,
+        "line_end": 320,
+        "snippet": "with open('results.json', 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "sensitive:references/examples.md:296:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/examples.md",
+        "line_start": 296,
+        "line_end": 296,
+        "snippet": "api = API(\"my_data.db\")"
+      },
+      {
+        "id": "blocker:references/examples.md:201:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/examples.md",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "if tweet.id == target_id:"
+      },
+      {
+        "id": "blocker:references/examples.md:205:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/examples.md",
+        "line_start": 205,
+        "line_end": 205,
+        "snippet": "if tweet.id < target_id:"
+      },
+      {
+        "id": "network:references/installation.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/installation.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "pip install git+https://github.com/vladkens/twscrape.git"
+      },
+      {
+        "id": "sensitive:references/installation.md:56:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/installation.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "By default, twscrape creates `accounts.db` in your current working directory. You can specify a cust"
+      },
+      {
+        "id": "sensitive:references/installation.md:59:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/installation.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "api = API(\"path/to/custom.db\")"
+      },
+      {
+        "id": "sensitive:references/installation.md:65:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/installation.md",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "twscrape --db path/to/custom.db <command>"
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "category": "metadata",
+        "severity": "low",
+        "pattern": "Unscanned file (invalid_frontmatter) — manual review required",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[unscanned: invalid_frontmatter]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:references/examples.md:247:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a proxy configuration placeholder using example.com and sample credentials. It does not contact an external destination or disclose a real endpoint."
+      },
+      {
+        "id": "network:references/examples.md:255:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "127.0.0.1 is the loopback address in a local SOCKS proxy example. It cannot route traffic to an external host."
+      },
+      {
+        "id": "network:references/examples.md:255:socks-proxy",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The documentation shows an optional local SOCKS proxy configuration with placeholder credentials. It contains no proxy service, destination, or covert routing behavior."
+      },
+      {
+        "id": "filesystem:references/examples.md:161:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The documented write operation explicitly saves requested collection output to a user-selected file. It is ordinary local export behavior, not hidden modification."
+      },
+      {
+        "id": "filesystem:references/examples.md:320:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example writes collected results to results.json in the current directory. This is transparent, expected output persistence."
+      },
+      {
+        "id": "sensitive:references/examples.md:296:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The SQLite path is a user-named local database passed to the documented API constructor. No database contents are transmitted or accessed outside the stated account storage purpose."
+      },
+      {
+        "id": "blocker:references/examples.md:201:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The comparison checks a tweet identifier while iterating results. It does not inspect the host, processes, network, or system configuration."
+      },
+      {
+        "id": "blocker:references/examples.md:205:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The comparison uses tweet identifiers to control pagination or iteration. It is application data handling, not system reconnaissance."
+      },
+      {
+        "id": "network:references/installation.md:14:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL is the public GitHub repository used for an optional pip installation command. It is a transparent dependency source, not an unsolicited network request."
+      },
+      {
+        "id": "sensitive:references/installation.md:56:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The text explains that the library creates a local accounts database by default. This is documented local persistence, although users should protect that file."
+      },
+      {
+        "id": "sensitive:references/installation.md:59:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The code shows selecting a custom local SQLite database path. It does not expose database contents or connect to a remote database."
+      },
+      {
+        "id": "sensitive:references/installation.md:65:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The CLI example specifies a local database path explicitly. It is expected configuration for account storage, not sensitive-data exfiltration."
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Manual review of SKILL.md found ordinary Markdown documentation with no prompt-injection text, executable payload, or concealed instructions. The invalid frontmatter is a formatting issue only."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [
+      {
+        "title": "Unscanned file (invalid_frontmatter) — manual review required",
+        "description": "[unscanned: invalid_frontmatter]",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "metadata",
+        "source_severity": "low",
+        "confidence": 1,
+        "confidence_reasoning": "Force-confirmed metadata/low static finding; AI false-positive verdict rejected."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 435,
+    "audit_model": "claude",
+    "audited_at": "2026-07-18T09:24:44.475Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Collect Twitter/X Data with twscrape",
+    "value_statement": "Twitter/X data collection can require asynchronous queries, session setup, and careful rate-limit handling. This skill provides documented twscrape workflows for searches, profiles, timelines, and local result exports.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "twscrape",
+      "Twitter X scraping",
+      "social media data",
+      "Python GraphQL",
+      "async data collection",
+      "Twitter analytics",
+      "tweet search"
+    ],
+    "actual_capabilities": [
+      "Install twscrape from PyPI or its public GitHub repository.",
+      "Configure API instances with local account databases and optional proxies.",
+      "Search public tweets with queries, filters, and result limits.",
+      "Retrieve public profiles, timelines, followers, following, replies, and retweeters.",
+      "Use asynchronous iteration and batch requests for documented collection workflows.",
+      "Export requested results to local text or JSON files."
+    ],
+    "limitations": [
+      "Requires valid Twitter/X accounts, sessions, or cookies for many operations.",
+      "Twitter/X rate limits, suspensions, and platform changes can interrupt collection.",
+      "The skill does not guarantee compliance with Twitter/X terms, privacy law, or consent requirements.",
+      "It does not provide official Twitter/X API access or bypass authentication requirements."
+    ],
+    "use_cases": [
+      {
+        "title": "Monitor a public topic",
+        "description": "Search public posts for a defined topic and collect a limited result set for analysis.",
+        "target_user": "Research analyst"
+      },
+      {
+        "title": "Review a public account",
+        "description": "Retrieve a public profile and recent timeline for a documented research task.",
+        "target_user": "Social media manager"
+      },
+      {
+        "title": "Build an async collector",
+        "description": "Use asynchronous queries and local exports in a Python data collection workflow.",
+        "target_user": "Python developer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a basic search",
+        "scenario": "Beginner",
+        "prompt": "Help me use twscrape to search public Twitter/X posts for \"climate data\" and return at most 20 results. Explain the required setup first."
+      },
+      {
+        "title": "Retrieve a public profile",
+        "scenario": "Intermediate",
+        "prompt": "Show me how to retrieve a public Twitter/X profile by username with twscrape. Include safe handling for account credentials and cookies."
+      },
+      {
+        "title": "Collect a limited timeline",
+        "scenario": "Intermediate",
+        "prompt": "Create a twscrape workflow that collects up to 100 recent posts from a public account and saves the requested fields locally."
+      },
+      {
+        "title": "Design a compliant collector",
+        "scenario": "Advanced",
+        "prompt": "Design an asynchronous twscrape collection plan for authorized research. Include limits, local database protections, logging, retries, and platform compliance checks."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Search public posts for \"python lang:en\" with a limit of 20.",
+        "output": [
+          "Setup checklist for an authenticated twscrape API instance.",
+          "A limited asynchronous search workflow.",
+          "Guidance for reviewing results and respecting platform limits."
+        ]
+      },
+      {
+        "input": "Collect a public account timeline and store it locally.",
+        "output": [
+          "Steps to retrieve a public account identifier.",
+          "A bounded timeline collection workflow.",
+          "A local export plan with credential and database protection reminders."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Use only accounts and data collection activities that you are authorized to access.",
+      "Store passwords, cookies, and local account databases outside source control with restrictive file permissions.",
+      "Set small limits, add delays, and follow Twitter/X terms, privacy obligations, and applicable law."
+    ],
+    "anti_patterns": [
+      "Do not use account rotation or proxies to evade platform enforcement or collect data without authorization.",
+      "Do not hardcode real passwords, email credentials, or session cookies in scripts or prompts.",
+      "Do not collect, retain, or share personal data beyond the approved research purpose."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help me do?",
+        "answer": "It documents twscrape workflows for collecting public Twitter/X data with Python."
+      },
+      {
+        "question": "Do I need a Twitter/X account?",
+        "answer": "Many operations require valid accounts, sessions, or cookies managed by twscrape."
+      },
+      {
+        "question": "Can I use this as the official Twitter/X API?",
+        "answer": "No. twscrape is a separate library and does not provide official API access."
+      },
+      {
+        "question": "Where are account details stored?",
+        "answer": "The documented default is a local accounts.db file. Protect it with restrictive permissions and keep it out of source control."
+      },
+      {
+        "question": "Can I use a proxy?",
+        "answer": "The skill documents optional proxy configuration. Use it only for legitimate network requirements and authorized activity."
+      },
+      {
+        "question": "Does this guarantee compliance with Twitter/X rules?",
+        "answer": "No. You must review and follow current platform terms, privacy requirements, and applicable law."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "examples.md",
+          "type": "file",
+          "path": "references/examples.md",
+          "lines": 328
+        },
+        {
+          "name": "index.md",
+          "type": "file",
+          "path": "references/index.md",
+          "lines": 40
+        },
+        {
+          "name": "installation.md",
+          "type": "file",
+          "path": "references/installation.md",
+          "lines": 67
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 439
+    }
+  ]
+}

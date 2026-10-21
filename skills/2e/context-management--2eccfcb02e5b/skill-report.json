@@ -1,0 +1,633 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T11:36:30.822Z",
+    "slug": "89jobrien-context-management",
+    "source_url": "https://github.com/89jobrien/steve/tree/main/steve/skills/context-management",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2eccfcb02e5b18c902adce0845ef7befedd082abb354efc1e4455e6bb995a020",
+    "tree_hash": "9c2b8ccb85caf6dbb8cac4404dfe1a560239657bc93ce1dfd2ecca57c3f7299c",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "context-management",
+    "description": "Manage context for multi-agent workflows, long-running projects, and persistent memory. The skill helps capture decisions, prepare handoffs, compress context, and organize project knowledge.",
+    "summary": "Capture, compress, and hand off project context across agents and sessions.",
+    "icon": "📦",
+    "version": "1.0.2",
+    "author": "Joseph OBrien",
+    "license": "MIT",
+    "category": "productivity",
+    "tags": [
+      "context-management",
+      "multi-agent",
+      "handoffs",
+      "memory",
+      "workflow"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by markdown code fences or ordinary prose. The confirmed static risks are filesystem examples that use predictable /tmp paths and broad glob matching. A semantic issue remains because the memory guidance suggests preserving credentials in persistent context.",
+    "remediation": [
+      {
+        "issue": "Insecure temporary artifact pattern",
+        "suggestion": "Use a dedicated workspace directory, randomized filenames, strict permissions, and cleanup instead of predictable /tmp files and broad globs.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Credential storage guidance",
+        "suggestion": "Remove credentials from the preservation list and instruct users to store only redacted references or secret-manager pointers.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 105,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 88
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 53,
+            "line_end": 53
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:memory-management.md:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "memory-management.md",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "1. Check entity name format (avoid special characters)"
+      },
+      {
+        "id": "blocker:memory-management.md:174:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "memory-management.md",
+        "line_start": 174,
+        "line_end": 175,
+        "snippet": "3. Confirm observation format is valid"
+      },
+      {
+        "id": "blocker:memory-management.md:186:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "memory-management.md",
+        "line_start": 186,
+        "line_end": 186,
+        "snippet": "- Avoid special characters"
+      },
+      {
+        "id": "blocker:memory-management.md:201:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "memory-management.md",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "- Avoid circular dependencies"
+      },
+      {
+        "id": "blocker:memory-management.md:272:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "memory-management.md",
+        "line_start": 272,
+        "line_end": 274,
+        "snippet": "## Common Pitfalls to Avoid"
+      },
+      {
+        "id": "external_commands:references/patterns.md:105:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/patterns.md",
+        "line_start": 105,
+        "line_end": 113,
+        "snippet": "- `path/to/file.ts` - [description]"
+      },
+      {
+        "id": "filesystem:references/patterns.md:50:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "references/patterns.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "output_path = f\"/tmp/agent_{task_id}_{timestamp}.md\""
+      },
+      {
+        "id": "filesystem:references/patterns.md:53:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "references/patterns.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "artifacts = glob.glob(\"/tmp/agent_*.md\")"
+      },
+      {
+        "id": "filesystem:references/patterns.md:53:python-glob-pattern-matching",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Python glob/pattern matching",
+        "file": "references/patterns.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "artifacts = glob.glob(\"/tmp/agent_*.md\")"
+      },
+      {
+        "id": "blocker:references/patterns.md:31:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 31,
+        "line_end": 32,
+        "snippet": "- What's in progress"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 42,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 44,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 46,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 50,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 52,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 88,
+        "snippet": "```"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:memory-management.md:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is troubleshooting advice about validating entity names. It does not inspect the host system or request reconnaissance."
+      },
+      {
+        "id": "blocker:memory-management.md:174:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line asks users to confirm observation format during memory error recovery. It is not system probing or collection."
+      },
+      {
+        "id": "blocker:memory-management.md:186:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The text advises avoiding special characters in entity names. It contains no reconnaissance behavior or host inspection."
+      },
+      {
+        "id": "blocker:memory-management.md:201:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line discusses avoiding circular dependencies in memory relationships. It is conceptual data-model guidance, not system reconnaissance."
+      },
+      {
+        "id": "blocker:memory-management.md:272:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The section title introduces common memory-management pitfalls. It does not instruct reconnaissance or environment discovery."
+      },
+      {
+        "id": "external_commands:references/patterns.md:105:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are markdown formatting for a placeholder file path in a handoff template. There is no shell execution context."
+      },
+      {
+        "id": "filesystem:references/patterns.md:50:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "reason": "The example tells agents to write artifacts under predictable /tmp paths. That can collide with other files or expose coordination data on shared systems.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:references/patterns.md:53:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "The example reads every matching /tmp artifact. Broad temp-directory reads can ingest stale or attacker-created files.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:references/patterns.md:53:python-glob-pattern-matching",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "The glob pattern supports the same broad /tmp read behavior. It is legitimate coordination guidance, but the unscoped pattern creates file-confusion risk.",
+        "severity": "low"
+      },
+      {
+        "id": "blocker:references/patterns.md:31:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The phrase is part of a handoff checklist about current work status. It contains no network access or reconnaissance instruction."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The detected token is a markdown code fence around a natural-language prompt example. It is not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The detected token is a markdown code fence delimiter. The surrounding content is a prompt example, not executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is another markdown code fence used to display a prompt. It does not invoke a command interpreter."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks close a markdown prompt example. No command, interpolation, or external execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The detected code fence wraps a natural-language context checkpoint prompt. It is documentation formatting only."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The region contains markdown guidance and reference text, not shell commands or Ruby backtick interpolation. No external command execution is instructed."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Credential Storage Guidance",
+        "description": "memory-management.md lists API endpoints and credentials as information to preserve. Persistent context should not store secrets because later sessions or agents may expose them.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "memory-management.md",
+            "line_start": 54,
+            "line_end": 59
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The text explicitly recommends preserving credentials in memory-related context. The risk is secret retention rather than code execution, so medium severity is appropriate."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Temp directory access",
+        "description": "output_path = f\"/tmp/agent_{task_id}_{timestamp}.md\"",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 50,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "The example tells agents to write artifacts under predictable /tmp paths. That can collide with other files or expose coordination data on shared systems."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "artifacts = glob.glob(\"/tmp/agent_*.md\")",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 53,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The example reads every matching /tmp artifact. Broad temp-directory reads can ingest stale or attacker-created files."
+      },
+      {
+        "title": "Credential Storage Guidance",
+        "description": "memory-management.md lists API endpoints and credentials as information to preserve. Persistent context should not store secrets because later sessions or agents may expose them.",
+        "locations": [
+          {
+            "file": "memory-management.md",
+            "line_start": 54,
+            "line_end": 59
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The text explicitly recommends preserving credentials in memory-related context. The risk is secret retention rather than code execution, so medium severity is appropriate."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Python glob/pattern matching",
+        "description": "artifacts = glob.glob(\"/tmp/agent_*.md\")",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 53,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "low",
+        "confidence": 0.7,
+        "confidence_reasoning": "The glob pattern supports the same broad /tmp read behavior. It is legitimate coordination guidance, but the unscoped pattern creates file-confusion risk."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 540,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T11:36:30.822Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Manage Multi-Agent Context",
+    "value_statement": "Long-running AI work often loses decisions, blockers, and session state. This skill provides practical workflows for checkpoints, handoffs, memory records, and compact context sharing.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "context management",
+      "multi-agent workflows",
+      "AI handoff templates",
+      "session continuity",
+      "memory management",
+      "project knowledge base",
+      "context compression"
+    ],
+    "actual_capabilities": [
+      "Captures key decisions, rationale, blockers, and active work for later sessions.",
+      "Prepares short or full handoff context for another agent or workflow stage.",
+      "Provides patterns for file-based context artifacts and coordination notes.",
+      "Guides persistent memory organization with entities, observations, and relationships.",
+      "Supports context compression by removing redundant details and preserving key facts.",
+      "Offers templates for completion and blocked-task handoffs."
+    ],
+    "limitations": [
+      "Does not execute coordination automatically or create files without agent action.",
+      "Requires the user or agent to decide what information is safe to store.",
+      "Memory workflows depend on a compatible memory tool or manual tracking process.",
+      "Examples are guidance patterns, not tested automation scripts."
+    ],
+    "use_cases": [
+      {
+        "title": "Coordinate Agent Handoffs",
+        "description": "Prepare focused context for the next agent, including current state, decisions, blockers, and expected next actions.",
+        "target_user": "AI workflow lead"
+      },
+      {
+        "title": "Resume Long Projects",
+        "description": "Create checkpoints that help a developer continue work after breaks, session changes, or task interruptions.",
+        "target_user": "software developer"
+      },
+      {
+        "title": "Maintain Project Memory",
+        "description": "Organize project knowledge with entities, observations, and relationships so important decisions remain searchable.",
+        "target_user": "technical team"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Capture Current Context",
+        "prompt": "Capture the current project context. Include the active goal, recent decisions, blockers, files involved, and next actions.",
+        "scenario": "Beginner checkpoint for a single active task."
+      },
+      {
+        "title": "Prepare Agent Handoff",
+        "prompt": "Prepare a handoff for the next agent. Include only context relevant to its task, expected output, and known constraints.",
+        "scenario": "Intermediate handoff for a multi-agent workflow."
+      },
+      {
+        "title": "Compress Session History",
+        "prompt": "Compress this session into a short context summary. Preserve decisions, rationale, unresolved questions, and risks.",
+        "scenario": "Advanced summary when token budget is limited."
+      },
+      {
+        "title": "Build Memory Graph Plan",
+        "prompt": "Design a memory graph plan for this project. Define entities, observations, relationship types, update rules, and safe storage boundaries.",
+        "scenario": "Advanced persistent memory setup for long-running work."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Capture context before this coding session ends.",
+        "output": "A concise checkpoint with the current goal, completed work, open decisions, blockers, and next actions."
+      },
+      {
+        "input": "Prepare a handoff for a reviewer agent.",
+        "output": "A reviewer-focused brief with changed areas, design choices, test status, risks, and files to inspect."
+      },
+      {
+        "input": "Compress our project memory for a new session.",
+        "output": "A short project memory summary that keeps durable facts and removes resolved discussion details."
+      }
+    ],
+    "best_practices": [
+      "Store decisions with the reason, date, and affected project area.",
+      "Redact credentials and personal data before saving context.",
+      "Use short handoffs for routine transitions and full context for complex work."
+    ],
+    "anti_patterns": [
+      "Saving full conversation transcripts when a short checkpoint is enough.",
+      "Recording credentials, tokens, or private data in persistent memory.",
+      "Passing every detail to each agent instead of tailoring context to the task."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help manage?",
+        "answer": "It helps manage context across agents, sessions, checkpoints, and persistent project memory."
+      },
+      {
+        "question": "Does it run automation by itself?",
+        "answer": "No. It provides workflows, templates, and organization patterns for an agent or user to apply."
+      },
+      {
+        "question": "Can it help with Claude and Codex workflows?",
+        "answer": "Yes. The guidance is written for AI work in Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "What should not be stored in memory?",
+        "answer": "Do not store credentials, tokens, private personal data, or secrets in persistent context."
+      },
+      {
+        "question": "When should I use a short context summary?",
+        "answer": "Use it for routine handoffs when the next agent only needs goals, decisions, blockers, and next steps."
+      },
+      {
+        "question": "When should I use full context?",
+        "answer": "Use full context for complex work that needs architecture, dependencies, decisions, and active work streams."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "memory-management.md",
+      "type": "file",
+      "path": "memory-management.md",
+      "lines": 312
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "patterns.md",
+          "type": "file",
+          "path": "references/patterns.md",
+          "lines": 131
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 97
+    }
+  ]
+}

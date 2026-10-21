@@ -1,0 +1,1414 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HubSpot 中国 AI 平台 GEO 综合实施方案</title>
+<style>
+    :root {
+      --paper: #ffffff;
+      --ivory: #faf9f5;
+      --warm: #f5f4ed;
+      --ink: #141413;
+      --muted: #5e5d59;
+      --stone: #87867f;
+      --line: #e8e5da;
+      --line-strong: #d1cfc5;
+      --soft: #faf9f5;
+      --accent: #1B365D;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; background: #ffffff; color: var(--ink); }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.54;
+    }
+    .report-menu {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+    .report-menu__inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 42px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    .report-menu a {
+      flex: 0 0 auto;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 4px 9px;
+      font-size: 12px;
+      line-height: 1.35;
+      background: var(--ivory);
+    }
+    .report-menu a:hover { border-color: var(--accent); color: var(--accent); }
+    .page { max-width: 1120px; margin: 0 auto; padding: 44px 42px 68px; background: #ffffff; }
+    h1, h2, h3 {
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 22px; padding-bottom: 18px; border-bottom: 1.5px solid var(--accent); font-size: 31px; line-height: 1.18; color: var(--ink); }
+    h2 { margin: 34px 0 14px; padding-left: 10px; border-left: 4px solid var(--accent); font-size: 21px; line-height: 1.25; color: var(--ink); }
+    h3 { margin: 24px 0 10px; font-size: 17px; line-height: 1.3; color: var(--ink); }
+    p { margin: 0 0 10px; }
+    ul { margin: 8px 0 16px 1.2em; padding: 0; }
+    li { margin: 4px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin: 10px 0 22px;
+      break-inside: avoid;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    main > table:first-of-type {
+      background: var(--ivory);
+      border: 1px solid var(--line-strong);
+      margin-bottom: 28px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 7px 9px;
+      vertical-align: top;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    th { background: var(--soft); color: var(--accent); font-weight: 600; text-align: left; }
+    td:first-child, th:first-child { color: var(--ink); }
+    code { white-space: pre-wrap; word-break: break-word; }
+    @page { size: A4; margin: 18mm 16mm; background: #ffffff; }
+    @media print {
+      .report-menu { display: none; }
+      body { font-size: 9.8pt; line-height: 1.5; background: #ffffff; }
+      .page { max-width: none; padding: 0; }
+      h1 { font-size: 22pt; }
+      h2 { font-size: 15pt; margin-top: 22pt; }
+      h3 { font-size: 12pt; }
+      th, td { padding: 5pt 6pt; font-size: 8.8pt; line-height: 1.38; }
+      table { page-break-inside: avoid; }
+    }
+    </style>
+</head>
+<body><nav class="report-menu" aria-label="报告章节"><div class="report-menu__inner"><a href="#section-1">执行摘要</a><a href="#section-2">诊断承接</a><a href="#section-3">真实数据能力与采集计划</a><a href="#section-4">分析完整性矩阵</a><a href="#section-5">证据成熟度与事实底座</a><a href="#section-6">北极星指标</a><a href="#section-7">六个项目包</a><a href="#section-8">90 天执行路线图</a><a href="#section-9">国内平台差异化动作</a><a href="#section-10">角色分工与验收指标</a><a href="#section-11">资源预算与优先级</a><a href="#section-12">监测闭环计划</a><a href="#section-13">治理节奏与决策机制</a><a href="#section-14">风险预案</a><a href="#section-15">来源台账</a><a href="#section-16">自检记录</a></div></nav><main class="page"><h1 id="hubspot-ai-geo">HubSpot 中国 AI 平台 GEO 综合实施方案</h1>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>测试对象</td>
+<td>HubSpot</td>
+</tr>
+<tr>
+<td>官网</td>
+<td>https://www.hubspot.com/</td>
+</tr>
+<tr>
+<td>测试场景</td>
+<td>海外 B2B CRM 与客户平台品牌，希望在 DeepSeek、豆包、千问、Kimi、元宝等国内 AI 平台中提升中文答案的可发现性、可验证性和可抽取性。</td>
+</tr>
+<tr>
+<td>目标平台</td>
+<td>DeepSeek；豆包；千问；Kimi；元宝</td>
+</tr>
+<tr>
+<td>生成日期</td>
+<td>2026-05-21</td>
+</tr>
+<tr>
+<td>输出语言</td>
+<td>中文简体</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-1">执行摘要</h2>
+<ul>
+<li>本测试场景把 HubSpot 作为海外 B2B SaaS/CRM 品牌，目标不是承诺国内 AI 平台一定引用官网，而是用中文事实底座、结构化页面、外部证据与复测机制，提升品牌在相关问题中的可发现性、可验证性和可抽取性。</li>
+<li>HubSpot 的公开事实基础较强：官网将其定位为客户平台，并覆盖 Marketing Hub、Sales Hub、Service Hub、Content Hub、Data Hub、Commerce Hub、Smart CRM 与 Breeze 等当前产品口径；投资者关系材料披露了客户规模与收入数据，适合作为中文 GEO 事实底座的起点。</li>
+<li>90 天实施应先修复中文核心事实页和高频问答，再建设长文知识库、对比内容和证据台账，最后通过同题多轮采样复测 DeepSeek、豆包、千问、Kimi、元宝中的品牌出现、推荐、引用和事实准确率变化。</li>
+</ul>
+<h2 id="section-2">诊断承接</h2>
+<table>
+<thead>
+<tr>
+<th>诊断发现</th>
+<th>实施转译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中文 AI 答案中容易把 HubSpot 简化为 CRM 工具，弱化客户平台、AI、营销自动化、服务和运营 Hub 的完整产品线。</td>
+<td>建立中文品牌事实底座，把产品线、适用团队、AI 能力、客户规模、商业模式和官方来源整理成可引用页面与知识库。</td>
+</tr>
+<tr>
+<td>国内用户高频问题更口语化，例如“中小企业怎么选 CRM”“HubSpot 和 Salesforce 有什么区别”“HubSpot 有没有中文支持”。</td>
+<td>建设口语化 FAQ、对比页和场景页，覆盖采购、销售运营、市场自动化、客服、内容运营和 RevOps 问题簇。</td>
+</tr>
+<tr>
+<td>海外官网事实多为英文，国内 AI 平台在中文回答中可能缺少可追溯中文来源。</td>
+<td>把关键事实翻译成中文摘要页，同时保留英文官方 URL 和更新时间，形成中文说明加官方来源的双层证据。</td>
+</tr>
+<tr>
+<td>长文本研究类平台会读取白皮书、年报和产品说明，但关键事实如果埋在长文中间，抽取稳定性会下降。</td>
+<td>在长文知识库前置事实卡、适用场景、引用口径和目录锚点，降低长上下文位置偏差影响。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-3">真实数据能力与采集计划</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据模式</td>
+<td>公开网页核验 + 用户授权平台采样导入</td>
+</tr>
+<tr>
+<td>真实数据能力边界</td>
+<td>可核验 HubSpot 官网、产品页、AI 页面、投资者关系和公开研究资料；国内 AI 平台答案、CRM 线索和客户案例必须由用户授权账号采样或导入。</td>
+</tr>
+<tr>
+<td>公开来源策略</td>
+<td>优先使用 HubSpot 官方产品页、Breeze AI 页面、Our Story、投资者关系公告；第三方资料仅作佐证，不替代官方口径。</td>
+</tr>
+<tr>
+<td>平台采样策略</td>
+<td>DeepSeek、豆包、千问、Kimi、元宝采用同题多轮采样表导入，记录账号、地域、时间、问题、答案、引用、品牌顺位和事实错误。</td>
+</tr>
+<tr>
+<td>最后核验日期</td>
+<td>2026-05-21</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>数据需求</th>
+<th>状态与获取方式</th>
+<th>来源与新鲜度</th>
+<th>责任与验收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官方产品线与平台定位</td>
+<td>已用公开网页核验产品页和客户平台导航。<br>方式：联网核验官方产品页，抽取产品线、Smart CRM、Breeze、AEO Beta 等口径。</td>
+<td>必须是 hubspot.com 官方页面或官方帮助中心。<br>新鲜度：30 天复核；产品命名或导航变化时立即更新。</td>
+<td>产品市场负责人<br>验收：所有产品线事实在来源台账中有 URL、核验日期和证据等级。</td>
+</tr>
+<tr>
+<td>AI 能力与 Breeze 口径</td>
+<td>已有官方 AI 页面来源，但需区分功能、代理、场景和禁用夸大表述。<br>方式：核验官方 AI 页面和产品更新，抽取可公开事实。</td>
+<td>官方 AI 页面、产品发布页或帮助中心。<br>新鲜度：14 天复核；AI 产品变化高频，报告中必须写核验日期。</td>
+<td>内容负责人<br>验收：Breeze 相关事实 100% 标注来源，能力边界写入禁用表述清单。</td>
+</tr>
+<tr>
+<td>客户规模、收入和财务口径</td>
+<td>已核验 Q4/FY2025 投资者关系公告。<br>方式：读取投资者关系公告、财报和 SEC/IR 资料。</td>
+<td>HubSpot IR、SEC 文件或官方财报。<br>新鲜度：季度复核；所有数字必须带截至日期和公告日期。</td>
+<td>数据负责人<br>验收：财务和客户规模数据不脱离原始口径，不使用无日期数字。</td>
+</tr>
+<tr>
+<td>国内 AI 平台答案基线</td>
+<td>当前示例未直接访问五个平台账号，需用户授权采样或导入表格。<br>方式：按 50-80 题同题多轮采样，导入 DeepSeek、豆包、千问、Kimi、元宝答案。</td>
+<td>采样表需包含平台、账号状态、地域、时间、问题、答案、引用、品牌顺位、事实错误。<br>新鲜度：7-14 天复测；重大页面上线后一周内复测。</td>
+<td>增长负责人 + 数据负责人<br>验收：基线字段完整率 95% 以上，每题至少 3 轮采样。</td>
+</tr>
+<tr>
+<td>CRM 线索和转化贡献</td>
+<td>未接入用户 CRM，当前只输出字段设计和导入要求。<br>方式：由用户提供 CRM 导出或看板字段，按问题簇和内容资产映射线索。</td>
+<td>用户授权 CRM、表单、UTM、销售跟进记录。<br>新鲜度：月度复盘；涉及隐私数据需脱敏。</td>
+<td>销售运营负责人<br>验收：90 天复盘能说明线索贡献口径、可用字段和不可归因部分。</td>
+</tr>
+<tr>
+<td>客户案例和本地支持说法</td>
+<td>高风险待补证，不能直接公开承诺。<br>方式：收集客户授权材料、帮助中心政策、销售确认和法务审核记录。</td>
+<td>公开授权案例、官方支持政策或内部法务批准记录。<br>新鲜度：发布前复核；授权状态变化立即下线或改写。</td>
+<td>法务/合规负责人<br>验收：无授权客户案例不进入对外报告；本地支持只写已验证范围。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-4">分析完整性矩阵</h2>
+<table>
+<thead>
+<tr>
+<th>分析维度</th>
+<th>当前状态</th>
+<th>缺口</th>
+<th>纳入方案的动作</th>
+<th>验收口径</th>
+<th>责任角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>业务目标</td>
+<td>目标同时包含品牌权威、中文曝光、线索贡献和产品教育，但现有诊断尚未把每个目标映射到可复测指标。</td>
+<td>容易停留在内容生产数量，无法证明 GEO 对推荐、引用和线索的贡献。</td>
+<td>把品牌推荐率、被引用率、答案准确率、核心问题覆盖率和线索贡献作为北极星指标，并绑定 30/60/90 天目标。</td>
+<td>每个业务目标至少对应 1 个北极星指标、1 个数据来源和 1 个责任角色。</td>
+<td>增长负责人</td>
+</tr>
+<tr>
+<td>问题覆盖</td>
+<td>已识别 CRM 选型、竞品对比、营销自动化、AI 客户平台、实施和价格等中文问题簇。</td>
+<td>口语化问题和追问链路不足，豆包、元宝侧的自然问法覆盖偏弱。</td>
+<td>建设 80 题中文 AI 搜索问题库，按推荐、比较、替代、价格、实施、合规、行业场景分组。</td>
+<td>80 题全部绑定意图、平台、对应资产、优先级和验收口径。</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>品牌实体</td>
+<td>HubSpot 官方定位、产品线和 AI 能力较完整，但中文语境中容易被压缩成单一 CRM。</td>
+<td>品牌实体、产品实体、Breeze/Smart CRM 等新口径缺少中文可抽取事实卡。</td>
+<td>建立中文品牌事实页和实体说明区块，统一客户平台、Smart CRM、各 Hub 与 Breeze 口径。</td>
+<td>事实卡不少于 40 条，核心实体 100% 有官方来源或待确认状态。</td>
+<td>产品市场负责人</td>
+</tr>
+<tr>
+<td>页面技术</td>
+<td>官网英文页面信息丰富，中文可引用页面、结构化数据和摘要区块不足。</td>
+<td>国内 AI 平台抓取时缺少中文摘要、FAQ、Schema 和更新时间字段。</td>
+<td>改造中文品牌事实页、产品线聚合页和 FAQ 页，补充 Organization、Product、FAQ 结构化数据。</td>
+<td>核心页面可抓取，表格不溢出，每页有摘要、事实卡、FAQ、来源链接和更新时间。</td>
+<td>技术负责人</td>
+</tr>
+<tr>
+<td>内容资产</td>
+<td>英文产品资料、博客和投资者关系材料丰富，中文场景化内容不足。</td>
+<td>国内买方关心的实施成本、本地生态、竞品替代和团队场景缺少系统答案。</td>
+<td>围绕销售、市场、客服、RevOps 生产场景页、对比页和 FAQ，前置结论摘要与适用对象。</td>
+<td>60 天上线 12 篇场景页、40 个 FAQ，90 天核心问题覆盖率达到 85%。</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>标题体系</td>
+<td>现有标题多来自英文产品表达，和中文自然问题存在距离。</td>
+<td>标题不能稳定命中“怎么选、有什么区别、适不适合、有没有中文支持”等问法。</td>
+<td>建立问答式 H1/H2 标题库，把每个标题绑定问题簇、平台适配和禁用表述。</td>
+<td>核心问题至少 2 个标题候选，标题库不少于 120 条且通过合规审核。</td>
+<td>编辑负责人</td>
+</tr>
+<tr>
+<td>知识库</td>
+<td>官方事实分散在产品页、AI 页面、关于我们和投资者关系材料中。</td>
+<td>Kimi、DeepSeek 深度研究场景中，长文本事实若埋在段落中间，抽取稳定性下降。</td>
+<td>建设中文长文知识库资料包，前置事实卡、目录锚点、引用口径和待确认清单。</td>
+<td>资料包覆盖 8 类买方问题，关键事实不埋在长段落中间。</td>
+<td>客户交付负责人</td>
+</tr>
+<tr>
+<td>外部证据</td>
+<td>官方来源强，但国内中文第三方证据和合作伙伴材料不足。</td>
+<td>若只有官网自述，AI 答案在比较和推荐场景中的信任信号偏弱。</td>
+<td>建立第三方信源清单，补充行业媒体、合作伙伴、公开评测和客户授权案例。</td>
+<td>新增至少 10 个可追溯外部信源，重要断言具备官方来源加第三方辅助证据。</td>
+<td>PR 负责人</td>
+</tr>
+<tr>
+<td>平台适配</td>
+<td>五个平台的内容偏好不同，当前方案需要显式拆分 DeepSeek、豆包、千问、Kimi、元宝动作。</td>
+<td>若只输出统一内容清单，平台差异不会进入执行排期。</td>
+<td>DeepSeek 强化逻辑证据链，豆包强化口语问答，千问强化引用规范，Kimi 强化长文知识库，元宝强化微信生态入口。</td>
+<td>五个平台均有问题簇、资产要求、验收指标和风险提示。</td>
+<td>增长负责人</td>
+</tr>
+<tr>
+<td>监测治理</td>
+<td>已有监测闭环方向，但基线采样、归因和预算决策机制需要固化。</td>
+<td>没有稳定治理节奏时，事实错误、引用缺失和平台波动难以及时回流修复。</td>
+<td>建立周会、双周采样复盘、月度 steering review 和合规升级机制。</td>
+<td>每次复测输出指标变化、问题归因、修复 Backlog 和下一轮优先级。</td>
+<td>客户交付负责人</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-5">证据成熟度与事实底座</h2>
+<table>
+<thead>
+<tr>
+<th>断言/资产</th>
+<th>成熟度</th>
+<th>来源状态</th>
+<th>证据缺口</th>
+<th>下一步动作</th>
+<th>责任角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HubSpot 是客户平台，覆盖 CRM、营销、销售、服务、内容、数据和商务等产品能力。</td>
+<td>A 官方来源</td>
+<td>官网产品和平台页面可验证。</td>
+<td>中文摘要页尚未统一当前产品线口径。</td>
+<td>把官方产品线整理为中文事实卡，保留英文 URL 和更新时间。</td>
+<td>产品市场负责人</td>
+</tr>
+<tr>
+<td>Breeze 是 HubSpot AI 能力的当前品牌口径。</td>
+<td>A 官方来源</td>
+<td>官方 AI 页面可验证。</td>
+<td>国内中文问答中容易被泛化为“AI CRM”。</td>
+<td>建立 Breeze 中文说明、适用场景、能力边界和禁用夸大表述。</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>客户规模、收入等公司级数据。</td>
+<td>A 官方/投资者关系来源</td>
+<td>投资者关系材料可验证，但数字随季度变化。</td>
+<td>静态报告可能过期。</td>
+<td>所有数字加“截至日期”，月度复核，过期数据进入待确认状态。</td>
+<td>数据负责人</td>
+</tr>
+<tr>
+<td>HubSpot 与 Salesforce 等竞品对比。</td>
+<td>B 第三方可验证</td>
+<td>可结合官方产品页、第三方评测和用户评价。</td>
+<td>中文对比页需要避免片面或不可证优势。</td>
+<td>建立同口径比较表，只写可验证维度和适用场景。</td>
+<td>编辑负责人</td>
+</tr>
+<tr>
+<td>中国团队使用、中文支持、本地生态兼容。</td>
+<td>D 待补证</td>
+<td>需要官方帮助中心、销售政策或客户授权材料支撑。</td>
+<td>若无证据，容易产生过度承诺。</td>
+<td>拆成“已验证支持”“需实施配置”“不承诺”三类表述。</td>
+<td>法务/合规负责人</td>
+</tr>
+<tr>
+<td>客户案例和行业效果数据。</td>
+<td>C 客户/案例证据</td>
+<td>需确认客户授权、行业适配和数据口径。</td>
+<td>部分案例无法直接外显到中文内容。</td>
+<td>优先使用公开授权案例，未授权案例只做内部销售知识库。</td>
+<td>PR 负责人</td>
+</tr>
+<tr>
+<td>“保证被国内 AI 平台引用”类承诺。</td>
+<td>E 禁用表述</td>
+<td>无可验证来源。</td>
+<td>该承诺违反方法边界。</td>
+<td>统一替换为“提升可发现性、可验证性和可抽取性”。</td>
+<td>客户交付负责人</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-6">北极星指标</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>基线</th>
+<th>30 天目标</th>
+<th>60 天目标</th>
+<th>90 天目标</th>
+<th>负责人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>品牌推荐率</td>
+<td>受控样例基线：目标问题 50 题中，品牌推荐出现率待采样确认</td>
+<td>完成 50 题基线采样并锁定 10 个快赢问题</td>
+<td>核心场景推荐出现率较基线提升 15%</td>
+<td>高意向问题中推荐出现率较基线提升 25%</td>
+<td>增长负责人</td>
+</tr>
+<tr>
+<td>被引用率</td>
+<td>中文可引用来源不足，官方英文来源分散</td>
+<td>发布中文事实页、产品线页和来源台账</td>
+<td>核心断言 90% 绑定官方或第三方来源</td>
+<td>目标问题中可追溯引用出现率较基线提升 20%</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>答案准确率</td>
+<td>常见风险为产品线遗漏、AI 能力表述过期、客户规模数字过期</td>
+<td>建立事实卡与禁用表述清单</td>
+<td>复测答案事实错误率低于 15%</td>
+<td>复测答案事实错误率低于 8%</td>
+<td>客户交付负责人</td>
+</tr>
+<tr>
+<td>核心问题覆盖率</td>
+<td>覆盖采购、对比、价格、实施、集成、数据合规、适用行业等问题簇</td>
+<td>完成 80 个中文问题样本和 20 个优先问题</td>
+<td>上线 40 个 FAQ/场景答案</td>
+<td>目标问题覆盖率达到 85%</td>
+<td>市场负责人</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-7">六个项目包</h2>
+<h3 id="_8">页面技术</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>让 HubSpot 中文核心事实、产品线和场景页面更容易被国内 AI 平台抓取、理解和抽取。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>官网产品页；公司介绍页；投资者关系材料；中文问题样本；现有 SEO 页面</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>技术负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>技术 1 人 + 内容 0.5 人；预算中；优先核心事实页、产品线页、FAQ 结构化数据。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>中文品牌事实页；产品线结构化页面；FAQ Schema；实体说明区块；来源更新时间字段</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>核心页面可抓取；每页有摘要、事实卡、FAQ、来源链接；长 URL 不溢出；核心断言 100% 标注来源</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>内容矩阵；知识库；法务审核</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重构中文品牌事实页</td>
+<td>整理 HubSpot 官方定位、当前产品线、AI 能力、客户规模和适用团队；添加事实卡、更新时间、官方来源链接；加入 Organization、Product、FAQ 结构化数据</td>
+<td>技术负责人 + 内容负责人</td>
+<td>中文品牌事实页与结构化数据</td>
+<td>事实卡不少于 12 条，所有关键断言有来源 URL，页面通过移动端和桌面端排版检查</td>
+<td>来源台账初版</td>
+</tr>
+<tr>
+<td>建立产品线聚合页模板</td>
+<td>按 Marketing Hub、Sales Hub、Service Hub、Content Hub、Data Hub、Commerce Hub、Smart CRM 和 Breeze 建立统一模块；每个模块写明适用问题、核心能力、证据来源和相关 FAQ</td>
+<td>技术负责人</td>
+<td>产品线聚合页模板</td>
+<td>六条产品线均有独立锚点，页面表格不溢出，AI 摘要句出现在首屏</td>
+<td>产品事实卡</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_9">内容矩阵</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>围绕国内买方问题建立中文内容矩阵，覆盖 CRM 选型、营销自动化、销售管理、客服、AI 客户平台和 RevOps。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>目标问题簇；销售咨询记录；竞品对比问题；HubSpot 官方产品资料</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>内容 2 人 + 编辑 1 人；预算中；优先高意向问题和场景页。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>问题簇地图；场景文章；对比页；FAQ 页面；案例解读</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>30 天完成 20 个快赢问题；60 天上线 40 个结构化答案；90 天覆盖 85% 核心问题</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>标题体系；知识库；外部证据</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建立 80 题中文 AI 搜索问题库</td>
+<td>按推荐、比较、替代、价格、实施、合规、行业场景分组；标记每题业务价值、平台适配和所需证据；挑选 20 个 30 天快赢问题</td>
+<td>增长负责人 + 内容负责人</td>
+<td>中文问题库与优先级表</td>
+<td>每题有意图标签、目标平台、对应资产和验收口径</td>
+<td>诊断摘要</td>
+</tr>
+<tr>
+<td>生产场景化答案资产</td>
+<td>围绕销售团队、市场团队、客服团队和 RevOps 写场景页；每篇前置结论摘要、适用对象和来源台账；避免夸大 HubSpot 对中国本地生态的原生支持</td>
+<td>内容负责人</td>
+<td>场景文章与 FAQ</td>
+<td>不少于 12 篇场景页上线，每篇至少 6 个 FAQ，所有产品能力描述有来源</td>
+<td>法务与产品审核</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_10">标题体系</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>把内容标题改造成更贴近国内 AI 平台问题匹配、摘要抽取和答案生成的表达方式。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>问题库；现有文章标题；平台采样答案；销售高频问法</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>编辑负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>编辑 1 人 + 内容协作；预算低；与内容矩阵同步执行。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>标题规范；H1/H2 模板；问答式标题库；摘要句式规范</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>每个核心问题至少 2 个标题候选；标题不夸大承诺；H2 覆盖用户自然问法</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>内容矩阵</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>制定问答式标题规范</td>
+<td>把英文产品能力翻译为中文买方问题；区分选型、对比、实施和风险类标题；给每个标题绑定目标问题和验收指标</td>
+<td>编辑负责人</td>
+<td>标题规范和 120 条标题候选</td>
+<td>标题库覆盖五个平台问题表达，禁用绝对化和保证性表述</td>
+<td>问题库</td>
+</tr>
+<tr>
+<td>重写核心页面 H1/H2</td>
+<td>为事实页、产品页、对比页和 FAQ 页改写 H1/H2；首屏加入一句话答案和事实卡；长标题在移动端不溢出</td>
+<td>编辑负责人 + 技术负责人</td>
+<td>页面标题改造清单</td>
+<td>不少于 20 个页面完成标题改造并通过排版检查</td>
+<td>页面技术排期</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_11">知识库</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>建立 HubSpot 中文品牌事实底座，让长文本平台和深度研究类问题能稳定抽取正确事实。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>官方产品页；关于我们页面；投资者关系材料；AI 产品资料；销售答疑</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>产品市场负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>产品市场 1 人 + 交付 0.5 人；预算低到中；优先事实卡和长文资料包。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>品牌事实卡；术语表；产品线 FAQ；竞品对比事实表；引用口径手册</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>核心事实 100% 有来源；事实卡每月复核；长文首屏有摘要和目录锚点</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>来源台账；法务审核</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建设中文品牌事实卡</td>
+<td>整理定位、产品线、AI 能力、客户规模、收入数据和适用对象；为每条事实绑定官方 URL、日期和使用限制；标记待确认事实</td>
+<td>产品市场负责人</td>
+<td>中文品牌事实卡 v1</td>
+<td>不少于 40 条事实，100% 有来源或待确认状态，敏感数据不脱离原始口径</td>
+<td>官方来源确认</td>
+</tr>
+<tr>
+<td>建设深度研究资料包</td>
+<td>把年报、产品页、AI 页面、客户平台说明整理成中文资料包；前置执行摘要和引用格式；保留英文 URL 供追溯，并标记 Data Hub/Operations Hub 等历史口径差异</td>
+<td>客户交付负责人</td>
+<td>Kimi/DeepSeek 深度研究资料包</td>
+<td>资料包覆盖当前官方产品口径和 8 类买方问题，关键事实不埋在长段落中间</td>
+<td>事实卡</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_12">外部证据</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>增强国内 AI 平台可检索到的第三方可信信号，避免只有官网自述。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>行业媒体；合作伙伴页面；客户案例；公开评测；官方投资者关系材料</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>PR 负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>PR 1 人 + 法务按需；预算中到高；优先可验证第三方信源。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>第三方信源清单；中文媒体选题；合作伙伴证据页；客户案例摘要</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>新增 10 个可追溯外部信源；每个核心断言至少有 1 个官方来源，重要断言补充第三方来源；不使用无法验证的客户案例</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>法务审核；客户授权</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建立第三方证据清单</td>
+<td>筛选行业媒体、合作伙伴、公开评测和投资者关系材料；标记来源可信度、可引用断言和更新时间；剔除无法证明断言的弱来源</td>
+<td>PR 负责人</td>
+<td>第三方证据清单</td>
+<td>至少 10 个外部信源，每个信源有支持断言和 URL</td>
+<td>来源审核</td>
+</tr>
+<tr>
+<td>发布中文证据型内容</td>
+<td>围绕客户平台、AI CRM、营销自动化和 RevOps 发布证据型稿件；链接回官方事实页；避免写成纯品牌宣传稿</td>
+<td>市场负责人 + PR 负责人</td>
+<td>中文证据型稿件与合作伙伴摘要</td>
+<td>不少于 6 篇证据型内容，均有事实来源、官网回链和更新时间</td>
+<td>内容矩阵</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_13">监测闭环</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>建立同题多轮采样和复盘机制，持续观察五个平台答案中的出现、推荐、引用、顺位和事实准确率变化。</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>80 题问题库；平台采样表；基线数据；CRM 线索数据；页面上线记录</td>
+</tr>
+<tr>
+<td>负责人</td>
+<td>数据负责人</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>资源/预算</td>
+<td>数据 1 人 + 增长 0.5 人；预算低；贯穿 90 天。</td>
+</tr>
+<tr>
+<td>交付物</td>
+<td>采样 Prompt 库；复测表；GEO 看板；月度复盘报告；问题修复 Backlog</td>
+</tr>
+<tr>
+<td>验收指标</td>
+<td>30 天完成基线；60 天完成第一次复测；90 天形成闭环复盘和下一轮预算建议</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>数据权限；内容上线节奏；平台账号环境</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>步骤</th>
+<th>负责人</th>
+<th>交付物</th>
+<th>验收指标</th>
+<th>依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建立五平台采样机制</td>
+<td>同题多轮采样 DeepSeek、豆包、千问、Kimi、元宝；记录账号状态、时间、地域、问题、答案、引用、品牌顺位和事实错误；区分出现、推荐、引用支持和事实准确</td>
+<td>数据负责人</td>
+<td>平台采样表与基线报告</td>
+<td>50 题基线、每题至少 3 轮采样，字段完整率 95% 以上</td>
+<td>问题库</td>
+</tr>
+<tr>
+<td>建立月度复盘与修复机制</td>
+<td>按错误类型归因到页面、内容、证据或平台波动；把修复项回流到项目包 Backlog；复测修复前后变化</td>
+<td>客户交付负责人 + 数据负责人</td>
+<td>月度 GEO 复盘报告</td>
+<td>每月输出修复清单、指标变化和下一轮优先级，90 天形成预算复盘</td>
+<td>采样基线</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-8">90 天执行路线图</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>目标</th>
+<th>关键动作</th>
+<th>交付物</th>
+<th>验收口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-30 天快赢</td>
+<td>建立基线、修复事实底座和高置信页面问题。</td>
+<td>完成 50 题五平台基线采样；上线中文品牌事实页；改造 10 个核心 FAQ；建立来源台账和禁用表述清单</td>
+<td>基线报告；中文事实页；来源台账 v1；快赢 FAQ</td>
+<td>四格式报告生成通过；核心断言 100% 有来源或待确认；50 题基线采样字段完整率 95% 以上。</td>
+</tr>
+<tr>
+<td>31-60 天资产建设</td>
+<td>批量建设内容矩阵、长文知识库和平台差异化资产。</td>
+<td>上线 12 篇场景页；完成 40 个 FAQ；建设 Kimi/DeepSeek 深度研究资料包；发布 6 篇证据型内容</td>
+<td>内容矩阵；长文知识库；平台动作清单；外部证据清单</td>
+<td>核心问题覆盖率达到 65%；核心断言 90% 有来源；第一次复测事实错误率低于 15%。</td>
+</tr>
+<tr>
+<td>61-90 天闭环优化</td>
+<td>把复测结果回流到页面、内容、证据和预算决策。</td>
+<td>完成第二次五平台复测；修复事实错误 Top 10；优化低覆盖问题簇；输出下一轮预算和人力建议</td>
+<td>90 天复盘；修复 Backlog；下一轮路线图；预算建议</td>
+<td>高意向问题推荐出现率较基线提升 25%；事实错误率低于 8%；形成可复用监测闭环。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-9">国内平台差异化动作</h2>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>执行重点</th>
+<th>目标问题簇</th>
+<th>具体动作</th>
+<th>资产要求</th>
+<th>验收指标</th>
+<th>风险提示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek</td>
+<td>重逻辑与证据链，适合承接 CRM 选型、AI 客户平台、竞品比较和实施路径问题。</td>
+<td>HubSpot 适合什么企业；HubSpot 和 Salesforce 区别；AI CRM 怎么落地；B2B 增长团队怎么搭建客户平台</td>
+<td>发布方法论型对比页；用表格解释产品线和适用团队；建立证据链页面；在长文中前置结论和来源</td>
+<td>对比表；事实卡；实施路径页；引用台账</td>
+<td>目标问题中答案能解释推荐理由，关键断言有官方或第三方来源支持。</td>
+<td>推理链容易放大过期事实，需每月复核客户规模、AI 产品命名和产品线口径。</td>
+</tr>
+<tr>
+<td>豆包</td>
+<td>重口语化问题和创作式答案，适合覆盖国内买方的自然问法。</td>
+<td>中小企业 CRM 怎么选；HubSpot 是干什么的；市场团队怎么用 HubSpot；销售跟进怎么自动化</td>
+<td>建设短问短答 FAQ；把英文产品能力翻译成自然中文场景；制作口语化标题；补充案例式回答</td>
+<td>FAQ 页面；场景页；短摘要；案例故事</td>
+<td>口语问题覆盖率达到 80%，答案能自然提到 HubSpot 的适用团队和产品线。</td>
+<td>创作式答案可能补全不存在的本地化功能，需加入禁用表述和事实纠错清单。</td>
+</tr>
+<tr>
+<td>千问</td>
+<td>重可追溯引用与检索配置，适合做来源明确的产品线、价格、客户规模和公司事实回答。</td>
+<td>HubSpot 有哪些产品；HubSpot 客户规模；HubSpot AI 功能；HubSpot 官方资料在哪里</td>
+<td>建立中文来源台账；页面首屏放官方引用链接；对每个核心断言标记来源日期；补齐结构化数据</td>
+<td>来源台账；结构化产品页；FAQ Schema；更新时间字段</td>
+<td>复测答案中的引用源能真实支持对应断言，引用缺失问题进入修复 Backlog。</td>
+<td>引用链接可能只支持部分断言，需人工抽检引用-断言匹配度。</td>
+</tr>
+<tr>
+<td>Kimi</td>
+<td>重长文本与深度研究，适合承接白皮书、年报、产品资料和竞品研究问题。</td>
+<td>HubSpot 深度研究；HubSpot 年报怎么看；HubSpot 产品线分析；HubSpot 适合中国企业吗</td>
+<td>整理深度研究资料包；把长文拆成事实卡、目录和引用块；在文首放摘要和适用问题；保持英文原始来源链接</td>
+<td>长文知识库；研究资料包；术语表；对比事实表</td>
+<td>深度问题答案能覆盖完整产品线、业务场景和来源，不把关键事实遗漏在长上下文中。</td>
+<td>长上下文中间信息可能被忽略，需把关键事实前置并用锚点重复。</td>
+</tr>
+<tr>
+<td>元宝</td>
+<td>重微信生态和腾讯内容入口，适合用公众号/视频号承接中文品牌教育和场景内容。</td>
+<td>HubSpot 中文介绍；CRM 选型指南；营销自动化案例；销售与客服协同</td>
+<td>搭建公众号内容专题；每篇公众号文章链接官网事实页；用微信生态摘要覆盖高频问题；建立腾讯生态可检索入口</td>
+<td>公众号专题；视频号摘要；微信文章 FAQ；官网事实页回链</td>
+<td>微信生态内容覆盖 Top 30 高频问题，文章中的关键断言均链接到官方事实页或来源台账。</td>
+<td>微信内容容易变成孤岛，需持续回链官网事实底座并保持更新时间。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-10">角色分工与验收指标</h2>
+<table>
+<thead>
+<tr>
+<th>项目包</th>
+<th>责任角色</th>
+<th>任务</th>
+<th>交付物</th>
+<th>验收指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>页面技术</td>
+<td>技术负责人 + 内容负责人</td>
+<td>重构中文品牌事实页</td>
+<td>中文品牌事实页与结构化数据</td>
+<td>事实卡不少于 12 条，所有关键断言有来源 URL，页面通过移动端和桌面端排版检查</td>
+</tr>
+<tr>
+<td>页面技术</td>
+<td>技术负责人</td>
+<td>建立产品线聚合页模板</td>
+<td>产品线聚合页模板</td>
+<td>六条产品线均有独立锚点，页面表格不溢出，AI 摘要句出现在首屏</td>
+</tr>
+<tr>
+<td>内容矩阵</td>
+<td>增长负责人 + 内容负责人</td>
+<td>建立 80 题中文 AI 搜索问题库</td>
+<td>中文问题库与优先级表</td>
+<td>每题有意图标签、目标平台、对应资产和验收口径</td>
+</tr>
+<tr>
+<td>内容矩阵</td>
+<td>内容负责人</td>
+<td>生产场景化答案资产</td>
+<td>场景文章与 FAQ</td>
+<td>不少于 12 篇场景页上线，每篇至少 6 个 FAQ，所有产品能力描述有来源</td>
+</tr>
+<tr>
+<td>标题体系</td>
+<td>编辑负责人</td>
+<td>制定问答式标题规范</td>
+<td>标题规范和 120 条标题候选</td>
+<td>标题库覆盖五个平台问题表达，禁用绝对化和保证性表述</td>
+</tr>
+<tr>
+<td>标题体系</td>
+<td>编辑负责人 + 技术负责人</td>
+<td>重写核心页面 H1/H2</td>
+<td>页面标题改造清单</td>
+<td>不少于 20 个页面完成标题改造并通过排版检查</td>
+</tr>
+<tr>
+<td>知识库</td>
+<td>产品市场负责人</td>
+<td>建设中文品牌事实卡</td>
+<td>中文品牌事实卡 v1</td>
+<td>不少于 40 条事实，100% 有来源或待确认状态，敏感数据不脱离原始口径</td>
+</tr>
+<tr>
+<td>知识库</td>
+<td>客户交付负责人</td>
+<td>建设深度研究资料包</td>
+<td>Kimi/DeepSeek 深度研究资料包</td>
+<td>资料包覆盖当前官方产品口径和 8 类买方问题，关键事实不埋在长段落中间</td>
+</tr>
+<tr>
+<td>外部证据</td>
+<td>PR 负责人</td>
+<td>建立第三方证据清单</td>
+<td>第三方证据清单</td>
+<td>至少 10 个外部信源，每个信源有支持断言和 URL</td>
+</tr>
+<tr>
+<td>外部证据</td>
+<td>市场负责人 + PR 负责人</td>
+<td>发布中文证据型内容</td>
+<td>中文证据型稿件与合作伙伴摘要</td>
+<td>不少于 6 篇证据型内容，均有事实来源、官网回链和更新时间</td>
+</tr>
+<tr>
+<td>监测闭环</td>
+<td>数据负责人</td>
+<td>建立五平台采样机制</td>
+<td>平台采样表与基线报告</td>
+<td>50 题基线、每题至少 3 轮采样，字段完整率 95% 以上</td>
+</tr>
+<tr>
+<td>监测闭环</td>
+<td>客户交付负责人 + 数据负责人</td>
+<td>建立月度复盘与修复机制</td>
+<td>月度 GEO 复盘报告</td>
+<td>每月输出修复清单、指标变化和下一轮优先级，90 天形成预算复盘</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-11">资源预算与优先级</h2>
+<table>
+<thead>
+<tr>
+<th>资源项</th>
+<th>优先级</th>
+<th>资源投入</th>
+<th>预算等级</th>
+<th>时间窗口</th>
+<th>取舍说明</th>
+<th>责任角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中文事实底座与来源台账</td>
+<td>P0</td>
+<td>产品市场 1 人、内容 1 人、交付 0.5 人，连续 2 周。</td>
+<td>低到中，主要为内部人力。</td>
+<td>0-30 天</td>
+<td>先覆盖高置信事实，暂缓低证据案例和本地支持承诺。</td>
+<td>产品市场负责人</td>
+</tr>
+<tr>
+<td>五平台基线采样与复测</td>
+<td>P0</td>
+<td>数据 1 人、增长 0.5 人，建立采样表和复测流程。</td>
+<td>低，主要为账号与人工采样成本。</td>
+<td>0-30 天启动，60/90 天复测</td>
+<td>先做 50 题高质量基线，再扩展到 80 题。</td>
+<td>数据负责人</td>
+</tr>
+<tr>
+<td>页面技术与结构化数据改造</td>
+<td>P0</td>
+<td>前端/SEO 技术 1 人，内容协作 0.5 人。</td>
+<td>中，受开发排期影响。</td>
+<td>0-60 天</td>
+<td>优先品牌事实页和产品线聚合页，暂缓低流量文章模板。</td>
+<td>技术负责人</td>
+</tr>
+<tr>
+<td>内容矩阵与标题体系</td>
+<td>P1</td>
+<td>内容 2 人、编辑 1 人，持续 6-8 周。</td>
+<td>中，必要时外包初稿但内部做事实审核。</td>
+<td>31-90 天</td>
+<td>先覆盖高意向问题，低商业价值科普题放到第二轮。</td>
+<td>内容负责人</td>
+</tr>
+<tr>
+<td>外部证据与 PR 选题</td>
+<td>P1</td>
+<td>PR 1 人、市场 0.5 人、法务按需审核。</td>
+<td>中到高，取决于媒体和合作伙伴资源。</td>
+<td>31-90 天</td>
+<td>优先可信证据和合作伙伴摘要，不做无法验证的宣传稿。</td>
+<td>PR 负责人</td>
+</tr>
+<tr>
+<td>治理与合规审核</td>
+<td>P0</td>
+<td>交付、法务、产品市场每周固定 30-60 分钟。</td>
+<td>低，主要为管理投入。</td>
+<td>全周期</td>
+<td>任何高风险表述先进入待确认，不牺牲准确性换产量。</td>
+<td>客户交付负责人</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-12">监测闭环计划</h2>
+<table>
+<thead>
+<tr>
+<th>监测项</th>
+<th>方法</th>
+<th>频率</th>
+<th>负责人</th>
+<th>验收指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>五平台同题采样</td>
+<td>使用固定 50 题样本，对 DeepSeek、豆包、千问、Kimi、元宝进行同题三轮采样。</td>
+<td>第 1、45、90 天</td>
+<td>数据负责人</td>
+<td>字段完整率 95% 以上，记录平台、时间、地域、账号状态、答案、引用和品牌顺位。</td>
+</tr>
+<tr>
+<td>事实错误复核</td>
+<td>把答案中的产品线、客户规模、AI 能力、价格和本地化支持逐条对照来源台账。</td>
+<td>每两周</td>
+<td>客户交付负责人</td>
+<td>错误按页面、内容、证据、平台波动四类归因，Top 10 错误进入修复 Backlog。</td>
+</tr>
+<tr>
+<td>线索贡献观察</td>
+<td>在 CRM 中标记来自 AI 搜索、自报来源、内容下载和咨询问题的线索。</td>
+<td>每月</td>
+<td>增长负责人</td>
+<td>形成 AI 影响线索的观察口径，不把相关性直接等同于确定归因。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-13">治理节奏与决策机制</h2>
+<table>
+<thead>
+<tr>
+<th>治理节奏</th>
+<th>参与角色</th>
+<th>决策事项</th>
+<th>输入材料</th>
+<th>输出物</th>
+<th>升级条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每周项目例会</td>
+<td>增长负责人、内容负责人、技术负责人、客户交付负责人</td>
+<td>确认本周上线资产、阻塞项和 P0 修复顺序。</td>
+<td>项目包进度、页面上线记录、内容审核状态、开发排期。</td>
+<td>本周行动清单、延期原因、责任人和截止时间。</td>
+<td>P0 页面或事实卡延期超过 5 个工作日。</td>
+</tr>
+<tr>
+<td>双周五平台采样复盘</td>
+<td>数据负责人、增长负责人、内容负责人、交付负责人</td>
+<td>判断答案变化来自页面、内容、证据、平台波动还是采样口径。</td>
+<td>DeepSeek、豆包、千问、Kimi、元宝同题采样表和基线对比。</td>
+<td>错误归因表、修复 Backlog、下一轮采样问题。</td>
+<td>事实错误率连续两轮高于 15% 或高意向问题品牌消失。</td>
+</tr>
+<tr>
+<td>月度 Steering Review</td>
+<td>CEO/市场负责人、增长、产品市场、技术、客户交付</td>
+<td>确认预算、人力、范围取舍和下一月优先级。</td>
+<td>北极星指标趋势、内容产能、技术排期、线索贡献和风险清单。</td>
+<td>预算建议、范围调整、P0/P1/P2 优先级更新。</td>
+<td>预算超出预估 20% 或核心指标两轮无改善。</td>
+</tr>
+<tr>
+<td>合规触发审核</td>
+<td>法务/合规负责人、产品市场、内容负责人、交付负责人</td>
+<td>审核本地支持、客户案例、效果数据和竞品对比表述。</td>
+<td>待发布页面、来源台账、禁用表述清单、客户授权材料。</td>
+<td>批准、修改、禁用或待补证状态。</td>
+<td>出现医疗、金融、法律、教育、母婴等敏感行业客户场景，或使用未授权案例。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-14">风险预案</h2>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>触发信号</th>
+<th>预案</th>
+<th>负责人</th>
+<th>验收指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事实错误</td>
+<td>AI 答案误写产品线、客户规模、AI 能力或本地化能力。</td>
+<td>建立事实卡、禁用表述和每月来源复核；所有页面显示更新时间。</td>
+<td>产品市场负责人</td>
+<td>90 天事实错误率低于 8%。</td>
+</tr>
+<tr>
+<td>引用缺失或引用不支持断言</td>
+<td>答案出现引用但引用页没有支撑对应结论。</td>
+<td>为每条核心断言绑定来源，人工抽检引用-断言匹配度。</td>
+<td>内容负责人</td>
+<td>核心断言 90% 以上有真实支持来源。</td>
+</tr>
+<tr>
+<td>平台波动</td>
+<td>同题采样结果短期内大幅变化。</td>
+<td>记录账号、地域、时间、轮次和问题版本，不把单次输出作为结论。</td>
+<td>数据负责人</td>
+<td>每次复测至少三轮样本，并在报告中标注波动范围。</td>
+</tr>
+<tr>
+<td>内容合规</td>
+<td>涉及客户数据、价格、合规、本地化支持或竞品比较。</td>
+<td>法务审核竞品对比和客户案例；未授权客户不写具体名称。</td>
+<td>法务/合规负责人</td>
+<td>敏感内容上线前 100% 完成审核记录。</td>
+</tr>
+<tr>
+<td>开发延期</td>
+<td>结构化数据、页面模板或 CMS 改造无法按 30 天完成。</td>
+<td>先用静态事实页和 FAQ 模块完成快赢，再进入模板化改造。</td>
+<td>技术负责人</td>
+<td>30 天至少完成事实页和 10 个核心 FAQ 的上线。</td>
+</tr>
+<tr>
+<td>监测口径变化</td>
+<td>问题库、平台版本或账号环境变化导致前后不可比。</td>
+<td>锁定基线题库和元数据字段，新增题单独标记。</td>
+<td>数据负责人</td>
+<td>90 天复盘中核心 50 题保持可比，新增题不混入趋势计算。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-15">来源台账</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>支持断言</th>
+<th>来源与类型</th>
+<th>证据与新鲜度</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H-001</td>
+<td>HubSpot 官网产品页展示客户平台、Marketing Hub、Sales Hub、Service Hub、Content Hub、Data Hub、Commerce Hub、Smart CRM 与 Breeze 等当前产品口径。</td>
+<td>HubSpot Products / Customer Platform<br>类型：官方公开网页</td>
+<td>A 官方已证实<br>核验：2026-05-21<br>新鲜度：30 天复核；产品/AI 口径变更需提前复核</td>
+<td>https://www.hubspot.com/products</td>
+</tr>
+<tr>
+<td>H-002</td>
+<td>HubSpot 的 Breeze AI 相关能力可作为 AI 客户平台事实底座的一部分，但需按官方页面更新时间复核。</td>
+<td>HubSpot Breeze AI<br>类型：官方公开网页</td>
+<td>A 官方已证实<br>核验：2026-05-21<br>新鲜度：30 天复核；产品/AI 口径变更需提前复核</td>
+<td>https://www.hubspot.com/products/artificial-intelligence</td>
+</tr>
+<tr>
+<td>H-003</td>
+<td>HubSpot 公司介绍、客户规模、办公室和员工等公司事实应以官方 About/Our Story 页面为准。</td>
+<td>HubSpot Our Story<br>类型：官方公开网页</td>
+<td>A 官方已证实<br>核验：2026-05-21<br>新鲜度：30 天复核；产品/AI 口径变更需提前复核</td>
+<td>https://www.hubspot.com/our-story</td>
+</tr>
+<tr>
+<td>H-004</td>
+<td>HubSpot 年度收入和客户数量等财务事实应以投资者关系、年度业绩公告和 10-K 材料为准。</td>
+<td>HubSpot Q4 and Full Year 2025 Results<br>类型：官方公开网页</td>
+<td>A 官方已证实<br>核验：2026-05-21<br>新鲜度：季度复核，财务和客户数必须带截至日期</td>
+<td>https://hubspot.gcs-web.com/news-releases/news-release-details/hubspot-reports-strong-q4-and-full-year-2025-results</td>
+</tr>
+<tr>
+<td>R-001</td>
+<td>RAG 研究支持建设可检索、可引用的外部知识资产，而不是只写通用文章。</td>
+<td>Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks<br>类型：公开研究论文</td>
+<td>A 方法论依据<br>核验：2026-05-21<br>新鲜度：理论依据稳定，年度复核</td>
+<td>https://arxiv.org/abs/2005.11401</td>
+</tr>
+<tr>
+<td>R-002</td>
+<td>Self-RAG 研究支持把检索、生成和自我检查结合，因此方案应包含来源台账和复测质检。</td>
+<td>Asai et al., Self-RAG<br>类型：公开研究论文</td>
+<td>A 方法论依据<br>核验：2026-05-21<br>新鲜度：理论依据稳定，年度复核</td>
+<td>https://arxiv.org/abs/2310.11511</td>
+</tr>
+<tr>
+<td>R-003</td>
+<td>长上下文位置偏差研究支持在长文知识库中前置关键事实和摘要。</td>
+<td>Liu et al., Lost in the Middle<br>类型：公开研究论文</td>
+<td>A 方法论依据<br>核验：2026-05-21<br>新鲜度：理论依据稳定，年度复核</td>
+<td>https://arxiv.org/abs/2307.03172</td>
+</tr>
+</tbody>
+</table>
+<h2 id="section-16">自检记录</h2>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>四格式文件</td>
+<td>生成后由 quality-report.json 复核</td>
+</tr>
+<tr>
+<td>真实数据</td>
+<td>公开来源、用户授权数据、平台采样导入、来源新鲜度和待补证缺口均有处理规则</td>
+</tr>
+<tr>
+<td>分析完整性</td>
+<td>十维分析矩阵覆盖业务目标、问题覆盖、品牌实体、页面技术、内容资产、标题体系、知识库、外部证据、平台适配、监测治理</td>
+</tr>
+<tr>
+<td>证据成熟度</td>
+<td>核心事实按 A-E 成熟度标注来源状态、缺口和补证动作</td>
+</tr>
+<tr>
+<td>预算治理</td>
+<td>资源预算、优先级、治理节奏和升级条件进入实施方案</td>
+</tr>
+<tr>
+<td>平台覆盖</td>
+<td>DeepSeek、豆包、千问、Kimi、元宝均有差异动作</td>
+</tr>
+<tr>
+<td>项目包覆盖</td>
+<td>页面技术、内容矩阵、标题体系、知识库、外部证据、监测闭环均有任务和验收指标</td>
+</tr>
+<tr>
+<td>承诺边界</td>
+<td>不承诺平台必定引用，只提升可发现性、可验证性和可抽取性</td>
+</tr>
+</tbody>
+</table></main></body>
+</html>

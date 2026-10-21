@@ -1,0 +1,31 @@
+&control
+  calculation = 'scf'
+  prefix      = 'zrs2'
+  outdir      = './tmp'
+  pseudo_dir  = './pp'
+  tprnfor     = .true.
+  tstress     = .true.
+/
+&system
+  ibrav           = 4               ! hexagonal; set to match your Bravais lattice
+  celldm(1)       = 6.93340465      ! Bohr, in-plane
+  celldm(3)       = 8.17661488      ! c/a; ~30 A vacuum on a ~3 A slab
+  nat             = 3
+  ntyp            = 2
+  ecutwfc         = 60.0            ! material-specific; EPC-converged for ZrS2
+  occupations     = 'fixed'         ! semiconductor, no smearing
+  assume_isolated = '2D'            ! REQUIRED; mirror in ph.x and EPW
+/
+&electrons
+  conv_thr    = 1.0d-10
+  mixing_beta = 0.7
+/
+ATOMIC_SPECIES
+  Zr  91.224   Zr_ONCV_PBE-1.2.upf
+  S   32.065   S_ONCV_PBE-1.2.upf
+ATOMIC_POSITIONS crystal
+  Zr  0.000000000   0.000000000   0.500000000
+  S   0.333333000   0.666667000   0.548302181
+  S   0.666667000   0.333333000   0.451697819
+K_POINTS automatic
+  12 12 1  0 0 0

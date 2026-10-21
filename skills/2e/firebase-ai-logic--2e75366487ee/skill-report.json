@@ -1,0 +1,648 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T12:39:39.932Z",
+    "slug": "firebase-firebase-ai-logic",
+    "source_url": "https://github.com/firebase/agent-skills/tree/main/skills/firebase-ai-logic-basics/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "13d15d93183320e9026ff22f1a24d147c55b3128854d187cc9275b3526945531",
+    "tree_hash": "59017050b83efb6fb04317a443851d0150582f2890cab3b23e88a46cc7857c83",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "firebase-ai-logic",
+    "description": "Guides integrating Firebase AI Logic and Gemini APIs into web applications, including setup, multimodal inference, structured output, and production safeguards.",
+    "summary": "Guides Firebase AI Logic integration for Gemini-powered web app features and production controls.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "firebase",
+    "license": "MIT",
+    "tags": [
+      "firebase",
+      "gemini-api",
+      "web-sdk",
+      "ai-logic",
+      "app-check"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most detections are documentation snippets, Firebase SDK method names, or Firebase documentation URLs and are false positives. Four setup commands are confirmed medium-risk external command guidance because they install or run latest npm packages and can change Firebase project state. No evidence of prompt injection, credential exfiltration, or malicious intent was found.",
+    "remediation": [
+      {
+        "issue": "Firebase CLI setup commands use latest package resolution and automatic npx execution.",
+        "suggestion": "Pin firebase-tools versions, remove automatic yes behavior where possible, and require explicit user approval before running npm or npx commands.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Global Firebase CLI installation can change the user environment.",
+        "suggestion": "Prefer a project-local dev dependency or explain the global install impact before suggesting npm install -g.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/usage_patterns_web.md",
+            "line_start": 32,
+            "line_end": 34
+          },
+          {
+            "file": "references/usage_patterns_web.md",
+            "line_start": 120,
+            "line_end": 132
+          },
+          {
+            "file": "references/usage_patterns_web.md",
+            "line_start": 132,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:references/usage_patterns_web.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/usage_patterns_web.md",
+        "line_start": 32,
+        "line_end": 34,
+        "snippet": "// Specify the config as part of creating the `GenerativeModel` instance"
+      },
+      {
+        "id": "external_commands:references/usage_patterns_web.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/usage_patterns_web.md",
+        "line_start": 120,
+        "line_end": 132,
+        "snippet": "// Create a `GenerativeModel` instance with a model that supports your use case"
+      },
+      {
+        "id": "external_commands:references/usage_patterns_web.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/usage_patterns_web.md",
+        "line_start": 132,
+        "line_end": 145,
+        "snippet": "// To generate an image, call `generateContent` with the text input"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "`npm install -g firebase@latest`"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "`npx -y firebase-tools@latest projects:list`"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "`npx -y firebase-tools@latest apps:list`"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "`npx -y firebase-tools@latest init # Choose AI logic`"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "Maintain history automatically using `startChat`."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "To improve the user experience by showing partial results as they arrive (like a typing effect), use"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "Consider that you do not need to hardcode model names (e.g., `gemini-flash-lite-latest`). Use Fireba"
+      },
+      {
+        "id": "network:SKILL.md:25:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- If their platform is unsupported, Direct the user to Firebase Docs to learn how to set up AI Logic"
+      },
+      {
+        "id": "network:SKILL.md:47:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "More info in [Firebase AI Logic Getting Started](https://firebase.google.com/docs/ai-logic/get-start"
+      },
+      {
+        "id": "network:SKILL.md:84:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "Hybrid on-device inference for web apps, where the Firebase Javascript SDK automatically checks for "
+      },
+      {
+        "id": "network:SKILL.md:90:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "Recommended: The developer must enable Firebase App Check to prevent unauthorized clients from using"
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "Consider that you do not need to hardcode model names (e.g., `gemini-flash-lite-latest`). Use Fireba"
+      },
+      {
+        "id": "blocker:SKILL.md:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "Hybrid on-device inference for web apps, where the Firebase Javascript SDK automatically checks for "
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:references/usage_patterns_web.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Line 32 is a JavaScript comment inside a documentation example for creating a Firebase generative model. It does not execute a shell command or invoke Ruby backticks."
+      },
+      {
+        "id": "external_commands:references/usage_patterns_web.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Line 120 is a JavaScript comment introducing a model creation example. The surrounding code calls Firebase SDK APIs, not operating system commands."
+      },
+      {
+        "id": "external_commands:references/usage_patterns_web.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 132 is a JavaScript comment before a Firebase generateContent call. It documents SDK usage and does not launch an external process."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "severity": "medium",
+        "reason": "The skill instructs users or agents to run a global npm install for the latest Firebase CLI. This is legitimate setup guidance, but it downloads and installs executable code from the network."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "The skill recommends an npx command that runs firebase-tools@latest with automatic yes behavior. This executes remote npm package code and queries Firebase project metadata."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "The skill recommends an npx command that runs firebase-tools@latest to list Firebase apps. It is useful setup guidance but still executes external package code."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "The skill recommends running firebase-tools init through npx with latest package resolution. That command can modify the project and enable Firebase services, so it needs user confirmation."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text only names the Firebase SDK startChat method in inline code formatting. It is not a shell command and has no command injection behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text references Firebase SDK methods for streaming responses. Inline code formatting caused the alert, but no external process is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The flagged inline code is a Gemini model name used as an example. It is configuration text, not a command execution pattern."
+      },
+      {
+        "id": "network:SKILL.md:25:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL points to Firebase documentation for unsupported platforms. It is a user-facing reference link and does not transmit data."
+      },
+      {
+        "id": "network:SKILL.md:47:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hardcoded URL is a Firebase documentation link for getting started. There is no code path that performs a network request or exfiltrates information."
+      },
+      {
+        "id": "network:SKILL.md:84:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The URL links to Firebase hybrid on-device inference documentation. The line describes SDK behavior and does not direct hidden traffic to a third party."
+      },
+      {
+        "id": "network:SKILL.md:90:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL is a Firebase App Check documentation reference. It supports security guidance and is not an unauthorized network operation."
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The URL links to Firebase documentation about changing model names with Remote Config. It is a documentation reference, not a data transfer endpoint."
+      },
+      {
+        "id": "blocker:SKILL.md:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The line describes Firebase SDK checking browser support for Gemini Nano in a documented hybrid inference feature. It is not host reconnaissance by the skill."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "`npm install -g firebase@latest`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The skill instructs users or agents to run a global npm install for the latest Firebase CLI. This is legitimate setup guidance, but it downloads and installs executable code from the network."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "`npx -y firebase-tools@latest projects:list`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The skill recommends an npx command that runs firebase-tools@latest with automatic yes behavior. This executes remote npm package code and queries Firebase project metadata."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "`npx -y firebase-tools@latest apps:list`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The skill recommends an npx command that runs firebase-tools@latest to list Firebase apps. It is useful setup guidance but still executes external package code."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "`npx -y firebase-tools@latest init # Choose AI logic`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The skill recommends running firebase-tools init through npx with latest package resolution. That command can modify the project and enable Firebase services, so it needs user confirmation."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 285,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T12:39:39.932Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Integrate Firebase AI Logic",
+    "value_statement": "Developers often need Firebase AI features without maintaining a separate backend. This skill guides setup, Gemini model usage, multimodal prompts, structured output, and production security for web apps.",
+    "seo_keywords": [
+      "Firebase AI Logic",
+      "Gemini API",
+      "Firebase Web SDK",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "multimodal AI",
+      "structured output",
+      "App Check",
+      "Remote Config"
+    ],
+    "actual_capabilities": [
+      "Guides Firebase AI Logic setup for web projects using the Firebase Web SDK.",
+      "Explains Gemini Developer API and Vertex AI Gemini API provider choices.",
+      "Shows text, chat, streaming, multimodal, image generation, and structured output patterns.",
+      "Covers App Check and Remote Config recommendations for production deployments.",
+      "References Firebase documentation and web usage patterns for implementation support."
+    ],
+    "limitations": [
+      "Focused mainly on web examples; mobile and Flutter guidance is only summarized.",
+      "Does not provide a full application scaffold or deployed Firebase project.",
+      "Requires existing Firebase knowledge, account access, and billing decisions for production features.",
+      "Some setup commands install or run Firebase CLI packages from npm."
+    ],
+    "use_cases": [
+      {
+        "title": "Add Gemini text features",
+        "description": "A web developer can initialize Firebase AI Logic and call Gemini for text generation.",
+        "target_user": "Web developer"
+      },
+      {
+        "title": "Plan multimodal workflows",
+        "description": "A product engineer can map image, audio, video, and PDF inputs to Firebase AI Logic patterns.",
+        "target_user": "Product engineer"
+      },
+      {
+        "title": "Prepare production controls",
+        "description": "A Firebase lead can review App Check, model configuration, and provider selection before launch.",
+        "target_user": "Firebase team lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Set up Firebase AI Logic",
+        "scenario": "Beginner setup",
+        "prompt": "Help me add Firebase AI Logic to a web app. Check prerequisites, explain provider choice, and list the safest setup steps."
+      },
+      {
+        "title": "Add multimodal input",
+        "scenario": "Feature implementation",
+        "prompt": "Guide me through accepting an image file in a web app and sending it to Gemini with Firebase AI Logic."
+      },
+      {
+        "title": "Stream chat responses",
+        "scenario": "Interactive UI",
+        "prompt": "Design a chat flow using startChat and streaming responses. Include state handling, loading states, and error handling."
+      },
+      {
+        "title": "Harden a production launch",
+        "scenario": "Production readiness",
+        "prompt": "Review my Firebase AI Logic launch plan. Focus on App Check, Remote Config model selection, quota protection, and billing risks."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Set up Firebase AI Logic for a web prototype.",
+        "output": [
+          "Provider recommendation with rationale.",
+          "Prerequisite checklist.",
+          "Setup sequence with user confirmation points.",
+          "Links to relevant Firebase documentation."
+        ]
+      },
+      {
+        "input": "Plan a multimodal image caption feature.",
+        "output": "A workflow covering file handling, MIME type checks, Gemini prompt design, and response display considerations."
+      },
+      {
+        "input": "Prepare for production launch.",
+        "output": [
+          "App Check readiness notes.",
+          "Remote Config model update plan.",
+          "Quota and billing risk checklist."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Ask before running npm or Firebase CLI commands, especially global installs.",
+      "Enable Firebase App Check before exposing AI calls in production clients.",
+      "Use Remote Config for model names when teams need controlled updates."
+    ],
+    "anti_patterns": [
+      "Running npx commands with automatic yes flags without user approval.",
+      "Hardcoding model versions across client releases without an update path.",
+      "Sending large files inline when Cloud Storage URLs are more appropriate."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill create a Firebase project?",
+        "answer": "No. It explains setup steps and command options, but project creation still needs authorized user action."
+      },
+      {
+        "question": "Which provider does it recommend by default?",
+        "answer": "It recommends Gemini Developer API by default and Vertex AI Gemini API when scale or enterprise requirements need it."
+      },
+      {
+        "question": "Does it support mobile platforms?",
+        "answer": "It lists Android, iOS, Flutter, Unity, and web support, but the included usage patterns focus on web."
+      },
+      {
+        "question": "Can it help with structured output?",
+        "answer": "Yes. It describes response schemas and JSON response handling for Firebase AI Logic."
+      },
+      {
+        "question": "What security controls are covered?",
+        "answer": "It covers App Check for quota protection and Remote Config for safer model version updates."
+      },
+      {
+        "question": "Are external commands required?",
+        "answer": "Some setup guidance uses npm and Firebase CLI commands. Users should review and approve them before execution."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "usage_patterns_web.md",
+          "type": "file",
+          "path": "references/usage_patterns_web.md",
+          "lines": 175
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 110
+    }
+  ]
+}

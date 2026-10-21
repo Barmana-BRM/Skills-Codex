@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "id": "goalpro",
+  "componentType": "skill",
+  "componentVersion": "0.1.4",
+  "entrypoint": "SKILL.md",
+  "capabilities": [
+    {
+      "id": "goalpro-goal-prompt",
+      "summary": "Create a bounded Goal Prompt with separated intent, goal/plan/output boundaries, and evidence conditions without executing the target task.",
+      "useWhen": [
+        "The user asks to write, improve, or repair a goal, task prompt, or execution contract.",
+        "A task needs explicit scope, evidence, stop conditions, and verification instructions before another actor executes it.",
+        "A long-term goal needs proxy-evidence coverage gaps and conditions for revalidating the goal itself."
+      ],
+      "doNotUseWhen": [
+        "The user wants product or business decision analysis rather than a prompt artifact; use Kim Decision instead.",
+        "The request is to select components, route work, coordinate cross-component state, execute the task, perform research, or make the final acceptance decision."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "minLength": 1
+          },
+          "providedContext": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "request"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Goal Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "enum": [
+              "goal-prompt",
+              "draft-goal",
+              "research-plan"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceStatus": {
+            "enum": [
+              "sufficient",
+              "insufficient"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "permissions": [
+        "read-only access to explicitly scoped context",
+        "read-only public research when current facts are required to write an evidence-bounded prompt and the host provides a research tool"
+      ],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
+      ]
+    },
+    {
+      "id": "goalpro-loop-prompt",
+      "summary": "Create a Loop Prompt only for an explicit loop request or when post-delivery evidence determines a subsequent action.",
+      "useWhen": [
+        "The user explicitly requests continued iteration or a Loop Prompt; a Loop-only request requires the previous result or Next LOOP packet.",
+        "Observable post-delivery evidence has a defined trigger and will determine the next action."
+      ],
+      "doNotUseWhen": [
+        "The user is asking GoalPro to run the loop, schedule automation, route components, execute fixes, or accept the final result.",
+        "The task is a finite delivery; complexity, multiple files, or repeated checks within that delivery alone do not require a Loop Prompt."
+      ],
+      "input": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuationNeed": {
+            "enum": [
+              "explicit-loop-request",
+              "post-delivery-evidence"
+            ]
+          },
+          "previousResult": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request",
+          "continuationNeed"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "deliveryFormat": "conceptual-human-delivery",
+        "description": "Conceptual structure for a human-readable Loop Prompt. This prompt-only Skill has no Adapter that guarantees a strict JSON envelope.",
+        "properties": {
+          "artifactType": {
+            "const": "loop-prompt"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuationNeed": {
+            "enum": [
+              "explicit-loop-request",
+              "post-delivery-evidence"
+            ]
+          },
+          "executionAuthorized": {
+            "const": false
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "permissions": [],
+      "sideEffects": [],
+      "humanGate": {
+        "required": false,
+        "when": []
+      },
+      "validation": [
+        "tests/behavior.test.mjs",
+        "tests/boundary.test.mjs",
+        "tests/governance.test.mjs"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-08T12:35:01.242Z",
+    "slug": "zhanlincui-deploying-to-production",
+    "source_url": "https://github.com/ZhanlinCui/Ultimate-Agent-Skills-Collection/tree/main/deploying-to-production",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "3a780f5481b4303efa7f141e642993b91d44bc32e3a1609a019630fd1d973eb5",
+    "tree_hash": "b9025dbf3ebfd7ffa6daacc837899f189848f15eb5bdf86df0a8066696bd82d8",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "deploying-to-production",
+    "description": "Guide agents through build checks, GitHub repository setup, code push, Vercel deployment, and deployment verification for web projects.",
+    "summary": "Deploy web projects through build validation, GitHub publishing, Vercel release, and live verification.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "ZhanlinCui",
+    "license": "MIT",
+    "tags": [
+      "deployment",
+      "vercel",
+      "github",
+      "production",
+      "web-apps"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The single static finding is a false positive caused by an inline Markdown build command. No prompt injection, credential exfiltration, or hidden malicious deployment intent was found in SKILL.md.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "`npm run build`"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Line 22 is an inline Markdown command showing a standard npm build step, not Ruby or shell backtick execution by the skill. The file is prompt-only and contains no executable wrapper around this text."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 41,
+    "audit_model": "codex",
+    "audited_at": "2026-07-08T12:35:01.242Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Deploy Web Projects to Production",
+    "value_statement": "Production releases require careful build checks, repository setup, and live verification. This skill guides Claude, Codex, and Claude Code through GitHub and Vercel deployment steps.",
+    "seo_keywords": [
+      "Claude deployment skill",
+      "Codex deployment automation",
+      "Claude Code Vercel deploy",
+      "GitHub repository setup",
+      "Vercel production deployment",
+      "web app publishing",
+      "npm build verification",
+      "AI DevOps workflow",
+      "deploying to production"
+    ],
+    "actual_capabilities": [
+      "Runs a project build command before deployment and blocks progress on build errors.",
+      "Guides GitHub repository creation or reuse decisions.",
+      "Pushes the selected codebase to the configured Git remote.",
+      "Deploys a GitHub-backed web project to Vercel.",
+      "Captures and verifies the live deployment URL."
+    ],
+    "limitations": [
+      "Requires valid GitHub and Vercel access configured outside the skill.",
+      "Does not choose production settings, domains, or secrets automatically.",
+      "Can expose private code if repository visibility is chosen incorrectly.",
+      "Assumes the project uses an npm build workflow."
+    ],
+    "use_cases": [
+      {
+        "title": "Ship a Client Website",
+        "description": "Validate the build, create the repository, deploy to Vercel, and share a tested URL.",
+        "target_user": "Freelance developers"
+      },
+      {
+        "title": "Publish an Internal Tool",
+        "description": "Move a web app from local development to a GitHub-backed Vercel deployment.",
+        "target_user": "Startup engineers"
+      },
+      {
+        "title": "Standardize Release Handoff",
+        "description": "Give agents a repeatable checklist for build, source control, deployment, and verification.",
+        "target_user": "Technical leads"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Production Deploy",
+        "scenario": "Beginner deployment request",
+        "prompt": "Deploy this app to production using the deploying-to-production skill. Run the build first, then create or reuse a GitHub repository, deploy to Vercel, and verify the URL."
+      },
+      {
+        "title": "Fix Build Then Deploy",
+        "scenario": "Deployment with build errors",
+        "prompt": "Prepare this project for a Vercel production release. If the build fails, diagnose the error, apply a focused fix, rerun the build, then continue with GitHub and Vercel deployment."
+      },
+      {
+        "title": "Use an Existing Repository",
+        "scenario": "Controlled GitHub release",
+        "prompt": "Deploy this repository to Vercel with a clear release trail. Confirm repository reuse, push the expected branch, capture the deployment URL, and report verification results."
+      },
+      {
+        "title": "Security-Aware Release",
+        "scenario": "Advanced deployment with review points",
+        "prompt": "After reviewing uncommitted changes, deploy this web project. Keep repository visibility explicit, avoid committing secrets, push the chosen branch, deploy on Vercel, and verify the live page."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Deploy my portfolio site to production.",
+        "output": "The build passed, the repository was published to GitHub, and the site was deployed to Vercel. The live URL was verified successfully."
+      },
+      {
+        "input": "The build failed during deployment.",
+        "output": "The report identifies the failed build step, summarizes the cause, applies a focused fix, and continues only after a successful rebuild."
+      },
+      {
+        "input": "Deploy this app but use the existing repository.",
+        "output": "The workflow reuses the confirmed repository, pushes the expected branch, deploys from GitHub to Vercel, and returns the verified deployment URL."
+      }
+    ],
+    "best_practices": [
+      "Confirm repository visibility before pushing code to GitHub.",
+      "Check for secrets, local configuration files, and generated artifacts before deployment.",
+      "Verify the live URL after every deployment and record the result."
+    ],
+    "anti_patterns": [
+      "Deploying before the build succeeds.",
+      "Creating a new repository when the user requested an existing one.",
+      "Pushing private or secret files without review."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill deploy directly from local files?",
+        "answer": "It guides a GitHub-backed Vercel deployment. The project is pushed to GitHub before Vercel deployment."
+      },
+      {
+        "question": "Does it require Vercel credentials?",
+        "answer": "Yes. The agent needs access through the user's configured Vercel account or CLI session."
+      },
+      {
+        "question": "Can it fix build errors?",
+        "answer": "It can diagnose and fix build errors when the surrounding project files provide enough context."
+      },
+      {
+        "question": "Will it choose repository visibility?",
+        "answer": "No. Repository visibility should be confirmed before pushing code."
+      },
+      {
+        "question": "Is it safe for private projects?",
+        "answer": "It can be used for private projects when repository visibility, secrets, and deployment permissions are reviewed first."
+      },
+      {
+        "question": "Does it configure custom domains?",
+        "answer": "No. The workflow focuses on GitHub setup, Vercel deployment, and URL verification."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 41
+    }
+  ]
+}

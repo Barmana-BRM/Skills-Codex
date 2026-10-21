@@ -1,0 +1,3406 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T06:28:32.276Z",
+    "slug": "agentsecops-sast-bandit",
+    "source_url": "https://github.com/AgentSecOps/SecOpsAgentKit/tree/main/skills/appsec/sast-bandit",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2136f3e3934b62184785bf564e354428b51697a7b55db36586738d8b4a0fdcfc",
+    "tree_hash": "a45a86923bb12730187410147f200c9ef0b1e97f6290826a8e5713443fb2fbfd",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "sast-bandit",
+    "description": "Guide Bandit SAST scans for Python projects, triage findings by severity and confidence, and map remediation to CWE and OWASP guidance.",
+    "summary": "Run and interpret Bandit security scans for Python code and CI workflows.",
+    "icon": "📦",
+    "version": "0.1.0",
+    "author": "AgentSecOps",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "python-security",
+      "bandit",
+      "sast",
+      "owasp",
+      "cwe"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "scripts",
+      "external_commands",
+      "filesystem",
+      "network",
+      "env_access"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static matches are false positives from configuration lists, Markdown formatting, references, and labeled vulnerable examples. Confirmed risks include unsafe eval suppression, unvalidated subprocess guidance, fragile xargs filename handling, and unsafe pickle suppression. Third-party hooks and actions also use mutable references.",
+    "remediation": [
+      {
+        "issue": "The examples suppress Bandit warnings around eval and pickle deserialization.",
+        "suggestion": "Remove these suppression examples. Use a structured parser, or enforce strict trusted-source and integrity controls when replacement is impossible.",
+        "severity": "high"
+      },
+      {
+        "issue": "A safe-labeled subprocess example accepts an unvalidated filename.",
+        "suggestion": "Resolve the path within an approved directory, reject traversal and option-like values, and prefer direct file APIs over cat.",
+        "severity": "high"
+      },
+      {
+        "issue": "The changed-file pipeline passes repository filenames through unsafe xargs parsing.",
+        "suggestion": "Use null-delimited filenames, terminate options explicitly, and reject paths that Bandit could interpret as command options.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Remote hooks and actions use mutable version tags.",
+        "suggestion": "Pin executable dependencies to reviewed commit hashes and use automated updates to keep those hashes current.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The skill references scripts/bandit_analyzer.py, but the file is absent.",
+        "suggestion": "Bundle and audit the script, or remove claims that depend on enhanced reporting and ticket creation.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 204,
+            "line_end": 204
+          },
+          {
+            "file": "references/cwe_owasp_mapping.md",
+            "line_start": 61,
+            "line_end": 61
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 116,
+            "line_end": 116
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 115,
+            "line_end": 115
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 187,
+            "line_end": 187
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 204,
+            "line_end": 204
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 209,
+            "line_end": 209
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 228,
+            "line_end": 228
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 169,
+            "line_end": 169
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 176,
+            "line_end": 176
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 172,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 115
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 115,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 132
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 132,
+            "line_end": 132
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 140,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 165
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 173
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 179
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 179,
+            "line_end": 181
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 181,
+            "line_end": 183
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 183,
+            "line_end": 185
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 185,
+            "line_end": 187
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 187,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 206
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 206,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 219
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 219,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 234
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 234,
+            "line_end": 240
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 240,
+            "line_end": 247
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 247,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 251,
+            "line_end": 257
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 257,
+            "line_end": 264
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 264,
+            "line_end": 265
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 265,
+            "line_end": 266
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 75,
+            "line_end": 75
+          },
+          {
+            "file": "references/cwe_owasp_mapping.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 272,
+            "line_end": 272
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 144,
+            "line_end": 144
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 321,
+            "line_end": 321
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 338,
+            "line_end": 338
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 341,
+            "line_end": 341
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 344,
+            "line_end": 344
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 348,
+            "line_end": 348
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 321,
+            "line_end": 321
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 338,
+            "line_end": 338
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 341,
+            "line_end": 341
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 347,
+            "line_end": 347
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 499,
+            "line_end": 499
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 523,
+            "line_end": 523
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 526,
+            "line_end": 526
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 290,
+            "line_end": 290
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 301,
+            "line_end": 301
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 302,
+            "line_end": 302
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 303,
+            "line_end": 303
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 304,
+            "line_end": 304
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 305,
+            "line_end": 305
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 393,
+            "line_end": 393
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 510,
+            "line_end": 510
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 511,
+            "line_end": 511
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 518,
+            "line_end": 518
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 301,
+            "line_end": 301
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 304,
+            "line_end": 304
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 393,
+            "line_end": 393
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 398,
+            "line_end": 398
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 406,
+            "line_end": 406
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 416,
+            "line_end": 416
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 518,
+            "line_end": 518
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "scripts:assets/bandit_config.yaml:204:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 204,
+        "line_end": 204,
+        "snippet": "#   result = eval(safe_expression)  # nosec B307"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:117:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "- subprocess.run"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:112:python-subprocess-popen",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.Popen",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "# Default: ['os.system', 'subprocess.call', 'subprocess.Popen']"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:116:python-subprocess-popen",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.Popen",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "- subprocess.Popen"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:112:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "# Default: ['os.system', 'subprocess.call', 'subprocess.Popen']"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:115:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "- subprocess.call"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:8:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "- /.venv/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:10:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "- /.env/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:12:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- /.virtualenv/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:19:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "- /.pytest_cache/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:20:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- /.tox/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:23:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- /.eggs/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:27:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- /.git/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:28:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "- /.svn/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:29:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "- /.hg/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:30:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "- /.idea/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:31:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "- /.vscode/"
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:75:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "#   - B306  # Use of mktemp"
+      },
+      {
+        "id": "sensitive:assets/bandit_config.yaml:10:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "assets/bandit_config.yaml",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "- /.env/"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- repo: https://github.com/psf/black"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:26:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- repo: https://github.com/pycqa/isort"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:32:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "- repo: https://github.com/pycqa/flake8"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:39:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- repo: https://github.com/PyCQA/bandit"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:68:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "# - repo: https://github.com/PyCQA/bandit"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:100:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "- repo: https://github.com/pre-commit/pre-commit-hooks"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:137:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "- repo: https://github.com/Lucas-C/pre-commit-hooks-safety"
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:144:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "- repo: https://github.com/Yelp/detect-secrets"
+      },
+      {
+        "id": "sensitive:assets/pre-commit-config.yaml:110:crypto-seed-private-key-mention",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Crypto seed/private key mention",
+        "file": "assets/pre-commit-config.yaml",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "# Detect private keys"
+      },
+      {
+        "id": "scripts:references/cwe_owasp_mapping.md:61:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "references/cwe_owasp_mapping.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "| B410 | XML etree import (lxml) | CWE-611 | LOW |"
+      },
+      {
+        "id": "filesystem:references/cwe_owasp_mapping.md:23:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "references/cwe_owasp_mapping.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "| B306 | Use of insecure and deprecated function (mktemp) | CWE-377 | MEDIUM |"
+      },
+      {
+        "id": "blocker:references/cwe_owasp_mapping.md:76:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/cwe_owasp_mapping.md",
+        "line_start": 76,
+        "line_end": 76,
+        "snippet": "**Remediation Strategy**: Never concatenate user input into commands, queries, or markup. Use parame"
+      },
+      {
+        "id": "blocker:references/cwe_owasp_mapping.md:102:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/cwe_owasp_mapping.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "**Remediation Strategy**: Avoid using pickle for untrusted data. Use JSON, MessagePack, or Protocol "
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:187:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 187,
+        "line_end": 187,
+        "snippet": "subprocess.run([\"cat\", filename], check=True, capture_output=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:204:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 204,
+        "line_end": 204,
+        "snippet": "subprocess.run([\"cat\", str(filename)], check=True, capture_output=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:209:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 209,
+        "line_end": 209,
+        "snippet": "subprocess.run(shlex.split(command_string), check=True, capture_output=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:228:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 228,
+        "line_end": 228,
+        "snippet": "subprocess.run(cmd, check=True, capture_output=True, timeout=10)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:169:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "references/remediation_guide.md",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "subprocess.call(f\"cat {filename}\", shell=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:176:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "references/remediation_guide.md",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "subprocess.call(cmd, shell=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:172:python-os-system",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python os.system",
+        "file": "references/remediation_guide.md",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "os.system(f\"ping -c 1 {hostname}\")"
+      },
+      {
+        "id": "network:references/remediation_guide.md:321:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 321,
+        "line_end": 321,
+        "snippet": "requests.get('https://example.com', verify=False)"
+      },
+      {
+        "id": "network:references/remediation_guide.md:338:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 338,
+        "line_end": 338,
+        "snippet": "response = requests.get('https://example.com', verify=True)"
+      },
+      {
+        "id": "network:references/remediation_guide.md:341:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 341,
+        "line_end": 341,
+        "snippet": "response = requests.get('https://example.com', verify='/path/to/ca-bundle.crt')"
+      },
+      {
+        "id": "network:references/remediation_guide.md:344:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 344,
+        "line_end": 344,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:references/remediation_guide.md:348:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "response = urllib.request.urlopen(url, context=context, cafile=certifi.where())"
+      },
+      {
+        "id": "network:references/remediation_guide.md:321:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/remediation_guide.md",
+        "line_start": 321,
+        "line_end": 321,
+        "snippet": "requests.get('https://example.com', verify=False)"
+      },
+      {
+        "id": "network:references/remediation_guide.md:338:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/remediation_guide.md",
+        "line_start": 338,
+        "line_end": 338,
+        "snippet": "response = requests.get('https://example.com', verify=True)"
+      },
+      {
+        "id": "network:references/remediation_guide.md:341:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/remediation_guide.md",
+        "line_start": 341,
+        "line_end": 341,
+        "snippet": "response = requests.get('https://example.com', verify='/path/to/ca-bundle.crt')"
+      },
+      {
+        "id": "network:references/remediation_guide.md:347:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/remediation_guide.md",
+        "line_start": 347,
+        "line_end": 347,
+        "snippet": "url = 'https://example.com'"
+      },
+      {
+        "id": "network:references/remediation_guide.md:499:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/remediation_guide.md",
+        "line_start": 499,
+        "line_end": 499,
+        "snippet": "app.run(debug=True, host='0.0.0.0')"
+      },
+      {
+        "id": "network:references/remediation_guide.md:523:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/remediation_guide.md",
+        "line_start": 523,
+        "line_end": 523,
+        "snippet": "# gunicorn -w 4 -b 0.0.0.0:8000 app:app"
+      },
+      {
+        "id": "network:references/remediation_guide.md:526:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/remediation_guide.md",
+        "line_start": 526,
+        "line_end": 526,
+        "snippet": "app.run(debug=DEBUG, host='127.0.0.1', port=5000)"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:43:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "DATABASE_PASSWORD = os.environ.get(\"DATABASE_PASSWORD\")"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:49:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "host=os.environ.get(\"DB_HOST\", \"localhost\"),"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:50:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "password=os.environ.get(\"DB_PASSWORD\")"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:393:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 393,
+        "line_end": 393,
+        "snippet": "SECRET_KEY = os.environ['SECRET_KEY'].encode()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:510:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 510,
+        "line_end": 510,
+        "snippet": "DEBUG = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:511:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 511,
+        "line_end": 511,
+        "snippet": "ENV = os.environ.get('FLASK_ENV', 'production')"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:518:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/remediation_guide.md",
+        "line_start": 518,
+        "line_end": 518,
+        "snippet": "app.config['SECRET_KEY'] = os.environ['SECRET_KEY']"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:37:dotenv-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "dotenv library",
+        "file": "references/remediation_guide.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "from dotenv import load_dotenv"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:40:dotenv-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "dotenv library",
+        "file": "references/remediation_guide.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "load_dotenv()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:37:python-dotenv-loader",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python dotenv loader",
+        "file": "references/remediation_guide.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "from dotenv import load_dotenv"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:40:python-dotenv-loader",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python dotenv loader",
+        "file": "references/remediation_guide.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "load_dotenv()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:50:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "references/remediation_guide.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "password=os.environ.get(\"DB_PASSWORD\")"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:301:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 301,
+        "line_end": 301,
+        "snippet": "def create_signature(message: str, secret_key: bytes) -> str:"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:304:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "secret_key,"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:393:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 393,
+        "line_end": 393,
+        "snippet": "SECRET_KEY = os.environ['SECRET_KEY'].encode()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:398:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 398,
+        "line_end": 398,
+        "snippet": "signature = hmac.new(SECRET_KEY, pickled, hashlib.sha256).digest()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:406:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 406,
+        "line_end": 406,
+        "snippet": "expected_signature = hmac.new(SECRET_KEY, pickled, hashlib.sha256).digest()"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:416:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 416,
+        "line_end": 416,
+        "snippet": "serializer = URLSafeSerializer(SECRET_KEY)"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:518:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/remediation_guide.md",
+        "line_start": 518,
+        "line_end": 518,
+        "snippet": "app.config['SECRET_KEY'] = os.environ['SECRET_KEY']"
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:369:python-pickle-deserialization-rce-risk",
+        "category": "obfuscation",
+        "severity": "critical",
+        "pattern": "Python pickle deserialization (RCE risk)",
+        "file": "references/remediation_guide.md",
+        "line_start": 369,
+        "line_end": 369,
+        "snippet": "user_data = pickle.loads(request.body)"
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:411:python-pickle-deserialization-rce-risk",
+        "category": "obfuscation",
+        "severity": "critical",
+        "pattern": "Python pickle deserialization (RCE risk)",
+        "file": "references/remediation_guide.md",
+        "line_start": 411,
+        "line_end": 411,
+        "snippet": "return pickle.loads(pickled)"
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:70:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/remediation_guide.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "- Use environment variables with `.env` files (never commit `.env` to version control)"
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:341:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "references/remediation_guide.md",
+        "line_start": 341,
+        "line_end": 341,
+        "snippet": "response = requests.get('https://example.com', verify='/path/to/ca-bundle.crt')"
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:135:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/remediation_guide.md",
+        "line_start": 135,
+        "line_end": 135,
+        "snippet": "from django.db.models import Q"
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:144:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/remediation_guide.md",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "from django.db import connection"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:251:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "references/remediation_guide.md",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "password_hash = hashlib.md5(password.encode()).hexdigest()"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "user_id = request.GET['id']"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:85:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "query = f\"SELECT * FROM users WHERE id = {user_id}\""
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:102:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "user_id = request.GET['id']"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:103:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "query = \"SELECT * FROM users WHERE id = %s\""
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "os.system(f\"ping -c 1 {hostname}\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:194:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "raise ValueError(\"Invalid filename\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:223:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 223,
+        "line_end": 223,
+        "snippet": "# Validate target (e.g., IP address or hostname)"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:225:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 225,
+        "line_end": 225,
+        "snippet": "raise ValueError(\"Invalid target\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:409:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 409,
+        "line_end": 409,
+        "snippet": "raise ValueError(\"Invalid signature - data may be tampered\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:426:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 426,
+        "line_end": 426,
+        "snippet": "- Avoid pickle for untrusted data"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 49,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 57,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 59,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 61,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "Create a configuration file `.bandit` or `.bandit.yaml` to customize scans:"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 79,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 85,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 97,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 110,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 115,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 128,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 132,
+        "snippet": "For each finding, consult the bundled `references/remediation_guide.md` for secure coding patterns. "
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "- **Command Injection (B602, B605)**: Avoid `shell=True`, use `shlex.split()` for argument parsing"
+      },
+      {
+        "id": "external_commands:SKILL.md:140:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 140,
+        "line_end": 159,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 161,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 165,
+        "snippet": "Use the bundled script `scripts/bandit_analyzer.py` for enhanced reporting with OWASP mapping."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 173,
+        "snippet": "- **Sensitive Data Handling**: Bandit reports may contain code snippets with hardcoded credentials. "
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 177,
+        "snippet": "- **False Positives**: Review LOW confidence findings manually. Use inline `# nosec` comments sparin"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 179,
+        "snippet": "### Scripts (`scripts/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 179,
+        "line_end": 181,
+        "snippet": "- `bandit_analyzer.py` - Enhanced Bandit wrapper that parses JSON output, maps findings to OWASP Top"
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 181,
+        "line_end": 183,
+        "snippet": "### References (`references/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 183,
+        "line_end": 185,
+        "snippet": "- `remediation_guide.md` - Detailed secure coding patterns for common Bandit findings, including cod"
+      },
+      {
+        "id": "external_commands:SKILL.md:185:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 185,
+        "line_end": 187,
+        "snippet": "- `cwe_owasp_mapping.md` - Complete mapping between Bandit issue codes, CWE identifiers, and OWASP T"
+      },
+      {
+        "id": "external_commands:SKILL.md:187:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 187,
+        "line_end": 189,
+        "snippet": "### Assets (`assets/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 191,
+        "snippet": "- `bandit_config.yaml` - Production-ready Bandit configuration with optimized test selection, exclus"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 199,
+        "snippet": "- `pre-commit-config.yaml` - Pre-commit hook configuration for Bandit integration. Prevents commits "
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 206,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 206,
+        "line_end": 212,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 219,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 219,
+        "line_end": 225,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 234,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:234:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 234,
+        "line_end": 240,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:240:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 240,
+        "line_end": 247,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 247,
+        "line_end": 251,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 251,
+        "line_end": 257,
+        "snippet": "- **CI/CD**: Integrate as GitHub Actions, GitLab CI, Jenkins pipeline stage, or pre-commit hook. Use"
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 257,
+        "line_end": 264,
+        "snippet": "- **Ticketing Integration**: Use `scripts/bandit_analyzer.py` to automatically create Jira/GitHub is"
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 264,
+        "line_end": 265,
+        "snippet": "1. Use confidence filtering: `bandit -r . -i` (HIGH confidence only)"
+      },
+      {
+        "id": "external_commands:SKILL.md:265:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 265,
+        "line_end": 266,
+        "snippet": "2. Exclude test files: `bandit -r . --exclude /tests/`"
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 267,
+        "snippet": "3. Customize `.bandit.yaml` to skip specific tests for known safe patterns"
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 267,
+        "line_end": 272,
+        "snippet": "4. Review and suppress with inline `# nosec` comments with justification"
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 272,
+        "snippet": "1. Exclude dependencies: Add `/venv/`, `/.venv/`, `/site-packages/` to `.bandit.yaml` exclude_dirs"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 279,
+        "snippet": "3. Scan only changed files in CI/CD: `git diff --name-only origin/main | grep '.py$' | xargs bandit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 279,
+        "line_end": 280,
+        "snippet": "1. Check enabled tests: `bandit -l` (list all tests)"
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 280,
+        "line_end": 282,
+        "snippet": "2. Ensure tests are not skipped in `.bandit.yaml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 282,
+        "line_end": 287,
+        "snippet": "4. Update Bandit regularly: `pip install --upgrade bandit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 287,
+        "line_end": 289,
+        "snippet": "Use the bundled `assets/pre-commit-config.yaml`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:289:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 289,
+        "line_end": 295,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:295:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 295,
+        "line_end": 297,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:xargs-command-can-execute-arbitrary-commands",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "xargs command (can execute arbitrary commands)",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 274,
+        "snippet": "3. Scan only changed files in CI/CD: `git diff --name-only origin/main | grep '.py$' | xargs bandit`"
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "- https://github.com/PyCQA/bandit"
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- https://bandit.readthedocs.io/"
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- https://owasp.org/www-project-top-ten/"
+      },
+      {
+        "id": "network:SKILL.md:290:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 290,
+        "line_end": 290,
+        "snippet": "- repo: https://github.com/PyCQA/bandit"
+      },
+      {
+        "id": "network:SKILL.md:301:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 301,
+        "line_end": 301,
+        "snippet": "- [Bandit Documentation](https://bandit.readthedocs.io/)"
+      },
+      {
+        "id": "network:SKILL.md:302:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 302,
+        "line_end": 302,
+        "snippet": "- [Bandit GitHub Repository](https://github.com/PyCQA/bandit)"
+      },
+      {
+        "id": "network:SKILL.md:303:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 303,
+        "line_end": 303,
+        "snippet": "- [OWASP Top 10](https://owasp.org/www-project-top-ten/)"
+      },
+      {
+        "id": "network:SKILL.md:304:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "- [CWE Database](https://cwe.mitre.org/)"
+      },
+      {
+        "id": "network:SKILL.md:305:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 305,
+        "line_end": 305,
+        "snippet": "- [Python Security Best Practices](https://python.readthedocs.io/en/stable/library/security_warnings"
+      },
+      {
+        "id": "filesystem:SKILL.md:68:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "- /.venv/"
+      },
+      {
+        "id": "filesystem:SKILL.md:272:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 272,
+        "snippet": "1. Exclude dependencies: Add `/venv/`, `/.venv/`, `/site-packages/` to `.bandit.yaml` exclude_dirs"
+      },
+      {
+        "id": "blocker:SKILL.md:133:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "- **Weak Cryptography (B303, B304)**: Replace MD5/SHA1 with SHA256/SHA512 or bcrypt for passwords"
+      },
+      {
+        "id": "blocker:SKILL.md:132:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "- **Command Injection (B602, B605)**: Avoid `shell=True`, use `shlex.split()` for argument parsing"
+      },
+      {
+        "id": "blocker:SKILL.md:134:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "- **Insecure Deserialization (B301)**: Avoid pickle, use JSON or MessagePack with schema validation"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "scripts:assets/bandit_config.yaml:204:dynamic-code-evaluation-with-eval",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The line is non-executable, but it presents eval() with a # nosec suppression and no validation. Copying this guidance can introduce arbitrary code execution.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:117:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This YAML lists function names for Bandit's shell-injection detector. It does not invoke a subprocess or pass any command arguments."
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:112:python-subprocess-popen",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This YAML lists function names for Bandit's shell-injection detector. It does not invoke a subprocess or pass any command arguments."
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:116:python-subprocess-popen",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This YAML lists function names for Bandit's shell-injection detector. It does not invoke a subprocess or pass any command arguments."
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:112:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This YAML lists function names for Bandit's shell-injection detector. It does not invoke a subprocess or pass any command arguments."
+      },
+      {
+        "id": "external_commands:assets/bandit_config.yaml:115:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This YAML lists function names for Bandit's shell-injection detector. It does not invoke a subprocess or pass any command arguments."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:8:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:10:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:12:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:19:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:20:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:23:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:27:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:28:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:29:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:30:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:31:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This value is an exclusion pattern for a directory that Bandit should not scan. It does not read, copy, or expose hidden-file contents."
+      },
+      {
+        "id": "filesystem:assets/bandit_config.yaml:75:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is a commented Bandit test identifier describing mktemp detection. It does not create a temporary file."
+      },
+      {
+        "id": "sensitive:assets/bandit_config.yaml:10:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The .env path is an exclusion entry, so the configuration avoids scanning that directory. No environment file is opened or read."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:26:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:32:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:39:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:68:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:100:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:137:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "network:assets/pre-commit-config.yaml:144:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a declared pre-commit hook repository, not an exfiltration endpoint. The separate mutable-reference finding covers its supply-chain risk."
+      },
+      {
+        "id": "sensitive:assets/pre-commit-config.yaml:110:crypto-seed-private-key-mention",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The text is the identifier and comment for a hook that detects private keys. It contains no key material, seed, or credential."
+      },
+      {
+        "id": "scripts:references/cwe_owasp_mapping.md:61:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is a Markdown table row naming Bandit test B410 and lxml imports. It contains no dynamic import expression or executable code."
+      },
+      {
+        "id": "filesystem:references/cwe_owasp_mapping.md:23:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line documents Bandit test B306 and the mktemp weakness in a reference table. It does not create a file."
+      },
+      {
+        "id": "blocker:references/cwe_owasp_mapping.md:76:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched text is defensive remediation prose about avoiding unsafe input handling. It performs no system discovery or execution."
+      },
+      {
+        "id": "blocker:references/cwe_owasp_mapping.md:102:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched text is defensive remediation prose about avoiding unsafe input handling. It performs no system discovery or execution."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:187:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The example labels this call safe although filename comes directly from request.GET. An attacker can select arbitrary readable paths or inject options into cat.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:204:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This educational example validates the filename and containment path before using a fixed executable with shell disabled. It is not package runtime behavior."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:209:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This educational example splits a hardcoded command string and runs it without a shell. No untrusted command input is present."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:228:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This educational example uses an allowlisted command, validates the target, disables shell execution, and sets a timeout. It is not package runtime behavior."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:169:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The command appears only in a section explicitly labeled Vulnerable Code and is followed by safer alternatives. The package does not execute it."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:176:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The command appears only in a section explicitly labeled Vulnerable Code and is followed by safer alternatives. The package does not execute it."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:172:python-os-system",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The command appears only in a section explicitly labeled Vulnerable Code and is followed by safer alternatives. The package does not execute it."
+      },
+      {
+        "id": "network:references/remediation_guide.md:321:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The request is an explicitly labeled vulnerable TLS example used for instruction. It is not executed by the skill."
+      },
+      {
+        "id": "network:references/remediation_guide.md:338:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The HTTP call or import is a documentation example for verified TLS handling. It is not package runtime behavior or an exfiltration request."
+      },
+      {
+        "id": "network:references/remediation_guide.md:341:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The HTTP call or import is a documentation example for verified TLS handling. It is not package runtime behavior or an exfiltration request."
+      },
+      {
+        "id": "network:references/remediation_guide.md:344:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The HTTP call or import is a documentation example for verified TLS handling. It is not package runtime behavior or an exfiltration request."
+      },
+      {
+        "id": "network:references/remediation_guide.md:348:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The HTTP call or import is a documentation example for verified TLS handling. It is not package runtime behavior or an exfiltration request."
+      },
+      {
+        "id": "network:references/remediation_guide.md:321:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example.com URL is a reserved documentation endpoint inside a TLS example. The skill does not contact it."
+      },
+      {
+        "id": "network:references/remediation_guide.md:338:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example.com URL is a reserved documentation endpoint inside a TLS example. The skill does not contact it."
+      },
+      {
+        "id": "network:references/remediation_guide.md:341:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example.com URL is a reserved documentation endpoint inside a TLS example. The skill does not contact it."
+      },
+      {
+        "id": "network:references/remediation_guide.md:347:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example.com URL is a reserved documentation endpoint inside a TLS example. The skill does not contact it."
+      },
+      {
+        "id": "network:references/remediation_guide.md:499:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The wildcard bind is inside an explicitly labeled vulnerable Flask example. It is not an active service configuration."
+      },
+      {
+        "id": "network:references/remediation_guide.md:523:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The address is part of defensive deployment guidance or a loopback development example. The skill does not open a listener."
+      },
+      {
+        "id": "network:references/remediation_guide.md:526:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The address is part of defensive deployment guidance or a loopback development example. The skill does not open a listener."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:43:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:49:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:50:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:393:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:510:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:511:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:518:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:37:dotenv-library",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:40:dotenv-library",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:37:python-dotenv-loader",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:40:python-dotenv-loader",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation example showing how an application can load configuration without hardcoding secrets. The skill does not access the host environment."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:50:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line reads a password from a named environment variable in a defensive example. It contains no connection string or credential value."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:301:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:304:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:393:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:398:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:406:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:416:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:518:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The identifier is a placeholder variable used in HMAC or Flask guidance. No literal secret, API key, or credential is embedded."
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:369:python-pickle-deserialization-rce-risk",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This call is in a section explicitly labeled Vulnerable Code and demonstrates what users should avoid. It is not executed by the package."
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:411:python-pickle-deserialization-rce-risk",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This reference example verifies an HMAC before deserialization and is not executed by the package. The separate skill-level suppression example remains unsafe."
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:70:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The sentence advises users never to commit .env files. It does not open, read, or transmit an environment file."
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:341:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The path is a placeholder for a public CA certificate bundle used to verify TLS. It is not a private key or credential."
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:135:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The scanner matched the django.db module name in an ORM example. No SQLite file path or database file access is present."
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:144:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The scanner matched the django.db module name in an ORM example. No SQLite file path or database file access is present."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:251:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The MD5 call is inside an explicitly labeled Vulnerable Code example and is followed by strong alternatives. It is not executed by the package."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:85:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:102:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:103:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:194:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:223:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:225:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:409:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:426:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is defensive sample code or remediation prose. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:140:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:185:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:187:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:234:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:240:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:265:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:289:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:295:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched backticks are Markdown code delimiters around documentation. They are not shell command substitution and the package does not execute them automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:xargs-command-can-execute-arbitrary-commands",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "Repository-controlled filenames are passed through newline and whitespace parsing into Bandit arguments. Crafted paths can split arguments or be interpreted as Bandit options.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:290:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:301:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:302:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:303:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:304:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "network:SKILL.md:305:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a public Bandit, OWASP, CWE, or Python documentation reference. It is not an exfiltration endpoint and no request is made."
+      },
+      {
+        "id": "filesystem:SKILL.md:68:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The hidden directory name is presented as a Bandit exclusion pattern. The skill does not read hidden files."
+      },
+      {
+        "id": "filesystem:SKILL.md:272:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The hidden directory name is presented as a Bandit exclusion pattern. The skill does not read hidden files."
+      },
+      {
+        "id": "blocker:SKILL.md:133:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The text warns users to replace MD5 and SHA1 with stronger choices. It does not implement or endorse weak cryptography."
+      },
+      {
+        "id": "blocker:SKILL.md:132:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is defensive guidance against command injection or insecure deserialization. It does not gather system information."
+      },
+      {
+        "id": "blocker:SKILL.md:134:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is defensive guidance against command injection or insecure deserialization. It does not gather system information."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unsafe Pickle Suppression Guidance",
+        "description": "The skill presents pickle.load on a caller-provided path as an acceptable # nosec example. A writable cache or attacker-controlled path could enable code execution.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 240,
+            "line_end": 246
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The example directly deserializes a caller-selected file and suppresses B301 without enforcing a trusted directory, ownership, or integrity check."
+      },
+      {
+        "title": "Mutable Third-Party Execution References",
+        "description": "Pre-commit hooks and GitHub Actions execute third-party code through release tags instead of immutable commit hashes. A moved or compromised tag could execute altered code.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 20,
+            "line_end": 40
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 100,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 154
+          }
+        ],
+        "confidence": 0.93,
+        "confidence_reasoning": "The cited configurations use version tags for code that runs in developer or CI environments. No immutable commit SHA or package hash is specified."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Dynamic code evaluation with eval()",
+        "description": "#   result = eval(safe_expression)  # nosec B307",
+        "locations": [
+          {
+            "file": "assets/bandit_config.yaml",
+            "line_start": 204,
+            "line_end": 204
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "scripts",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The line is non-executable, but it presents eval() with a # nosec suppression and no validation. Copying this guidance can introduce arbitrary code execution."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "subprocess.run([\"cat\", filename], check=True, capture_output=True)",
+        "locations": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 187,
+            "line_end": 187
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The example labels this call safe although filename comes directly from request.GET. An attacker can select arbitrary readable paths or inject options into cat."
+      },
+      {
+        "title": "Unsafe Pickle Suppression Guidance",
+        "description": "The skill presents pickle.load on a caller-provided path as an acceptable # nosec example. A writable cache or attacker-controlled path could enable code execution.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 240,
+            "line_end": 246
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The example directly deserializes a caller-selected file and suppresses B301 without enforcing a trusted directory, ownership, or integrity check."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "xargs command (can execute arbitrary commands)",
+        "description": "3. Scan only changed files in CI/CD: `git diff --name-only origin/main | grep '.py$' | xargs bandit`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 274,
+            "line_end": 274
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "Repository-controlled filenames are passed through newline and whitespace parsing into Bandit arguments. Crafted paths can split arguments or be interpreted as Bandit options."
+      },
+      {
+        "title": "Mutable Third-Party Execution References",
+        "description": "Pre-commit hooks and GitHub Actions execute third-party code through release tags instead of immutable commit hashes. A moved or compromised tag could execute altered code.",
+        "locations": [
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 20,
+            "line_end": 40
+          },
+          {
+            "file": "assets/pre-commit-config.yaml",
+            "line_start": 100,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 154
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.93,
+        "confidence_reasoning": "The cited configurations use version tags for code that runs in developer or CI environments. No immutable commit SHA or package hash is specified."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 1527,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T06:28:32.276Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Scan Python Code with Bandit",
+    "value_statement": "Python security flaws can reach production unnoticed. This skill guides Bandit scans, prioritization, CI integration, and remediation with CWE and OWASP references.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Bandit SAST",
+      "Python security scanning",
+      "OWASP mapping",
+      "CWE mapping",
+      "CI security gates",
+      "pre-commit security"
+    ],
+    "actual_capabilities": [
+      "Explains how to run Bandit against Python files, directories, and configured projects.",
+      "Organizes findings by Bandit severity, confidence, location, and CWE reference.",
+      "Provides remediation examples for injection, cryptography, deserialization, TLS, XML, and template risks.",
+      "Supplies baseline Bandit and pre-commit configuration examples.",
+      "Guides CI security gates and progressive enforcement for legacy projects."
+    ],
+    "limitations": [
+      "The referenced scripts/bandit_analyzer.py file is not included in this package.",
+      "Bandit cannot reliably detect business logic, authorization, or runtime flaws.",
+      "Results depend on the Bandit version, enabled tests, exclusions, and confidence thresholds.",
+      "Reports can expose source snippets or secrets unless code output and access are restricted."
+    ],
+    "use_cases": [
+      {
+        "title": "Triage a Python Feature",
+        "description": "Scan changed Python files, review high-confidence findings, and prepare focused fixes before code review.",
+        "target_user": "Python developer"
+      },
+      {
+        "title": "Establish an Application Baseline",
+        "description": "Inventory existing Bandit findings, map them to CWE and OWASP, and define remediation priorities.",
+        "target_user": "Application security engineer"
+      },
+      {
+        "title": "Add a CI Security Gate",
+        "description": "Configure Bandit or pre-commit checks that block selected severity levels while preserving reviewable reports.",
+        "target_user": "DevOps engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a Basic Scan",
+        "prompt": "Scan the Python files in [path] with Bandit. Use a read-only workflow, explain the command, and summarize findings by severity and confidence.",
+        "scenario": "First scan of a small Python project"
+      },
+      {
+        "title": "Review a Bandit Report",
+        "prompt": "Review the Bandit report at [path]. Prioritize exploitable findings, identify likely false positives, and recommend one verification step for each priority item.",
+        "scenario": "Triage an existing scan report"
+      },
+      {
+        "title": "Design a CI Gate",
+        "prompt": "Design a Bandit gate for [repository]. Specify scan scope, thresholds, exclusions, report retention, failure behavior, and a safe exception review process.",
+        "scenario": "Introduce Bandit into continuous integration"
+      },
+      {
+        "title": "Build a Remediation Plan",
+        "prompt": "Analyze Bandit findings in [report]. Map each confirmed issue to CWE and OWASP, rank exploitability, propose fixes, and define validation tests.",
+        "scenario": "Advanced security remediation planning"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review Bandit finding B602 in payments/tasks.py.",
+        "output": [
+          "Priority: High because user input reaches a shell-enabled subprocess.",
+          "Recommended action: use a fixed executable with validated arguments and no shell.",
+          "Validation: test metacharacters, traversal values, and unexpected option-like inputs."
+        ]
+      },
+      {
+        "input": "Plan a Bandit gate for a legacy Python service.",
+        "output": [
+          "Start by recording all findings without blocking builds.",
+          "Block new high-severity, high-confidence findings after the baseline is reviewed.",
+          "Store restricted reports and require documented approval for suppressions."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Run scans with read-only source access and restrict report access.",
+      "Review exploitability before suppression, and document every accepted exception.",
+      "Pin Bandit, hooks, and CI actions to reviewed immutable versions."
+    ],
+    "anti_patterns": [
+      "Do not treat every Bandit finding as a confirmed vulnerability.",
+      "Do not suppress eval, pickle, or shell findings without a documented trust boundary.",
+      "Do not publish reports containing credentials or sensitive source snippets."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill install Bandit automatically?",
+        "answer": "It provides installation commands and configurations. Confirm package installation and external downloads before execution."
+      },
+      {
+        "question": "Which languages can Bandit scan?",
+        "answer": "Bandit analyzes Python source code. Use other tools for non-Python languages."
+      },
+      {
+        "question": "Does Bandit cover the complete OWASP Top 10?",
+        "answer": "No. It covers selected Python patterns, while business logic and authorization issues require additional review."
+      },
+      {
+        "question": "How should false positives be handled?",
+        "answer": "Verify data flow and exploitability first. Record a precise justification before adding a targeted suppression."
+      },
+      {
+        "question": "Can Bandit reports contain secrets?",
+        "answer": "Yes. Reports may include source snippets, so restrict access or disable code excerpts."
+      },
+      {
+        "question": "Is the enhanced analyzer included?",
+        "answer": "No. The package references scripts/bandit_analyzer.py, but that file is absent."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "bandit_config.yaml",
+          "type": "file",
+          "path": "assets/bandit_config.yaml",
+          "lines": 212
+        },
+        {
+          "name": "pre-commit-config.yaml",
+          "type": "file",
+          "path": "assets/pre-commit-config.yaml",
+          "lines": 218
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "cwe_owasp_mapping.md",
+          "type": "file",
+          "path": "references/cwe_owasp_mapping.md",
+          "lines": 158
+        },
+        {
+          "name": "remediation_guide.md",
+          "type": "file",
+          "path": "references/remediation_guide.md",
+          "lines": 623
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 306
+    }
+  ]
+}

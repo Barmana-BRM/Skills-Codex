@@ -1,0 +1,1980 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-08-08T08:37:07.496Z",
+    "slug": "lllllllama-ai-research-reproduction",
+    "source_url": "https://github.com/lllllllama/rigorpilot-skills/tree/main/skills/ai-research-reproduction/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2dd32f685ef0b2154ab960ba06548e675cbd4533fbf4499518f98d9bd2607bc3",
+    "tree_hash": "ae2e707197dad62a5bce67ff854dfd1093d46586831bad4055e2ed523257cae0",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    },
+    "upstream_version_raw": null,
+    "upstream_version_normalized": null,
+    "upstream_version_source": "none",
+    "upstream_version_status": "missing",
+    "upstream_commit_sha": "3ab505258a8b16f95f5d1bee4101adbbf3a469ea"
+  },
+  "skill": {
+    "name": "ai-research-reproduction",
+    "description": "Reproduce deep learning repositories through README-first target selection, controlled setup, documented execution, conservative patches, and standardized evidence reports.",
+    "summary": "Plan and audit a minimal, repository-grounded AI research reproduction.",
+    "icon": "📦",
+    "author": "lllllllama",
+    "license": "MIT",
+    "category": "research",
+    "tags": [
+      "research-reproduction",
+      "deep-learning",
+      "experiment-audit",
+      "readme-first",
+      "reproducibility"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are Markdown backticks, prose, safe temporary-file handling, or fixed argument-array subprocess calls. Confirmed risks include executing README-derived commands, loading files outside the skill directory, accessing a hidden home file, and dynamically importing external sibling code.",
+    "remediation": [
+      {
+        "issue": "A documented command extracted from an untrusted repository can execute with the agent process permissions.",
+        "suggestion": "Show the exact command and working directory, require immediate approval, and run it in a restricted container without secrets or host write access.",
+        "severity": "high"
+      },
+      {
+        "issue": "The skill directs agents to load policies outside its package and consult a hidden file in the user home directory.",
+        "suggestion": "Bundle required policies inside the skill, enforce skill-root path containment, and require explicit consent before reading user-specific files.",
+        "severity": "high"
+      },
+      {
+        "issue": "The orchestrator dynamically imports and executes a sibling lessons module without verifying its integrity.",
+        "suggestion": "Use a packaged dependency with a pinned integrity check, or remove dynamic loading and expose lesson recording through a trusted API.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 71,
+            "line_end": 119
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 119,
+            "line_end": 137
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 137,
+            "line_end": 143
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 143,
+            "line_end": 150
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 178,
+            "line_end": 178
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 196,
+            "line_end": 196
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 207,
+            "line_end": 207
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 216,
+            "line_end": 216
+          },
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 374,
+            "line_end": 374
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 357,
+            "line_end": 357
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 306,
+            "line_end": 306
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 556,
+            "line_end": 556
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 557,
+            "line_end": 557
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 613,
+            "line_end": 613
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 634,
+            "line_end": 634
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 635,
+            "line_end": 635
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 696,
+            "line_end": 696
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 701,
+            "line_end": 701
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 112,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 114
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 114,
+            "line_end": 115
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 115,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 123
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/annotate_readme.py",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/output-spec.md:44:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/output-spec.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "- avoid dumping noise from the shell history"
+      },
+      {
+        "id": "blocker:references/patch-policy.md:5:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patch-policy.md",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "Avoid patching repository code unless reproduction is blocked and the change is both conservative an"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 71,
+        "line_end": 119,
+        "snippet": "if stripped.startswith(\"```\"):"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:119:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 119,
+        "line_end": 137,
+        "snippet": "lines = [f\"`{item.get('command', '')}`\" for item in matched[:limit]]"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:137:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 137,
+        "line_end": 143,
+        "snippet": "f\"`{name}={value}`\""
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 143,
+        "line_end": 150,
+        "snippet": "shown = [f\"`{best_metric['name']}={best_metric['value']}`\"]"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:150:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "lines: List[str] = [text(user_language, f\"Command: `{command}`\", f\"命令:`{command}`\")]"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 178,
+        "line_end": 178,
+        "snippet": "lines.append(text(user_language, f\"Error excerpt: `{excerpt}`\", f\"错误摘录:`{excerpt}`\"))"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 196,
+        "line_end": 196,
+        "snippet": "text(user_language, f\"Command sourced from linked doc `{source_file}`.\", f\"命令来自 README 链接的文档 `{sourc"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:207:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 207,
+        "line_end": 207,
+        "snippet": "text(user_language, f\"Command: `{command}`\", f\"命令:`{command}`\"),"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:216:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 216,
+        "line_end": 216,
+        "snippet": "text(user_language, f\"Command sourced from linked doc `{source_file}`.\", f\"命令来自 README 链接的文档 `{sourc"
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:374:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 374,
+        "line_end": 374,
+        "snippet": "f\"{status_style} `{status}` · `{selected_goal}` · `{context.get('lane')}` · {evidence_links(selected"
+      },
+      {
+        "id": "filesystem:scripts/annotate_readme.py:104:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "links += \" · [train status](../train_outputs/status.json)\""
+      },
+      {
+        "id": "blocker:scripts/annotate_readme.py:6:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/annotate_readme.py",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "annotation describing what the reproduction run did there, colored by risk:"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:84:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "result = subprocess.run(command, check=True, capture_output=True, text=True)"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:95:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:357:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 357,
+        "line_end": 357,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:306:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 306,
+        "line_end": 306,
+        "snippet": "f\"README had no runnable commands; delegated extraction to linked doc `{rel}`.\""
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:556:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 556,
+        "line_end": 556,
+        "snippet": "f\"Selected goal `{chosen['selected_goal']}` from README evidence.\","
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:557:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 557,
+        "line_end": 557,
+        "snippet": "f\"已根据 README 证据选择目标 `{chosen['selected_goal']}`。\","
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:613:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 613,
+        "line_end": 613,
+        "snippet": "source_note += text(user_language, f\", section `{section}`\", f\",章节 `{section}`\")"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:634:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 634,
+        "line_end": 634,
+        "snippet": "f\"Review `train_outputs/status.json`, then decide whether to authorize a fuller training reproductio"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:635:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 635,
+        "line_end": 635,
+        "snippet": "f\"先检查 `train_outputs/status.json`,再决定是否授权更完整的训练复现。计划继续执行的命令是:`{chosen['documented_command']}`。保守预估时长"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:696:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 696,
+        "line_end": 696,
+        "snippet": "text(user_language, f\"Selected `{chosen['selected_goal']}` as the smallest trustworthy target.\", f\"已"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:701:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 701,
+        "line_end": 701,
+        "snippet": "timeline.append(text(user_language, f\"Training lane `{lane}` selected with run mode `{run_data.get('"
+      },
+      {
+        "id": "filesystem:scripts/orchestrate_repro.py:12:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "import tempfile"
+      },
+      {
+        "id": "filesystem:scripts/orchestrate_repro.py:90:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "with tempfile.NamedTemporaryFile(\"w\", encoding=\"utf-8\", suffix=\".json\", delete=False) as handle:"
+      },
+      {
+        "id": "blocker:scripts/orchestrate_repro.py:383:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 383,
+        "line_end": 383,
+        "snippet": "f\"Selected documented command did not finish within {timeout} seconds.\","
+      },
+      {
+        "id": "blocker:scripts/orchestrate_repro.py:579:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 579,
+        "line_end": 579,
+        "snippet": "\"Selected documented command started but did not complete cleanly.\","
+      },
+      {
+        "id": "external_commands:SKILL.md:3:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "description: Rigor Reproduce compatible skill slug for README-first deep learning repository reprodu"
+      },
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "`ai-research-reproduction` for compatibility. The skill guides the agent toward"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "`../../references/agent-operating-principles.md`, then load"
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "`../../references/research-rigor-principles.md` and"
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "`../../references/deep-learning-experiment-principles.md` when scientific meaning, comparability, or"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "conflict, record the conflict and use `paper-context-resolver` only for the"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "2. Use `repo-intake-and-plan` to extract documented commands and candidate"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "4. Use `env-and-assets-bootstrap` only for target-specific environment,"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "5. Use `analyze-project` only when structure, insertion points, or suspicious"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "6. Use `minimal-run-and-audit` for documented inference, evaluation, smoke, or"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "7. Use `run-train` instead when the selected trusted target is training startup,"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 86,
+        "snippet": "`repro/YYYY-MM-DD-short-task`, keep verified patch commits sparse, and record"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "README-fidelity impact in `PATCHES.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "See `references/patch-policy.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "Always target `repro_outputs/`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 104,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 106,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "Use the templates under `assets/` and the field rules in `references/output-spec.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 109,
+        "snippet": "- Put the shortest high-value summary in `SUMMARY.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 110,
+        "snippet": "- Put copyable commands in `COMMANDS.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 111,
+        "snippet": "- Put process evidence, assumptions, failures, and decisions in `LOG.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 112,
+        "snippet": "- Put scientific meaning and change effects in `SCIENTIFIC_CHANGELOG.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 113,
+        "snippet": "- Put comparison anchors and protocol deviations in `COMPARABILITY_REPORT.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 114,
+        "snippet": "- Put durable machine-readable state in `status.json`."
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 114,
+        "line_end": 115,
+        "snippet": "- Put branch, commit, validation, and README-fidelity impact in `PATCHES.md` when needed."
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 120,
+        "snippet": "- Put the researcher's at-a-glance view in `ANNOTATED_README.md`: the README replayed verbatim, each"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 121,
+        "snippet": "- Load `references/language-policy.md` when writing human-readable outputs."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 122,
+        "snippet": "- Load `../../references/research-rigor-principles.md` before making comparability, contribution, or"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 123,
+        "snippet": "- Load `../../references/deep-learning-experiment-principles.md` when dataset, split, metric, checkp"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "- Failed and later-resolved runs are auto-recorded as lessons via `shared/scripts/lessons_store.py` "
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 127,
+        "snippet": "- Load `references/research-safety-principles.md` before protocol-sensitive"
+      },
+      {
+        "id": "filesystem:SKILL.md:20:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "`../../references/agent-operating-principles.md`, then load"
+      },
+      {
+        "id": "filesystem:SKILL.md:21:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "`../../references/research-rigor-principles.md` and"
+      },
+      {
+        "id": "filesystem:SKILL.md:22:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "`../../references/deep-learning-experiment-principles.md` when scientific meaning, comparability, or"
+      },
+      {
+        "id": "filesystem:SKILL.md:121:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "- Load `../../references/research-rigor-principles.md` before making comparability, contribution, or"
+      },
+      {
+        "id": "filesystem:SKILL.md:122:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "- Load `../../references/deep-learning-experiment-principles.md` when dataset, split, metric, checkp"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-"
+      },
+      {
+        "id": "blocker:SKILL.md:83:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "- Avoid changing model architecture, core inference semantics, training logic,"
+      },
+      {
+        "id": "blocker:SKILL.md:115:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "- Put the researcher's at-a-glance view in `ANNOTATED_README.md`: the README replayed verbatim, each"
+      },
+      {
+        "id": "obfuscation:scripts/orchestrate_repro.py:1:heuristic-multiple-bracket-chains-15-jsfuck-obfu",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Multiple bracket chains (15) - JSFuck/obfuscation pattern",
+        "file": "scripts/orchestrate_repro.py",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[])[, ())], []))"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/output-spec.md:44:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line advises against copying shell-history noise into a report. It performs no reconnaissance or command execution."
+      },
+      {
+        "id": "blocker:references/patch-policy.md:5:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a conservative patching policy. It does not inspect the host system."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The Python code detects Markdown fence delimiters while parsing text. It is not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:119:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are emitted as Markdown code formatting around report text. No process is launched."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:137:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format a metric name and value in Markdown. They have no execution semantics in Python."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The code creates Markdown text for an observed metric. It does not invoke a command interpreter."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:150:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The command string is displayed inside Markdown backticks for reporting. This line does not execute it."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The error excerpt is wrapped in Markdown backticks. The operation is text rendering only."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:196:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The source filename is formatted as inline Markdown code. There is no shell evaluation."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:207:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line renders a command for human review using Markdown. It does not execute the command."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:216:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown around a source path. They do not trigger external execution."
+      },
+      {
+        "id": "external_commands:scripts/annotate_readme.py:374:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line builds an annotated README header with inline-code formatting. No command runner is involved."
+      },
+      {
+        "id": "filesystem:scripts/annotate_readme.py:104:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The parent segment appears only in a generated Markdown link to a sibling output directory. It is not used for filesystem access."
+      },
+      {
+        "id": "blocker:scripts/annotate_readme.py:6:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This docstring describes annotations for reproduction results. It does not direct system reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:84:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The subprocess executes a fixed Python interpreter and a package-derived helper path with an argument array. No shell or user-controlled executable is used here."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:95:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The subprocess invokes a package-derived report writer through a fixed Python interpreter and argument list. The call does not use a shell."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:357:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This executes a command extracted from an untrusted target repository README. The opt-in flag limits surprise, but there is no allowlist, sandbox, or final command approval.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:306:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The linked document path is formatted in a warning string. Python does not execute Markdown backticks."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:556:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The selected goal is wrapped in Markdown backticks for output. This is text interpolation only."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:557:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The localized report text uses Markdown inline-code formatting. It has no command execution behavior."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:613:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The section name is placed inside Markdown backticks in a report note. No shell is called."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:634:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This line displays a file path and planned command for review. The backticks are Markdown formatting."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:635:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The localized line formats a path and command as inline code. It does not perform execution."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:696:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The selected goal is rendered as inline Markdown code in the timeline. No external command is invoked."
+      },
+      {
+        "id": "external_commands:scripts/orchestrate_repro.py:701:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The lane and run mode are formatted for a human-readable timeline. Backticks remain literal output characters."
+      },
+      {
+        "id": "filesystem:scripts/orchestrate_repro.py:12:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This line only imports Python's tempfile module. The later code uses secure named temporary-file creation."
+      },
+      {
+        "id": "filesystem:scripts/orchestrate_repro.py:90:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "NamedTemporaryFile creates a randomized file securely, and the surrounding finally block deletes it. The file contains generated context, not credentials."
+      },
+      {
+        "id": "blocker:scripts/orchestrate_repro.py:383:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line reports a command timeout to the user. It does not collect system information."
+      },
+      {
+        "id": "blocker:scripts/orchestrate_repro.py:579:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a status message about incomplete execution. It contains no reconnaissance behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:3:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The skill description uses Markdown backticks around an output directory. It is documentation, not shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The installed skill slug is formatted as inline Markdown code. No execution is requested."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Backticks only format a referenced policy path. The separate filesystem finding covers the out-of-package read risk."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks denote a policy filename in Markdown. They are not command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The policy path is displayed as inline code. The line contains no shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The referenced sub-skill name is Markdown inline code. No command is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This line names a workflow sub-skill using Markdown. It has no shell semantics."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The text identifies a setup sub-skill. Markdown backticks do not execute it as a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is a documented sub-skill name in inline-code formatting. It is not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line names an execution sub-skill in Markdown. The backticks remain documentation characters."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line references a training sub-skill by name. It does not itself launch any process."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The proposed branch naming convention is formatted as inline code. No command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The report filename is enclosed in Markdown backticks. It does not trigger execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The referenced local documentation path is formatted as inline code. No shell command exists."
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The output directory name appears in Markdown. This line does not access or execute it."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is the opening delimiter for a Markdown text fence. It is not executable syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is the closing delimiter for a Markdown code fence. It does not invoke a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line references packaged templates and a specification. Backticks are inline-code formatting."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line names an output file in Markdown. It does not execute external code."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The output filename is formatted as inline code. No command substitution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line documents the purpose of a log file. It has no process execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The changelog filename is Markdown inline code. It is not a shell expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The report filename is rendered with Markdown backticks. Nothing is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The status filename is formatted as inline code. This line is documentation only."
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The patch report filename uses Markdown formatting. There is no command invocation."
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The annotated README filename is shown as inline code. This prose does not execute anything."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The packaged language-policy path is formatted as Markdown. It is not shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Backticks only format the external policy path. Its filesystem scope risk is adjudicated separately."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line contains an inline-code policy path, not a command substitution expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown around filesystem paths. Separate findings cover the home-file and traversal risks."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The module path and environment setting are displayed as inline code. This prose line does not launch a process."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The safety-policy path is Markdown inline code. No external command is executed."
+      },
+      {
+        "id": "filesystem:SKILL.md:20:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The skill instructs the agent to load a path two directories above its package. This expands the trust boundary beyond marketplace-audited files.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:21:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The required policy is resolved outside the skill directory. External content could alter behavior without changing this audited package.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:22:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "This directs the agent to read an out-of-package experiment policy. The referenced content is outside the report's scanned file set.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:121:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The instruction repeats an out-of-package policy read before research claims. The external file is not covered by this audit.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:122:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The agent is told to load a policy through parent-directory traversal. This creates an unaudited instruction dependency.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The line references both a home-directory file and a parent-relative external policy. These reads cross the packaged skill boundary.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill explicitly instructs the agent to consult a hidden user-home file. Its contents may be private and are not marketplace audited.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:123:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The requested hidden-file read introduces user-specific, unaudited instructions into the agent context. Explicit consent and scope controls are absent.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:SKILL.md:83:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line prohibits semantic changes to model and training behavior. It does not inspect system state."
+      },
+      {
+        "id": "blocker:SKILL.md:115:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line describes a reproduction report assembled from README sections and generated evidence. It does not request host reconnaissance."
+      },
+      {
+        "id": "obfuscation:scripts/orchestrate_repro.py:1:heuristic-multiple-bracket-chains-15-jsfuck-obfu",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The file is readable Python source with ordinary lists, indexing, and calls. There is no encoded or JSFuck-style payload."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unaudited Dynamic Module Execution",
+        "description": "The orchestrator resolves a sibling lessons_store.py outside the skill package and executes it through importlib without provenance or integrity verification.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 23,
+            "line_end": 31
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The code directly constructs an out-of-package path and calls exec_module. The external module is not included in the scanned file set."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Python subprocess.run",
+        "description": "result = subprocess.run(",
+        "locations": [
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 357,
+            "line_end": 357
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "This executes a command extracted from an untrusted target repository README. The opt-in flag limits surprise, but there is no allowlist, sandbox, or final command approval."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "`../../references/agent-operating-principles.md`, then load",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The skill instructs the agent to load a path two directories above its package. This expands the trust boundary beyond marketplace-audited files."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "`../../references/research-rigor-principles.md` and",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The required policy is resolved outside the skill directory. External content could alter behavior without changing this audited package."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "`../../references/deep-learning-experiment-principles.md` when scientific meaning, comparability, or",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "This directs the agent to read an out-of-package experiment policy. The referenced content is outside the report's scanned file set."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "- Load `../../references/research-rigor-principles.md` before making comparability, contribution, or",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The instruction repeats an out-of-package policy read before research claims. The external file is not covered by this audit."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "- Load `../../references/deep-learning-experiment-principles.md` when dataset, split, metric, checkp",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 122
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The agent is told to load a policy through parent-directory traversal. This creates an unaudited instruction dependency."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The line references both a home-directory file and a parent-relative external policy. These reads cross the packaged skill boundary."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill explicitly instructs the agent to consult a hidden user-home file. Its contents may be private and are not marketplace audited."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "- Consult `~/.rigorpilot/PERSONAL_RIGOR.md` if present, under `../../references/continuous-learning-",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The requested hidden-file read introduces user-specific, unaudited instructions into the agent context. Explicit consent and scope controls are absent."
+      },
+      {
+        "title": "Unaudited Dynamic Module Execution",
+        "description": "The orchestrator resolves a sibling lessons_store.py outside the skill package and executes it through importlib without provenance or integrity verification.",
+        "locations": [
+          {
+            "file": "scripts/orchestrate_repro.py",
+            "line_start": 23,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The code directly constructs an out-of-package path and calls exec_module. The external module is not included in the scanned file set."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 14,
+    "total_lines": 2038,
+    "audit_model": "codex",
+    "audited_at": "2026-08-08T08:37:07.496Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Reproduce AI Research Repositories",
+    "value_statement": "Deep learning repositories often lack a clear, trustworthy reproduction path. This skill selects a minimal documented target and records execution evidence and deviations.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI research reproduction",
+      "deep learning reproducibility",
+      "README workflow",
+      "experiment audit",
+      "model evaluation",
+      "research evidence"
+    ],
+    "actual_capabilities": [
+      "Extracts documented commands and candidate targets from a repository README.",
+      "Prioritizes inference, evaluation, or short training verification before full training.",
+      "Plans environment, checkpoint, dataset, and cache requirements for the selected target.",
+      "Optionally executes the selected documented command with a configured timeout.",
+      "Produces standardized summaries, command records, logs, status, comparability notes, and README annotations.",
+      "Records assumptions, blockers, protocol deviations, patch evidence, and required human decisions."
+    ],
+    "limitations": [
+      "It depends on companion RigorPilot skills and shared policy files that are not bundled here.",
+      "Repository documentation can be incomplete, outdated, or unsafe.",
+      "Full training requires explicit authorization and may exceed available compute or time.",
+      "Generated evidence does not prove scientific equivalence without researcher review."
+    ],
+    "use_cases": [
+      {
+        "title": "Verify a published repository",
+        "description": "Select and run the smallest documented inference or evaluation target, then record evidence and blockers.",
+        "target_user": "Machine learning researchers"
+      },
+      {
+        "title": "Audit reproducibility before review",
+        "description": "Compare repository guidance, observed behavior, and protocol deviations before assessing a research claim.",
+        "target_user": "Paper reviewers and research engineers"
+      },
+      {
+        "title": "Prepare a team handoff",
+        "description": "Create standardized reproduction outputs that preserve commands, assumptions, status, and next decisions.",
+        "target_user": "Research leads and platform teams"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Plan a minimal reproduction",
+        "prompt": "Inspect [repository path]. Select the smallest documented inference or evaluation target. Do not execute commands. Produce a reproduction plan with evidence.",
+        "scenario": "Beginner planning without execution"
+      },
+      {
+        "title": "Run a documented smoke test",
+        "prompt": "Reproduce [repository path] using the smallest documented target. Show the selected command before execution. Stop after the first trustworthy result.",
+        "scenario": "Controlled inference or evaluation"
+      },
+      {
+        "title": "Audit a partial reproduction",
+        "prompt": "Review [repository path] and [existing output path]. Identify blockers, assumptions, protocol deviations, and the lowest-risk next action. Preserve repository semantics.",
+        "scenario": "Intermediate failure analysis"
+      },
+      {
+        "title": "Assess training comparability",
+        "prompt": "Evaluate whether [repository path] can reproduce [paper result]. Verify dataset, split, checkpoint, preprocessing, metric, and training assumptions. Require approval before fuller training.",
+        "scenario": "Advanced protocol and training review"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Plan a minimal reproduction for an image-classification repository without running commands.",
+        "output": "Selected target: documented single-image inference. Evidence lists the README section, required checkpoint, setup assumptions, and the command awaiting approval."
+      },
+      {
+        "input": "Run the smallest documented evaluation and explain why it failed.",
+        "output": "Outcome: blocked before evaluation because the checkpoint was absent. The report records the attempted command, error excerpt, asset requirement, and next safe action."
+      },
+      {
+        "input": "Check whether a short training run supports the paper claim.",
+        "output": "Outcome: partial evidence only. Startup succeeded, but dataset split and metric settings remain unverified, so no comparability claim is made."
+      }
+    ],
+    "best_practices": [
+      "Review every extracted command and its working directory before allowing execution.",
+      "Prefer the smallest documented target that can produce meaningful evidence.",
+      "Record every assumption, patch, and protocol deviation before comparing results."
+    ],
+    "anti_patterns": [
+      "Do not run full training before environment, assets, and startup behavior are verified.",
+      "Do not change model semantics or metrics merely to obtain a successful result.",
+      "Do not treat generated reports as proof when key experimental details remain unverified."
+    ],
+    "faq": [
+      {
+        "question": "What repositories does this skill support?",
+        "answer": "It targets AI repositories with a README, scripts, configurations, and documented inference, evaluation, or training commands."
+      },
+      {
+        "question": "Does it execute repository commands automatically?",
+        "answer": "Execution requires the run option. Review extracted commands because repository documentation is untrusted."
+      },
+      {
+        "question": "Can it run full model training?",
+        "answer": "Yes, but fuller training requires explicit authorization after startup evidence is reviewed."
+      },
+      {
+        "question": "What outputs does it create?",
+        "answer": "It creates summaries, command records, logs, status data, comparability notes, patch records, and an annotated README."
+      },
+      {
+        "question": "Does it guarantee reproduction of published results?",
+        "answer": "No. It records evidence and deviations, but researchers must verify scientific comparability."
+      },
+      {
+        "question": "Can it modify the target repository?",
+        "answer": "It prefers no edits. Necessary fixes should be conservative, isolated on a branch, verified, and documented."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "agents",
+      "type": "dir",
+      "path": "agents",
+      "children": [
+        {
+          "name": "openai.yaml",
+          "type": "file",
+          "path": "agents/openai.yaml",
+          "lines": 4
+        }
+      ]
+    },
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "COMMANDS.template.md",
+          "type": "file",
+          "path": "assets/COMMANDS.template.md",
+          "lines": 34
+        },
+        {
+          "name": "LOG.template.md",
+          "type": "file",
+          "path": "assets/LOG.template.md",
+          "lines": 47
+        },
+        {
+          "name": "PATCHES.template.md",
+          "type": "file",
+          "path": "assets/PATCHES.template.md",
+          "lines": 29
+        },
+        {
+          "name": "status.template.json",
+          "type": "file",
+          "path": "assets/status.template.json",
+          "lines": 36
+        },
+        {
+          "name": "SUMMARY.template.md",
+          "type": "file",
+          "path": "assets/SUMMARY.template.md",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "architecture.md",
+          "type": "file",
+          "path": "references/architecture.md",
+          "lines": 54
+        },
+        {
+          "name": "language-policy.md",
+          "type": "file",
+          "path": "references/language-policy.md",
+          "lines": 30
+        },
+        {
+          "name": "output-spec.md",
+          "type": "file",
+          "path": "references/output-spec.md",
+          "lines": 135
+        },
+        {
+          "name": "patch-policy.md",
+          "type": "file",
+          "path": "references/patch-policy.md",
+          "lines": 72
+        },
+        {
+          "name": "research-safety-principles.md",
+          "type": "file",
+          "path": "references/research-safety-principles.md",
+          "lines": 57
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "annotate_readme.py",
+          "type": "file",
+          "path": "scripts/annotate_readme.py",
+          "lines": 452
+        },
+        {
+          "name": "orchestrate_repro.py",
+          "type": "file",
+          "path": "scripts/orchestrate_repro.py",
+          "lines": 930
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 131
+    }
+  ]
+}

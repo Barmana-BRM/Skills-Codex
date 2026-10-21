@@ -1,0 +1,427 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T01:50:23.767Z",
+    "slug": "arcadeai-quality-reviewer",
+    "source_url": "https://github.com/ArcadeAI/dexa/tree/main/.claude/skills/safeword-quality-reviewer",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "3473cb53ed13768bd7491c73e4dbc36e701b665fe8057e4d7c773a8ae5d70694",
+    "tree_hash": "ec2a33b51758018c16efbab87040486ff058784dc5cdfad408a095e8466488ff",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "quality-reviewer",
+    "description": "Deep code review workflow that checks project standards, current documentation, library versions, and security advisories.",
+    "summary": "Review code quality against project context and current ecosystem guidance.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "ArcadeAI",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "code-review",
+      "quality-review",
+      "dependency-checks",
+      "documentation-review",
+      "security-review"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The static command-execution alerts are false positives from markdown fences, inline code, and a hardcoded read-only ls example. No malware, credential access, or data exfiltration intent was found, but the skill grants overbroad tool access through a wildcard permission.",
+    "remediation": [
+      {
+        "issue": "Overbroad tool permissions",
+        "suggestion": "Replace allowed-tools: '*' with the minimum tools needed, such as Read, Glob, Grep, WebSearch, WebFetch, and constrained read-only Bash.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Shell command example",
+        "suggestion": "Keep shell examples hardcoded and read-only. Avoid examples that mutate files, install packages, or upload project data.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 145
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 39,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 43,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "- `CLAUDE.md` or `SAFEWORD.md` - Project-specific guidelines"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 125,
+        "snippet": "- `ARCHITECTURE.md` - Architectural principles"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 127,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 131,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 145,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "blocker:SKILL.md:119:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "- Did the library's recommendations change recently?"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The fenced bash block contains a single hardcoded ls command for local project standards files. It is read-only and does not use dynamic input or Ruby backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line is the closing markdown fence for the prior example. It is not executable code and has no command execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark the filename CLAUDE.md as inline markdown text. There is no shell execution, interpolation, or external command invocation."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This range covers prose review guidance and inline markdown terms, not executable script content. I found no dynamic command construction or unsafe command request in this range."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line opens a text output example block. It does not execute a command or instruct the agent to run shell code."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line closes a markdown text example. It is formatting only and contains no executable instruction."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line opens a markdown output format example. It is documentation for report formatting, not command execution."
+      },
+      {
+        "id": "blocker:SKILL.md:119:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The line asks whether library recommendations changed recently as part of documentation review. It is not host reconnaissance or collection of system information."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Overbroad Tool Permission",
+        "description": "The skill declares allowed-tools: '*' for a workflow that includes filesystem inspection and web research. Broad permissions increase impact if instructions are misused.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 4,
+            "line_end": 4
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "The wildcard permission is explicit in the skill metadata, and the review workflow only needs a smaller set of read and research tools."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Overbroad Tool Permission",
+        "description": "The skill declares allowed-tools: '*' for a workflow that includes filesystem inspection and web research. Broad permissions increase impact if instructions are misused.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 4,
+            "line_end": 4
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The wildcard permission is explicit in the skill metadata, and the review workflow only needs a smaller set of read and research tools."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 158,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T01:50:23.767Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Review Code Against Current Docs",
+    "value_statement": "Developers need reviews that catch bugs, outdated libraries, and documentation drift before changes ship. This skill guides Claude, Codex, and Claude Code through a current, standards-aware code review.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI code review",
+      "code quality review",
+      "dependency version check",
+      "latest documentation review",
+      "security review",
+      "project standards review",
+      "software architecture review"
+    ],
+    "actual_capabilities": [
+      "Reviews recent code changes for correctness, edge cases, and error handling.",
+      "Checks changes against CLAUDE.md, SAFEWORD.md, and architecture guidance when present.",
+      "Researches current library versions, security advisories, and official documentation.",
+      "Flags outdated dependencies, deprecated APIs, and changed best practices.",
+      "Produces concise verdicts with critical issues and suggested improvements."
+    ],
+    "limitations": [
+      "Requires internet access for current version and documentation checks.",
+      "Does not replace automated tests, static analysis, or formal security review.",
+      "Needs clear change context to identify the relevant files.",
+      "Can miss private project rules if they are not documented."
+    ],
+    "use_cases": [
+      {
+        "title": "Pre-Merge Review",
+        "description": "Review recent changes for correctness, edge cases, project standards, and release blockers before merging.",
+        "target_user": "Feature developers"
+      },
+      {
+        "title": "Dependency Audit",
+        "description": "Check selected libraries against current versions, security advisories, and official migration guidance.",
+        "target_user": "Engineering leads"
+      },
+      {
+        "title": "Architecture Review",
+        "description": "Compare an implementation with documented architecture principles and suggest focused improvements.",
+        "target_user": "Technical reviewers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Change Review",
+        "scenario": "Beginner review of recent edits",
+        "prompt": "Review my recent changes for correctness, edge cases, and blocking issues. Use project standards if available."
+      },
+      {
+        "title": "Dependency Version Check",
+        "scenario": "Intermediate review with current version research",
+        "prompt": "Review this implementation and verify the main libraries against current stable versions and security advisories."
+      },
+      {
+        "title": "Documentation Compatibility Review",
+        "scenario": "Advanced review against official documentation",
+        "prompt": "Compare this code with the latest official docs for the frameworks it uses. Flag deprecated APIs and newer recommended patterns."
+      },
+      {
+        "title": "Release Readiness Audit",
+        "scenario": "Advanced release review across quality dimensions",
+        "prompt": "Perform a full quality review before release. Check correctness, bloat, maintainability, standards, versions, docs, and security-sensitive dependencies."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review a recent UI change before merge.",
+        "output": [
+          "Correctness is sound for the main flow.",
+          "One edge case needs a loading-state check.",
+          "No dependency concerns were found after documentation review."
+        ]
+      },
+      {
+        "input": "Check whether a framework upgrade is safe.",
+        "output": [
+          "The installed major version is behind the current stable release.",
+          "The official migration guide lists one breaking change in routing.",
+          "Upgrade after adding coverage for the affected route behavior."
+        ]
+      },
+      {
+        "input": "Audit code against project architecture rules.",
+        "output": [
+          "The implementation follows the documented ownership boundary.",
+          "One helper duplicates existing shared logic.",
+          "Request changes for the duplication before approval."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Provide the diff, affected files, and the goal of the change.",
+      "Ask for official documentation checks when library behavior matters.",
+      "Separate blocking issues from optional cleanup in the final verdict."
+    ],
+    "anti_patterns": [
+      "Do not use it as the only test or security gate.",
+      "Do not ask for broad web research when the change is local and simple.",
+      "Do not ignore project standards files when they exist."
+    ],
+    "faq": [
+      {
+        "question": "Which tools can use this skill?",
+        "answer": "It is designed for Claude, Codex, and Claude Code workflows."
+      },
+      {
+        "question": "Does it require web access?",
+        "answer": "Web access is needed for current version, vulnerability, and documentation checks."
+      },
+      {
+        "question": "Can it replace automated tests?",
+        "answer": "No. It complements tests by adding human-style review and current ecosystem checks."
+      },
+      {
+        "question": "What inputs improve the review?",
+        "answer": "Provide the changed files, intended behavior, dependencies involved, and any project standards documents."
+      },
+      {
+        "question": "Will it modify code?",
+        "answer": "No. It is a review workflow unless the user separately asks for edits."
+      },
+      {
+        "question": "Can it find security issues?",
+        "answer": "It can flag risky patterns and vulnerable dependencies, but it is not a formal penetration test."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 158
+    }
+  ]
+}

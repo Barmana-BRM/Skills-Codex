@@ -1,0 +1,239 @@
+"""Quark batch runner v2.1.0: save-share lockstep with title tracking + multi-account rotation.
+
+v2.1.0: 集成 quark_account_rotator，每次执行自动轮换夸克账号（方案B：按批次轮换）。
+        支持 --force-account N 强制指定账号。
+
+Each item is saved AND shared in one step, capturing the title→URL mapping
+explicitly (no longer order-dependent on get_sorted_file_list).
+
+Title rules:
+- If items.json has both title + url → use the provided title
+- If items.json has only url (empty/no title) → use the actual Quark folder name
+- If one title has two URLs → both saved under the same title (merged later)
+
+Usage:
+  cd /Users/m/document/QNSZ/project/QuarkPanTool
+  . .venv/bin/activate
+  python /Users/m/document/QNSZ/project/skills/quark-mswnlz-publisher/scripts/quark_batch_run.py \
+    --label "短裤哥批次" \
+    --month 202603 \
+    --items-json /path/to/items.json \
+    --out-json /path/to/batch_share_results.json
+
+items.json format:
+  [
+    {"title": "xxx", "url": "https://pan.quark.cn/s/...."},
+    ...
+  ]
+
+Notes:
+- Requires Quark cookies to exist at QuarkPanTool/config/cookies.txt (run quark_login.py if needed).
+"""
+
+import argparse
+import asyncio
+import json
+import os
+from datetime import datetime
+from pathlib import Path
+
+# 自动加载 secrets.env（如果存在）
+SECRETS_ENV = Path(__file__).resolve().parent.parent.parent.parent / "QuarkPanTool" / "config" / "secrets.env"
+if SECRETS_ENV.exists():
+    for line in SECRETS_ENV.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        if '=' in line:
+            key, _, value = line.partition('=')
+            os.environ.setdefault(key.strip(), value.strip())
+
+from quark import QuarkPanFileManager
+from utils import read_config
+
+from share_folder_items import get_share_id_with_retry
+
+
+# ── 批次指纹锁（防止同一批 items 短时间内重复执行）──
+BATCH_LOCK_DIR = Path(__file__).resolve().parent.parent / ".batch_locks"
+BATCH_LOCK_TTL_SEC = 3600  # 1小时内视为重复
+
+
+def _items_fingerprint(items_json_path: str) -> str:
+    """计算 items.json 内容指纹（URL 排序后 md5）"""
+    import hashlib
+    items = json.loads(Path(items_json_path).read_text(encoding="utf-8"))
+    urls = []
+    for it in items:
+        u = (it.get("url") or it.get("input_url") or "").strip()
+        if u:
+            urls.append(u)
+        for multi in it.get("urls", []):
+            urls.append(multi.strip())
+    urls.sort()
+    return hashlib.md5("\n".join(urls).encode()).hexdigest()[:16]
+
+
+def check_batch_lock(items_json_path: str) -> bool:
+    """检查同一批 items 是否在 TTL 内已执行过。返回 True=应跳过。"""
+    fp = _items_fingerprint(items_json_path)
+    BATCH_LOCK_DIR.mkdir(parents=True, exist_ok=True)
+    lock_file = BATCH_LOCK_DIR / f"{fp}.lock"
+    if lock_file.exists():
+        import time
+        age = time.time() - lock_file.stat().st_mtime
+        if age < BATCH_LOCK_TTL_SEC:
+            prev = lock_file.read_text(encoding="utf-8").strip()
+            print(f"\n[LOCK] ⚠️ 检测到同一批资源在 {int(age)} 秒前已执行过：{prev}")
+            print(f"[LOCK] 跳过本次执行，避免重复转存。")
+            print(f"[LOCK] 如需强制执行，删除 {lock_file} 后重试。")
+            return True
+    return False
+
+
+def write_batch_lock(items_json_path: str, batch_name: str):
+    """写入批次锁"""
+    fp = _items_fingerprint(items_json_path)
+    BATCH_LOCK_DIR.mkdir(parents=True, exist_ok=True)
+    lock_file = BATCH_LOCK_DIR / f"{fp}.lock"
+    lock_file.write_text(f"{batch_name} @ {datetime.now().isoformat()}", encoding="utf-8")
+
+
+def parse_args():
+    p = argparse.ArgumentParser()
+    p.add_argument("--label", default="短裤哥批次")
+    p.add_argument("--month", default="")
+    p.add_argument("--items-json", required=True)
+    p.add_argument("--out-json", required=True)
+    p.add_argument("--headless", action="store_true", default=True)
+    p.add_argument("--force-account", type=int, default=None,
+                   help="强制使用指定账号（跳过自动轮换），用于某账号被限速时")
+    p.add_argument("--no-rotate", action="store_true",
+                   help="不轮换账号（使用当前 cookies.txt）")
+    return p.parse_args()
+
+
+async def list_all_items(mgr, pdir_fid):
+    """Get ALL items in a directory, handling pagination."""
+    all_items = []
+    page = 1
+    size = 200
+    while True:
+        data = await mgr.get_sorted_file_list(pdir_fid=pdir_fid, page=str(page), size=str(size), fetch_total='true')
+        lst = (data.get('data') or {}).get('list') or []
+        meta = data.get('metadata') or {}
+        all_items.extend(lst)
+        total = meta.get('_total') or 0
+        _size = meta.get('_size') or size
+        _page = meta.get('_page') or page
+        if _size * _page >= total:
+            break
+        page += 1
+    return all_items
+
+
+async def main():
+    args = parse_args()
+
+    # ── 批次指纹锁 ──
+    if check_batch_lock(args.items_json):
+        print("\n[LOCK] 如需强制重新执行，请删除锁文件或等待 1 小时。")
+        return
+
+    # ── 账号轮换（方案B + 做法甲）──
+    account_id = None
+    if not args.no_rotate:
+        try:
+            from quark_account_rotator import rotate_to_next_account
+            # 确定配置目录（QuarkPanTool/config）
+            config_dir = Path(__file__).resolve().parent.parent.parent.parent / "QuarkPanTool" / "config"
+            account_id = rotate_to_next_account(str(config_dir), force_account=args.force_account)
+            print(f"\n[ACCOUNT] 当前使用夸克账号 {account_id}")
+        except Exception as e:
+            print(f"\n[ACCOUNT] ⚠️ 账号轮换失败（{e}），使用当前 cookies.txt")
+    else:
+        print("\n[ACCOUNT] 跳过轮换，使用当前 cookies.txt")
+
+    items = json.loads(Path(args.items_json).read_text(encoding="utf-8"))
+    norm_items = []
+    for it in items:
+        title = (it.get("title") or "").strip()
+        url = (it.get("url") or it.get("input_url") or "").strip()
+        if not url:
+            continue
+        norm_items.append((title, url))
+
+    mgr = QuarkPanFileManager(headless=True, slow_mo=0)
+
+    ts = datetime.now().strftime("%Y-%m-%d_%H%M")
+    batch_folder_name = f"{ts}_{args.label}"
+    await mgr.create_dir(batch_folder_name)
+
+    cfg = read_config('./config/config.json', read_type='json')
+    to_dir_id = cfg['pdir_id']
+
+    share_results = []
+
+    for idx, (title, url) in enumerate(norm_items, 1):
+        print(f"\n==== ({idx}/{len(norm_items)}) {title or '(无标题，将使用实际文件夹名)'} ====")
+        print(f"  source: {url}")
+
+        # 1. Pre-save snapshot: record existing file FIDs
+        before = {item['fid'] for item in await list_all_items(mgr, to_dir_id)}
+
+        # 2. Save the source URL to batch folder
+        try:
+            await mgr.run(url, folder_id=to_dir_id, download=False)
+        except (EOFError, Exception) as e:
+            print(f"  ❌ 转存失败，跳过: {e}")
+            continue
+
+        # 3. Post-save snapshot: find newly created files/folders
+        after = await list_all_items(mgr, to_dir_id)
+        new_items = [item for item in after if item['fid'] not in before]
+
+        if not new_items:
+            print(f"  ⚠️ 未检测到新保存的文件（可能已存在），跳过")
+            continue
+
+        for item in new_items:
+            fid = item['fid']
+            quark_name = item['file_name']
+
+            # User rule:
+            # - 有 title + url → 用提供的 title
+            # - 只有 url（title为空）→ 用 Quark 实际文件夹名
+            effective_title = title if title else quark_name
+
+            # 4. Create encrypted share link for this saved item
+            print(f"  sharing: {quark_name} ...", end=" ")
+            task_id = await mgr.get_share_task_id(fid, quark_name, url_type=2, expired_type=1, password='')
+            share_id = await get_share_id_with_retry(mgr, task_id, timeout_sec=90)
+            share_url, _ = await mgr.submit_share(share_id)
+
+            share_results.append({
+                "title": effective_title,
+                "quark_name": quark_name,
+                "fid": fid,
+                "share_id": share_id,
+                "share_url": share_url,
+            })
+            print(f"-> {share_url}")
+
+    out = {
+        "batch_folder_name": batch_folder_name,
+        "batch_folder_fid": to_dir_id,
+        "quark_account": account_id,
+        "items": [{"title": t, "input_url": u} for t, u in norm_items],
+        "share_results": share_results,
+    }
+
+    write_batch_lock(args.items_json, batch_folder_name)
+
+    Path(args.out_json).write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\n[DONE] wrote {args.out_json}")
+    print(f"Batch folder: {batch_folder_name}\n")
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

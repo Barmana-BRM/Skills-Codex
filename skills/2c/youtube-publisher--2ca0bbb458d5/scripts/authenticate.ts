@@ -1,0 +1,233 @@
+/**
+ * authenticate.ts — Shared YouTube OAuth2 authentication module.
+ *
+ * Provides a single `authenticate()` function used by all YouTube API scripts:
+ *   youtube-upload.ts, upload-captions.ts, upload-thumbnail.ts,
+ *   youtube-update-description.ts.
+ *
+ * Token handling:
+ *  1. Load .env and .youtube-token.json.
+ *  2. If token is valid (expiry_date exists and not expired), return immediately.
+ *  3. If expired or expiry_date is missing, refresh the access token.
+ *  4. After refresh, ensure expiry_date is present (compute from expires_in
+ *     if Google omits it) and persist to disk.
+ *  5. If refresh fails, fall back to interactive browser auth (only when
+ *     `allowInteractive` is true — e.g. youtube-upload.ts).
+ *
+ * Usage:
+ *   import { authenticate } from "./authenticate";
+ *   const auth = await authenticate();
+ *   const youtube = google.youtube({ version: "v3", auth });
+ *
+ * v1.0  2026-06-09  Initial extraction from 4 separate implementations.
+ */
+
+import { google } from "googleapis";
+import * as fs from "fs";
+import * as path from "path";
+import * as dotenv from "dotenv";
+import * as http from "http";
+import * as crypto from "crypto";
+import open = require("open");
+
+// Load .env from the same directory as this script
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+// --- Proxy support ---
+// googleapis uses node-fetch internally which does NOT respect HTTPS_PROXY
+// by default. If a proxy is set in the environment, configure a global
+// dispatcher so all API calls go through it. This prevents intermittent
+// "Premature close" errors when operating behind a proxy.
+const proxyUrl =
+  process.env.HTTPS_PROXY ||
+  process.env.https_proxy ||
+  process.env.HTTP_PROXY ||
+  process.env.http_proxy;
+if (proxyUrl) {
+  try {
+    const { ProxyAgent, setGlobalDispatcher } = require("undici");
+    setGlobalDispatcher(new ProxyAgent(proxyUrl as string));
+    const parsedProxy = new URL(proxyUrl);
+    console.log(`[proxy] Using proxy: ${parsedProxy.protocol}//${parsedProxy.host}`);
+  } catch {
+    // undici not available — googleapis will fall back to default transport.
+    // Proxy may not work but don't crash.
+    console.warn(`[proxy] HTTPS_PROXY set but undici not available; proxy not applied`);
+  }
+}
+
+const TOKEN_PATH = path.join(__dirname, ".youtube-token.json");
+
+function saveToken(token: object): void {
+  fs.writeFileSync(TOKEN_PATH, JSON.stringify(token, null, 2), { mode: 0o600 });
+  fs.chmodSync(TOKEN_PATH, 0o600);
+}
+
+const SCOPES = [
+  "https://www.googleapis.com/auth/youtube",
+  "https://www.googleapis.com/auth/youtube.upload",
+  "https://www.googleapis.com/auth/youtube.force-ssl",
+];
+
+interface TokenData {
+  access_token?: string;
+  refresh_token?: string;
+  expiry_date?: number;
+  expires_in?: number;
+  [key: string]: unknown;
+}
+
+export interface AuthResult {
+  oauth2Client: any;
+  youtube: any;
+}
+
+/**
+ * Ensure expiry_date exists on credentials. Google sometimes omits it.
+ */
+function ensureExpiryDate(creds: Record<string, any>): void {
+  if (!creds.expiry_date && creds.expires_in) {
+    creds.expiry_date = Date.now() + creds.expires_in * 1000;
+  }
+}
+
+/**
+ * Authenticate with YouTube API.
+ *
+ * @param allowInteractive If true, fall back to browser-based OAuth flow when
+ *   token refresh fails. Default: false (scripts that run unattended should
+ *   set false and exit on refresh failure).
+ */
+export async function authenticate(allowInteractive = false): Promise<AuthResult> {
+  const clientId = process.env.YOUTUBE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.YOUTUBE_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET;
+  const redirectUri =
+    process.env.YOUTUBE_REDIRECT_URI || "http://localhost:3333/oauth2callback";
+
+  if (!clientId || !clientSecret) {
+    console.error(
+      "Error: Missing YOUTUBE_CLIENT_ID or YOUTUBE_CLIENT_SECRET in .env"
+    );
+    process.exit(1);
+  }
+
+  const oauth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUri
+  );
+
+  // No token file at all
+  if (!fs.existsSync(TOKEN_PATH)) {
+    if (allowInteractive) {
+      return interactiveAuth(oauth2Client);
+    }
+    console.error("Error: .youtube-token.json not found. Run youtube-upload.ts first.");
+    process.exit(1);
+  }
+
+  const tokenData: TokenData = JSON.parse(
+    fs.readFileSync(TOKEN_PATH, "utf-8")
+  );
+  oauth2Client.setCredentials(tokenData);
+
+  // Token is still valid
+  if (tokenData.expiry_date && tokenData.expiry_date > Date.now()) {
+    const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+    return { oauth2Client, youtube };
+  }
+
+  // Token expired or missing expiry_date — try refresh
+  if (tokenData.refresh_token) {
+    try {
+      const { credentials } = await oauth2Client.refreshAccessToken();
+      const creds = credentials as Record<string, any>;
+      ensureExpiryDate(creds);
+      oauth2Client.setCredentials(credentials);
+      saveToken(credentials);
+      console.log("Token refreshed successfully");
+      const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+      return { oauth2Client, youtube };
+    } catch (err) {
+      console.error("Token refresh failed:", err instanceof Error ? err.message : String(err));
+      if (!allowInteractive) {
+        process.exit(1);
+      }
+      console.log("Falling back to interactive auth...");
+    }
+  }
+
+  // Interactive auth
+  if (allowInteractive) {
+    return interactiveAuth(oauth2Client);
+  }
+
+  console.error("Error: No refresh_token available. Run youtube-upload.ts to re-authenticate.");
+  process.exit(1);
+}
+
+async function interactiveAuth(oauth2Client: any): Promise<AuthResult> {
+  return new Promise((resolve, reject) => {
+    const redirectUri = process.env.YOUTUBE_REDIRECT_URI || "http://localhost:3333/oauth2callback";
+    const redirect = new URL(redirectUri);
+    if (redirect.hostname !== "localhost" && redirect.hostname !== "127.0.0.1") {
+      reject(new Error("YOUTUBE_REDIRECT_URI must use localhost or 127.0.0.1"));
+      return;
+    }
+    const port = Number(redirect.port || 3333);
+    const oauthState = crypto.randomBytes(32).toString("hex");
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: SCOPES,
+      prompt: "consent",
+      state: oauthState,
+    });
+
+    console.log("\n=== YouTube Authentication ===");
+    console.log("Opening browser for authentication...\n");
+    console.log("Auth URL:", authUrl, "\n");
+
+    const server = http.createServer(async (req, res) => {
+      try {
+        const urlObj = new URL(req.url || "", redirectUri);
+        if (urlObj.pathname === redirect.pathname) {
+          if (urlObj.searchParams.get("state") !== oauthState) {
+            res.writeHead(400, { "Content-Type": "text/plain; charset=utf-8" });
+            res.end("OAuth state mismatch");
+            throw new Error("OAuth callback state mismatch");
+          }
+          const code = urlObj.searchParams.get("code");
+          if (code) {
+            const { tokens } = await oauth2Client.getToken(code);
+            oauth2Client.setCredentials(tokens);
+            saveToken(tokens);
+
+            res.writeHead(200, { "Content-Type": "text/html" });
+            res.end(
+              `<html><body style="font-family:sans-serif;text-align:center;padding:50px">
+                <h1>Authentication Successful!</h1>
+                <p>You can close this window.</p></body></html>`
+            );
+
+            server.close();
+            const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+            resolve({ oauth2Client, youtube });
+          }
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    server.listen(port, redirect.hostname, () => {
+      open(authUrl).catch(() => {
+        console.log("Could not open browser. Visit the URL above manually.");
+      });
+    });
+
+    setTimeout(() => {
+      server.close();
+      reject(new Error("Authentication timed out after 5 minutes"));
+    }, 5 * 60 * 1000);
+  });
+}

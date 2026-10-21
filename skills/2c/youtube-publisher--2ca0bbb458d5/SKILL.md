@@ -1,0 +1,275 @@
+---
+name: youtube-publisher
+description: "Upload and fully manage YouTube videos and live events: metadata, thumbnails, captions, playlists, scheduled broadcasts, encoder streams, binding, lifecycle transitions, and cleanup."
+version: 1.9.0
+setup_complete: true
+setup: "./SETUP.md"
+changelog: "v1.9.0: Document read-only playlist export for author-managed blog topics; exporters never mutate playlists. Full history: references/CHANGELOG.md."
+---
+
+## 🔴 Strict Execution Rule (Highest Priority)
+
+Every instruction, step, and check in this SKILL.md must be **followed exactly as written** — no deviations allowed.
+
+- **Scripts must be actually executed**: The `youtube-upload.ts` script must be run with all required parameters. Do not simulate or manually construct API calls.
+- **Steps must not be skipped or merged**: Execute authentication, metadata sanitization, and upload in the defined order. Each step must succeed before the next begins.
+- **Checks must not be omitted**: All metadata validation (title ≤100 chars, description ≤5000 chars, tags ≤500 chars) and upload verification must be fully executed.
+- **Config must be read from files**: OAuth credentials and default settings must be read from the configured files. Do not hardcode.
+
+---
+
+# YouTube Publisher
+
+> **First time?** If `setup_complete: false` above, run `./SETUP.md` first, then set `setup_complete: true`.
+
+Upload videos to YouTube with full metadata control.
+
+## Live broadcasts and encoder streams
+
+Use `youtube-live.ts` to list, inspect, schedule, update, bind, transition, and delete
+YouTube Live broadcasts and encoder streams. Mutating commands support `--dry-run`;
+destructive deletion, live/completed transitions, and stream-key disclosure require
+explicit `--yes`. Stream keys are redacted from ordinary output.
+
+The safe default is one dedicated named encoder stream per independent show/event.
+Intentional reuse across active or upcoming broadcasts requires `--allow-shared-stream`.
+
+Read [references/live-streaming.md](references/live-streaming.md) before operating a live
+event. Scheduled timestamps must include an explicit timezone (`Z` or `±HH:MM`).
+
+The skill passes `--inherit-previous` before creation unless the user requests a clean
+profile. The raw CLI remains deterministic and offline without that explicit flag.
+
+An interrupted video insert is never retried inside `youtube-upload.ts`. Recovery must
+identify exactly one recent same-title video with a verified non-zero duration. Persistent
+`P0D` exits `42` with `PERSISTENT_P0D_VIDEO_ID`; unavailable or inconclusive inspection
+exits `43` with `AMBIGUOUS_UPLOAD_VIDEO_ID`. Inspect the channel before another insert.
+
+Caption recovery updates one exact language/name track in place or inserts a new track.
+It never deletes an existing caption before the replacement upload succeeds.
+
+## Metadata sanitization
+
+- `>` in title/description is automatically rewritten to `》`
+- `<` in title/description is automatically rewritten to `《`
+- Use this when YouTube rejects metadata because of special characters
+
+## Quick Start
+
+```bash
+cd ~/.claude/skills/youtube-publisher/scripts
+
+# First time: authenticate
+npx ts-node youtube-upload.ts --auth
+
+# Upload video
+npx ts-node youtube-upload.ts \
+  --video /path/to/video.mp4 \
+  --title "My Awesome Video" \
+  --description "Check out this amazing content!" \
+  --tags "tech,ai,tutorial" \
+  --privacy unlisted
+
+# Upload as YouTube Short (vertical video)
+npx ts-node youtube-upload.ts \
+  --video /path/to/short.mp4 \
+  --title "Quick Tip #Shorts" \
+  --description "A quick tip for you!" \
+  --privacy public \
+  --short
+```
+
+## Options
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--video` | `-v` | Video file path (required) |
+| `--title` | `-t` | Video title (required) |
+| `--description` | `-d` | Video description |
+| `--tags` | | Comma-separated tags |
+| `--privacy` | `-p` | Privacy: public, unlisted, private (default: unlisted) |
+| `--category` | `-c` | Category ID (default: 22 = People & Blogs) |
+| `--thumbnail` | | Custom thumbnail image (local path or URL) |
+| `--subtitles` | | Subtitle file path (SRT/VTT) |
+| `--subtitle-lang` | | Subtitle language code (default: zh) |
+| `--subtitle-name` | | Subtitle display name (default: 中文) |
+| `--short` | | Mark as YouTube Short |
+| `--auth` | | Run OAuth2 authentication flow |
+| `--dry-run` | | Preview without uploading |
+
+## Playlist catalog export
+
+Export every public playlist owned by the authenticated channel, including ordered video IDs and thumbnails. The blog synchronizer consumes this deterministic JSON to build `/series/`, GitHub series pages, and the resource-site guide hub.
+
+This command is read-only. The author manually maintains playlist membership before requesting the final notification; `export-playlists.ts` must never add, remove, reorder or infer playlist membership. The notification pipeline performs a fresh export, deploys the blog topic pages and verifies their public fingerprint before sending.
+
+```bash
+cd ~/.codex/skills/youtube-publisher/scripts
+npm run export:playlists -- --output /absolute/path/youtube-playlists.json
+```
+
+## Category IDs
+
+| ID | Category |
+|----|----------|
+| 1 | Film & Animation |
+| 2 | Autos & Vehicles |
+| 10 | Music |
+| 15 | Pets & Animals |
+| 17 | Sports |
+| 19 | Travel & Events |
+| 20 | Gaming |
+| 22 | People & Blogs |
+| 23 | Comedy |
+| 24 | Entertainment |
+| 25 | News & Politics |
+| 26 | Howto & Style |
+| 27 | Education |
+| 28 | Science & Technology |
+
+## Authentication
+
+First-time setup requires OAuth2 authentication:
+
+1. Run `npx ts-node youtube-upload.ts --auth`
+2. Browser opens Google login
+3. Grant permissions to upload videos
+4. Token is saved to `.youtube-token.json`
+
+Token refreshes automatically. Re-run `--auth` if expired.
+
+## Environment
+
+Create `scripts/.env`:
+
+```env
+YOUTUBE_CLIENT_ID=your_client_id
+YOUTUBE_CLIENT_SECRET=your_client_secret
+```
+
+Get credentials from Google Cloud Console:
+1. Create project at console.cloud.google.com
+2. Enable YouTube Data API v3
+3. Create OAuth2 credentials (Desktop app)
+4. Download and extract client_id & client_secret
+
+## Examples
+
+### Upload Tutorial Video
+
+```bash
+npx ts-node youtube-upload.ts \
+  -v tutorial.mp4 \
+  -t "How to Use Claude Code - Complete Guide" \
+  -d "Learn everything about Claude Code in this comprehensive tutorial.
+
+Timestamps:
+00:00 Introduction
+02:30 Getting Started
+05:00 Advanced Features
+
+#ClaudeCode #AI #Tutorial" \
+  --tags "claude code,ai,tutorial,anthropic,coding" \
+  --category 28 \
+  --privacy public
+```
+
+### Upload YouTube Short
+
+```bash
+npx ts-node youtube-upload.ts \
+  -v short_video.mp4 \
+  -t "Mind-blowing AI trick! #Shorts" \
+  -d "This will change how you work! #AI #Tech" \
+  --privacy public \
+  --short
+```
+
+### Upload with Thumbnail and Subtitles
+
+```bash
+npx ts-node youtube-upload.ts \
+  -v tutorial.mp4 \
+  -t "Tutorial with Subtitles" \
+  -d "Learn step by step with subtitles" \
+  --thumbnail /path/to/cover.jpg \
+  --subtitles /path/to/subtitles.srt \
+  --subtitle-lang zh \
+  --subtitle-name "中文" \
+  --privacy public
+```
+
+### Upload with Local Thumbnail
+
+```bash
+npx ts-node youtube-upload.ts \
+  -v video.mp4 \
+  -t "My Video Title" \
+  --thumbnail "/Users/m/Downloads/shell/work/cover.jpg" \
+  --privacy public
+```
+
+### Retry Only a Failed Thumbnail
+
+Use the dedicated recovery command when the video already exists and only its
+custom thumbnail needs to be uploaded again. It validates the video ID and
+local JPG/PNG file, retries transient failures, verifies that the target video
+is readable, and prints structured result markers.
+
+```bash
+npx ts-node upload-thumbnail.ts \
+  --video-id VIDEO_ID \
+  --thumbnail /path/to/cover.jpg \
+  --attempts 3
+```
+
+This command never deletes or uploads a video. Do not create one-off recovery
+scripts with hardcoded video IDs or local paths.
+
+## Output
+
+On success, returns:
+- Video ID
+- Video URL (https://youtu.be/VIDEO_ID)
+- Status
+
+## Limitations
+
+- Max file size: 256GB (YouTube limit)
+- Supported formats: MP4, MOV, AVI, WMV, FLV, 3GP, MPEG
+- Supported subtitle formats: SRT, VTT
+- Daily upload quota: 10,000 units (typically ~6 videos/day)
+- Title max: 100 characters
+- Description max: 5,000 characters
+- Tags max: 500 characters total
+
+## Changelog
+
+### v1.7.1 - Unknown-Flag Fail-Fast (2026-09-28)
+
+- `youtube-update-description.ts` v1.8（2026-10-01）**章节显示契约门禁**：上传前校验描述里的章节块必须满足 YouTube 硬规则（首章 0:00 / 每章 ≥10 秒 / ≥3 章），违规**拒绝上传并 exit 3**（列出具体违规）。原因：任一条不满足时 YouTube **静默忽略整份章节列表**——描述看着正常、播放轴却没有章节（2026-10-01 charles_schwab `0:00`/`0:01` 相邻 1 秒，18 章全废）。描述里完全没有章节块时只打 WARN 不拦。修复用 `duanku-youtube-publish/scripts/split_description_chapters.py`（内置自愈）/ 复检 `--validate`。
+- `youtube-update-description.ts` 遇到未知 `--` 参数直接报错退出（exit 2），不再静默忽略。背景：当日测试 `--dry-run`（不存在的 flag）被静默吞掉，截断的测试文件真实上传；fail-fast 杜绝同类误操作。
+
+### v1.7.0 - Baseline-Header Upload Guard (2026-09-28)
+
+- `youtube-update-description.ts` 现在会在上传前自动剥离 duanku 基线头：`--description-file` 内容若以 `# YouTube description baseline` 开头（run_pipeline v2.46+ 落盘的人工 diff 参照文件），去掉头部注释块后上传并打印 `NOTE: stripped baseline header before upload (v1.7 guard)`。
+- 背景：9/15(tello)/9/27(capital_one)/9/28(maya) 三次 agent 驱动的描述编辑把带头的基线文件原样重传，6 行 `#` 注释泄漏到线上 YouTube 说明区（tello/capital_one 由用户手工清除，maya 已由本版本修复）。守卫落在上传口，此后任何调用路径都无法再把头推上线。
+
+### v1.6.0 - Safe Thumbnail-Only Recovery (2026-07-28)
+
+- Added `upload-thumbnail.ts` with parameter validation, bounded retry, target-video verification, and structured output.
+- Removed the hardcoded thumbnail repair script that also deleted a fixed video ID.
+- Expanded the production TypeScript gate to cover the thumbnail recovery command.
+
+### v1.1 - Resumable Upload + Retry (2026-04-22)
+
+- Fixed EPIPE error on large file uploads by switching to resumable upload with progress tracking
+- Added automatic retry (up to 3 attempts) for transient network errors (EPIPE, ETIMEDOUT, ECONNRESET)
+- Added upload progress logging (every 10%)
+- Added `media.mimeType` for better upload compatibility
+
+### v1.0 - Initial Release
+
+- Basic video upload with metadata
+- Thumbnail, subtitle, playlist support
+- OAuth2 authentication

@@ -1,0 +1,410 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T17:53:46.405Z",
+    "slug": "mattpocock-diagnose",
+    "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnose/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "cdae59b4a28c5175120aa1e49c9250bb3342382cc4a5b08cdb86fc69c693b2ee",
+    "tree_hash": "be7b10ad8183e809e29230169f51fdf6844e3f7a0c1684085f26b483b9f61b8a",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "diagnose",
+    "description": "Use a disciplined loop to diagnose hard bugs and performance regressions through reproduction, hypotheses, instrumentation, fixes, and regression tests.",
+    "summary": "Structured debugging workflow for reproducing, isolating, fixing, and preventing regressions.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "mattpocock",
+    "license": "MIT",
+    "tags": [
+      "debugging",
+      "diagnosis",
+      "regression-testing",
+      "performance",
+      "developer-workflow"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "external_commands"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "No malicious intent or prompt injection was found in the reviewed files. The static findings are Markdown examples, localhost prompts, or local debugging instructions, not hidden execution or external data transfer. The skill may guide users to run normal project tests or scripts during diagnosis.",
+    "remediation": [
+      {
+        "issue": "Command examples appear in Markdown prose and can trigger conservative scanners.",
+        "suggestion": "Clarify that commands should run only in the user project and under normal tool approval.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/hitl-loop.template.sh",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 117
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:scripts/hitl-loop.template.sh:31:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/hitl-loop.template.sh",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "step \"Open the app at http://localhost:3000 and sign in.\""
+      },
+      {
+        "id": "blocker:scripts/hitl-loop.template.sh:33:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/hitl-loop.template.sh",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "capture ERRORED \"Click the 'Export' button. Did it throw an error? (y/n)\""
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "8. **Bisection harness.** If the bug appeared between two known states (commit, dataset, version), a"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "10. **HITL bash script.** Last resort. If a human must click, drive _them_ with `scripts/hitl-loop.t"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "**Tag every debug log** with a unique prefix, e.g. `[DEBUG-a4f2]`. Cleanup at the end becomes a sing"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "**Perf branch.** For performance regressions, logs are usually wrong. Instead: establish a baseline "
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 113,
+        "snippet": "- [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "**Then ask: what would have prevented this bug?** If the answer involves architectural change (no go"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:scripts/hitl-loop.template.sh:31:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL is http://localhost:3000 inside a human-in-the-loop reproduction prompt. It does not make a network request or send data to an external service."
+      },
+      {
+        "id": "blocker:scripts/hitl-loop.template.sh:33:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line asks the user whether a UI action produced an error. It captures a manual debugging observation, not host reconnaissance or sensitive system discovery."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The backticked text names git bisect run as a debugging technique in Markdown prose. There is no embedded code path that executes the command automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The backticked script path is a reference to a local template for manual reproduction. The associated script only prints prompts and reads user responses."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The backticked DEBUG token is a log tag example, not command execution. The surrounding guidance is about making temporary instrumentation easy to remove."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backticked performance.now() reference is a browser timing API example in prose. It does not create shell execution or an injection path."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The cleanup checklist suggests using grep to find temporary debug tags. This is a normal local development command with no hidden arguments or data exfiltration."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticked text names another skill path as a handoff recommendation. It is Markdown prose and does not execute a shell command."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 160,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T17:53:46.405Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Diagnose Bugs With a Reproducible Loop",
+    "value_statement": "Hard bugs waste time when teams guess before reproducing the failure. This skill guides Claude, Codex, or Claude Code from reproduction to regression test.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "debugging workflow",
+      "bug diagnosis",
+      "bug reproduction",
+      "performance regression",
+      "regression testing",
+      "AI debugging",
+      "developer productivity"
+    ],
+    "actual_capabilities": [
+      "Guides creation of a deterministic reproduction loop using tests, scripts, browser automation, or trace replay.",
+      "Requires confirmation that the loop reproduces the user-visible failure.",
+      "Prompts for three to five ranked, falsifiable hypotheses before testing.",
+      "Recommends targeted instrumentation with removable debug log tags.",
+      "Directs regression testing before the fix when a correct seam exists.",
+      "Includes cleanup checks for repros, temporary logs, prototypes, and post-mortem notes."
+    ],
+    "limitations": [
+      "It needs project access, fixtures, logs, or captured artifacts to reproduce real failures.",
+      "It does not replace domain knowledge from users or maintainers.",
+      "The human-in-the-loop script is a template and must be adapted.",
+      "Production instrumentation requires explicit permission and careful review."
+    ],
+    "use_cases": [
+      {
+        "title": "Reproduce Application Bugs",
+        "description": "Turn vague bug reports into a deterministic loop, then verify the fix against the original symptom.",
+        "target_user": "Application developers"
+      },
+      {
+        "title": "Isolate Performance Regressions",
+        "description": "Measure a baseline, rank likely causes, and test one performance hypothesis at a time.",
+        "target_user": "Performance engineers"
+      },
+      {
+        "title": "Structure Debugging Handoffs",
+        "description": "Capture the repro, hypotheses, fix evidence, and prevention notes for team review.",
+        "target_user": "Tech leads"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Start a Basic Diagnosis",
+        "scenario": "A user reports a clear bug but no investigation has started.",
+        "prompt": "Use the diagnose skill on this bug. Build a feedback loop first. Reproduce the failure before proposing a fix."
+      },
+      {
+        "title": "Debug a UI Failure",
+        "scenario": "A browser workflow fails and needs a reliable reproduction path.",
+        "prompt": "Diagnose this UI bug. Choose a browser or human-in-the-loop reproduction path. Confirm the visible symptom before changing code."
+      },
+      {
+        "title": "Investigate a Regression",
+        "scenario": "A behavior changed between two versions or commits.",
+        "prompt": "Use the diagnose process for this regression. Build a bisectable signal. Rank hypotheses and test one prediction at a time."
+      },
+      {
+        "title": "Run Full Root Cause Analysis",
+        "scenario": "A complex bug needs fix evidence and prevention notes.",
+        "prompt": "Diagnose this failure end to end. Minimize the repro, test hypotheses, fix it, remove instrumentation, and write prevention notes."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A test fails only on CI after a dependency update.",
+        "output": [
+          "A local loop that reproduces the CI-like failure.",
+          "A ranked hypothesis list tied to dependency behavior.",
+          "A regression test plan and cleanup checklist."
+        ]
+      },
+      {
+        "input": "The export button throws an error for some users.",
+        "output": [
+          "A browser or human-in-the-loop reproduction plan.",
+          "A request for the exact symptom and affected conditions.",
+          "A fix path verified against the original export scenario."
+        ]
+      },
+      {
+        "input": "A page became slower after a recent release.",
+        "output": [
+          "A baseline measurement before any optimization.",
+          "Focused probes for likely regression causes.",
+          "A final check that performance improved without new failures."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Start with the fastest deterministic loop that reproduces the real symptom.",
+      "Write falsifiable hypotheses before changing code or adding instrumentation.",
+      "Remove temporary logs, prototypes, and debug helpers before declaring the fix complete."
+    ],
+    "anti_patterns": [
+      "Changing code before reproducing the original failure.",
+      "Logging everything instead of adding probes tied to specific hypotheses.",
+      "Adding shallow tests that do not exercise the real bug path."
+    ],
+    "faq": [
+      {
+        "question": "What problem does this skill solve?",
+        "answer": "It gives agents a disciplined process for hard bugs and performance regressions. The process starts with a reliable feedback loop."
+      },
+      {
+        "question": "Does it fix bugs automatically?",
+        "answer": "No. It guides investigation, hypothesis testing, implementation, and verification using the project context available to the agent."
+      },
+      {
+        "question": "Can it handle flaky bugs?",
+        "answer": "Yes. It focuses on raising the reproduction rate until the failure is frequent enough to debug."
+      },
+      {
+        "question": "Why does it require ranked hypotheses?",
+        "answer": "Ranked hypotheses reduce guessing. Each hypothesis must predict what evidence would confirm or disprove it."
+      },
+      {
+        "question": "Does it support performance work?",
+        "answer": "Yes. It recommends baseline measurement, targeted profiling, and verification before and after the fix."
+      },
+      {
+        "question": "What access does it need?",
+        "answer": "It works best with tests, logs, fixtures, traces, or a local environment that reproduces the reported issue."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "hitl-loop.template.sh",
+          "type": "file",
+          "path": "scripts/hitl-loop.template.sh",
+          "lines": 42
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 118
+    }
+  ]
+}

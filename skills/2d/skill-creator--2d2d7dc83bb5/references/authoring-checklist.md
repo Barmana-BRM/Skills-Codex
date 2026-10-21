@@ -1,0 +1,56 @@
+# Skill Authoring Pre-Publish Checklist
+
+Run through every item before sharing or publishing a skill. Each unchecked item is a known failure mode.
+
+SOURCE: Anthropic skill-authoring best practices (docs.anthropic.com, accessed 2026-03-23)
+
+---
+
+## Core Quality
+
+- [ ] Description is specific and includes key terms — both what the skill does and when to use it
+- [ ] SKILL.md body is under 500 lines
+- [ ] Additional detail lives in separate reference files under `references/` — not inline in SKILL.md
+- [ ] Content is written for Claude, not humans — instructions over explanations
+- [ ] Every instruction justifies its token cost — no padding, no restating what Claude already knows
+- [ ] No time-sensitive or superseded instructions without a live execution branch
+- [ ] Consistent terminology throughout — same term for the same concept, every time
+- [ ] Examples are concrete, not abstract
+- [ ] File references are one level deep — ``references/file.md`` not ``references/subdir/file.md``
+- [ ] Progressive disclosure used appropriately — overview in SKILL.md, detail in references
+- [ ] Workflows have clear, numbered steps
+- [ ] For skills enforcing a multi-step discipline with skippable quality gates, a `Rationalization | Response` table (plus optional Red Flags) is present or explicitly deemed not applicable — see [anti-rationalization-pattern.md](./anti-rationalization-pattern.md)
+
+---
+
+## Structure
+
+- [ ] Portable upload/package frontmatter has a required `name` (max 64 characters; lowercase letters, numbers, and hyphens only) and `description` (non-empty; max 1024 characters)
+- [ ] Claude Code-only frontmatter is checked against the runtime field rules rather than portable package constraints
+- [ ] Frontmatter validated with `uvx skilllint@latest check --fix <file>` — auto-fixes YAML formatting issues
+- [ ] Reference files sit one level deep under `references/` — not in subdirectories
+- [ ] Every disclosed reference has a trigger-bearing pointer from its entrypoint
+- [ ] Relative markdown links resolve from the file that contains them
+- [ ] All code fences have a language specifier
+
+---
+
+## Code and Scripts
+
+- [ ] Scripts solve problems rather than instruct Claude to figure it out
+- [ ] Error handling is explicit — scripts fail with a clear message, not silently
+- [ ] No "voodoo constants" — every value (timeouts, limits, thresholds) has a comment explaining why that value was chosen
+- [ ] Required packages listed in instructions and verified as available before use
+- [ ] Scripts have clear inline documentation
+- [ ] No Windows-style paths — all forward slashes
+- [ ] Validation and verification steps present for critical operations
+- [ ] Feedback loops included for quality-critical tasks
+
+---
+
+## Testing
+
+- [ ] At least three evaluations created with realistic prompts
+- [ ] Tested with Haiku, Sonnet, and Opus — instructions specific enough to work on Haiku, not only Opus
+- [ ] Tested with real usage scenarios, not synthetic ones
+- [ ] Team feedback incorporated (if applicable)

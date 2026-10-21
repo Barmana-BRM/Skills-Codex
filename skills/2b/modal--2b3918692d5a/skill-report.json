@@ -1,0 +1,3336 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T13:55:09.221Z",
+    "slug": "davila7-modal",
+    "source_url": "https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/scientific/modal",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2b3918692d5a5be0a7dc03985c26fdded21e088d8f82566bec915e83f536d1e5",
+    "tree_hash": "25147b3ec54ceb767a0d3ebd56dce7098af2c01cc7738384d7ac0a16f42f8185",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "modal",
+    "description": "Guide Modal deployments for serverless Python, GPU workloads, batch processing, scheduled jobs, persistent storage, secrets, APIs, and autoscaling.",
+    "summary": "Build and operate serverless Python workloads on Modal with practical deployment patterns.",
+    "icon": "📦",
+    "author": "davila7",
+    "license": "MIT",
+    "tags": [
+      "modal",
+      "serverless-python",
+      "gpu-computing",
+      "ml-deployment",
+      "cloud-automation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "scripts",
+      "network",
+      "filesystem",
+      "env_access",
+      "external_commands"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most alerts are false positives from Markdown, framework method names, placeholders, and expected Modal APIs. Confirmed examples expose credentials, log secrets, serve the container root, and use unpinned source.",
+    "remediation": [
+      {
+        "issue": "A container image example copies a local AWS credential directory.",
+        "suggestion": "Replace the directory copy with a least-privilege Modal Secret or workload identity. Never place long-lived credentials in an image or container home directory.",
+        "severity": "high"
+      },
+      {
+        "issue": "A public web server example serves the container filesystem root.",
+        "suggestion": "Serve a dedicated empty content directory, avoid shell=True, and add authentication when files are not public.",
+        "severity": "high"
+      },
+      {
+        "issue": "Secret examples print injected environment values and import a complete dotenv file.",
+        "suggestion": "Remove secret-value logging and select only required keys. Use placeholder status messages that never include credential contents.",
+        "severity": "high"
+      },
+      {
+        "issue": "Image builds clone repositories without immutable revisions.",
+        "suggestion": "Pin each repository to a reviewed commit and verify the source before using its files in an image.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 57,
+            "line_end": 57
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 366,
+            "line_end": 366
+          },
+          {
+            "file": "references/examples.md",
+            "line_start": 367,
+            "line_end": 367
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 315,
+            "line_end": 315
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 271,
+            "line_end": 271
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 140,
+            "line_end": 140
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 377,
+            "line_end": 377
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "file": "references/getting-started.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "references/getting-started.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "references/scheduled-jobs.md",
+            "line_start": 248,
+            "line_end": 248
+          },
+          {
+            "file": "references/volumes.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "references/volumes.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "references/volumes.md",
+            "line_start": 278,
+            "line_end": 278
+          },
+          {
+            "file": "references/volumes.md",
+            "line_start": 282,
+            "line_end": 282
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/examples.md",
+            "line_start": 368,
+            "line_end": 368
+          },
+          {
+            "file": "references/examples.md",
+            "line_start": 368,
+            "line_end": 368
+          },
+          {
+            "file": "references/scheduled-jobs.md",
+            "line_start": 242,
+            "line_end": 242
+          },
+          {
+            "file": "references/scheduled-jobs.md",
+            "line_start": 242,
+            "line_end": 242
+          },
+          {
+            "file": "references/scheduled-jobs.md",
+            "line_start": 245,
+            "line_end": 245
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 160,
+            "line_end": 160
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 161,
+            "line_end": 161
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 163,
+            "line_end": 163
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 237,
+            "line_end": 237
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 210
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/functions.md",
+            "line_start": 239,
+            "line_end": 239
+          },
+          {
+            "file": "references/gpu.md",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "references/scaling.md",
+            "line_start": 190,
+            "line_end": 190
+          },
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 147
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 151
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 151,
+            "line_end": 158
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 158,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 180
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 180,
+            "line_end": 182
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 182,
+            "line_end": 188
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 188,
+            "line_end": 196
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 196,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 206
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 206,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 215,
+            "line_end": 217
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 217,
+            "line_end": 219
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 219,
+            "line_end": 223
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "scripts:references/examples.md:57:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "references/examples.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "self.model.eval()"
+      },
+      {
+        "id": "network:references/examples.md:366:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/examples.md",
+        "line_start": 366,
+        "line_end": 366,
+        "snippet": "response = requests.get("
+      },
+      {
+        "id": "network:references/examples.md:367:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/examples.md",
+        "line_start": 367,
+        "line_end": 367,
+        "snippet": "\"https://api.example.com/sensors\","
+      },
+      {
+        "id": "filesystem:references/examples.md:375:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/examples.md",
+        "line_start": 375,
+        "line_end": 375,
+        "snippet": "with open(f\"/data/{timestamp}.json\", \"w\") as f:"
+      },
+      {
+        "id": "env_access:references/examples.md:368:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/examples.md",
+        "line_start": 368,
+        "line_end": 368,
+        "snippet": "headers={\"Authorization\": f\"Bearer {os.environ['API_KEY']}\"}"
+      },
+      {
+        "id": "env_access:references/examples.md:368:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/examples.md",
+        "line_start": 368,
+        "line_end": 368,
+        "snippet": "headers={\"Authorization\": f\"Bearer {os.environ['API_KEY']}\"}"
+      },
+      {
+        "id": "blocker:references/examples.md:88:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/examples.md",
+        "line_start": 88,
+        "line_end": 90,
+        "snippet": "return batch_id"
+      },
+      {
+        "id": "external_commands:references/functions.md:239:process-spawn",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process spawn",
+        "file": "references/functions.md",
+        "line_start": 239,
+        "line_end": 239,
+        "snippet": "call = process_job.spawn(data)"
+      },
+      {
+        "id": "filesystem:references/getting-started.md:15:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/getting-started.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "This creates credentials in `~/.modal.toml`. Alternatively, set environment variables:"
+      },
+      {
+        "id": "filesystem:references/getting-started.md:15:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/getting-started.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "This creates credentials in `~/.modal.toml`. Alternatively, set environment variables:"
+      },
+      {
+        "id": "external_commands:references/gpu.md:148:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/gpu.md",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "subprocess.run("
+      },
+      {
+        "id": "blocker:references/gpu.md:95:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/gpu.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "To avoid automatic upgrades (e.g., for benchmarking):"
+      },
+      {
+        "id": "blocker:references/gpu.md:162:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/gpu.md",
+        "line_start": 162,
+        "line_end": 163,
+        "snippet": "- Newer GPUs have faster arithmetic than memory access"
+      },
+      {
+        "id": "network:references/images.md:17:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/images.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": ".run_commands(\"git clone https://github.com/modal-labs/agi\")"
+      },
+      {
+        "id": "network:references/images.md:77:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/images.md",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": ".run_commands(\"git clone https://github.com/modal-labs/gpu-glossary\")"
+      },
+      {
+        "id": "filesystem:references/images.md:99:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/images.md",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "volumes={\"/root/.cache/huggingface\": hf_cache},"
+      },
+      {
+        "id": "filesystem:references/images.md:110:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/images.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "\"/user/erikbern/.aws\","
+      },
+      {
+        "id": "filesystem:references/images.md:111:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/images.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "remote_path=\"/root/.aws\""
+      },
+      {
+        "id": "sensitive:references/images.md:16:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/images.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": ".env({\"HALT_AND_CATCH_FIRE\": \"0\"})"
+      },
+      {
+        "id": "sensitive:references/images.md:63:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/images.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "Pass a dictionary to `.env()`:"
+      },
+      {
+        "id": "sensitive:references/images.md:66:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/images.md",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "image = modal.Image.debian_slim().env({\"PORT\": \"6443\"})"
+      },
+      {
+        "id": "blocker:references/resources.md:98:at-command-scheduling",
+        "category": "blocker",
+        "severity": "medium",
+        "pattern": "at command scheduling",
+        "file": "references/resources.md",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "Disk requests increase memory request at 20:1 ratio:"
+      },
+      {
+        "id": "external_commands:references/scaling.md:190:process-spawn",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process spawn",
+        "file": "references/scaling.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "For `.spawn()` async jobs: up to 1 million pending inputs."
+      },
+      {
+        "id": "filesystem:references/scheduled-jobs.md:248:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/scheduled-jobs.md",
+        "line_start": 248,
+        "line_end": 248,
+        "snippet": "with open(\"/data/latest.json\", \"w\") as f:"
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:242:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/scheduled-jobs.md",
+        "line_start": 242,
+        "line_end": 242,
+        "snippet": "api_key = os.environ[\"API_KEY\"]"
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:242:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/scheduled-jobs.md",
+        "line_start": 242,
+        "line_end": 242,
+        "snippet": "api_key = os.environ[\"API_KEY\"]"
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:245:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/scheduled-jobs.md",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "data = fetch_external_data(api_key)"
+      },
+      {
+        "id": "env_access:references/secrets.md:37:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "local_secret = modal.Secret.from_dict({\"FOO\": os.environ[\"LOCAL_FOO\"]})"
+      },
+      {
+        "id": "env_access:references/secrets.md:44:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "print(os.environ[\"FOO\"])"
+      },
+      {
+        "id": "env_access:references/secrets.md:53:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "print(os.environ[\"USERNAME\"])"
+      },
+      {
+        "id": "env_access:references/secrets.md:64:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "secret_key = os.environ[\"MY_PASSWORD\"]"
+      },
+      {
+        "id": "env_access:references/secrets.md:111:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "port = os.environ[\"PORT\"]"
+      },
+      {
+        "id": "env_access:references/secrets.md:122:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "api_key = os.environ[\"API_KEY\"]"
+      },
+      {
+        "id": "env_access:references/secrets.md:160:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "host=os.environ[\"PGHOST\"],"
+      },
+      {
+        "id": "env_access:references/secrets.md:161:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "port=os.environ[\"PGPORT\"],"
+      },
+      {
+        "id": "env_access:references/secrets.md:162:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "user=os.environ[\"PGUSER\"],"
+      },
+      {
+        "id": "env_access:references/secrets.md:163:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/secrets.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "password=os.environ[\"PGPASSWORD\"],"
+      },
+      {
+        "id": "env_access:references/secrets.md:50:dotenv-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "dotenv library",
+        "file": "references/secrets.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "@app.function(secrets=[modal.Secret.from_dotenv()])"
+      },
+      {
+        "id": "env_access:references/secrets.md:136:aws-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "AWS credential environment variables",
+        "file": "references/secrets.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "# AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY automatically used"
+      },
+      {
+        "id": "env_access:references/secrets.md:64:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/secrets.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "secret_key = os.environ[\"MY_PASSWORD\"]"
+      },
+      {
+        "id": "env_access:references/secrets.md:117:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/secrets.md",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "secret = modal.Secret.from_dict({\"API_KEY\": \"secret-value\"})"
+      },
+      {
+        "id": "env_access:references/secrets.md:122:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/secrets.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "api_key = os.environ[\"API_KEY\"]"
+      },
+      {
+        "id": "sensitive:references/secrets.md:47:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/secrets.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "From .env file:"
+      },
+      {
+        "id": "sensitive:references/secrets.md:106:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/secrets.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "image = modal.Image.debian_slim().env({\"PORT\": \"6443\"})"
+      },
+      {
+        "id": "filesystem:references/volumes.md:38:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/volumes.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "with open(\"/data/xyz.txt\", \"w\") as f:"
+      },
+      {
+        "id": "filesystem:references/volumes.md:52:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/volumes.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "with open(\"/data/file.txt\", \"w\") as f:"
+      },
+      {
+        "id": "filesystem:references/volumes.md:278:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/volumes.md",
+        "line_start": 278,
+        "line_end": 278,
+        "snippet": "with open(\"/xyz.txt\", \"w\") as f:"
+      },
+      {
+        "id": "filesystem:references/volumes.md:282:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/volumes.md",
+        "line_start": 282,
+        "line_end": 282,
+        "snippet": "with open(\"/data/xyz.txt\", \"w\") as f:"
+      },
+      {
+        "id": "blocker:references/volumes.md:247:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/volumes.md",
+        "line_start": 247,
+        "line_end": 247,
+        "snippet": "- Avoid modifying same files concurrently"
+      },
+      {
+        "id": "external_commands:references/web-endpoints.md:141:python-subprocess-popen",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.Popen",
+        "file": "references/web-endpoints.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "subprocess.Popen(\"python -m http.server -d / 8000\", shell=True)"
+      },
+      {
+        "id": "network:references/web-endpoints.md:315:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/web-endpoints.md",
+        "line_start": 315,
+        "line_end": 315,
+        "snippet": "First request may experience cold start (few seconds). Modal keeps containers alive for subsequent r"
+      },
+      {
+        "id": "network:references/web-endpoints.md:47:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/web-endpoints.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "curl \"https://workspace--app-square.modal.run?x=42\""
+      },
+      {
+        "id": "network:references/web-endpoints.md:63:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/web-endpoints.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "https://workspace--app-square.modal.run"
+      },
+      {
+        "id": "network:references/web-endpoints.md:271:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/web-endpoints.md",
+        "line_start": 271,
+        "line_end": 271,
+        "snippet": "# URL: https://workspace--api.modal.run"
+      },
+      {
+        "id": "network:references/web-endpoints.md:140:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/web-endpoints.md",
+        "line_start": 140,
+        "line_end": 140,
+        "snippet": "# Must bind to 0.0.0.0, not 127.0.0.1"
+      },
+      {
+        "id": "env_access:references/web-endpoints.md:237:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/web-endpoints.md",
+        "line_start": 237,
+        "line_end": 237,
+        "snippet": "if token.credentials != os.environ[\"AUTH_TOKEN\"]:"
+      },
+      {
+        "id": "blocker:references/web-endpoints.md:240:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/web-endpoints.md",
+        "line_start": 240,
+        "line_end": 240,
+        "snippet": "detail=\"Invalid token\""
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 36,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 38,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 42,
+        "snippet": "This creates a token stored in `~/.modal.toml`. The token authenticates all Modal operations."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 50,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 52,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 62,
+        "snippet": "Run with: `modal run script.py`"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 72,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 75,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 76,
+        "snippet": "- Install Python packages: `.uv_pip_install(\"pandas\", \"scikit-learn\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 77,
+        "snippet": "- Install system packages: `.apt_install(\"ffmpeg\", \"git\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 78,
+        "snippet": "- Use existing Docker images: `modal.Image.from_registry(\"nvidia/cuda:12.1.0-base\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 80,
+        "snippet": "- Add local code: `.add_local_python_source(\"my_module\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 84,
+        "snippet": "See `references/images.md` for comprehensive image building documentation."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 86,
+        "snippet": "Define functions that run in the cloud with the `@app.function()` decorator."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 92,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 95,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 101,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 103,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 105,
+        "snippet": "Run with: `modal run script.py`"
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 111,
+        "snippet": "See `references/functions.md` for function patterns, deployment, and parameter handling."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 117,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 120,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 120,
+        "snippet": "- `T4`, `L4` - Cost-effective inference"
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "- `A10`, `A100`, `A100-80GB` - Standard training/inference"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 123,
+        "snippet": "- `L40S` - Excellent cost/performance balance (48GB)"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- `H100`, `H200` - High-performance training"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 127,
+        "snippet": "- `B200` - Flagship performance (most powerful)"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 131,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 133,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 139,
+        "snippet": "See `references/gpu.md` for GPU selection guidance, CUDA setup, and multi-GPU configuration."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 147,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 151,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 151,
+        "line_end": 158,
+        "snippet": "See `references/resources.md` for resource limits and billing details."
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 169,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 172,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 180,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:180:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 180,
+        "line_end": 182,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 182,
+        "line_end": 188,
+        "snippet": "See `references/scaling.md` for autoscaling configuration, concurrency, and scaling limits."
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 188,
+        "line_end": 196,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 196,
+        "line_end": 200,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 206,
+        "snippet": "See `references/volumes.md` for volume management, commits, and caching patterns."
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 206,
+        "line_end": 212,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 215,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 215,
+        "line_end": 217,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 217,
+        "line_end": 219,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 219,
+        "line_end": 223,
+        "snippet": "See `references/secrets.md` for secret management and authentication patterns."
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 223,
+        "line_end": 225,
+        "snippet": "Serve HTTP endpoints, APIs, and webhooks with `@modal.web_endpoint()`."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 232,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 232,
+        "line_end": 235,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 237,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 237,
+        "line_end": 241,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 241,
+        "line_end": 247,
+        "snippet": "See `references/web-endpoints.md` for FastAPI integration, streaming, authentication, and WebSocket "
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 247,
+        "line_end": 257,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 257,
+        "line_end": 261,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:261:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 261,
+        "line_end": 267,
+        "snippet": "See `references/scheduled-jobs.md` for cron syntax, timezone configuration, and monitoring."
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 267,
+        "line_end": 297,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 297,
+        "line_end": 301,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:301:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 301,
+        "line_end": 315,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:315:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 315,
+        "line_end": 319,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:319:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 319,
+        "line_end": 330,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:330:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 330,
+        "line_end": 336,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 336,
+        "line_end": 337,
+        "snippet": "- **`references/getting-started.md`** - Authentication, setup, basic concepts"
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 337,
+        "line_end": 338,
+        "snippet": "- **`references/images.md`** - Image building, dependencies, Dockerfiles"
+      },
+      {
+        "id": "external_commands:SKILL.md:338:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 338,
+        "line_end": 339,
+        "snippet": "- **`references/functions.md`** - Function patterns, deployment, parameters"
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 339,
+        "line_end": 340,
+        "snippet": "- **`references/gpu.md`** - GPU types, CUDA, multi-GPU configuration"
+      },
+      {
+        "id": "external_commands:SKILL.md:340:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 340,
+        "line_end": 341,
+        "snippet": "- **`references/resources.md`** - CPU, memory, disk management"
+      },
+      {
+        "id": "external_commands:SKILL.md:341:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 341,
+        "line_end": 342,
+        "snippet": "- **`references/scaling.md`** - Autoscaling, parallel execution, concurrency"
+      },
+      {
+        "id": "external_commands:SKILL.md:342:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 342,
+        "line_end": 343,
+        "snippet": "- **`references/volumes.md`** - Persistent storage, data management"
+      },
+      {
+        "id": "external_commands:SKILL.md:343:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 343,
+        "line_end": 344,
+        "snippet": "- **`references/secrets.md`** - Environment variables, authentication"
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 344,
+        "line_end": 345,
+        "snippet": "- **`references/web-endpoints.md`** - APIs, webhooks, endpoints"
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 345,
+        "line_end": 346,
+        "snippet": "- **`references/scheduled-jobs.md`** - Cron jobs, periodic tasks"
+      },
+      {
+        "id": "external_commands:SKILL.md:346:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 346,
+        "line_end": 350,
+        "snippet": "- **`references/examples.md`** - Common patterns for scientific computing"
+      },
+      {
+        "id": "external_commands:SKILL.md:350:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 350,
+        "line_end": 353,
+        "snippet": "1. **Pin dependencies** in `.uv_pip_install()` for reproducible builds"
+      },
+      {
+        "id": "external_commands:SKILL.md:353:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 353,
+        "line_end": 353,
+        "snippet": "4. **Configure autoscaling** - Set `max_containers` and `min_containers` based on workload"
+      },
+      {
+        "id": "external_commands:SKILL.md:355:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 355,
+        "line_end": 362,
+        "snippet": "6. **Use `.map()` for parallel processing** instead of sequential loops"
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 362,
+        "line_end": 366,
+        "snippet": "- Add packages to image with `.uv_pip_install(\"package-name\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:366:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 366,
+        "line_end": 367,
+        "snippet": "- Verify GPU specification: `@app.function(gpu=\"A100\")`"
+      },
+      {
+        "id": "external_commands:SKILL.md:367:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 367,
+        "line_end": 370,
+        "snippet": "- Check CUDA availability: `torch.cuda.is_available()`"
+      },
+      {
+        "id": "external_commands:SKILL.md:370:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 370,
+        "line_end": 374,
+        "snippet": "- Increase timeout: `@app.function(timeout=3600)`"
+      },
+      {
+        "id": "network:SKILL.md:12:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "Modal is particularly suited for AI/ML workloads, high-performance batch processing, scheduled jobs,"
+      },
+      {
+        "id": "network:SKILL.md:377:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 377,
+        "line_end": 377,
+        "snippet": "For additional help, see Modal documentation at https://modal.com/docs or join Modal Slack community"
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "This creates a token stored in `~/.modal.toml`. The token authenticates all Modal operations."
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "This creates a token stored in `~/.modal.toml`. The token authenticates all Modal operations."
+      },
+      {
+        "id": "filesystem:SKILL.md:193:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "with open(\"/data/results.txt\", \"w\") as f:"
+      },
+      {
+        "id": "env_access:SKILL.md:210:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "token = os.environ[\"HF_TOKEN\"]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "scripts:references/examples.md:57:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The call is torch model.eval(), which switches a model to inference mode. It does not evaluate source code."
+      },
+      {
+        "id": "network:references/examples.md:366:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The request is an explicit data-collection example using a placeholder API endpoint. No hidden destination or unauthorized transmission is present."
+      },
+      {
+        "id": "network:references/examples.md:367:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL uses example.com in a sample sensor API request. It is a reserved placeholder rather than an operational exfiltration endpoint."
+      },
+      {
+        "id": "filesystem:references/examples.md:375:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "env_access:references/examples.md:368:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/examples.md:368:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "blocker:references/examples.md:88:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched prose or return statement does not inspect the host, users, processes, hardware, or operating system. This is a lexical scanner collision."
+      },
+      {
+        "id": "external_commands:references/functions.md:239:process-spawn",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The spawn call is Modal's asynchronous function API, not an operating-system process launcher. The scaling reference is explanatory prose about the same API."
+      },
+      {
+        "id": "filesystem:references/getting-started.md:15:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The text explains the standard credential file created by the Modal CLI. It does not read, copy, print, or transmit that file."
+      },
+      {
+        "id": "filesystem:references/getting-started.md:15:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The path is a documented Modal credential location or a Hugging Face cache mount. The example does not access unrelated hidden user data."
+      },
+      {
+        "id": "external_commands:references/gpu.md:148:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The subprocess uses a fixed argument array for a documented training entrypoint, with shell execution disabled. No user-controlled command is interpolated."
+      },
+      {
+        "id": "blocker:references/gpu.md:95:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched prose or return statement does not inspect the host, users, processes, hardware, or operating system. This is a lexical scanner collision."
+      },
+      {
+        "id": "blocker:references/gpu.md:162:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched sentence compares GPU arithmetic and memory performance. It performs no network discovery or probing."
+      },
+      {
+        "id": "network:references/images.md:17:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a public modal-labs GitHub repository in an image-building example. It is visible documentation, not a covert endpoint."
+      },
+      {
+        "id": "network:references/images.md:77:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL identifies a public modal-labs GitHub repository in an image-building example. It is visible documentation, not a covert endpoint."
+      },
+      {
+        "id": "filesystem:references/images.md:99:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The path is a documented Modal credential location or a Hugging Face cache mount. The example does not access unrelated hidden user data."
+      },
+      {
+        "id": "filesystem:references/images.md:110:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "The example selects a local .aws directory for transfer into a remote container. That directory commonly contains reusable cloud credentials."
+      },
+      {
+        "id": "filesystem:references/images.md:111:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "The remote path places copied AWS configuration under the container root account. This can expose long-lived cloud credentials to deployed code or image users."
+      },
+      {
+        "id": "sensitive:references/images.md:16:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matches are documentation headings or Modal Image.env calls that set fixed non-secret values. They do not read a local environment file at these locations."
+      },
+      {
+        "id": "sensitive:references/images.md:63:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matches are documentation headings or Modal Image.env calls that set fixed non-secret values. They do not read a local environment file at these locations."
+      },
+      {
+        "id": "sensitive:references/images.md:66:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matches are documentation headings or Modal Image.env calls that set fixed non-secret values. They do not read a local environment file at these locations."
+      },
+      {
+        "id": "blocker:references/resources.md:98:at-command-scheduling",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The word at appears in a disk-to-memory billing ratio. No operating-system at command or persistent task is scheduled."
+      },
+      {
+        "id": "external_commands:references/scaling.md:190:process-spawn",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The spawn call is Modal's asynchronous function API, not an operating-system process launcher. The scaling reference is explanatory prose about the same API."
+      },
+      {
+        "id": "filesystem:references/scheduled-jobs.md:248:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:242:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:242:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "env_access:references/scheduled-jobs.md:245:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "env_access:references/secrets.md:37:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:44:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The example prints a value injected through Modal Secret to application logs. Logging secret material can disclose it to operators and log systems."
+      },
+      {
+        "id": "env_access:references/secrets.md:53:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The example prints an environment value loaded through a Modal Secret. A value from a local dotenv file may be sensitive and should not enter logs."
+      },
+      {
+        "id": "env_access:references/secrets.md:64:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:111:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:122:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:160:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:161:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:162:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:163:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "env_access:references/secrets.md:50:dotenv-library",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "medium",
+        "reason": "Secret.from_dotenv() can import every value from a local dotenv file into the cloud secret. Unrelated credentials may be transferred without explicit selection."
+      },
+      {
+        "id": "env_access:references/secrets.md:136:aws-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The comment explains standard boto3 credential resolution inside a function with an explicitly attached secret. It does not reveal credential values."
+      },
+      {
+        "id": "env_access:references/secrets.md:64:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "env_access:references/secrets.md:117:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "env_access:references/secrets.md:122:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text uses placeholder names or passes an injected credential to its intended API. It contains no real secret value or covert destination."
+      },
+      {
+        "id": "sensitive:references/secrets.md:47:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matches are documentation headings or Modal Image.env calls that set fixed non-secret values. They do not read a local environment file at these locations."
+      },
+      {
+        "id": "sensitive:references/secrets.md:106:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matches are documentation headings or Modal Image.env calls that set fixed non-secret values. They do not read a local environment file at these locations."
+      },
+      {
+        "id": "filesystem:references/volumes.md:38:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "filesystem:references/volumes.md:52:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "filesystem:references/volumes.md:278:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "filesystem:references/volumes.md:282:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "blocker:references/volumes.md:247:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched prose or return statement does not inspect the host, users, processes, hardware, or operating system. This is a lexical scanner collision."
+      },
+      {
+        "id": "external_commands:references/web-endpoints.md:141:python-subprocess-popen",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "The example starts a shell process and serves the container root directory on a web endpoint. This can expose container files and expands shell execution risk."
+      },
+      {
+        "id": "network:references/web-endpoints.md:315:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes request latency and contains no HTTP client call. It cannot initiate a network request."
+      },
+      {
+        "id": "network:references/web-endpoints.md:47:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a documented placeholder for a generated Modal endpoint. It does not identify an attacker-controlled service."
+      },
+      {
+        "id": "network:references/web-endpoints.md:63:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a documented placeholder for a generated Modal endpoint. It does not identify an attacker-controlled service."
+      },
+      {
+        "id": "network:references/web-endpoints.md:271:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL is a documented placeholder for a generated Modal endpoint. It does not identify an attacker-controlled service."
+      },
+      {
+        "id": "network:references/web-endpoints.md:140:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The address is the standard all-interfaces bind target required for a container web server. It is not a remote host or reconnaissance target."
+      },
+      {
+        "id": "env_access:references/web-endpoints.md:237:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      },
+      {
+        "id": "blocker:references/web-endpoints.md:240:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched prose or return statement does not inspect the host, users, processes, hardware, or operating system. This is a lexical scanner collision."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:180:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:261:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:301:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:315:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:319:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:330:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:338:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:340:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:341:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:342:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:343:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:346:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:350:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:353:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:355:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:366:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:367:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:370:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown fences or inline code markers in documentation. They are not Ruby backtick expressions and do not execute a shell."
+      },
+      {
+        "id": "network:SKILL.md:12:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL points to Modal signup, documentation, or community resources. It is ordinary product documentation with no data transmission logic."
+      },
+      {
+        "id": "network:SKILL.md:377:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL points to Modal signup, documentation, or community resources. It is ordinary product documentation with no data transmission logic."
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The text explains the standard credential file created by the Modal CLI. It does not read, copy, print, or transmit that file."
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The path is a documented Modal credential location or a Hugging Face cache mount. The example does not access unrelated hidden user data."
+      },
+      {
+        "id": "filesystem:SKILL.md:193:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code demonstrates writing application output to an explicit Modal volume or container path. It does not alter host files or sensitive configuration."
+      },
+      {
+        "id": "env_access:SKILL.md:210:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The example retrieves a named value intentionally supplied through Modal Secrets or configuration. No unauthorized enumeration or disclosure occurs at this location."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Local AWS Credentials Copied Into Remote Container",
+        "description": "The image example copies a local .aws directory into the remote root account, which can disclose reusable cloud credentials.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 108,
+            "line_end": 112
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The source and destination paths explicitly identify AWS configuration under user and root home directories."
+      },
+      {
+        "title": "Container Root Directory Exposed by Web Server",
+        "description": "The web server example publishes the container root directory, potentially exposing application files, configuration, and attached data.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 135,
+            "line_end": 141
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The command explicitly starts Python http.server with its document root set to the filesystem root on the published port."
+      },
+      {
+        "title": "Secret Values Printed to Logs",
+        "description": "Two examples print values injected through Modal Secrets, which can disclose secret material through application logs.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/secrets.md",
+            "line_start": 35,
+            "line_end": 44
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 47,
+            "line_end": 53
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "Both functions attach Modal Secret objects and directly print an environment value supplied by those objects."
+      },
+      {
+        "title": "Unpinned Source Repositories Used in Image Builds",
+        "description": "Image examples clone mutable repository branches without commit pins, allowing upstream changes to alter later builds.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 12,
+            "line_end": 18
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 73,
+            "line_end": 78
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "Both build commands clone repository URLs without a tag or commit checkout, so build inputs are not immutable."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Hidden file access",
+        "description": "\"/user/erikbern/.aws\",",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 110,
+            "line_end": 110
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The example selects a local .aws directory for transfer into a remote container. That directory commonly contains reusable cloud credentials."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "remote_path=\"/root/.aws\"",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The remote path places copied AWS configuration under the container root account. This can expose long-lived cloud credentials to deployed code or image users."
+      },
+      {
+        "title": "Python environment access",
+        "description": "print(os.environ[\"FOO\"])",
+        "locations": [
+          {
+            "file": "references/secrets.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The example prints a value injected through Modal Secret to application logs. Logging secret material can disclose it to operators and log systems."
+      },
+      {
+        "title": "Python environment access",
+        "description": "print(os.environ[\"USERNAME\"])",
+        "locations": [
+          {
+            "file": "references/secrets.md",
+            "line_start": 53,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The example prints an environment value loaded through a Modal Secret. A value from a local dotenv file may be sensitive and should not enter logs."
+      },
+      {
+        "title": "Python subprocess.Popen",
+        "description": "subprocess.Popen(\"python -m http.server -d / 8000\", shell=True)",
+        "locations": [
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 141,
+            "line_end": 141
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The example starts a shell process and serves the container root directory on a web endpoint. This can expose container files and expands shell execution risk."
+      },
+      {
+        "title": "Local AWS Credentials Copied Into Remote Container",
+        "description": "The image example copies a local .aws directory into the remote root account, which can disclose reusable cloud credentials.",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 108,
+            "line_end": 112
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The source and destination paths explicitly identify AWS configuration under user and root home directories."
+      },
+      {
+        "title": "Container Root Directory Exposed by Web Server",
+        "description": "The web server example publishes the container root directory, potentially exposing application files, configuration, and attached data.",
+        "locations": [
+          {
+            "file": "references/web-endpoints.md",
+            "line_start": 135,
+            "line_end": 141
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command explicitly starts Python http.server with its document root set to the filesystem root on the published port."
+      },
+      {
+        "title": "Secret Values Printed to Logs",
+        "description": "Two examples print values injected through Modal Secrets, which can disclose secret material through application logs.",
+        "locations": [
+          {
+            "file": "references/secrets.md",
+            "line_start": 35,
+            "line_end": 44
+          },
+          {
+            "file": "references/secrets.md",
+            "line_start": 47,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "Both functions attach Modal Secret objects and directly print an environment value supplied by those objects."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "dotenv library",
+        "description": "@app.function(secrets=[modal.Secret.from_dotenv()])",
+        "locations": [
+          {
+            "file": "references/secrets.md",
+            "line_start": 50,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.9,
+        "confidence_reasoning": "Secret.from_dotenv() can import every value from a local dotenv file into the cloud secret. Unrelated credentials may be transferred without explicit selection."
+      },
+      {
+        "title": "Unpinned Source Repositories Used in Image Builds",
+        "description": "Image examples clone mutable repository branches without commit pins, allowing upstream changes to alter later builds.",
+        "locations": [
+          {
+            "file": "references/images.md",
+            "line_start": 12,
+            "line_end": 18
+          },
+          {
+            "file": "references/images.md",
+            "line_start": 73,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "Both build commands clone repository URLs without a tag or commit checkout, so build inputs are not immutable."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 13,
+    "total_lines": 3131,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T13:55:09.221Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Deploy Python Workloads on Modal",
+    "value_statement": "Cloud deployment requires correct images, resources, secrets, storage, and scaling settings. This skill guides Claude, Codex, and Claude Code through practical Modal workflows.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Modal",
+      "serverless Python",
+      "GPU deployment",
+      "machine learning inference",
+      "batch processing",
+      "cloud autoscaling",
+      "scheduled jobs"
+    ],
+    "actual_capabilities": [
+      "Creates Modal application, image, function, class, and local entrypoint patterns.",
+      "Configures GPU, CPU, memory, disk, timeout, concurrency, and autoscaling settings.",
+      "Designs batch processing with map operations and asynchronous function spawning.",
+      "Guides persistent storage with Modal Volumes, commits, reloads, and cache mounts.",
+      "Explains Modal Secrets, scheduled jobs, HTTP endpoints, FastAPI integration, and deployment commands."
+    ],
+    "limitations": [
+      "Requires a Modal account, credentials, network access, and responsibility for cloud charges.",
+      "Provides guidance and examples but does not deploy, monitor, or validate workloads independently.",
+      "Examples may require changes for current Modal APIs, dependency versions, and project structure.",
+      "Some reference examples require security review, especially credential mounts, secret logging, and public web servers."
+    ],
+    "use_cases": [
+      {
+        "title": "Deploy GPU Inference",
+        "description": "Plan a container image, GPU selection, model loading lifecycle, endpoint, and scaling policy for an inference service.",
+        "target_user": "Machine learning engineer"
+      },
+      {
+        "title": "Run Parallel Data Pipelines",
+        "description": "Design mapped batch functions, scheduled collection jobs, persistent volumes, retries, and resource limits for data processing.",
+        "target_user": "Data engineer"
+      },
+      {
+        "title": "Standardize Modal Services",
+        "description": "Create repeatable deployment patterns for images, secrets, APIs, concurrency, observability, and cost controls.",
+        "target_user": "Platform engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a First Modal Function",
+        "prompt": "Create a minimal Modal function for [task]. List prerequisites, image dependencies, local run steps, and expected output.",
+        "scenario": "A beginner is testing Modal with a small Python workload."
+      },
+      {
+        "title": "Plan a GPU Workload",
+        "prompt": "Design a Modal GPU workload for [model]. Recommend the GPU, image packages, memory, timeout, caching, and validation steps.",
+        "scenario": "An ML engineer needs a reproducible training or inference environment."
+      },
+      {
+        "title": "Build a Scheduled Data Pipeline",
+        "prompt": "Design a Modal job that runs [schedule], calls [source], stores results in a Volume, and handles secrets, retries, and failures.",
+        "scenario": "A data engineer is moving a periodic workflow to serverless compute."
+      },
+      {
+        "title": "Architect a Production Inference API",
+        "prompt": "Architect a secure Modal inference API for [traffic profile]. Cover authentication, model lifecycle, concurrency, autoscaling, observability, rollback, and cost controls.",
+        "scenario": "A platform team is preparing a production service with variable demand."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Deploy a text classifier on one GPU with low idle cost.",
+        "output": "A deployment plan using a cost-appropriate GPU, cached model weights, scale-to-zero behavior, bounded concurrency, and a protected inference endpoint."
+      },
+      {
+        "input": "Process one thousand files every night and preserve summaries.",
+        "output": "A scheduled batch design with mapped file processing, explicit resource limits, a persistent results volume, retry guidance, and completion monitoring."
+      },
+      {
+        "input": "Reduce cold starts for a frequently used model API.",
+        "output": "A tuning proposal covering minimum warm containers, image caching, model initialization, concurrency targets, latency measurement, and cost tradeoffs."
+      }
+    ],
+    "best_practices": [
+      "Pin package versions, base images, and source commits for reproducible deployments.",
+      "Use least-privilege Modal Secrets and never print, copy, or embed credential values.",
+      "Set explicit scaling, concurrency, timeout, and resource limits before production deployment."
+    ],
+    "anti_patterns": [
+      "Do not copy local credential directories into images or remote container filesystems.",
+      "Do not expose container root directories or unauthenticated administrative endpoints.",
+      "Do not deploy unbounded workloads without cost limits, retries, monitoring, and failure handling."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help deploy?",
+        "answer": "It covers Modal functions, GPU workloads, batch jobs, scheduled tasks, volumes, secrets, and web endpoints."
+      },
+      {
+        "question": "Does it require a Modal account?",
+        "answer": "Yes. Running or deploying workloads requires a Modal account and valid authentication credentials."
+      },
+      {
+        "question": "Can it choose a GPU?",
+        "answer": "It can recommend a GPU from workload requirements, but users must confirm availability, performance, and current pricing."
+      },
+      {
+        "question": "Does it manage cloud costs automatically?",
+        "answer": "No. It can propose resource and scaling limits, while users remain responsible for monitoring usage and billing."
+      },
+      {
+        "question": "How should secrets be handled?",
+        "answer": "Use narrowly scoped Modal Secrets, avoid complete credential directories, and never include secret values in logs or images."
+      },
+      {
+        "question": "Are the examples ready for production?",
+        "answer": "No. Review API compatibility, authentication, dependency pins, observability, error handling, and security before deployment."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "api_reference.md",
+          "type": "file",
+          "path": "references/api_reference.md",
+          "lines": 35
+        },
+        {
+          "name": "examples.md",
+          "type": "file",
+          "path": "references/examples.md",
+          "lines": 434
+        },
+        {
+          "name": "functions.md",
+          "type": "file",
+          "path": "references/functions.md",
+          "lines": 275
+        },
+        {
+          "name": "getting-started.md",
+          "type": "file",
+          "path": "references/getting-started.md",
+          "lines": 93
+        },
+        {
+          "name": "gpu.md",
+          "type": "file",
+          "path": "references/gpu.md",
+          "lines": 169
+        },
+        {
+          "name": "images.md",
+          "type": "file",
+          "path": "references/images.md",
+          "lines": 262
+        },
+        {
+          "name": "resources.md",
+          "type": "file",
+          "path": "references/resources.md",
+          "lines": 130
+        },
+        {
+          "name": "scaling.md",
+          "type": "file",
+          "path": "references/scaling.md",
+          "lines": 231
+        },
+        {
+          "name": "scheduled-jobs.md",
+          "type": "file",
+          "path": "references/scheduled-jobs.md",
+          "lines": 304
+        },
+        {
+          "name": "secrets.md",
+          "type": "file",
+          "path": "references/secrets.md",
+          "lines": 181
+        },
+        {
+          "name": "volumes.md",
+          "type": "file",
+          "path": "references/volumes.md",
+          "lines": 304
+        },
+        {
+          "name": "web-endpoints.md",
+          "type": "file",
+          "path": "references/web-endpoints.md",
+          "lines": 335
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 378
+    }
+  ]
+}

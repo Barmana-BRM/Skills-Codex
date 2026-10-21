@@ -1,0 +1,40 @@
+&inputepw
+  prefix    = 'zrs2'
+  outdir    = '../02_nscf_out/tmp'       ! NSCF save tree (step 2)
+  dvscf_dir = '../04_dfpt_out/tmp/save'  ! save/ from step 6
+
+  elph      = .true.
+  epbwrite  = .true.
+  epbread   = .false.
+  epwwrite  = .true.
+  epwread   = .false.
+
+  lpolar    = .true.                     ! enable 2D Frohlich long range
+  vme       = 'wannier'
+  system_2d = 'gaussian'                 ! or 'dipole_sh' - pick one, keep it
+
+  nbndsub       = 9                      ! material-specific; span your manifold
+  bands_skipped = 'exclude_bands = 1-6,16-30'
+
+  wannierize = .true.
+  num_iter   = 20000
+  iprint     = 2
+  proj(1)    = 'S:p'
+  proj(2)    = 'Zr:dz2;dxy;dx2-y2'
+
+  wdata(1)  = 'guiding_centres=.true.'   ! CRITICAL in 2D long-vacuum cells
+  wdata(2)  = 'conv_tol=1E-12'
+  wdata(3)  = 'conv_window=5'
+  wdata(4)  = 'bands_plot=.true.'
+  wdata(5)  = 'bands_num_points=100'
+  wdata(6)  = 'begin kpoint_path'
+  wdata(7)  = 'G 0.000 0.000 0.000 M 0.500 0.000 0.000'
+  wdata(8)  = 'M 0.500 0.000 0.000 K 0.333333 0.333333 0.000'
+  wdata(9)  = 'K 0.333333 0.333333 0.000 G 0.000 0.000 0.000'
+  wdata(10) = 'end kpoint_path'
+
+  nk1 = 12, nk2 = 12, nk3 = 1            ! match NSCF / step 4
+  nq1 = 6,  nq2 = 6,  nq3 = 1
+  nkf1 = 20, nkf2 = 20, nkf3 = 1         ! fine grid for the band-gate check
+  nqf1 = 20, nqf2 = 20, nqf3 = 1
+/

@@ -1,0 +1,1900 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:32:12.073Z",
+    "slug": "am-will-role-creator",
+    "source_url": "https://github.com/am-will/codex-skills/tree/main/skills/role-creator/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "fd6579fffe970d2660b89f312b1ce202c2e2fb7e145b48b52ee8f68618bf0186",
+    "tree_hash": "58a1cdbdbcec487074ca3a81e1e15e46b6d4ce56582ecfa3798a9ab2b5c44a39",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "role-creator",
+    "description": "Create, update, and validate Codex custom agent TOML files with explicit role settings.",
+    "summary": "Build standalone Codex custom agent configuration files with validation guidance.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "am-will",
+    "license": "MIT",
+    "tags": [
+      "codex",
+      "custom-agents",
+      "toml",
+      "automation",
+      "developer-tools"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "env_access",
+      "external_commands",
+      "network"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Static alerts are false positives caused by expected Codex config paths, Markdown code formatting, documentation links, and quoted shell helper calls. I found no prompt injection attempt, credential exfiltration, covert network behavior, or malicious intent in the cited files. The scripts still edit local Codex configuration, so users should review paths before running them.",
+    "remediation": [
+      {
+        "issue": "Helper scripts can write to user-selected output and Codex configuration paths.",
+        "suggestion": "Add a dry-run mode and require an explicit confirmation message before modifying global Codex files.",
+        "severity": "medium"
+      },
+      {
+        "issue": "MCP server names are inserted into generated tomlq filter text.",
+        "suggestion": "Validate MCP server names against a conservative character allowlist before building the filter expression.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The README examples use an author-specific absolute script path.",
+        "suggestion": "Replace the absolute path with a repository-relative path so users do not copy a stale local path.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/role-config-reference.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "references/role-config-reference.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "references/role-config-reference.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "references/role-config-reference.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 83
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/role-config-reference.md",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "templates/full-role-config.toml",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/install_role.sh",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/validate_role.sh",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 151,
+            "line_end": 151
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 155,
+            "line_end": 155
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 173,
+            "line_end": 173
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 188,
+            "line_end": 188
+          },
+          {
+            "file": "scripts/write_role_config.sh",
+            "line_start": 198,
+            "line_end": 198
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 71
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 104
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 103
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:references/role-config-reference.md:10:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/role-config-reference.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "## Role Declaration Shape (`~/.codex/config.toml`)"
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:15:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/role-config-reference.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "config_file = \"~/.codex/agents/researcher.toml\""
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:10:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/role-config-reference.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "## Role Declaration Shape (`~/.codex/config.toml`)"
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:15:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/role-config-reference.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "config_file = \"~/.codex/agents/researcher.toml\""
+      },
+      {
+        "id": "env_access:references/role-config-reference.md:119:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/role-config-reference.md",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "env_vars = [\"LINEAR_API_KEY\"]"
+      },
+      {
+        "id": "blocker:references/role-config-reference.md:27:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/role-config-reference.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "Role `config_file` is parsed as a full `ConfigToml` layer. Top-level keys must be valid top-level ke"
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:53:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install_role.sh",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "mkdir -p \"$(dirname \"$config_path\")\""
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:58:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install_role.sh",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "role_exists=\"$(tomlq -r --arg role_name \"$role_name\" '.agents[$role_name] != null' \"$config_path\" 2>"
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:71:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install_role.sh",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "backup_path=\"${config_path}.bak.$(date +%Y%m%d%H%M%S)\""
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:74:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install_role.sh",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "tmp_file=\"$(mktemp)\""
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:10:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "scripts/install_role.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "--config PATH          Target config.toml (default: ~/.codex/config.toml)"
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:10:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/install_role.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "--config PATH          Target config.toml (default: ~/.codex/config.toml)"
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:17:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/install_role.sh",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "config_path=\"${HOME}/.codex/config.toml\""
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:58:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/install_role.sh",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "role_exists=\"$(tomlq -r --arg role_name \"$role_name\" '.agents[$role_name] != null' \"$config_path\" 2>"
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:74:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/install_role.sh",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "tmp_file=\"$(mktemp)\""
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:49:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "decl_keys=\"$(tomlq --arg role_name \"$role_name\" '.agents[$role_name] // {} | keys' \"$config_path\")\""
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:50:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "unsupported_decl=\"$(jq -n --argjson have \"$decl_keys\" --argjson allowed \"$allowed_decl\" '$have - $al"
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:56:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "required_decl_present=\"$(tomlq -r --arg role_name \"$role_name\" '.agents[$role_name].description != n"
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:62:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "allowed_top_keys=\"$(jq -c '.properties | keys' \"$schema_path\")\""
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:63:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "role_top_keys=\"$(tomlq 'keys' \"$role_config_path\")\""
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:64:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "unsupported_top=\"$(jq -n --argjson have \"$role_top_keys\" --argjson allowed \"$allowed_top_keys\" '$hav"
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:71:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate_role.sh",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "present=\"$(tomlq -r --arg required_key \"$required_key\" '.[$required_key] != null and .[$required_key"
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:141:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "developer_instructions=\"$(cat \"$developer_instructions_file\")\""
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:151:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 151,
+        "line_end": 151,
+        "snippet": "mkdir -p \"$(dirname \"$output_path\")\""
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:155:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 155,
+        "line_end": 155,
+        "snippet": "nickname_json=\"$(printf '%s' \"$nickname_candidates_csv\" | jq -Rc 'split(\",\") | map(gsub(\"^\\\\s+|\\\\s+$"
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:173:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 173,
+        "line_end": 173,
+        "snippet": "writable_roots_json=\"$(printf '%s' \"$writable_roots_csv\" | jq -Rc 'split(\",\") | map(gsub(\"^\\\\s+|\\\\s+"
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:188:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 188,
+        "line_end": 188,
+        "snippet": "trimmed=\"$(printf '%s' \"$name\" | xargs)\""
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:198:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 198,
+        "line_end": 198,
+        "snippet": "trimmed=\"$(printf '%s' \"$name\" | xargs)\""
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:100:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "echo \"Invalid reasoning effort: $reasoning\" >&2"
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:108:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "echo \"Invalid sandbox mode: $sandbox_mode\" >&2"
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:117:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "echo \"Invalid web_search mode: $web_search\" >&2"
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:126:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "echo \"Invalid --network-access value: $network_access\" >&2"
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:147:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "State assumptions clearly, fail fast on invalid inputs, and report concrete evidence for results."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:22:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scripts/write_role_config.sh",
+        "line_start": 22,
+        "line_end": 23,
+        "snippet": "--sandbox-mode read-only|workspace-write|danger-full-access"
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- Global: `~/.codex/agents/<agent-name>.toml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- Project: `<project>/.codex/agents/<agent-name>.toml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "- `~/.codex/config.toml` is only for global/runtime settings (for example `[agents]` thread limits),"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- `name` (role identifier used by `agent_type`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "- `description` (short, human-readable purpose)"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- `developer_instructions`"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- `model` (recommend `gpt-5.3-codex` unless requested)"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- `model_reasoning_effort` (`none|minimal|low|medium|high|xhigh`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "- role scope (`global` or `project`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "- whether to include `nickname_candidates` and exact values"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "From Codex custom agent docs (`/codex/subagents`):"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- Required keys: `name`, `description`, `developer_instructions`."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "- Optional keys: `nickname_candidates`, `model`, `model_reasoning_effort`, `sandbox_mode`, `web_sear"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "- `name` is the spawn identifier and source of truth."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "- `description` + `developer_instructions` define behavior and usage boundaries."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "- `nickname_candidates` is optional and used only for display."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "`nickname_candidates` requirements:"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "- `global` → `~/.codex/agents/<name>.toml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "- `project` → `<project>/.codex/agents/<name>.toml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 67,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 71,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 92,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 96,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 97,
+        "snippet": "- If runtime returns `unknown agent_type`, verify the active scope and confirm the file exists at th"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "- Check syntax first with `tomlq` or `tomlq -C`."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 103,
+        "snippet": "- Codex subagents docs: `https://developers.openai.com/codex/subagents`"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 104,
+        "snippet": "- Display nicknames: `https://developers.openai.com/codex/subagents#display-nicknames`"
+      },
+      {
+        "id": "network:SKILL.md:102:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "- Codex subagents docs: `https://developers.openai.com/codex/subagents`"
+      },
+      {
+        "id": "network:SKILL.md:103:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "- Display nicknames: `https://developers.openai.com/codex/subagents#display-nicknames`"
+      },
+      {
+        "id": "filesystem:SKILL.md:14:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- Global: `~/.codex/agents/<agent-name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:17:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "- `~/.codex/config.toml` is only for global/runtime settings (for example `[agents]` thread limits),"
+      },
+      {
+        "id": "filesystem:SKILL.md:59:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "- `global` → `~/.codex/agents/<name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "--output ~/.codex/agents/reviewer.toml \\"
+      },
+      {
+        "id": "filesystem:SKILL.md:83:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "--output ~/.codex/agents/reviewer.toml \\"
+      },
+      {
+        "id": "filesystem:SKILL.md:14:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- Global: `~/.codex/agents/<agent-name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:15:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- Project: `<project>/.codex/agents/<agent-name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:17:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "- `~/.codex/config.toml` is only for global/runtime settings (for example `[agents]` thread limits),"
+      },
+      {
+        "id": "filesystem:SKILL.md:59:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "- `global` → `~/.codex/agents/<name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "- `project` → `<project>/.codex/agents/<name>.toml`"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "--output ~/.codex/agents/reviewer.toml \\"
+      },
+      {
+        "id": "filesystem:SKILL.md:83:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "--output ~/.codex/agents/reviewer.toml \\"
+      },
+      {
+        "id": "blocker:SKILL.md:98:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "- Keep role instructions operational and narrowly scoped to avoid drift."
+      },
+      {
+        "id": "env_access:templates/full-role-config.toml:28:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "templates/full-role-config.toml",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "env_vars = [\"LINEAR_API_KEY\"]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:references/role-config-reference.md:10:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is documentation for expected Codex configuration paths, not runtime access to hidden files. It does not read, write, or hide user data."
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:15:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is documentation for expected Codex configuration paths, not runtime access to hidden files. It does not read, write, or hide user data."
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:10:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is documentation for expected Codex configuration paths, not runtime access to hidden files. It does not read, write, or hide user data."
+      },
+      {
+        "id": "filesystem:references/role-config-reference.md:15:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is documentation for expected Codex configuration paths, not runtime access to hidden files. It does not read, write, or hide user data."
+      },
+      {
+        "id": "env_access:references/role-config-reference.md:119:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line names an environment variable for an MCP example and does not include a secret value. No code reads or transmits the variable here."
+      },
+      {
+        "id": "blocker:references/role-config-reference.md:27:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The text explains valid TOML configuration keys. It does not inspect the host system or enumerate local resources."
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:53:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The substitution calls dirname on a quoted config path to create its parent directory. It does not execute user-controlled text as a command."
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:58:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The script invokes tomlq with quoted arguments and passes user data through --arg. This is expected TOML inspection, not command injection."
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:71:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "date is used only to add a timestamp to a local backup path. There is no user-controlled command execution."
+      },
+      {
+        "id": "external_commands:scripts/install_role.sh:74:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "mktemp is used to create a temporary file for an atomic config update. The pattern is a standard safe helper call."
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:10:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The hidden path is the documented Codex config location used by this role installer. The script requires explicit arguments and supports a custom config path."
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:10:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The hidden path is the documented Codex config location used by this role installer. The script requires explicit arguments and supports a custom config path."
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:17:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The hidden path is the documented Codex config location used by this role installer. The script requires explicit arguments and supports a custom config path."
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:58:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The device access is stderr redirection during a tomlq existence check. It does not access a sensitive device or collect data."
+      },
+      {
+        "id": "filesystem:scripts/install_role.sh:74:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The script uses mktemp for a temporary output file before moving it into place. This is a normal local write pattern."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:49:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:50:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:56:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:62:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:63:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:64:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/validate_role.sh:71:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The command substitution captures jq or tomlq output while validating explicit config and schema files. Inputs are quoted and no shell eval is used."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:141:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "cat reads a user-provided developer-instructions file into the generated local config. This can copy unintended content if misused, but it is not command execution or exfiltration."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:151:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "dirname is used on a quoted output path so the script can create the target directory. This is expected local file generation, not command injection."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:155:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The script pipes CSV text into jq to build JSON arrays for TOML output. The input is data to jq, not shell code."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:173:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The script pipes CSV text into jq to build JSON arrays for TOML output. The input is data to jq, not shell code."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:188:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The xargs call trims a user-provided MCP server name before writing config. It does not execute the name as a shell command."
+      },
+      {
+        "id": "external_commands:scripts/write_role_config.sh:198:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The xargs call trims a user-provided MCP server name before writing config. It does not execute the name as a shell command."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:100:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is an input validation error message for invalid user-supplied options. It does not perform system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:108:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is an input validation error message for invalid user-supplied options. It does not perform system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:117:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is an input validation error message for invalid user-supplied options. It does not perform system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:126:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is an input validation error message for invalid user-supplied options. It does not perform system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:147:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The text is default role instruction prose and does not inspect the system. No reconnaissance behavior is present."
+      },
+      {
+        "id": "blocker:scripts/write_role_config.sh:22:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The line lists allowed sandbox mode values in usage text. It does not perform network discovery or scanning."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown fences around example commands. They document how to run helper scripts and are not executed by the skill text."
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown fences around example commands. They document how to run helper scripts and are not executed by the skill text."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code formatting for paths, keys, or examples. They are not Ruby or shell execution."
+      },
+      {
+        "id": "network:SKILL.md:102:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL is a documentation reference to OpenAI developer docs. The skill text does not fetch the URL or send data to it."
+      },
+      {
+        "id": "network:SKILL.md:103:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL is a documentation reference to OpenAI developer docs. The skill text does not fetch the URL or send data to it."
+      },
+      {
+        "id": "filesystem:SKILL.md:14:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:17:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:59:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:83:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:14:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:15:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:17:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:59:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:83:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The path names expected Codex agent or config locations for the user-facing workflow. It is transparent documentation, not covert hidden-file access."
+      },
+      {
+        "id": "blocker:SKILL.md:98:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The sentence is guidance to keep role instructions scoped. It does not gather host information or bypass safeguards."
+      },
+      {
+        "id": "env_access:templates/full-role-config.toml:28:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The template contains an environment variable name for a Linear MCP example, not a secret value. It does not read or transmit the variable."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 9,
+    "total_lines": 722,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:32:12.073Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Create Codex Custom Agents",
+    "value_statement": "Custom Codex agents need precise TOML files and clear runtime settings. This skill guides role design, writes configs, and validates required fields.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Codex custom agents",
+      "custom agent TOML",
+      "AI role configuration",
+      "developer instructions",
+      "subagent setup",
+      "TOML validation",
+      "agent templates"
+    ],
+    "actual_capabilities": [
+      "Collects required role inputs before writing an agent file.",
+      "Resolves global and project Codex agent file paths.",
+      "Writes standalone custom-agent TOML with required keys.",
+      "Adds optional nicknames, sandbox, web search, and MCP settings when requested.",
+      "Validates role declarations and TOML keys with shell helpers.",
+      "Provides minimal, restricted, full, and frontend role templates."
+    ],
+    "limitations": [
+      "Does not infer missing role names, models, or developer instructions.",
+      "Requires local shell tools such as tomlq and jq for scripts.",
+      "Can modify Codex configuration files when users run helper scripts.",
+      "Does not verify external MCP server trust or availability."
+    ],
+    "use_cases": [
+      {
+        "title": "Create a project agent",
+        "description": "Define a focused Codex agent for one repository with clear instructions and model settings.",
+        "target_user": "Software engineer"
+      },
+      {
+        "title": "Standardize team roles",
+        "description": "Build repeatable agent profiles for review, research, planning, or implementation work.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Audit role configuration",
+        "description": "Check that agent files use supported keys and include required role fields.",
+        "target_user": "Platform administrator"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a basic role",
+        "scenario": "Beginner setup for one agent.",
+        "prompt": "Create a project Codex agent named reviewer. It should review pull requests for correctness and security. Use medium reasoning."
+      },
+      {
+        "title": "Add role details",
+        "scenario": "Define clear behavior before writing files.",
+        "prompt": "Help me design a global Codex agent for backend incident analysis. Ask for any missing required values before writing the role file."
+      },
+      {
+        "title": "Update an existing role",
+        "scenario": "Modify a role while preserving explicit settings.",
+        "prompt": "Update my project reviewer agent to include nickname candidates and disabled web search. Validate the role after the change."
+      },
+      {
+        "title": "Build a constrained specialist",
+        "scenario": "Advanced role with optional security controls.",
+        "prompt": "Create a read-focused architecture analyst role with workspace-write sandboxing, disabled network access, and strict developer instructions."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Create a reviewer role for one project.",
+        "output": [
+          "A confirmed role name, description, model, reasoning level, and developer instruction set.",
+          "A project-scoped agent file path selected for the new role.",
+          "A validation result showing whether required fields are present."
+        ]
+      },
+      {
+        "input": "Make a restricted research role.",
+        "output": [
+          "A role profile with read-focused instructions and limited optional settings.",
+          "A reminder that stronger controls are only added after explicit user confirmation."
+        ]
+      },
+      {
+        "input": "Troubleshoot an unknown agent type error.",
+        "output": [
+          "A checklist for scope, file location, role name, and supported configuration keys.",
+          "Guidance to validate TOML syntax before changing behavior."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Confirm the role name, scope, model, reasoning effort, and instructions before writing files.",
+      "Keep generated roles minimal unless the user requests optional tools or permissions.",
+      "Validate TOML syntax and required keys after each create or update task."
+    ],
+    "anti_patterns": [
+      "Do not add sandbox, web search, MCP, or app settings without explicit user approval.",
+      "Do not reuse vague developer instructions across unrelated roles.",
+      "Do not overwrite global Codex configuration without checking the intended scope."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill create?",
+        "answer": "It creates standalone Codex custom agent TOML files and can validate required role fields."
+      },
+      {
+        "question": "Can it create global and project agents?",
+        "answer": "Yes. It supports global Codex agent paths and project-local Codex agent paths."
+      },
+      {
+        "question": "Does it choose missing values automatically?",
+        "answer": "No. The skill is designed to ask for missing required values before writing files."
+      },
+      {
+        "question": "Does it edit Codex configuration files?",
+        "answer": "Yes, helper scripts can edit Codex configuration files when the user runs them."
+      },
+      {
+        "question": "Are optional permissions enabled by default?",
+        "answer": "No. Optional sandbox, web search, MCP, and app settings are omitted unless requested."
+      },
+      {
+        "question": "Which tools can use the generated roles?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code workflows."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "role-config-reference.md",
+          "type": "file",
+          "path": "references/role-config-reference.md",
+          "lines": 148
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "install_role.sh",
+          "type": "file",
+          "path": "scripts/install_role.sh",
+          "lines": 87
+        },
+        {
+          "name": "validate_role.sh",
+          "type": "file",
+          "path": "scripts/validate_role.sh",
+          "lines": 79
+        },
+        {
+          "name": "write_role_config.sh",
+          "type": "file",
+          "path": "scripts/write_role_config.sh",
+          "lines": 223
+        }
+      ]
+    },
+    {
+      "name": "templates",
+      "type": "dir",
+      "path": "templates",
+      "children": [
+        {
+          "name": "frontend-architecture-role.toml",
+          "type": "file",
+          "path": "templates/frontend-architecture-role.toml",
+          "lines": 13
+        },
+        {
+          "name": "full-role-config.toml",
+          "type": "file",
+          "path": "templates/full-role-config.toml",
+          "lines": 37
+        },
+        {
+          "name": "minimal-role-config.toml",
+          "type": "file",
+          "path": "templates/minimal-role-config.toml",
+          "lines": 10
+        },
+        {
+          "name": "restricted-role-config.toml",
+          "type": "file",
+          "path": "templates/restricted-role-config.toml",
+          "lines": 20
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 105
+    }
+  ]
+}

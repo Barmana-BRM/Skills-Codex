@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "skillHash": "sha256:25bb6cb96db5b53ab4d5d3f46b36fe3f97666731611a9ce10d285e056203f874",
+  "scoredAt": "2026-06-09T16:14:26Z",
+  "quality": {
+    "score": 93,
+    "dimensions": {
+      "clarity": "PASS",
+      "completeness": "WEAK",
+      "conciseness": "PASS",
+      "actionability": "PASS",
+      "crossPlatform": "PASS",
+      "examples": "PASS"
+    },
+    "issues": [
+      { "severity": "MEDIUM", "category": "completeness", "detail": "render-time flags (fps, output path, codec) are deferred to `--help` rather than enumerated, because exact flag names vary by CLI version and were not verified against a pinned release." }
+    ]
+  },
+  "security": {
+    "verdict": "SAFE",
+    "issues": []
+  },
+  "impact": {
+    "multiplier": 5.98,
+    "baselineAvg": 16,
+    "treatmentAvg": 96,
+    "scenarios": [
+      { "name": "render-gsap-to-mp4", "baseline": 28, "treatment": 96, "rationale": "Baseline never names HyperFrames — builds a manual Playwright/Puppeteer + ffmpeg frame loop. Treatment hits all rubric points: hyperframes render, headless-Chrome-per-frame + FFmpeg, paused/seekable timeline determinism (warns Date.now/Math.random), and preview/lint." },
+      { "name": "ci-launch-video-pipeline", "baseline": 12, "treatment": 95, "rationale": "Baseline pivots to Remotion/Node 20 and omits the lint→render CLI flow. Treatment gives a runnable GitHub Actions job: Node 22 + FFmpeg prereqs, lint then render, deterministic cacheable artifact, MP4 uploaded/attached." },
+      { "name": "composition-timing-and-audio", "baseline": 8, "treatment": 96, "rationale": "Baseline answers in Remotion React APIs (Sequence/Audio/Composition), using none of the data-* attributes. Treatment supplies a correct HTML snippet with data-start/data-duration (seconds), data-width/height on the stage, and <audio data-volume>." }
+    ]
+  }
+}

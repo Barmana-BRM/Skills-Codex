@@ -1,0 +1,425 @@
+{
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 100,
+    "gap_v": 90,
+    "margin": 40,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(can_top)"
+    ],
+    "block_label": [
+      "TOP",
+      "(can_top)"
+    ],
+    "block_row": [
+      "TOP (can_top)",
+      "CAN protocol controller top level in the 8051-host configuration. It joins the host bus to an internal register file, a bit-timing generator and a frame-processing engine, and exposes the serial CAN receive and transmit lines, an interrupt output, a bus-off status output and a programmable clock output.",
+      "can_top.v:214-874"
+    ]
+  },
+  "frame_row": [
+    "TOP (can_top) frame",
+    "Top level of a CAN protocol controller for microcontroller-style hosts. It joins the host bus to an internal register file, a bit-timing generator and a frame-processing engine, and exposes the serial CAN receive and transmit lines, an interrupt output, a bus-off status output and a programmable clock output. In this configuration the host uses a multiplexed address/data bus with separate address-latch, read and write strobes and a chip-select input.",
+    "can_top.v:214-874"
+  ],
+  "frame_interfaces": [
+    "HOST",
+    "rx_i",
+    "tx_o",
+    "bus_off_on",
+    "irq_on",
+    "clkout_o",
+    "CLK"
+  ],
+  "blocks": [
+    {
+      "key": "R",
+      "label": [
+        "i_can_registers",
+        "(can_registers)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_can_registers (can_registers)",
+      "function": "Register file seen by the host. It stores the operating mode (basic or extended), command requests, interrupt enables, bit-timing parameters, the error-warning limit, the acceptance code and mask used for message filtering, a 13-byte transmit buffer and the clock-divider setting. It decodes host reads and writes and applies mode-dependent access rules (many registers can be written only while the controller is in reset mode), builds the status word from the reports of the frame-processing engine, collects seven interrupt sources into one latched, read-to-clear, active-low interrupt request, selects the register value returned on a read, and derives a programmable divided output clock. Its own logic is not expanded at this level.",
+      "source": "can_registers.v:444-1251"
+    },
+    {
+      "key": "B",
+      "label": [
+        "i_can_btl",
+        "(can_btl)"
+      ],
+      "width": 120,
+      "row": 0,
+      "col": 2,
+      "row_name": "i_can_btl (can_btl)",
+      "function": "Bit-timing generator. It derives the time quantum from the programmed prescaler, divides every bit into a synchronization segment, a first phase segment (including the propagation segment) and a second phase segment, performs hard synchronization on the start-of-frame edge and resynchronization on later edges within the programmed jump width, and can take three samples per bit and apply a majority vote. It produces the sample instant used by the receiver and the transmit instant used to drive the bus, and restricts synchronization while the node is transmitting. Its own logic is not expanded at this level.",
+      "source": "can_btl.v:257-445"
+    },
+    {
+      "key": "S",
+      "label": [
+        "i_can_bsp",
+        "(can_bsp)"
+      ],
+      "width": 120,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_can_bsp (can_bsp)",
+      "function": "Frame-processing engine. On reception it decodes identifier, control, data, CRC, acknowledge and end-of-frame fields with bit de-stuffing and CRC checking, filters accepted identifiers with an acceptance filter and stores accepted messages in a receive FIFO. On transmission it serializes the transmit buffer with bit stuffing, arbitrates against other nodes and handles the acknowledge slot. It detects bit, stuff, form, CRC and acknowledge errors, generates error and overload frames, and maintains transmit and receive error counters with the error-active, error-passive and bus-off states. It reports status, errors and events to the register file. Its own logic and children (CRC, acceptance filter, FIFO) are not expanded at this level.",
+      "source": "can_bsp.v:699-2127"
+    },
+    {
+      "key": "FG1",
+      "label": [
+        "Host bus adapter",
+        "(FG of can_top)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "Host bus adapter (FG of can_top)",
+      "function": "Converts the multiplexed host bus into single-clock accesses. It captures the address presented on the shared lines while the address-latch strobe is active, detects the active edge of the write or read strobe to form one access pulse qualified by the chip-select input, passes the latched address and write data to the register file and the receive FIFO, and drives the read data onto the shared data lines only while a read is requested.",
+      "source": "can_top.v:836-869"
+    },
+    {
+      "key": "FG2",
+      "label": [
+        "Read-data select",
+        "(FG of can_top)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "Read-data select (FG of can_top)",
+      "function": "Read-path multiplexer. From the latched address and the operating mode it decides whether a host read targets the received-message window or an ordinary register, selects the corresponding data source, and keeps the selected byte in an output register so that the host sees stable data until the next read.",
+      "source": "can_top.v:743-762"
+    },
+    {
+      "key": "FG3",
+      "label": [
+        "RX synchronizer",
+        "(FG of can_top)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 2,
+      "row_name": "RX synchronizer (FG of can_top)",
+      "function": "Receive-line synchronizer. It passes the asynchronous CAN receive input through two flip-flops clocked by the core clock to remove metastability before the bit-timing generator uses it, and is initialised to the recessive (idle) level during reset.",
+      "source": "can_top.v:766-778"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "HRA",
+      "src": "FG1",
+      "src_side": "R",
+      "dst": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "HRS",
+      "src": "FG1",
+      "src_side": "B",
+      "dst": "FG2",
+      "dst_side": "T"
+    },
+    {
+      "id": "FAC",
+      "src": "FG1",
+      "src_side": {
+        "env": "FACSIDE",
+        "default": "B"
+      },
+      "dst": "S",
+      "dst_side": "L"
+    },
+    {
+      "id": "RRD",
+      "src": "R",
+      "src_side": {
+        "env": "RRDSIDE",
+        "default": "L"
+      },
+      "dst": "FG2",
+      "dst_side": "R"
+    },
+    {
+      "id": "FRI",
+      "src": "FG2",
+      "src_side": "R",
+      "dst": "S",
+      "dst_side": "L"
+    },
+    {
+      "id": "CSI",
+      "src": "R",
+      "src_side": "B",
+      "dst": "S",
+      "dst_side": "T"
+    },
+    {
+      "id": "BTI",
+      "src": "R",
+      "src_side": "R",
+      "dst": "B",
+      "dst_side": "L"
+    },
+    {
+      "id": "BSI",
+      "src": "B",
+      "src_side": "B",
+      "dst": "S",
+      "dst_side": "R"
+    },
+    {
+      "id": "rx_sync",
+      "src": "FG3",
+      "src_side": "T",
+      "dst": "B",
+      "dst_side": "B"
+    }
+  ],
+  "externals": [
+    {
+      "id": "HOST",
+      "block": "FG1",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "HOST",
+        "ale_i, rd_i, wr_i, cs_can_i",
+        "port_0_io[7:0]"
+      ]
+    },
+    {
+      "id": "irq_on",
+      "block": "R",
+      "side": "T",
+      "dir": "out",
+      "pos": -150,
+      "text": [
+        "irq_on"
+      ]
+    },
+    {
+      "id": "CLK",
+      "block": "R",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CLK",
+        "clk_i, rst_i"
+      ]
+    },
+    {
+      "id": "clkout_o",
+      "block": "R",
+      "side": "T",
+      "dir": "out",
+      "pos": 150,
+      "text": [
+        "clkout_o"
+      ]
+    },
+    {
+      "id": "bus_off_on",
+      "block": "S",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "bus_off_on"
+      ]
+    },
+    {
+      "id": "tx_o",
+      "block": "S",
+      "side": "B",
+      "dir": "out",
+      "pos": 150,
+      "pad": true,
+      "text": [
+        "tx_o"
+      ]
+    },
+    {
+      "id": "rx_i",
+      "block": "FG3",
+      "side": "B",
+      "dir": "in",
+      "pos": -60,
+      "pad": true,
+      "text": [
+        "rx_i"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "entry": "CLK",
+      "sinks": [
+        {
+          "id": "CLK1",
+          "block": "FG1",
+          "side": "T",
+          "pos": 0
+        },
+        {
+          "id": "CLK2",
+          "block": "FG2",
+          "side": "L",
+          "pos": 0
+        },
+        {
+          "id": "CLK4",
+          "block": "B",
+          "side": "T",
+          "pos": 0
+        },
+        {
+          "id": "CLK5",
+          "block": "FG3",
+          "side": "R",
+          "pos": 0
+        },
+        {
+          "id": "CLK6",
+          "block": "S",
+          "side": "B",
+          "pos": -150
+        }
+      ]
+    }
+  ],
+  "legend_note": "The enclosing frame is the parent module; blocks inside are its instances and functional groups (FG = functional group of the module own logic). [pulse] = one-cycle signal, [level] = held value. Interface labels outside the frame mark connections to the outside.",
+  "interfaces": [
+    {
+      "id": "HOST",
+      "name": "Host bus (8051-style)",
+      "category": "custom, protocol-like",
+      "active": "external host -> Host bus adapter",
+      "active_top": "external host -> TOP",
+      "signals": "external -> TOP: ale_i, rd_i, wr_i, cs_can_i; bidirectional: port_0_io[7:0] (address and write data in, read data out)"
+    },
+    {
+      "id": "HRA",
+      "name": "Host register access",
+      "category": "custom",
+      "active": "Host bus adapter -> i_can_registers",
+      "signals": "cs [pulse], we, addr[7:0], data_in[7:0]"
+    },
+    {
+      "id": "HRS",
+      "name": "Host read select",
+      "category": "custom",
+      "active": "Host bus adapter -> Read-data select (initiator: Host bus adapter)",
+      "signals": "Host bus adapter -> Read-data select: cs [pulse], we, addr[7:0]; Read-data select -> Host bus adapter: data_out[7:0]"
+    },
+    {
+      "id": "FAC",
+      "name": "FIFO access",
+      "category": "custom",
+      "active": "Host bus adapter -> i_can_bsp",
+      "signals": "addr[7:0], data_in[7:0]"
+    },
+    {
+      "id": "RRD",
+      "name": "Register read data",
+      "category": "custom",
+      "active": "i_can_registers -> Read-data select",
+      "signals": "data_out_regs[7:0], extended_mode, reset_mode"
+    },
+    {
+      "id": "FRI",
+      "name": "FIFO read",
+      "category": "custom",
+      "active": "Read-data select -> i_can_bsp (initiator: Read-data select)",
+      "signals": "Read-data select -> i_can_bsp: data_out_fifo_selected [level]; i_can_bsp -> Read-data select: data_out_fifo[7:0]"
+    },
+    {
+      "id": "CSI",
+      "name": "Control and status",
+      "category": "custom",
+      "active": "i_can_registers -> i_can_bsp (initiator: i_can_registers)",
+      "signals": "i_can_registers -> i_can_bsp: reset_mode, listen_only_mode, acceptance_filter_mode, self_test_mode, extended_mode, release_buffer [pulse], tx_request, abort_tx, self_rx_request, single_shot_transmission, overload_request, error_warning_limit[7:0], we_rx_err_cnt [pulse], we_tx_err_cnt [pulse], read_arbitration_lost_capture_reg [pulse], read_error_code_capture_reg [pulse], acceptance_code_0[7:0], acceptance_code_1[7:0], acceptance_code_2[7:0], acceptance_code_3[7:0], acceptance_mask_0[7:0], acceptance_mask_1[7:0], acceptance_mask_2[7:0], acceptance_mask_3[7:0], tx_data_0[7:0], tx_data_1[7:0], tx_data_2[7:0], tx_data_3[7:0], tx_data_4[7:0], tx_data_5[7:0], tx_data_6[7:0], tx_data_7[7:0], tx_data_8[7:0], tx_data_9[7:0], tx_data_10[7:0], tx_data_11[7:0], tx_data_12[7:0], clear_data_overrun (open); i_can_bsp -> i_can_registers: node_bus_off, node_error_passive, node_error_active, error_status, rx_err_cnt[7:0], tx_err_cnt[7:0], transmit_status, receive_status, transmitting, tx_successful, need_to_tx, overrun, info_empty, rx_message_counter[6:0], error_capture_code[7:0], arbitration_lost_capture[4:0], tx_state, tx_state_q, overload_frame, set_reset_mode [pulse], set_bus_error_irq [pulse], set_arbitration_lost_irq [pulse]"
+    },
+    {
+      "id": "BTI",
+      "name": "Bit timing",
+      "category": "custom",
+      "active": "i_can_registers -> i_can_btl (initiator: i_can_registers)",
+      "signals": "i_can_registers -> i_can_btl: baud_r_presc[5:0], sync_jump_width[1:0], time_segment1[3:0], time_segment2[2:0], triple_sampling; i_can_btl -> i_can_registers: sample_point [pulse]"
+    },
+    {
+      "id": "BSI",
+      "name": "Bit stream",
+      "category": "custom",
+      "active": "i_can_btl -> i_can_bsp (initiator: i_can_btl, timing source)",
+      "signals": "i_can_btl -> i_can_bsp: sample_point [pulse], tx_point [pulse], sampled_bit, sampled_bit_q, hard_sync; i_can_bsp -> i_can_btl: rx_idle, rx_inter, transmitting, transmitter, go_rx_inter, go_overload_frame, go_error_frame, go_tx, send_ack, tx_next, node_error_passive, tx"
+    },
+    {
+      "id": "rx_sync",
+      "name": "RX synchronized",
+      "category": "custom",
+      "active": "RX synchronizer -> i_can_btl",
+      "signals": "rx_sync"
+    },
+    {
+      "id": "rx_i",
+      "name": "CAN RX",
+      "category": "custom (receive line; transceiver is external)",
+      "active": "external -> RX synchronizer",
+      "active_top": "external -> TOP",
+      "signals": "rx_i"
+    },
+    {
+      "id": "tx_o",
+      "name": "CAN TX",
+      "category": "custom (transmit line; transceiver is external)",
+      "active": "i_can_bsp -> external",
+      "active_top": "TOP -> external",
+      "signals": "tx_o"
+    },
+    {
+      "id": "bus_off_on",
+      "name": "Bus-off status",
+      "category": "custom",
+      "active": "i_can_bsp -> external",
+      "active_top": "TOP -> external",
+      "signals": "bus_off_on (low = bus-off)"
+    },
+    {
+      "id": "irq_on",
+      "name": "Interrupt",
+      "category": "custom",
+      "active": "i_can_registers -> external",
+      "active_top": "TOP -> external",
+      "signals": "irq_on (level, active low)"
+    },
+    {
+      "id": "clkout_o",
+      "name": "Clock output",
+      "category": "custom",
+      "active": "i_can_registers -> external",
+      "active_top": "TOP -> external",
+      "signals": "clkout_o"
+    },
+    {
+      "id": "CLK",
+      "name": "Clock/reset",
+      "category": "custom",
+      "active": "external -> all six blocks (distribution tree)",
+      "active_top": "external -> TOP",
+      "signals": "clk_i (all six blocks), rst_i (all blocks except Read-data select)"
+    }
+  ]
+}

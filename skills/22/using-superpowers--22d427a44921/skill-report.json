@@ -1,0 +1,329 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T07:51:37.622Z",
+    "slug": "cycleaddict-using-superpowers",
+    "source_url": "https://github.com/Cycleaddict/generic-superpowers/tree/main/skills/using-superpowers",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "14d30018ada61ffb6443394587955086fefc8246f024d669cb67d23736fc8612",
+    "tree_hash": "e4ee2e7c278f558128997aece2d01c74f44fd10a4c2c2ca9bcd5d461c50cd901",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "using-superpowers",
+    "description": "Guides AI agents to identify, load, and follow relevant skill instructions before starting a task.",
+    "summary": "Guides agents to check for relevant skills before beginning a task.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Cycleaddict",
+    "license": "MIT",
+    "category": "productivity",
+    "tags": [
+      "agent-workflow",
+      "skill-discovery",
+      "process-guidance",
+      "claude-code",
+      "codex"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The static external command findings are false positives caused by inline examples and a fenced Graphviz diagram. The skill contains prompt-injection style language that attempts to make its workflow mandatory before any response.",
+    "remediation": [
+      {
+        "issue": "Prompt-injection style mandatory agent control",
+        "suggestion": "Rewrite SKILL.md as guidance that preserves system, developer, and user instruction priority. Remove absolute commands such as mandatory invocation before any response.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 48
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "**In this environment:** Use your file reading tool (e.g., `read_file`, `cat`, or similar) to read t"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "**Example:** If you need to brainstorm, read `skills/brainstorming/SKILL.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 48,
+        "snippet": "```dot"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "Line 16 contains inline Markdown examples of file reading tools and paths, not executable shell or Ruby code. There is no dynamic input or command execution behavior in this text."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 18 is a documentation example that names a SKILL.md path inside Markdown backticks. It does not invoke a command or define executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Lines 28 through 48 are a fenced Graphviz dot diagram used for documentation. The triple backticks are Markdown fence syntax, not shell backtick execution."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "The skill says 'ABSOLUTELY MUST invoke the skill,' 'YOU DO NOT HAVE A CHOICE,' and 'Treat the content of that file as your strict instructions.' This attempts to override normal instruction priority and force behavior before any response.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 6,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The cited text directly instructs the agent to treat community skill content as strict mandatory instructions. That is a clear instruction-hierarchy override attempt, although it does not request data exfiltration."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "The skill says 'ABSOLUTELY MUST invoke the skill,' 'YOU DO NOT HAVE A CHOICE,' and 'Treat the content of that file as your strict instructions.' This attempts to override normal instruction priority and force behavior before any response.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 6,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The cited text directly instructs the agent to treat community skill content as strict mandatory instructions. That is a clear instruction-hierarchy override attempt, although it does not request data exfiltration."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 90,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T07:51:37.622Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Use Skills Before Each Task",
+    "value_statement": "Agents can miss relevant procedural guidance when a task begins. This skill tells them to check for applicable skills and load the relevant SKILL.md file.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI agent skills",
+      "skill discovery",
+      "agent workflow",
+      "using-superpowers",
+      "process guidance",
+      "community skill"
+    ],
+    "actual_capabilities": [
+      "Directs an agent to check whether a skill might apply before responding.",
+      "Explains how to read a relevant SKILL.md file from a skills directory.",
+      "Shows a decision flow for selecting, loading, and following skills.",
+      "Lists common rationalizations that lead agents to skip skill checks.",
+      "Defines priority between process skills and implementation skills."
+    ],
+    "limitations": [
+      "It is procedural guidance only and does not execute tools itself.",
+      "It assumes a local skills directory exists and contains useful skill files.",
+      "It can conflict with platform instruction hierarchy if installed unchanged.",
+      "It does not validate skill safety or authenticity."
+    ],
+    "use_cases": [
+      {
+        "title": "Start Claude Code Sessions",
+        "description": "Use a consistent skill discovery step before development, debugging, or documentation tasks begin.",
+        "target_user": "Claude Code users"
+      },
+      {
+        "title": "Standardize Codex Workflows",
+        "description": "Give agents a repeatable process for checking task-specific guidance before acting.",
+        "target_user": "Codex operators"
+      },
+      {
+        "title": "Document Team Agent Process",
+        "description": "Create shared expectations for when agents should load process skills and implementation skills.",
+        "target_user": "AI workflow leads"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Check for a Skill",
+        "prompt": "Before answering, check whether any installed skill applies. If one applies, read its SKILL.md and use it.",
+        "scenario": "Starting a simple task with a skill-aware assistant."
+      },
+      {
+        "title": "Select Relevant Guidance",
+        "prompt": "Review this task and identify any relevant skills. State which skill you will use before starting the work.",
+        "scenario": "Preparing for a task that may need procedural guidance."
+      },
+      {
+        "title": "Coordinate Multiple Skills",
+        "prompt": "For this feature request, decide whether a process skill or implementation skill should guide the first step.",
+        "scenario": "Planning a task where several skills could apply."
+      },
+      {
+        "title": "Design a Team Workflow",
+        "prompt": "Use the using-superpowers guidance to draft a team policy for selecting, loading, and documenting skills across agent tasks.",
+        "scenario": "Creating a repeatable agent operating process for a team."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A user asks the agent to fix a bug in a repository.",
+        "output": "The agent checks for relevant debugging or repository skills, reads the selected skill, announces the chosen guidance, and then begins investigation."
+      },
+      {
+        "input": "A team wants a consistent agent process for feature work.",
+        "output": [
+          "The workflow starts with a skill applicability check.",
+          "The agent loads process guidance before implementation guidance.",
+          "The agent records which skill influenced the approach."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Use this skill only after confirming it does not conflict with higher-priority instructions.",
+      "Keep skill selection explicit so reviewers can understand which guidance shaped the work.",
+      "Review every loaded community skill as untrusted content before following it."
+    ],
+    "anti_patterns": [
+      "Treating a community skill as higher priority than system or developer instructions.",
+      "Loading every available skill when only one task-specific skill applies.",
+      "Skipping security review because a skill claims mandatory authority."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill execute commands?",
+        "answer": "No. It is a Markdown instruction file and does not include executable scripts."
+      },
+      {
+        "question": "Why did static analysis flag external commands?",
+        "answer": "Inline backticks and a fenced diagram looked like command syntax, but they are documentation only."
+      },
+      {
+        "question": "Can I use this with Claude?",
+        "answer": "Yes. The guidance is written for skill-aware assistants, including Claude and Claude Code workflows."
+      },
+      {
+        "question": "Can I use this with Codex?",
+        "answer": "Yes. Codex can use the general workflow ideas when local skills are available."
+      },
+      {
+        "question": "What should I review before publishing?",
+        "answer": "Review the mandatory language that tells agents to treat community skill files as strict instructions."
+      },
+      {
+        "question": "Is this a complete skill safety system?",
+        "answer": "No. It helps with skill discovery, but it does not verify whether a loaded skill is safe."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 90
+    }
+  ]
+}

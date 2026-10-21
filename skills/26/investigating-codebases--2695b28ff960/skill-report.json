@@ -1,0 +1,1853 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T10:29:51.707Z",
+    "slug": "c0ntr0lledcha0s-investigating-codebases",
+    "source_url": "https://github.com/C0ntr0lledCha0s/claude-code-plugin-automations/tree/main/research-agent/skills/investigating-codebases",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2695b28ff960c501bd85c8778c7747abd0b354b92996fedf9fa9d87c17dfa8aa",
+    "tree_hash": "53740dcafa0bfe9b877822243c80900f482afe9afdb7d8f47eac8e3f8f9bcfd4",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "investigating-codebases",
+    "description": "Investigates unfamiliar codebases by mapping structure, finding entry points, tracing dependencies, and explaining implementation flows with file references.",
+    "summary": "Builds an evidence-based map of unfamiliar code and explains how components work together.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "C0ntr0lledCha0s",
+    "license": "MIT",
+    "tags": [
+      "codebase-analysis",
+      "architecture",
+      "dependency-tracing",
+      "code-navigation",
+      "documentation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most alerts are false positives caused by Markdown backticks, documentation examples, file discovery, quoted metadata commands, and `/dev/null` redirection. Five `find` substitutions are confirmed because an option-like project argument can be interpreted as `-delete` and remove files. The same flaw affects four earlier `find` pipelines; no prompt injection, network activity, credential access, or exfiltration was found.",
+    "remediation": [
+      {
+        "issue": "The structure script passes an unnormalized project argument to `find`, allowing expression or action injection.",
+        "suggestion": "Resolve the argument to an absolute path before any command, reject failures, and use that normalized path for every `find` call.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/framework-clues.md",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 66,
+            "line_end": 66
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/find-entry-points.py",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "scripts/find-entry-points.py",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 11,
+            "line_end": 11
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 108
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 130
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 130,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 146,
+            "line_end": 151
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 151,
+            "line_end": 157
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 157,
+            "line_end": 160
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 160,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 179
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 179,
+            "line_end": 182
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 182,
+            "line_end": 206
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 206,
+            "line_end": 210
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 224
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 224,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 287
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 287,
+            "line_end": 294
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 294,
+            "line_end": 297
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 297,
+            "line_end": 304
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 304,
+            "line_end": 307
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 307,
+            "line_end": 313
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 313,
+            "line_end": 316
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 316,
+            "line_end": 322
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 322,
+            "line_end": 327
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 327,
+            "line_end": 336
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 336,
+            "line_end": 339
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 339,
+            "line_end": 348
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 348,
+            "line_end": 351
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 351,
+            "line_end": 360
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 360,
+            "line_end": 377
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 377,
+            "line_end": 381
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 381,
+            "line_end": 382
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 382,
+            "line_end": 382
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 393,
+            "line_end": 394
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:assets/flow-diagram-syntax.md:31:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/flow-diagram-syntax.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "├─ Valid Token → Continue to Protected Route"
+      },
+      {
+        "id": "blocker:assets/flow-diagram-syntax.md:32:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/flow-diagram-syntax.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "└─ Invalid Token → Redirect to Login"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:239:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 239,
+        "line_end": 240,
+        "snippet": "### Test Pyramid"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:47:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 47,
+        "line_end": 48,
+        "snippet": "- Abstraction over data access"
+      },
+      {
+        "id": "filesystem:references/framework-clues.md:8:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/framework-clues.md",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "**Files:** `package.json` with `react` dependency, `.jsx/.tsx` files"
+      },
+      {
+        "id": "sensitive:references/investigation-checklist.md:17:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/investigation-checklist.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "- [ ] Find configuration files (`.env.example`, `config/`)"
+      },
+      {
+        "id": "external_commands:scripts/find-entry-points.py:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/find-entry-points.py",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "print(f\"- `{rel_path}`\")"
+      },
+      {
+        "id": "external_commands:scripts/find-entry-points.py:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/find-entry-points.py",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "print(f\"- `{rel_path}`\")"
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:10:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "echo \"Project: $(basename \"$PROJECT_DIR\")\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:11:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "echo \"Path: $(realpath \"$PROJECT_DIR\")\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:62:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "echo \"TypeScript: $(find \"$PROJECT_DIR\" -type f -name \"*.ts\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:63:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "echo \"JavaScript: $(find \"$PROJECT_DIR\" -type f -name \"*.js\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:64:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "echo \"Python:     $(find \"$PROJECT_DIR\" -type f -name \"*.py\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:65:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "echo \"Go:         $(find \"$PROJECT_DIR\" -type f -name \"*.go\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:66:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/map-structure.sh",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "echo \"Rust:       $(find \"$PROJECT_DIR\" -type f -name \"*.rs\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:15:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "if command -v tree &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:17:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "tree -L 3 -d \"$PROJECT_DIR\" 2>/dev/null || echo \"Error reading directory structure\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:20:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "find \"$PROJECT_DIR\" -maxdepth 3 -type d 2>/dev/null | head -50"
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:37:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "\\) 2>/dev/null | sed \"s|^$PROJECT_DIR/|- |\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:48:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "\\) 2>/dev/null | sed \"s|^$PROJECT_DIR/|- |\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:58:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "\\) 2>/dev/null | sed \"s|^$PROJECT_DIR/|- |\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:62:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "echo \"TypeScript: $(find \"$PROJECT_DIR\" -type f -name \"*.ts\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:63:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "echo \"JavaScript: $(find \"$PROJECT_DIR\" -type f -name \"*.js\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:64:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "echo \"Python:     $(find \"$PROJECT_DIR\" -type f -name \"*.py\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:65:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "echo \"Go:         $(find \"$PROJECT_DIR\" -type f -name \"*.go\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:66:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/map-structure.sh",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "echo \"Rust:       $(find \"$PROJECT_DIR\" -type f -name \"*.rs\" 2>/dev/null | wc -l)\""
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 51,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 54,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 70,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 73,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 91,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 96,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 108,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 111,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 127,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 130,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 130,
+        "line_end": 146,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 146,
+        "line_end": 151,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 151,
+        "line_end": 157,
+        "snippet": "Located in `{baseDir}/scripts/`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 160,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 160,
+        "line_end": 163,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 169,
+        "snippet": "Located in `{baseDir}/references/`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 179,
+        "snippet": "Located in `{baseDir}/assets/`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 179,
+        "line_end": 182,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 182,
+        "line_end": 206,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 206,
+        "line_end": 210,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 224,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 224,
+        "line_end": 225,
+        "snippet": "- File and line number: `src/routes/users.ts:42`"
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 287,
+        "snippet": "- Handler implementation: `src/controllers/userController.ts:15`"
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 287,
+        "line_end": 294,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 294,
+        "line_end": 297,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 297,
+        "line_end": 304,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:304:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 304,
+        "line_end": 307,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:307:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 307,
+        "line_end": 313,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 313,
+        "line_end": 316,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:316:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 316,
+        "line_end": 322,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 322,
+        "line_end": 327,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:327:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 327,
+        "line_end": 336,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 336,
+        "line_end": 339,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 339,
+        "line_end": 348,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:348:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 348,
+        "line_end": 351,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 351,
+        "line_end": 360,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:360:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 360,
+        "line_end": 377,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:377:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 377,
+        "line_end": 381,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:381:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 381,
+        "line_end": 382,
+        "snippet": "- Primary: `path/to/file.ts:42-67`"
+      },
+      {
+        "id": "external_commands:SKILL.md:382:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 382,
+        "line_end": 382,
+        "snippet": "- Related: `path/to/other.ts:15`, `path/to/helper.js:88`"
+      },
+      {
+        "id": "external_commands:SKILL.md:393:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 393,
+        "line_end": 394,
+        "snippet": "- `file1.ts`: [Role and purpose]"
+      },
+      {
+        "id": "external_commands:SKILL.md:394:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 394,
+        "line_end": 406,
+        "snippet": "- `file2.ts`: [Role and purpose]"
+      },
+      {
+        "id": "sensitive:SKILL.md:293:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 293,
+        "line_end": 293,
+        "snippet": "6. Config: config/, .env files"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:assets/flow-diagram-syntax.md:31:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line is a documentation example showing authentication branches. It performs no host or system reconnaissance."
+      },
+      {
+        "id": "blocker:assets/flow-diagram-syntax.md:32:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line is a documentation example showing authentication branches. It performs no host or system reconnaissance."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:239:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited section documents the test pyramid and contains no system discovery instructions or executable behavior."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:47:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line describes repository-pattern data access. It does not probe networks, hosts, ports, or services."
+      },
+      {
+        "id": "filesystem:references/framework-clues.md:8:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The text lists JSX and TSX filename extensions as React recognition clues. It does not access hidden files."
+      },
+      {
+        "id": "sensitive:references/investigation-checklist.md:17:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The checklist names `.env.example`, a conventional secret-free template, and `config/`. It neither reads environment files nor requests secret values."
+      },
+      {
+        "id": "external_commands:scripts/find-entry-points.py:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are literal Markdown delimiters inside a Python formatted string. The code only prints a discovered relative path and executes no shell command."
+      },
+      {
+        "id": "external_commands:scripts/find-entry-points.py:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are literal Markdown delimiters inside a Python formatted string. The code only prints a discovered relative path and executes no shell command."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:10:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution invokes `basename` or `realpath` with a quoted argument only to print project metadata. It does not evaluate project content as shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:11:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution invokes `basename` or `realpath` with a quoted argument only to print project metadata. It does not evaluate project content as shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:62:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:63:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:64:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:65:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "id": "external_commands:scripts/map-structure.sh:66:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "high",
+        "reason": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:15:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The script redirects an availability check to `/dev/null`. This standard redirection suppresses output and does not read or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:17:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:20:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:37:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:48:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:58:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:62:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:63:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:64:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:65:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "filesystem:scripts/map-structure.sh:66:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited `/dev/null` use only suppresses expected command errors. The redirection itself does not expose data or modify a sensitive device."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:304:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:307:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:316:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:327:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:348:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:360:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:377:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:381:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:382:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:393:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:394:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location is Markdown documentation where backticks delimit code blocks, commands, or file paths. They are not Ruby or shell backtick operators."
+      },
+      {
+        "id": "sensitive:SKILL.md:293:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This architectural example only identifies configuration locations, including `.env` files. It contains no instruction to expose, transmit, or extract their contents."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Project Directory Option Injection",
+        "description": "Four direct `find` pipelines accept an option-like project argument. A value such as `-delete` can remove files from the working directory.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 29,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 41,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 52,
+            "line_end": 58
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "Each pipeline places the unnormalized positional argument where `find` accepts expressions. The documented `-delete` action provides a direct destructive path."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "echo \"TypeScript: $(find \"$PROJECT_DIR\" -type f -name \"*.ts\" 2>/dev/null | wc -l)\"",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "echo \"JavaScript: $(find \"$PROJECT_DIR\" -type f -name \"*.js\" 2>/dev/null | wc -l)\"",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 63,
+            "line_end": 63
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "echo \"Python:     $(find \"$PROJECT_DIR\" -type f -name \"*.py\" 2>/dev/null | wc -l)\"",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 64,
+            "line_end": 64
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "echo \"Go:         $(find \"$PROJECT_DIR\" -type f -name \"*.go\" 2>/dev/null | wc -l)\"",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 65,
+            "line_end": 65
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "echo \"Rust:       $(find \"$PROJECT_DIR\" -type f -name \"*.rs\" 2>/dev/null | wc -l)\"",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 66,
+            "line_end": 66
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The substitution executes `find` with the user-supplied project argument as its first operand. An argument such as `-delete` is parsed as a find action and can remove files."
+      },
+      {
+        "title": "Project Directory Option Injection",
+        "description": "Four direct `find` pipelines accept an option-like project argument. A value such as `-delete` can remove files from the working directory.",
+        "locations": [
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 29,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 41,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/map-structure.sh",
+            "line_start": 52,
+            "line_end": 58
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "Each pipeline places the unnormalized positional argument where `find` accepts expressions. The documented `-delete` action provides a direct destructive path."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 9,
+    "total_lines": 1543,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T10:29:51.707Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Investigate Unfamiliar Codebases",
+    "value_statement": "Unfamiliar repositories make implementation questions slow and uncertain. This skill maps structure, traces dependencies, and explains behavior with concrete file references.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "codebase investigation",
+      "code architecture analysis",
+      "dependency tracing",
+      "entry point discovery",
+      "execution flow analysis",
+      "repository documentation"
+    ],
+    "actual_capabilities": [
+      "Maps directory structure and identifies common source, test, configuration, and documentation locations.",
+      "Finds likely entry points for Node.js, Python, Go, Rust, Java, and web projects.",
+      "Traces local TypeScript, JavaScript, and Python imports to a configurable depth.",
+      "Follows routes, handlers, services, repositories, and data transformations through related files.",
+      "Produces structured explanations with file references, execution flows, patterns, and related components."
+    ],
+    "limitations": [
+      "It does not modify code or validate behavior by running the application or its tests.",
+      "Import tracing does not resolve aliases, dynamic imports, or every language and build system.",
+      "Results depend on the files and repository scope available to the assistant.",
+      "The structure script requires a trusted directory argument until its option-injection flaw is fixed."
+    ],
+    "use_cases": [
+      {
+        "title": "Understand a New Repository",
+        "description": "Map the project, identify entry points, and learn the main architectural conventions before making changes.",
+        "target_user": "Software engineers joining an existing project"
+      },
+      {
+        "title": "Trace a Feature",
+        "description": "Follow a feature from its trigger through handlers, services, storage, and response formatting.",
+        "target_user": "Maintainers debugging unfamiliar behavior"
+      },
+      {
+        "title": "Prepare a Technical Review",
+        "description": "Document component boundaries, dependencies, data flows, and security-sensitive paths with evidence.",
+        "target_user": "Architects and security reviewers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Find an Implementation",
+        "prompt": "Find where [feature] is implemented. Name the primary files, explain each role, and include precise file references.",
+        "scenario": "A beginner needs a focused location answer."
+      },
+      {
+        "title": "Explain a Component",
+        "prompt": "Explain how [component] works from entry point to output. Trace important calls and data transformations with file references.",
+        "scenario": "A developer needs an implementation walkthrough."
+      },
+      {
+        "title": "Map Repository Architecture",
+        "prompt": "Investigate this repository architecture. Identify entry points, layers, shared modules, integrations, tests, conventions, and important configuration without reading secret values.",
+        "scenario": "A new maintainer needs a broad technical map."
+      },
+      {
+        "title": "Analyze a Cross-Cutting Flow",
+        "prompt": "Trace [workflow] across modules and services. Document branches, validation, state changes, failure handling, security controls, performance concerns, and unresolved questions.",
+        "scenario": "An experienced reviewer needs a deep evidence-based analysis."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Where is user authentication implemented?",
+        "output": [
+          "The investigation identifies the request middleware, token validator, session storage, and login handler.",
+          "It explains the decision branches and cites each relevant file and line."
+        ]
+      },
+      {
+        "input": "Explain how the application starts.",
+        "output": "The report traces startup from the main entry point through configuration, dependency initialization, route registration, and server startup."
+      },
+      {
+        "input": "Map the payment workflow and its failure paths.",
+        "output": [
+          "The analysis follows request validation, payment service calls, persistence, retries, and error responses.",
+          "It separates verified behavior from open questions and lists related components."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Start with repository structure and entry points before tracing a specific implementation.",
+      "Verify conclusions across definitions, callers, tests, and configuration files.",
+      "Separate confirmed behavior from assumptions, and cite a file reference for every important claim."
+    ],
+    "anti_patterns": [
+      "Do not search the entire repository without first defining the feature or workflow boundary.",
+      "Do not infer runtime behavior from names or directory structure alone.",
+      "Do not expose credentials or secret values found in configuration files."
+    ],
+    "faq": [
+      {
+        "question": "Can this skill change the code?",
+        "answer": "No. Its workflow focuses on reading, searching, tracing, and documenting existing code."
+      },
+      {
+        "question": "Which languages does it support?",
+        "answer": "The methodology is general, while bundled entry-point clues cover JavaScript, TypeScript, Python, Go, Rust, Java, and common web frameworks."
+      },
+      {
+        "question": "Does it run the application or tests?",
+        "answer": "No. It explains static evidence and does not validate behavior through runtime execution."
+      },
+      {
+        "question": "Can it trace dependencies?",
+        "answer": "Yes. It follows imports and related calls, with a helper for local TypeScript, JavaScript, and Python imports."
+      },
+      {
+        "question": "How are findings presented?",
+        "answer": "Findings include an overview, key files, implementation steps, execution flow, patterns, related components, and concrete file references."
+      },
+      {
+        "question": "Will it read environment secrets?",
+        "answer": "It may identify configuration locations, but users should limit access and request analysis without exposing secret values."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "flow-diagram-syntax.md",
+          "type": "file",
+          "path": "assets/flow-diagram-syntax.md",
+          "lines": 79
+        },
+        {
+          "name": "investigation-template.md",
+          "type": "file",
+          "path": "assets/investigation-template.md",
+          "lines": 138
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "common-patterns.md",
+          "type": "file",
+          "path": "references/common-patterns.md",
+          "lines": 333
+        },
+        {
+          "name": "framework-clues.md",
+          "type": "file",
+          "path": "references/framework-clues.md",
+          "lines": 66
+        },
+        {
+          "name": "investigation-checklist.md",
+          "type": "file",
+          "path": "references/investigation-checklist.md",
+          "lines": 184
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "find-entry-points.py",
+          "type": "file",
+          "path": "scripts/find-entry-points.py",
+          "lines": 109
+        },
+        {
+          "name": "map-structure.sh",
+          "type": "file",
+          "path": "scripts/map-structure.sh",
+          "lines": 71
+        },
+        {
+          "name": "trace-imports.py",
+          "type": "file",
+          "path": "scripts/trace-imports.py",
+          "lines": 152
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 411
+    }
+  ]
+}

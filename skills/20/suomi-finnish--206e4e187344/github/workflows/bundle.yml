@@ -1,0 +1,47 @@
+name: Bundle
+
+# suomi-finnish-full.md on generoitu tiedosto: se kootaan SKILL.md:stä ja
+# references/-kansiosta. Jos lähdettä muutetaan eikä koontiversiota ajeta
+# uudelleen, yhden tiedoston asennusta käyttävät jäävät vanhaan sisältöön.
+# Tämä työ kaataa buildin siinä tapauksessa.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  bundle-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generoi koontiversio uudelleen
+        run: python3 scripts/build-single-file.py
+
+      - name: Tarkista, ettei koontiversio ole ajautunut lähteistä
+        run: |
+          if ! git diff --quiet -- suomi-finnish-full.md; then
+            echo "::error file=suomi-finnish-full.md::Koontiversio ei vastaa lähteitä. Aja: python3 scripts/build-single-file.py ja committoi tulos."
+            git --no-pager diff -- suomi-finnish-full.md
+            exit 1
+          fi
+          echo "Koontiversio on synkassa lähteiden kanssa."
+
+      - name: Tarkista, että jakelupaketti rakentuu
+        run: |
+          ./scripts/build-skill-package.sh
+          test -f dist/suomi-finnish.zip
+
+      - name: Tarkista, että paketin sisältö vastaa lähteitä
+        run: |
+          unzip -q dist/suomi-finnish.zip -d /tmp/pkg
+          diff /tmp/pkg/suomi-finnish/SKILL.md SKILL.md
+          for f in references/*.md; do
+            diff "/tmp/pkg/suomi-finnish/$f" "$f"
+          done
+          echo "Paketin sisältö vastaa lähteitä."

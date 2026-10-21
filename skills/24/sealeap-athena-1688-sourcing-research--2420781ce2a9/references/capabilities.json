@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-1688-sourcing-research",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-1688-image-sourcing",
+      "title": "1688 图片找货源",
+      "description": "1688 图片找货源。用于从图片发现候选货源，再逐个确认材质、尺寸、包装数量与起订量。输入需明确目标图片、关键规格、采购数量、价格范围；边界见执行手册。",
+      "category": "1688",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_product_search_from_image",
+          "validation": "tool_schema",
+          "required_fields": [
+            "image_url"
+          ]
+        }
+      ],
+      "limitation": "外观相似不代表同规格；供应商标识不证明质量；本地图不自动上传公开图床",
+      "legacy_path": "sealeap-athena-1688-image-sourcing",
+      "entrypoint": "sealeap-athena-1688-sourcing-research",
+      "guide_path": "references/capabilities/1688-image-sourcing/workflow.md",
+      "playbook_path": "references/capabilities/1688-image-sourcing/playbook.md",
+      "tool_routing_path": "references/capabilities/1688-image-sourcing/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-1688-offer-detail",
+      "title": "1688 货源详情核对",
+      "description": "1688 货源详情核对。用于按 SKU 展开阶梯价、库存、起订量、包装和供应条件。输入需明确商品链接或 offer ID、SKU、币种、采购数量；边界见执行手册。",
+      "category": "1688",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_product_request",
+          "validation": "tool_schema",
+          "required_fields": [
+            "product_id"
+          ]
+        },
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_product_variations",
+          "validation": "tool_schema",
+          "required_fields": [
+            "product_id"
+          ]
+        }
+      ],
+      "limitation": "一件价、阶梯批发价和代发价分别列示；缺失不能互相替代；下单前重新核价",
+      "legacy_path": "sealeap-athena-1688-offer-detail",
+      "entrypoint": "sealeap-athena-1688-sourcing-research",
+      "guide_path": "references/capabilities/1688-offer-detail/workflow.md",
+      "playbook_path": "references/capabilities/1688-offer-detail/playbook.md",
+      "tool_routing_path": "references/capabilities/1688-offer-detail/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-1688-sales-ranking",
+      "title": "1688 供货热度筛选",
+      "description": "1688 供货热度筛选。用于获取可用销量估计并在已获取样本内排序，再确认阶梯价和 MOQ。输入需明确类目、关键词、日期、候选数和采购规格；边界见执行手册。",
+      "category": "1688",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_product_search",
+          "validation": "tool_schema",
+          "required_fields": []
+        }
+      ],
+      "limitation": "本地排序只能称样本榜；不冒充完整官方热销榜；销量不是工厂产能",
+      "legacy_path": "sealeap-athena-1688-sales-ranking",
+      "entrypoint": "sealeap-athena-1688-sourcing-research",
+      "guide_path": "references/capabilities/1688-sales-ranking/workflow.md",
+      "playbook_path": "references/capabilities/1688-sales-ranking/playbook.md",
+      "tool_routing_path": "references/capabilities/1688-sales-ranking/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-1688-keyword-sourcing",
+      "title": "1688 关键词找货源",
+      "description": "1688 关键词找货源。用于逐步收敛同用途货源，按规格和数量统一比价，再筛查供应条件。输入需明确中文关键词、规格、预算、数量、履约要求；边界见执行手册。",
+      "category": "1688",
+      "mode": "data",
+      "route": "Sorftime 直接工具",
+      "capabilities": [
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_product_search",
+          "validation": "tool_schema",
+          "required_fields": []
+        },
+        {
+          "provider": "sorftime",
+          "tool": "ali1688_similar_product",
+          "validation": "tool_schema",
+          "required_fields": [
+            "search_name"
+          ]
+        }
+      ],
+      "limitation": "不能把国际站报价当 1688 报价；混批、运费和包装数量单独核对",
+      "legacy_path": "sealeap-athena-1688-keyword-sourcing",
+      "entrypoint": "sealeap-athena-1688-sourcing-research",
+      "guide_path": "references/capabilities/1688-keyword-sourcing/workflow.md",
+      "playbook_path": "references/capabilities/1688-keyword-sourcing/playbook.md",
+      "tool_routing_path": "references/capabilities/1688-keyword-sourcing/tool-routing.md"
+    }
+  ]
+}
