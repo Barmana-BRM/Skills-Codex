@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+"""Read-only Codex config readiness report for long-running /goal work."""
+
+from __future__ import annotations
+
+import argparse
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover
+    import tomli as tomllib  # type: ignore
+
+
+CONFIG_PATH = Path.home() / ".codex" / "config.toml"
+# Codex CLI v0.128.0 introduced persisted /goal workflows.
+MIN_GOAL_VERSION = (0, 128, 0)
+MIN_GOAL_VERSION_LABEL = ".".join(str(part) for part in MIN_GOAL_VERSION)
+AUTONOMOUS_SETTINGS = {
+    "model": "gpt-5.5",
+    "model_context_window": 1050000,
+    "model_auto_compact_token_limit": 997500,
+    "model_reasoning_effort": "high",
+    "plan_mode_reasoning_effort": "xhigh",
+    "approval_policy": "never",
+    "sandbox_mode": "danger-full-access",
+}
+
+
+def codex_version() -> str | None:
+    try:
+        result = subprocess.run(
+            ["codex", "--version"],
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip() or None
+
+
+def parse_version(raw: str | None) -> tuple[int, int, int] | None:
+    if not raw:
+        return None
+    match = re.search(r"(\d+)\.(\d+)\.(\d+)", raw)
+    if not match:
+        return None
+    major, minor, patch = match.groups()
+    return (int(major), int(minor), int(patch))
+
+
+def load_config() -> tuple[dict, str | None]:
+    if not CONFIG_PATH.exists():
+        return {}, "missing"
+    try:
+        with CONFIG_PATH.open("rb") as handle:
+            return tomllib.load(handle), None
+    except tomllib.TOMLDecodeError as exc:
+        return {}, f"invalid TOML: {exc}"
+    except OSError as exc:
+        return {}, f"could not read config: {exc}"
+
+
+def current_project_trust(config: dict, project_path: Path) -> str | None:
+    target_path = project_path.resolve()
+    projects = config.get("projects")
+    if not isinstance(projects, dict):
+        return None
+
+    best_match: tuple[int, str] | None = None
+    for raw_path, settings in projects.items():
+        try:
+            registered_path = Path(os.path.expanduser(raw_path)).resolve()
+        except OSError:
+            continue
+        if not isinstance(settings, dict):
+            continue
+        try:
+            target_path.relative_to(registered_path)
+        except ValueError:
+            continue
+        trust_level = settings.get("trust_level")
+        if isinstance(trust_level, str):
+            score = len(registered_path.parts)
+            if best_match is None or score > best_match[0]:
+                best_match = (score, trust_level)
+    return best_match[1] if best_match else None
+
+
+def profile_overrides(config: dict) -> list[tuple[str, str, object]]:
+    profiles = config.get("profiles")
+    if not isinstance(profiles, dict):
+        return []
+
+    overrides: list[tuple[str, str, object]] = []
+    for profile_name, settings in sorted(profiles.items()):
+        if not isinstance(settings, dict):
+            continue
+        for key in (
+            "approval_policy",
+            "sandbox_mode",
+            "model",
+            "model_context_window",
+            "model_auto_compact_token_limit",
+            "model_reasoning_effort",
+            "plan_mode_reasoning_effort",
+        ):
+            if key in settings:
+                overrides.append((str(profile_name), key, settings[key]))
+    return overrides
+
+
+def print_key(config: dict, key: str) -> None:
+    value = config.get(key, "<unset>")
+    print(f"{key}: {value}")
+
+
+def config_value(config: dict, key: str) -> object:
+    return config.get(key, "<unset>")
+
+
+def autonomous_gaps(config: dict, features: dict, trust_level: str | None) -> list[str]:
+    gaps = []
+    for key, expected in AUTONOMOUS_SETTINGS.items():
+        actual = config_value(config, key)
+        if actual != expected:
+            gaps.append(f"{key}: expected {expected!r}, got {actual!r}")
+    if features.get("goals") is not True:
+        gaps.append(f"features.goals: expected True, got {features.get('goals', '<unset>')!r}")
+    if trust_level != "trusted":
+        gaps.append(f"current_project_trust: expected 'trusted', got {trust_level or '<unset>'!r}")
+    return gaps
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Read-only Codex config readiness report for long-running /goal work.",
+    )
+    parser.add_argument(
+        "--project-path",
+        default=".",
+        help="Project path to check against Codex trust settings. Defaults to cwd.",
+    )
+    args = parser.parse_args()
+    project_path = Path(args.project_path).expanduser()
+
+    version_raw = codex_version()
+    version = parse_version(version_raw)
+    config, config_error = load_config()
+    raw_features = config.get("features")
+    features = raw_features if isinstance(raw_features, dict) else {}
+
+    print("Codex /goal readiness report")
+    print()
+    print(f"codex --version: {version_raw or '<not found>'}")
+    if version and version < MIN_GOAL_VERSION:
+        print(f"version_status: update recommended; /goal was introduced in codex-cli {MIN_GOAL_VERSION_LABEL}")
+    elif version:
+        print("version_status: likely new enough for /goal")
+    else:
+        print("version_status: could not determine")
+
+    print()
+    print(f"config_path: {CONFIG_PATH}")
+    print(f"config_exists: {CONFIG_PATH.exists()}")
+    print(f"config_status: {config_error or 'ok'}")
+    trust_level = current_project_trust(config, project_path)
+    print(f"project_path: {project_path.resolve()}")
+    print(f"current_project_trust: {trust_level or '<unset>'}")
+    print_key(config, "model")
+    print_key(config, "model_context_window")
+    print_key(config, "model_reasoning_effort")
+    print_key(config, "plan_mode_reasoning_effort")
+    print_key(config, "model_auto_compact_token_limit")
+    print_key(config, "approval_policy")
+    print_key(config, "sandbox_mode")
+    print(f"features.goals: {features.get('goals', '<unset>')}")
+    overrides = profile_overrides(config)
+    if overrides:
+        print("profile_overrides:")
+        for profile_name, key, value in overrides:
+            print(f"- profiles.{profile_name}.{key}: {value}")
+    else:
+        print("profile_overrides: <none>")
+
+    print()
+    gaps = autonomous_gaps(config, features, trust_level)
+    if gaps:
+        print("autonomous_goal_status: not ready")
+        print("autonomous_goal_gaps:")
+        for gap in gaps:
+            print(f"- {gap}")
+    else:
+        print("autonomous_goal_status: ready")
+
+    print()
+    print("notes:")
+    print("- This script is read-only.")
+    print("- Use model_reasoning_effort=high for execution and plan_mode_reasoning_effort=xhigh for planning.")
+    print("- model_auto_compact_token_limit=997500 lets long /goal sessions compact before the context limit.")
+    print("- Use approval_policy=never and sandbox_mode=danger-full-access only in explicitly trusted project directories.")
+    print("- Do not start a long goal until SPEC.md has user-approved measurable done_when criteria, a scorecard, a fast feedback loop, and working-memory files when needed.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,2472 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:35:23.968Z",
+    "slug": "cygnusfear-design-spec-extraction",
+    "source_url": "https://github.com/Cygnusfear/claude-stuff/tree/main/skills/design-spec-extraction",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "9e75569069a8f11e5551a397da79809db474cc4c68cbd76392ecb4a3dc8553bb",
+    "tree_hash": "dbc629db8b1933b16abe15e23e0c75f0a3cd1a426cd17167a91aa85647881cdf",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "design-spec-extraction",
+    "description": "Extract structured UI design specifications from user-provided Figma exports, screenshots, mockups, or website captures. The skill creates design tokens, component trees, layout data, and accessibility notes for developer handoff.",
+    "summary": "Extract design tokens and component specifications from visual UI sources.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Cygnusfear",
+    "license": "MIT",
+    "tags": [
+      "design-tokens",
+      "ui-specs",
+      "figma",
+      "screenshots",
+      "developer-handoff"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "external_commands"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by markdown code fences, inline design-spec paths, design grid terminology, and schema or documentation URLs. The screenshot references describe user-provided visual inputs, not covert capture or upload. Two mkdir examples are confirmed as limited command-use risks, and one semantic finding covers unsafe project-name substitution.",
+    "remediation": [
+      {
+        "issue": "Project names are substituted into output paths and bash examples without validation.",
+        "suggestion": "Require a safe slug such as letters, numbers, and hyphens, and reject path separators or shell metacharacters before writing files.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The workflow includes bash mkdir examples for creating local output directories.",
+        "suggestion": "Prefer tool-mediated file creation or a fixed safe directory example, and avoid shell commands when they are not required.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Screenshot inputs can contain confidential designs, credentials, or third-party UI material.",
+        "suggestion": "State that images must be user-authorized and should not include secrets, private customer data, or restricted third-party content.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/design-tokens-schema.json",
+            "line_start": 2,
+            "line_end": 2
+          },
+          {
+            "file": "references/design-tokens-schema.json",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 1159,
+            "line_end": 1159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 1391,
+            "line_end": 1391
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 93
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 93,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 203
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 209
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 216
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 216,
+            "line_end": 332
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 332,
+            "line_end": 334
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 334,
+            "line_end": 344
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 344,
+            "line_end": 350
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 350,
+            "line_end": 353
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 353,
+            "line_end": 354
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 354,
+            "line_end": 360
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 360,
+            "line_end": 361
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 361,
+            "line_end": 521
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 521,
+            "line_end": 523
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 523,
+            "line_end": 533
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 533,
+            "line_end": 539
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 539,
+            "line_end": 542
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 542,
+            "line_end": 543
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 543,
+            "line_end": 544
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 544,
+            "line_end": 550
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 550,
+            "line_end": 551
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 551,
+            "line_end": 552
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 552,
+            "line_end": 718
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 718,
+            "line_end": 720
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 720,
+            "line_end": 730
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 730,
+            "line_end": 736
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 736,
+            "line_end": 739
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 739,
+            "line_end": 740
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 740,
+            "line_end": 746
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 746,
+            "line_end": 747
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 747,
+            "line_end": 874
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 874,
+            "line_end": 876
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 876,
+            "line_end": 886
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 886,
+            "line_end": 892
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 892,
+            "line_end": 895
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 895,
+            "line_end": 896
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:audit_output.json:4:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "audit_output.json",
+        "line_start": 4,
+        "line_end": 4,
+        "snippet": "\"description\": \"Extract comprehensive JSON design specifications from visual sources including Figma"
+      },
+      {
+        "id": "blocker:audit_output.json:67:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "audit_output.json",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "\"description\": \"Analyze screenshots of competitor UIs or inspiration to extract specs for rapid prot"
+      },
+      {
+        "id": "blocker:audit_output.json:104:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "audit_output.json",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "\"✓ Layout: 12-column grid with 24px gutters\","
+      },
+      {
+        "id": "network:references/design-tokens-schema.json:2:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/design-tokens-schema.json",
+        "line_start": 2,
+        "line_end": 2,
+        "snippet": "\"$schema\": \"http://json-schema.org/draft-07/schema#\","
+      },
+      {
+        "id": "network:references/design-tokens-schema.json:3:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/design-tokens-schema.json",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "\"$id\": \"https://design-spec-extraction/schema/v1\","
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:81:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 81,
+        "line_end": 82,
+        "snippet": "#### Multi-Column Grid"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:85:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "- Elements aligned to grid lines"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:131:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 131,
+        "line_end": 131,
+        "snippet": "### Grid System Detection"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:147:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "**Grid Calculation:**"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:153:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 153,
+        "line_end": 153,
+        "snippet": "### Flexbox vs Grid Indicators"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:161:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "**Grid Indicators:**"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:209:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 209,
+        "line_end": 209,
+        "snippet": "| Table | Grid of cells, header row, alternating row colors |"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:225:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 225,
+        "line_end": 225,
+        "snippet": "| Primary | Solid brand color | None | White/inverse |"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:226:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "| Secondary | Transparent/light | 1-2px solid | Brand color |"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:257:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 257,
+        "line_end": 257,
+        "snippet": "- Often in repeating grid patterns"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:273:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "**Grid Container Detection:**"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:276:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 276,
+        "line_end": 276,
+        "snippet": "- Gaps between grid cells"
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:951:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/extraction-patterns.md",
+        "line_start": 951,
+        "line_end": 951,
+        "snippet": "- [ ] Grid system detected"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 40,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 46,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 47,
+        "snippet": "| 1 | `.design-specs/{project}/pass-1-layout.json` | Layout and structure |"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 48,
+        "snippet": "| 2 | `.design-specs/{project}/pass-2-colors.json` | Color tokens |"
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 49,
+        "snippet": "| 3 | `.design-specs/{project}/pass-3-typography.json` | Typography tokens |"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 50,
+        "snippet": "| 4 | `.design-specs/{project}/pass-4-components.json` | Component tree |"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 51,
+        "snippet": "| 5 | `.design-specs/{project}/pass-5-spacing.json` | Spacing and dimensions |"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 52,
+        "snippet": "| 6 | `.design-specs/{project}/pass-6-states.json` | States and accessibility |"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 70,
+        "snippet": "| 7 | `.design-specs/{project}/design-spec.json` | **Final consolidated output** |"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 93,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 103,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 109,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 191,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 193,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 203,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 209,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 209,
+        "line_end": 211,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 216,
+        "snippet": "First, read the Pass 1 output: `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 216,
+        "line_end": 332,
+        "snippet": "- Layout data from Pass 1: Read from `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:332:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 332,
+        "line_end": 334,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:334:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 334,
+        "line_end": 344,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 344,
+        "line_end": 350,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:350:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 350,
+        "line_end": 353,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-3-typography.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:353:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 353,
+        "line_end": 354,
+        "snippet": "- `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:354:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 354,
+        "line_end": 360,
+        "snippet": "- `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:360:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 360,
+        "line_end": 361,
+        "snippet": "- Layout data from Pass 1: Read from `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:361:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 361,
+        "line_end": 521,
+        "snippet": "- Color data from Pass 2: Read from `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:521:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 521,
+        "line_end": 523,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-3-typography.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:523:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 523,
+        "line_end": 533,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:533:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 533,
+        "line_end": 539,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:539:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 539,
+        "line_end": 542,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:542:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 542,
+        "line_end": 543,
+        "snippet": "- `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:543:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 543,
+        "line_end": 544,
+        "snippet": "- `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:544:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 544,
+        "line_end": 550,
+        "snippet": "- `.design-specs/{project}/pass-3-typography.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:550:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 550,
+        "line_end": 551,
+        "snippet": "- Layout data from Pass 1: Read from `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:551:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 551,
+        "line_end": 552,
+        "snippet": "- Color data from Pass 2: Read from `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:552:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 552,
+        "line_end": 718,
+        "snippet": "- Typography data from Pass 3: Read from `.design-specs/{project}/pass-3-typography.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:718:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 718,
+        "line_end": 720,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:720:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 720,
+        "line_end": 730,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:730:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 730,
+        "line_end": 736,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:736:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 736,
+        "line_end": 739,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-5-spacing.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:739:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 739,
+        "line_end": 740,
+        "snippet": "- `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:740:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 740,
+        "line_end": 746,
+        "snippet": "- `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:746:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 746,
+        "line_end": 747,
+        "snippet": "- Layout data from Pass 1: Read from `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:747:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 747,
+        "line_end": 874,
+        "snippet": "- Component data from Pass 4: Read from `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:874:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 874,
+        "line_end": 876,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-5-spacing.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:876:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 876,
+        "line_end": 886,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:886:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 886,
+        "line_end": 892,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:892:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 892,
+        "line_end": 895,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/pass-6-states.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:895:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 895,
+        "line_end": 896,
+        "snippet": "- `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:896:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 896,
+        "line_end": 902,
+        "snippet": "- `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:902:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 902,
+        "line_end": 903,
+        "snippet": "- Component data from Pass 4: Read from `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:903:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 903,
+        "line_end": 1089,
+        "snippet": "- Color data from Pass 2: Read from `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1089:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1089,
+        "line_end": 1091,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/pass-6-states.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1091:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1091,
+        "line_end": 1101,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1101,
+        "line_end": 1107,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1107:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1107,
+        "line_end": 1110,
+        "snippet": "OUTPUT FILE: `.design-specs/{project}/design-spec.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1110,
+        "line_end": 1111,
+        "snippet": "- `.design-specs/{project}/pass-1-layout.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1111,
+        "line_end": 1112,
+        "snippet": "- `.design-specs/{project}/pass-2-colors.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1112,
+        "line_end": 1113,
+        "snippet": "- `.design-specs/{project}/pass-3-typography.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1113,
+        "line_end": 1114,
+        "snippet": "- `.design-specs/{project}/pass-4-components.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1114:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1114,
+        "line_end": 1115,
+        "snippet": "- `.design-specs/{project}/pass-5-spacing.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1115:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1115,
+        "line_end": 1245,
+        "snippet": "- `.design-specs/{project}/pass-6-states.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1245:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1245,
+        "line_end": 1247,
+        "snippet": "Use the Write tool to save this JSON to: `.design-specs/{project}/design-spec.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:1247:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1247,
+        "line_end": 1258,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1258:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1258,
+        "line_end": 1260,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:1260:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1260,
+        "line_end": 1267,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1267:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1267,
+        "line_end": 1269,
+        "snippet": "Execute each pass as a dedicated subtask agent. **Replace `{project}` with actual project name in AL"
+      },
+      {
+        "id": "external_commands:SKILL.md:1269:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1269,
+        "line_end": 1295,
+        "snippet": "```javascript"
+      },
+      {
+        "id": "external_commands:SKILL.md:1295:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1295,
+        "line_end": 1301,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1301:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1301,
+        "line_end": 1305,
+        "snippet": "```javascript"
+      },
+      {
+        "id": "external_commands:SKILL.md:1305:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1305,
+        "line_end": 1323,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1323:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1323,
+        "line_end": 1351,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:1351:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1351,
+        "line_end": 1384,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:1384:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1384,
+        "line_end": 1385,
+        "snippet": "- `references/design-tokens-schema.json` - Complete JSON Schema for output validation"
+      },
+      {
+        "id": "external_commands:SKILL.md:1385:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1385,
+        "line_end": 1392,
+        "snippet": "- `references/extraction-patterns.md` - Detailed patterns for visual analysis"
+      },
+      {
+        "id": "external_commands:SKILL.md:1392:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1392,
+        "line_end": 1392,
+        "snippet": "- All tokens use `$value`, `$type`, `$description` properties"
+      },
+      {
+        "id": "external_commands:SKILL.md:1393:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 1393,
+        "line_end": 1394,
+        "snippet": "- Token references use `{group.token}` syntax"
+      },
+      {
+        "id": "network:SKILL.md:1159:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 1159,
+        "line_end": 1159,
+        "snippet": "\"$schema\": \"https://design-tokens.org/schema.json\","
+      },
+      {
+        "id": "network:SKILL.md:1391:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 1391,
+        "line_end": 1391,
+        "snippet": "Output follows [W3C Design Tokens Community Group format (2025.10)](https://www.designtokens.org/tr/"
+      },
+      {
+        "id": "blocker:SKILL.md:3:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "SKILL.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "description: Extract comprehensive JSON design specifications from visual sources including Figma ex"
+      },
+      {
+        "id": "blocker:SKILL.md:111:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "Use the Write tool to save your analysis as valid JSON to this file."
+      },
+      {
+        "id": "blocker:SKILL.md:128:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "- Multi-column grid (count columns, estimate gutters)"
+      },
+      {
+        "id": "blocker:SKILL.md:141:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "### 4. Grid System Analysis"
+      },
+      {
+        "id": "blocker:SKILL.md:142:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "- Identify underlying grid (12-column, 4-column, etc.)"
+      },
+      {
+        "id": "blocker:SKILL.md:212:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "Then use the Write tool to save your analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:356:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 356,
+        "line_end": 356,
+        "snippet": "Then use the Write tool to save your analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:546:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 546,
+        "line_end": 546,
+        "snippet": "Then use the Write tool to save your analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:742:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 742,
+        "line_end": 742,
+        "snippet": "Then use the Write tool to save your analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:809:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 809,
+        "line_end": 809,
+        "snippet": "\"grid\": { \"$value\": \"{spacing.scale.6}\", \"$type\": \"dimension\", \"$description\": \"Card grid gap\" }"
+      },
+      {
+        "id": "blocker:SKILL.md:898:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 898,
+        "line_end": 898,
+        "snippet": "Then use the Write tool to save your analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:973:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 973,
+        "line_end": 973,
+        "snippet": "\"outline\": \"2px solid {colors.semantic.interactive.primary}\","
+      },
+      {
+        "id": "blocker:SKILL.md:994:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 994,
+        "line_end": 994,
+        "snippet": "\"outline\": \"2px solid {colors.semantic.interactive.primary}\","
+      },
+      {
+        "id": "blocker:SKILL.md:1117:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 1117,
+        "line_end": 1117,
+        "snippet": "Then use the Write tool to save your consolidated analysis as valid JSON."
+      },
+      {
+        "id": "blocker:SKILL.md:1135:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 1135,
+        "line_end": 1135,
+        "snippet": "- Ensure style references link to valid tokens"
+      },
+      {
+        "id": "blocker:SKILL.md:1242:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 1242,
+        "line_end": 1242,
+        "snippet": "The final file MUST be valid JSON. Validate all references resolve correctly."
+      },
+      {
+        "id": "blocker:SKILL.md:1304:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 1304,
+        "line_end": 1304,
+        "snippet": "// If file doesn't exist or is invalid JSON, re-run the pass"
+      },
+      {
+        "id": "blocker:SKILL.md:1334:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 1334,
+        "line_end": 1334,
+        "snippet": "- Layout: 12-column grid with 24px gutters"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:audit_output.json:4:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The text describes user-provided screenshots, Figma exports, or website captures as analysis inputs. It does not instruct covert screen capture, automatic upload, or transfer to an external endpoint."
+      },
+      {
+        "id": "blocker:audit_output.json:67:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This copy describes analyzing visual UI screenshots for design inspiration, not probing a live system. No network enumeration, credential collection, or host reconnaissance is requested."
+      },
+      {
+        "id": "blocker:audit_output.json:104:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "network:references/design-tokens-schema.json:2:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a JSON Schema URI or schema identifier used as metadata. There is no instruction or code path that performs a network request at this location."
+      },
+      {
+        "id": "network:references/design-tokens-schema.json:3:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a JSON Schema URI or schema identifier used as metadata. There is no instruction or code path that performs a network request at this location."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:81:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:85:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:131:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:147:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:153:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:161:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:209:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:225:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:226:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:257:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:273:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:276:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:references/extraction-patterns.md:951:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.62,
+        "reason": "This fenced bash example tells the agent to run mkdir with a project-name placeholder. The command is limited to directory creation, but unsanitized substitution could be unsafe in a shell context.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:332:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:334:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:350:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:353:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:354:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:360:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:361:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:521:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:523:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:533:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:539:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:542:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:543:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:544:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:550:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:551:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:552:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:718:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:720:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:730:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:736:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:739:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:740:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:746:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:747:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:874:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:876:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:886:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:892:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:895:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:896:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:902:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:903:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1089:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1091:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1107:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1114:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1115:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1245:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1247:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1258:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.62,
+        "reason": "This fenced bash example tells the agent to run mkdir with a project-name placeholder. The command is limited to directory creation, but unsanitized substitution could be unsafe in a shell context.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:1260:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1267:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1269:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "This range is an illustrative workflow block and uses a fixed local directory example. It does not execute code by itself or include user-controlled shell input at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:1295:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1301:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1305:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1323:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1351:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1384:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1385:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1392:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:1393:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The scanner matched markdown fences, inline file paths, or JSON examples rather than executable Ruby backtick code. The surrounding text is prompt documentation for local design-spec files, not command execution."
+      },
+      {
+        "id": "network:SKILL.md:1159:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is an example schema URL or documentation link in the expected output format. It does not fetch the URL or send data to an external service."
+      },
+      {
+        "id": "network:SKILL.md:1391:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is an example schema URL or documentation link in the expected output format. It does not fetch the URL or send data to an external service."
+      },
+      {
+        "id": "blocker:SKILL.md:3:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The text describes user-provided screenshots, Figma exports, or website captures as analysis inputs. It does not instruct covert screen capture, automatic upload, or transfer to an external endpoint."
+      },
+      {
+        "id": "blocker:SKILL.md:111:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:128:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:141:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:142:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:212:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:356:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:546:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:742:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:809:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:898:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:973:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:994:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:1117:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:1135:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:1242:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:1304:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      },
+      {
+        "id": "blocker:SKILL.md:1334:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged wording uses design-analysis terms such as grid, outline, validation, or local JSON writing. It is not host, network, or account reconnaissance and does not collect system details."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unsanitized Project Name In Paths And Shell Command",
+        "description": "The skill tells users to create .design-specs/{project-name} and replace {project} with an actual project name, but it does not require slug validation. A project name containing path traversal or shell metacharacters could write outside the intended directory if copied into the bash command.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 1257,
+            "line_end": 1267
+          }
+        ],
+        "confidence": 0.74,
+        "confidence_reasoning": "The bash mkdir examples and raw project placeholder are explicit. The impact depends on whether an agent substitutes untrusted text into a shell command, so this is a contextual risk."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 40
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.62,
+        "confidence_reasoning": "This fenced bash example tells the agent to run mkdir with a project-name placeholder. The command is limited to directory creation, but unsanitized substitution could be unsafe in a shell context."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 1258,
+            "line_end": 1260
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.62,
+        "confidence_reasoning": "This fenced bash example tells the agent to run mkdir with a project-name placeholder. The command is limited to directory creation, but unsanitized substitution could be unsafe in a shell context."
+      },
+      {
+        "title": "Unsanitized Project Name In Paths And Shell Command",
+        "description": "The skill tells users to create .design-specs/{project-name} and replace {project} with an actual project name, but it does not require slug validation. A project name containing path traversal or shell metacharacters could write outside the intended directory if copied into the bash command.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 1257,
+            "line_end": 1267
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The bash mkdir examples and raw project placeholder are explicit. The impact depends on whether an agent substitutes untrusted text into a shell command, so this is a contextual risk."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 3387,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:35:23.968Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Extract UI Design Specs from Screenshots",
+    "value_statement": "Manual design handoff from screenshots is slow and inconsistent. This skill extracts tokens, components, layout, and accessibility notes into structured design-spec files.",
+    "seo_keywords": [
+      "design spec extraction",
+      "design tokens",
+      "Figma screenshot analysis",
+      "UI mockup extraction",
+      "W3C DTCG",
+      "component specs",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "developer handoff"
+    ],
+    "actual_capabilities": [
+      "Extracts layout regions, grid systems, and bounding boxes from provided visual inputs.",
+      "Builds color, typography, spacing, sizing, border, radius, shadow, and transition tokens.",
+      "Produces six intermediate pass files and one final design-spec file under .design-specs.",
+      "Maps UI components into a hierarchy with variants, states, and accessibility metadata.",
+      "Checks contrast, focus indicators, touch targets, and ARIA recommendations.",
+      "Uses included schema and extraction pattern references for validation guidance."
+    ],
+    "limitations": [
+      "Requires user-provided images, exports, or captures before analysis can begin.",
+      "Color values, spacing, and font names are estimates when only pixels are available.",
+      "Does not browse live websites or capture screens by itself.",
+      "Writes local output files and needs permission to create the .design-specs directory."
+    ],
+    "use_cases": [
+      {
+        "target_user": "Frontend developer",
+        "title": "Create Implementation Tokens",
+        "description": "Turn a provided UI screenshot into design tokens and component notes for frontend implementation."
+      },
+      {
+        "target_user": "Design systems maintainer",
+        "title": "Document Existing Interfaces",
+        "description": "Extract reusable colors, type styles, spacing, and component patterns from approved product screens."
+      },
+      {
+        "target_user": "Accessibility reviewer",
+        "title": "Review Visual Accessibility",
+        "description": "Identify contrast issues, touch target concerns, focus states, and semantic structure from design images."
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Screenshot Extraction",
+        "scenario": "Beginner analysis of one UI image",
+        "prompt": "Use design-spec-extraction on the attached screenshot. Create a safe project slug and produce the final design specification with layout, colors, typography, and components."
+      },
+      {
+        "title": "Figma Export Handoff",
+        "scenario": "Structured handoff from a design export",
+        "prompt": "Analyze this Figma export with design-spec-extraction. Focus on design tokens, component hierarchy, spacing, and developer handoff notes."
+      },
+      {
+        "title": "Accessibility-Focused Review",
+        "scenario": "Check visible accessibility concerns",
+        "prompt": "Run design-spec-extraction on this screen and emphasize accessibility. Report contrast issues, focus indicators, touch targets, labels, and recommended fixes."
+      },
+      {
+        "title": "Multi-State Component Audit",
+        "scenario": "Advanced extraction across several states",
+        "prompt": "Use design-spec-extraction across these default, hover, active, and disabled state images. Compare states and consolidate variants into one component specification."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A landing page screenshot with hero, cards, and a call to action.",
+        "output": [
+          "Extracted 24 colors with primitive and semantic groupings.",
+          "Identified a 12-column desktop grid with 24px gutters.",
+          "Cataloged hero, card, navigation, and button components.",
+          "Flagged two contrast issues and suggested accessibility fixes."
+        ]
+      },
+      {
+        "input": "A dashboard mockup with sidebar navigation and data cards.",
+        "output": [
+          "Mapped header, sidebar, content regions, and card containers.",
+          "Detected typography roles for headings, labels, metrics, and body text.",
+          "Extracted spacing and radius tokens for repeated card patterns."
+        ]
+      },
+      {
+        "input": "A set of button state images for a design system.",
+        "output": [
+          "Grouped button variants by primary, secondary, disabled, and focus states.",
+          "Recorded visible color, border, shadow, and focus indicator differences.",
+          "Produced component notes suitable for implementation review."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Use high-resolution, user-authorized images so color and spacing estimates are more reliable.",
+      "Use a safe project slug with letters, numbers, and hyphens for output paths.",
+      "Provide separate images for hover, focus, disabled, and responsive states when those details matter."
+    ],
+    "anti_patterns": [
+      "Do not analyze confidential screens that contain secrets, credentials, or private customer data.",
+      "Do not reuse unsanitized project names in shell commands or output paths.",
+      "Do not send the final specification into code generation without reviewing estimates and accessibility findings."
+    ],
+    "faq": [
+      {
+        "question": "What inputs does this skill need?",
+        "answer": "It needs user-provided screenshots, Figma exports, mockups, or approved website captures."
+      },
+      {
+        "question": "Does it capture my screen automatically?",
+        "answer": "No. It only analyzes visual files or images that the user provides."
+      },
+      {
+        "question": "What does the output include?",
+        "answer": "The output includes tokens, layout data, component hierarchy, accessibility notes, confidence scores, and recommendations."
+      },
+      {
+        "question": "Can it identify exact fonts and colors?",
+        "answer": "It estimates them from the image unless the source file provides exact design metadata."
+      },
+      {
+        "question": "Where are files written?",
+        "answer": "The workflow writes local pass files and a final design specification under a .design-specs project directory."
+      },
+      {
+        "question": "Is the result ready for production?",
+        "answer": "It is a strong handoff starting point, but teams should review estimates and validate tokens before production use."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "design-tokens-schema.json",
+          "type": "file",
+          "path": "references/design-tokens-schema.json",
+          "lines": 858
+        },
+        {
+          "name": "extraction-patterns.md",
+          "type": "file",
+          "path": "references/extraction-patterns.md",
+          "lines": 983
+        }
+      ]
+    },
+    {
+      "name": "audit_output.json",
+      "type": "file",
+      "path": "audit_output.json",
+      "lines": 151
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 1395
+    }
+  ]
+}

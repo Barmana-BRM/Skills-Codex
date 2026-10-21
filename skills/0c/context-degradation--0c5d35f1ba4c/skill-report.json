@@ -1,0 +1,342 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T06:06:41.616Z",
+    "slug": "chakshugautam-context-degradation",
+    "source_url": "https://github.com/ChakshuGautam/games/tree/main/.claude/skills/context-degradation",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "8afbe608dd3ed3e1bedcb1202d766baf626a4df8d9bfab28f6dd1bcd68ff9ad2",
+    "tree_hash": "1c7ad9b75cfd7a9e80216716c61e6e50391f18b515b651825cb0b0622f1f28de",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "context-degradation",
+    "description": "Helps diagnose long-context degradation in AI agents by explaining lost-in-middle effects, context poisoning, distraction, confusion, and mitigation patterns.",
+    "summary": "Diagnose and mitigate long-context failures in AI agents.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "ChakshuGautam",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "context-engineering",
+      "ai-agents",
+      "debugging",
+      "long-context",
+      "llm-evaluation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "All five static findings were false positives after context review. The flagged SKILL.md ranges are fenced documentation examples, and the script phrase list detects hallucination markers rather than gathering system information.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 188
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:scripts/degradation_detector.py:282:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/degradation_detector.py",
+        "line_start": 282,
+        "line_end": 282,
+        "snippet": "\"it is said that\","
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 169,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 172,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 188,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "blocker:SKILL.md:85:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "Clash commonly arises from multi-source retrieval where different sources have contradictory informa"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:scripts/degradation_detector.py:282:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 282 is a string literal in a hallucination-marker list inside _detect_hallucination_markers. It does not read host details, enumerate files, or perform reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Lines 162-169 are a fenced YAML example showing token counts over turns. There is no executable shell or Ruby interpolation; the backticks are Markdown delimiters."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 169 closes the Markdown fence for the YAML example. It is documentation markup, not runtime command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Lines 172-188 are a fenced Markdown example showing context layout. The backticks define documentation formatting and no command is invoked."
+      },
+      {
+        "id": "blocker:SKILL.md:85:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 85 describes sources of context clash in retrieval systems. It does not instruct collection of system data or perform reconnaissance."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 967,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T06:06:41.616Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Diagnose Context Degradation in AI Agents",
+    "value_statement": "Long conversations and large prompts can make AI agents lose important information or follow conflicting context. This skill helps Claude, Codex, and Claude Code identify degradation patterns and choose mitigation strategies.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "context degradation",
+      "lost in middle",
+      "context poisoning",
+      "AI agent debugging",
+      "context engineering",
+      "long context",
+      "LLM evaluation"
+    ],
+    "actual_capabilities": [
+      "Explains lost-in-middle, poisoning, distraction, confusion, and clash patterns.",
+      "Identifies symptoms that suggest context quality is degrading during long sessions.",
+      "Recommends compaction, filtering, task isolation, and just-in-time context loading.",
+      "Provides example context layouts that place critical information at attention-favored positions.",
+      "Includes a Python analyzer for simulated context health checks and recommendations."
+    ],
+    "limitations": [
+      "The included analyzer uses heuristics and simulated attention, not model-internal attention weights.",
+      "Benchmark numbers in the guide may become outdated as models change.",
+      "It does not automatically inspect private conversation logs unless the user provides them.",
+      "It cannot prove that a failure was caused only by context degradation."
+    ],
+    "use_cases": [
+      {
+        "title": "Debug Agent Drift",
+        "description": "Find whether long sessions are causing wrong tool use, stale assumptions, or persistent hallucinations.",
+        "target_user": "AI application developer"
+      },
+      {
+        "title": "Plan Reliable Workflows",
+        "description": "Evaluate where context limits may affect multi-step agent features before launch.",
+        "target_user": "Product manager"
+      },
+      {
+        "title": "Design Context Tests",
+        "description": "Create experiments that compare placement, compaction, and retrieval choices across large prompts.",
+        "target_user": "LLM evaluator"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Check a Long Prompt",
+        "prompt": "Review this prompt for context degradation risks. Identify lost-in-middle, distraction, confusion, poisoning, and clash risks. Suggest three practical fixes.",
+        "scenario": "Beginner diagnosis"
+      },
+      {
+        "title": "Improve Context Layout",
+        "prompt": "Reorganize this task context so critical goals, constraints, and final checks sit in attention-favored positions. Explain the placement choices.",
+        "scenario": "Intermediate mitigation"
+      },
+      {
+        "title": "Diagnose Agent Failure",
+        "prompt": "Analyze this agent transcript for context poisoning, stale assumptions, and context clash. Separate likely causes from uncertain hypotheses.",
+        "scenario": "Advanced debugging"
+      },
+      {
+        "title": "Design Degradation Evaluation",
+        "prompt": "Design a context degradation test plan for this agent workflow. Include inputs, metrics, thresholds, and mitigation experiments.",
+        "scenario": "Advanced system design"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A support agent starts giving outdated policy answers after a long troubleshooting session.",
+        "output": [
+          "Likely pattern: context clash between old and current policy details.",
+          "Immediate fix: remove outdated policy text and restate the current source of truth.",
+          "Prevention: version retrieved documents and place active policy in the opening context."
+        ]
+      },
+      {
+        "input": "A coding agent misses a key requirement that appears in the middle of a long specification.",
+        "output": [
+          "Likely pattern: lost-in-middle degradation.",
+          "Immediate fix: move requirements into a short acceptance checklist near the end.",
+          "Prevention: split large specifications and load only task-relevant sections."
+        ]
+      },
+      {
+        "input": "An agent keeps using an incorrect file path after the user corrected it.",
+        "output": [
+          "Likely pattern: context poisoning from a stale intermediate claim.",
+          "Immediate fix: mark the wrong path as invalid and restate the verified path.",
+          "Prevention: compact the session after corrections and preserve only verified facts."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Keep goals, constraints, and acceptance checks near the start or end of active context.",
+      "Filter retrieved documents before adding them to a prompt.",
+      "Compact long sessions before symptoms appear, then preserve only verified facts."
+    ],
+    "anti_patterns": [
+      "Adding every available document to context without relevance checks.",
+      "Treating larger context windows as a substitute for task segmentation.",
+      "Keeping known incorrect tool outputs in active context after correction."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help diagnose?",
+        "answer": "It helps identify context degradation patterns that affect long prompts, agent sessions, and retrieval-heavy workflows."
+      },
+      {
+        "question": "Does it run analysis automatically?",
+        "answer": "It provides guidance and a Python analyzer. The user must provide context text or run the analyzer."
+      },
+      {
+        "question": "Is it only for coding agents?",
+        "answer": "No. It applies to any AI agent or assistant that depends on long active context."
+      },
+      {
+        "question": "Can it fix hallucinations?",
+        "answer": "It can identify context-related causes and suggest mitigations. It does not guarantee full hallucination removal."
+      },
+      {
+        "question": "How should I use it with Claude Code?",
+        "answer": "Ask Claude Code to review a prompt, transcript, or agent workflow using the degradation patterns."
+      },
+      {
+        "question": "What are the main mitigation strategies?",
+        "answer": "The guide emphasizes writing context externally, selecting relevant context, compressing long context, and isolating tasks."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "patterns.md",
+          "type": "file",
+          "path": "references/patterns.md",
+          "lines": 315
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "degradation_detector.py",
+          "type": "file",
+          "path": "scripts/degradation_detector.py",
+          "lines": 420
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 232
+    }
+  ]
+}

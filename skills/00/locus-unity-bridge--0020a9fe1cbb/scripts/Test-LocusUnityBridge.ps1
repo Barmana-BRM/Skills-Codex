@@ -1,0 +1,878 @@
+[CmdletBinding()]
+param(
+    [string] $NameFilter
+)
+
+$ErrorActionPreference = 'Stop'
+$scriptUnderTest = Join-Path $PSScriptRoot 'locus-unity.ps1'
+
+if (-not (Test-Path -LiteralPath $scriptUnderTest -PathType Leaf)) {
+    throw "Missing script under test: $scriptUnderTest"
+}
+
+. $scriptUnderTest
+
+$script:passed = 0
+$script:failed = 0
+
+function Assert-Equal {
+    param(
+        [Parameter(Mandatory)]
+        [AllowNull()]
+        $Actual,
+
+        [Parameter(Mandatory)]
+        [AllowNull()]
+        $Expected,
+
+        [Parameter(Mandatory)]
+        [string] $Because
+    )
+
+    if ($Actual -ne $Expected) {
+        throw "$Because. Expected '$Expected', got '$Actual'."
+    }
+}
+
+function Invoke-Test {
+    param(
+        [Parameter(Mandatory)]
+        [string] $Name,
+
+        [Parameter(Mandatory)]
+        [scriptblock] $Body
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($NameFilter) -and $Name -notlike "*$NameFilter*") {
+        return
+    }
+
+    try {
+        & $Body
+        $script:passed++
+        Write-Host "PASS $Name"
+    }
+    catch {
+        $script:failed++
+        Write-Host "FAIL $Name"
+        Write-Host "  $($_.Exception.Message)"
+    }
+}
+
+if (-not ('LocusUnityBridgeTests.BlockingTextReader' -as [type])) {
+    Add-Type -TypeDefinition @'
+using System;
+using System.IO;
+using System.Threading;
+
+namespace LocusUnityBridgeTests
+{
+    public sealed class BlockingTextReader : TextReader
+    {
+        public override string ReadLine()
+        {
+            Thread.Sleep(10000);
+            return null;
+        }
+    }
+}
+'@
+}
+
+function New-TestUnityProject {
+    $root = Join-Path ([System.IO.Path]::GetTempPath()) ("locus-skill-" + [guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path (Join-Path $root 'Assets') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $root 'ProjectSettings') -Force | Out-Null
+    return $root
+}
+
+function Start-MockPipeServer {
+    param(
+        [Parameter(Mandatory)]
+        [string] $PipeName,
+
+        [Parameter(Mandatory)]
+        [ValidateSet(
+            'event-then-ok',
+            'error',
+            'thumbnail',
+            'preview',
+            'execute-with-progress',
+            'execute-cancel',
+            'execute-progress-then-cancel'
+        )]
+        [string] $Mode
+    )
+
+    return Start-Job -ArgumentList $PipeName, $Mode -ScriptBlock {
+        param($PipeName, $Mode)
+
+        $pipe = [System.IO.Pipes.NamedPipeServerStream]::new(
+            $PipeName,
+            [System.IO.Pipes.PipeDirection]::InOut,
+            1,
+            [System.IO.Pipes.PipeTransmissionMode]::Byte,
+            [System.IO.Pipes.PipeOptions]::Asynchronous
+        )
+
+        try {
+            $connectTask = $pipe.WaitForConnectionAsync()
+            $connectTimeout = [System.Threading.Tasks.Task]::Delay(3000)
+            $completed = [System.Threading.Tasks.Task]::WhenAny(
+                $connectTask,
+                $connectTimeout
+            ).GetAwaiter().GetResult()
+            if ($completed -ne $connectTask) {
+                throw "Mock pipe '$PipeName' timed out waiting for a client connection."
+            }
+            $connectTask.GetAwaiter().GetResult()
+            $utf8 = [System.Text.UTF8Encoding]::new($false)
+            $reader = [System.IO.StreamReader]::new($pipe, $utf8, $false, 4096, $true)
+            $writer = [System.IO.StreamWriter]::new($pipe, $utf8, 4096, $true)
+            $writer.AutoFlush = $true
+            $request = $reader.ReadLine() | ConvertFrom-Json
+
+            if ($Mode -eq 'event-then-ok') {
+                $event = [ordered]@{
+                    id = 'event-1'
+                    type = 'unity-editor-update'
+                    message = 'tick'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($event)
+
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $true
+                    message = 'pong'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+            elseif ($Mode -eq 'execute-with-progress') {
+                if ($request.type -ne 'execute_code') {
+                    throw "Expected execute_code, got '$($request.type)'"
+                }
+
+                for ($i = 0; $i -lt 2; $i++) {
+                    $progressRequest = $reader.ReadLine() | ConvertFrom-Json
+                    if ($progressRequest.type -ne 'execute_code_progress') {
+                        throw "Expected execute_code_progress, got '$($progressRequest.type)'"
+                    }
+
+                    $snapshot = if ($i -eq 0) {
+                        '{"active":true,"title":"Mock progress","info":"waiting","progress":0.5,"revision":7,"source":"api","waitedMs":100,"sourceText":"sensitive snippet source"}'
+                    }
+                    else {
+                        '{"active":true,"title":"Mock progress","info":"waiting","progress":0.5,"revision":8,"source":"api","waitedMs":200,"sourceText":"sensitive snippet source"}'
+                    }
+                    $progress = [ordered]@{
+                        id = 'progress-response-' + $i
+                        type = 'response'
+                        reply_to = $progressRequest.id
+                        ok = $true
+                        message = $snapshot
+                    } | ConvertTo-Json -Compress
+                    $writer.WriteLine($progress)
+                }
+
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $true
+                    message = 'finished'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+            elseif ($Mode -eq 'execute-cancel' -or $Mode -eq 'execute-progress-then-cancel') {
+                if ($request.type -ne 'execute_code') {
+                    throw "Expected execute_code, got '$($request.type)'"
+                }
+
+                $executionIdMatch = [regex]::Match(
+                    [string] $request.message,
+                    '//__LOCUS_EXECUTION_ID__:([^\r\n]+)'
+                )
+                if (-not $executionIdMatch.Success) {
+                    throw 'Expected execute_code to include an execution ID marker.'
+                }
+                $executionId = $executionIdMatch.Groups[1].Value
+
+                if ($Mode -eq 'execute-progress-then-cancel') {
+                    $progress = [ordered]@{
+                        id = 'progress-response'
+                        type = 'response'
+                        reply_to = 'initial-progress'
+                        ok = $true
+                        message = '{"active":true,"title":"Mock progress","info":"waiting","progress":0.5,"revision":7,"source":"api"}'
+                    } | ConvertTo-Json -Compress
+                    $writer.WriteLine($progress)
+                }
+
+                $cancelRequest = $null
+                while ($null -eq $cancelRequest) {
+                    $nextRequest = $reader.ReadLine() | ConvertFrom-Json
+                    if ($nextRequest.type -eq 'execute_code_progress') {
+                        $progress = [ordered]@{
+                            id = 'progress-response'
+                            type = 'response'
+                            reply_to = $nextRequest.id
+                            ok = $true
+                            message = '{"active":true,"title":"Mock progress","info":"waiting","progress":0.5,"revision":8,"source":"api"}'
+                        } | ConvertTo-Json -Compress
+                        $writer.WriteLine($progress)
+                        continue
+                    }
+                    if ($nextRequest.type -ne 'cancel_execute_code') {
+                        throw "Expected cancel_execute_code, got '$($nextRequest.type)'"
+                    }
+                    $cancelRequest = $nextRequest
+                }
+                if ($cancelRequest.message -ne $executionId) {
+                    throw "Cancel request should target '$executionId', got '$($cancelRequest.message)'"
+                }
+                $cancelResponse = [ordered]@{
+                    id = 'cancel-response'
+                    type = 'response'
+                    reply_to = $cancelRequest.id
+                    ok = $true
+                    message = 'execute_code cancellation requested'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($cancelResponse)
+
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $false
+                    error = 'execute_code canceled'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+            elseif ($Mode -eq 'thumbnail') {
+                if ($request.type -ne 'asset_thumbnail') {
+                    throw "Expected asset_thumbnail, got '$($request.type)'"
+                }
+                $payload = [ordered]@{
+                    assetPath = 'Assets/Icon.png'
+                    width = 1
+                    height = 1
+                    mimeType = 'image/png'
+                    pngBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL1YQAAAABJRU5ErkJggg=='
+                } | ConvertTo-Json -Compress
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $true
+                    message = $payload
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+            elseif ($Mode -eq 'preview') {
+                if ($request.type -ne 'asset_preview_render') {
+                    throw "Expected asset_preview_render, got '$($request.type)'"
+                }
+                $payload = [ordered]@{
+                    assetPath = 'Assets/Model.prefab'
+                    width = 1
+                    height = 1
+                    mimeType = 'image/png'
+                    dataBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL1YQAAAABJRU5ErkJggg=='
+                } | ConvertTo-Json -Compress
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $true
+                    message = $payload
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+            else {
+                $response = [ordered]@{
+                    id = 'response-1'
+                    type = 'response'
+                    reply_to = $request.id
+                    ok = $false
+                    error = 'mock failure'
+                } | ConvertTo-Json -Compress
+                $writer.WriteLine($response)
+            }
+        }
+        finally {
+            if ($null -ne $reader) {
+                $reader.Dispose()
+            }
+            if ($null -ne $writer) {
+                $writer.Dispose()
+            }
+            $pipe.Dispose()
+        }
+    }
+}
+
+function Invoke-BridgeProcess {
+    param(
+        [Parameter(Mandatory)]
+        [string] $WorkingDirectory,
+
+        [Parameter(Mandatory)]
+        [string[]] $BridgeArguments
+    )
+
+    $pwsh = (Get-Command pwsh.exe -ErrorAction Stop).Source
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $pwsh
+    $startInfo.WorkingDirectory = $WorkingDirectory
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    foreach ($argument in @(
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-File',
+        $scriptUnderTest
+    ) + $BridgeArguments) {
+        $startInfo.ArgumentList.Add($argument)
+    }
+
+    $process = [System.Diagnostics.Process]::Start($startInfo)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $process.WaitForExit()
+    return [pscustomobject]@{
+        ExitCode = $process.ExitCode
+        Stdout = $stdoutTask.GetAwaiter().GetResult()
+        Stderr = $stderrTask.GetAwaiter().GetResult()
+    }
+}
+
+function Invoke-BridgeProcessWithCancel {
+    param(
+        [Parameter(Mandatory)]
+        [string] $WorkingDirectory,
+
+        [Parameter(Mandatory)]
+        [string[]] $BridgeArguments,
+
+        [int] $CancelDelayMilliseconds = 150
+    )
+
+    $pwsh = (Get-Command pwsh.exe -ErrorAction Stop).Source
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $pwsh
+    $startInfo.WorkingDirectory = $WorkingDirectory
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardInput = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    foreach ($argument in @(
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-File',
+        $scriptUnderTest
+    ) + $BridgeArguments) {
+        $startInfo.ArgumentList.Add($argument)
+    }
+
+    $process = [System.Diagnostics.Process]::Start($startInfo)
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    Start-Sleep -Milliseconds $CancelDelayMilliseconds
+    $process.StandardInput.WriteLine('cancel')
+    $process.StandardInput.Close()
+    if (-not $process.WaitForExit(10000)) {
+        $process.Kill($true)
+        $process.WaitForExit()
+        throw 'Cancelable bridge process did not exit within 10 seconds.'
+    }
+    return [pscustomobject]@{
+        ExitCode = $process.ExitCode
+        Stdout = $stdoutTask.GetAwaiter().GetResult()
+        Stderr = $stderrTask.GetAwaiter().GetResult()
+    }
+}
+
+Invoke-Test 'resolves Unity project by walking upward' {
+    $project = New-TestUnityProject
+    try {
+        $nested = Join-Path $project 'Assets\Scripts\Editor'
+        New-Item -ItemType Directory -Path $nested -Force | Out-Null
+        $actual = Resolve-LocusUnityProject -Path $nested
+        Assert-Equal $actual $project 'Project root should be resolved'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'fresh process discovers a missing-package project from a nested directory' {
+    $project = New-TestUnityProject
+    try {
+        $nested = Join-Path $project 'Assets\Nested'
+        New-Item -ItemType Directory -Path $nested -Force | Out-Null
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $nested `
+            -BridgeArguments @('-Command', 'probe', '-TimeoutSeconds', '1')
+        Assert-Equal $result.ExitCode 0 'Diagnostic probe should succeed'
+        $probe = $result.Stdout | ConvertFrom-Json
+        Assert-Equal $probe.Status 'package_missing' 'Fresh process should resolve the project upward'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'fresh process distinguishes bridge not enabled from editor unreachable' {
+    $project = New-TestUnityProject
+    try {
+        $editor = Join-Path $project 'Packages\com.farlocus.locus\Editor'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+
+        $notEnabled = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'probe',
+                '-ProjectPath', $project,
+                '-TimeoutSeconds', '1'
+            )
+        Assert-Equal $notEnabled.ExitCode 0 'Disconnected diagnostic probe should succeed'
+        $notEnabledProbe = $notEnabled.Stdout | ConvertFrom-Json
+        Assert-Equal $notEnabledProbe.Status 'bridge_not_enabled' 'Missing marker should be explicit'
+
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content `
+            -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') `
+            -Value ('missing_' + [guid]::NewGuid().ToString('N')) `
+            -Encoding utf8NoBOM
+
+        $unreachable = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'probe',
+                '-ProjectPath', $project,
+                '-TimeoutSeconds', '1'
+            )
+        Assert-Equal $unreachable.ExitCode 0 'Unreachable diagnostic probe should succeed'
+        $unreachableProbe = $unreachable.Stdout | ConvertFrom-Json
+        Assert-Equal $unreachableProbe.Status 'editor_unreachable' 'Marker without server should be explicit'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'reports a missing package' {
+    $project = New-TestUnityProject
+    try {
+        $state = Get-LocusPackageState -ProjectPath $project
+        Assert-Equal $state.Status 'package_missing' 'Missing package status should be explicit'
+        Assert-Equal $state.InstallPath $null 'Missing package should not invent a path'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'detects canonical package layout' {
+    $project = New-TestUnityProject
+    try {
+        $editor = Join-Path $project 'Packages\com.farlocus.locus\Editor'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+        $state = Get-LocusPackageState -ProjectPath $project
+        Assert-Equal $state.Status 'package_present' 'Canonical package should be present'
+        Assert-Equal $state.Layout 'canonical' 'Canonical package layout should be labeled'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'detects legacy package layout' {
+    $project = New-TestUnityProject
+    try {
+        $editor = Join-Path $project 'Assets\Plugins\Locus\Editor'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+        $state = Get-LocusPackageState -ProjectPath $project
+        Assert-Equal $state.Status 'package_present' 'Legacy package should be present'
+        Assert-Equal $state.Layout 'legacy' 'Legacy package layout should be labeled'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'uses marker pipe name before computed fallback' {
+    $project = New-TestUnityProject
+    try {
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value "marker_pipe`nignored" -Encoding utf8NoBOM
+        $pipe = Get-LocusPipeInfo -ProjectPath $project
+        Assert-Equal $pipe.Name 'marker_pipe' 'First nonempty marker line should win'
+        Assert-Equal $pipe.Source 'marker' 'Marker source should be reported'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'computes the Locus native pipe hash' {
+    $actual = Get-LocusComputedPipeName -ProjectPath 'C:\Projects\Game\'
+    Assert-Equal $actual 'locus_unity_native_b77b5670d55eab3d7294a562f9c5bd60' 'Pipe hash must match Locus'
+}
+
+Invoke-Test 'console input reader does not block the pipe event loop' {
+    $blockingInput = [LocusUnityBridgeTests.BlockingTextReader]::new()
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    $inputReader = Start-LocusConsoleInputReader -SourceReader $blockingInput
+    try {
+        Assert-Equal ($stopwatch.ElapsedMilliseconds -lt 250) $true 'Starting a console reader must return before its input produces a line'
+    }
+    finally {
+        $inputReader.Dispose()
+    }
+}
+
+Invoke-Test 'ignores an unsolicited event before the matching response' {
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = Start-MockPipeServer -PipeName $pipeName -Mode 'event-then-ok'
+    try {
+        Start-Sleep -Milliseconds 150
+        $response = Invoke-LocusRequest -PipeName $pipeName -MessageType 'ping' -Message '' -TimeoutMilliseconds 3000
+        Assert-Equal $response.message 'pong' 'Client should return the matching response'
+        Assert-Equal $response.reply_to.StartsWith('locus-skill-') $true 'Response should match generated request id'
+    }
+    finally {
+        Wait-Job -Job $job -Timeout 3 | Out-Null
+        Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+        Remove-Job -Job $job -Force
+    }
+}
+
+Invoke-Test 'execute follow-progress multiplexes requests on one connection and de-duplicates revisions' {
+    $project = New-TestUnityProject
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = $null
+    try {
+        $editor = Join-Path $project 'Packages\com.farlocus.locus\Editor'
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value $pipeName -Encoding utf8NoBOM
+        $job = Start-MockPipeServer -PipeName $pipeName -Mode 'execute-with-progress'
+        Start-Sleep -Milliseconds 150
+
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'execute',
+                '-ProjectPath', $project,
+                '-Code', 'print("mock")',
+                '-FollowProgress',
+                '-ProgressIntervalSeconds', '1',
+                '-TimeoutSeconds', '5'
+            )
+
+        Assert-Equal $result.ExitCode 0 'Follow-progress execute should succeed'
+        Assert-Equal ([regex]::Matches($result.Stdout, '<locus-execute-progress>').Count) 1 'Revision and wait duration alone should not repeat progress output'
+        Assert-Equal $result.Stdout.Contains('"revision":7') $true 'Progress output should contain the snapshot'
+        Assert-Equal $result.Stdout.Contains('sensitive snippet source') $false 'Progress output should not include source code text'
+        Assert-Equal $result.Stdout.Contains('"message": "finished"') $true 'Final execute response should still be emitted'
+    }
+    finally {
+        if ($null -ne $job) {
+            Wait-Job -Job $job -Timeout 5 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job | Out-Null
+            }
+            Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+            Remove-Job -Job $job -Force
+        }
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'execute accepts stdin cancellation without progress polling' {
+    $project = New-TestUnityProject
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = $null
+    try {
+        $editor = Join-Path $project 'Packages\com.farlocus.locus\Editor'
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value $pipeName -Encoding utf8NoBOM
+        $job = Start-MockPipeServer -PipeName $pipeName -Mode 'execute-cancel'
+        Start-Sleep -Milliseconds 150
+
+        $result = Invoke-BridgeProcessWithCancel `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'execute',
+                '-ProjectPath', $project,
+                '-Code', 'print("mock")',
+                '-AcceptCancel',
+                '-TimeoutSeconds', '5'
+            )
+
+        Assert-Equal $result.ExitCode 0 'Cancelable execute should normalize its cancellation response'
+        Assert-Equal $result.Stdout.Contains('"Status": "canceled"') $true 'Cancelable execute should identify intentional cancellation'
+        Assert-Equal $result.Stdout.Contains('<locus-execute-progress>') $false 'Normal execute should not poll or print progress'
+    }
+    finally {
+        if ($null -ne $job) {
+            Wait-Job -Job $job -Timeout 5 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job | Out-Null
+            }
+            Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+            Remove-Job -Job $job -Force
+        }
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'execute follow-progress accepts stdin cancellation on its existing connection' {
+    $project = New-TestUnityProject
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = $null
+    try {
+        $editor = Join-Path $project 'Packages\com.farlocus.locus\Editor'
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $editor -Force | Out-Null
+        New-Item -ItemType File -Path (Join-Path $editor 'Locus.Editor.asmdef') -Force | Out-Null
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value $pipeName -Encoding utf8NoBOM
+        $job = Start-MockPipeServer -PipeName $pipeName -Mode 'execute-cancel'
+        Start-Sleep -Milliseconds 150
+
+        $result = Invoke-BridgeProcessWithCancel `
+            -WorkingDirectory $project `
+            -CancelDelayMilliseconds 2200 `
+            -BridgeArguments @(
+                '-Command', 'execute',
+                '-ProjectPath', $project,
+                '-Code', 'print("mock")',
+                '-FollowProgress',
+                '-AcceptCancel',
+                '-ProgressIntervalSeconds', '1',
+                '-TimeoutSeconds', '5'
+            )
+
+        Assert-Equal $result.ExitCode 0 'Follow-progress execute should normalize its cancellation response'
+        Assert-Equal ([regex]::Matches($result.Stdout, '<locus-execute-progress>').Count) 1 'Follow-progress execute should emit its progress before cancellation'
+        Assert-Equal $result.Stdout.Contains('"Status": "canceled"') $true 'Follow-progress execute should identify intentional cancellation'
+    }
+    finally {
+        if ($null -ne $job) {
+            Wait-Job -Job $job -Timeout 5 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job | Out-Null
+            }
+            Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+            Remove-Job -Job $job -Force
+        }
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'surfaces ok=false as an error' {
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = Start-MockPipeServer -PipeName $pipeName -Mode 'error'
+    try {
+        Start-Sleep -Milliseconds 150
+        $caught = $null
+        try {
+            Invoke-LocusRequest -PipeName $pipeName -MessageType 'ping' -Message '' -TimeoutMilliseconds 3000
+        }
+        catch {
+            $caught = $_.Exception.Message
+        }
+        Assert-Equal $caught.Contains('mock failure') $true 'Server error should be preserved'
+    }
+    finally {
+        Wait-Job -Job $job -Timeout 3 | Out-Null
+        Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+        Remove-Job -Job $job -Force
+    }
+}
+
+Invoke-Test 'thumbnail command saves the PNG and omits Base64 from its output' {
+    $project = New-TestUnityProject
+    $outputDirectory = Join-Path $project 'LocusOutput'
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = $null
+    try {
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value $pipeName -Encoding utf8NoBOM
+        $job = Start-MockPipeServer -PipeName $pipeName -Mode 'thumbnail'
+        Start-Sleep -Milliseconds 150
+
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'thumbnail',
+                '-ProjectPath', $project,
+                '-AssetPath', 'Assets/Icon.png',
+                '-MaxSize', '64',
+                '-OutputDirectory', $outputDirectory
+            )
+
+        Assert-Equal $result.ExitCode 0 'Thumbnail command should succeed'
+        Assert-Equal $result.Stdout.Contains('pngBase64') $false 'Thumbnail command output must not retain Base64'
+        $thumbnail = $result.Stdout | ConvertFrom-Json
+        Assert-Equal $thumbnail.AssetPath 'Assets/Icon.png' 'Thumbnail metadata should preserve the asset path'
+        Assert-Equal $thumbnail.Width 1 'Thumbnail metadata should preserve the image width'
+        Assert-Equal $thumbnail.Height 1 'Thumbnail metadata should preserve the image height'
+        Assert-Equal $thumbnail.MimeType 'image/png' 'Thumbnail metadata should report PNG'
+        Assert-Equal (Test-Path -LiteralPath $thumbnail.Path -PathType Leaf) $true 'Thumbnail command should write a local PNG'
+        Assert-Equal ((Get-Item -LiteralPath $thumbnail.Path).Length -gt 0) $true 'Written thumbnail PNG should not be empty'
+    }
+    finally {
+        if ($null -ne $job) {
+            Wait-Job -Job $job -Timeout 3 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job | Out-Null
+            }
+            Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+            Remove-Job -Job $job -Force
+        }
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'render-preview command saves the PNG and omits Base64 from its output' {
+    $project = New-TestUnityProject
+    $outputDirectory = Join-Path $project 'LocusOutput'
+    $pipeName = 'locus_skill_test_' + [guid]::NewGuid().ToString('N')
+    $job = $null
+    try {
+        $markerDirectory = Join-Path $project 'Library\Locus'
+        New-Item -ItemType Directory -Path $markerDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $markerDirectory 'NativeBridge.enabled') -Value $pipeName -Encoding utf8NoBOM
+        $job = Start-MockPipeServer -PipeName $pipeName -Mode 'preview'
+        Start-Sleep -Milliseconds 150
+
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'render-preview',
+                '-ProjectPath', $project,
+                '-AssetPath', 'Assets/Model.prefab',
+                '-PreviewWidth', '96',
+                '-PreviewHeight', '96',
+                '-OutputDirectory', $outputDirectory
+            )
+
+        Assert-Equal $result.ExitCode 0 'Render-preview command should succeed'
+        Assert-Equal $result.Stdout.Contains('dataBase64') $false 'Render-preview output must not retain Base64'
+        $preview = $result.Stdout | ConvertFrom-Json
+        Assert-Equal $preview.AssetPath 'Assets/Model.prefab' 'Preview metadata should preserve the asset path'
+        Assert-Equal $preview.Width 1 'Preview metadata should preserve the image width'
+        Assert-Equal $preview.Height 1 'Preview metadata should preserve the image height'
+        Assert-Equal $preview.MimeType 'image/png' 'Preview metadata should report PNG'
+        Assert-Equal (Test-Path -LiteralPath $preview.Path -PathType Leaf) $true 'Render-preview command should write a local PNG'
+        Assert-Equal ((Get-Item -LiteralPath $preview.Path).Length -gt 0) $true 'Written preview PNG should not be empty'
+    }
+    finally {
+        if ($null -ne $job) {
+            Wait-Job -Job $job -Timeout 3 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job | Out-Null
+            }
+            Receive-Job -Job $job -ErrorAction SilentlyContinue | Out-Null
+            Remove-Job -Job $job -Force
+        }
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'times out when the pipe is unavailable' {
+    $caught = $null
+    try {
+        Invoke-LocusRequest -PipeName ('missing_' + [guid]::NewGuid().ToString('N')) -MessageType 'ping' -Message '' -TimeoutMilliseconds 100
+    }
+    catch {
+        $caught = $_.Exception.Message
+    }
+    Assert-Equal $caught.Contains('unavailable') $true 'Unavailable pipe should have a clear diagnostic'
+}
+
+Invoke-Test 'recompile accepts a dedicated per-request timeout option' {
+    $project = New-TestUnityProject
+    try {
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'recompile',
+                '-ProjectPath', $project,
+                '-RecompileRequestTimeoutSeconds', '1',
+                '-RecompileTimeoutSeconds', '1'
+            )
+        $output = $result.Stdout + $result.Stderr
+
+        Assert-Equal $result.ExitCode 1 'Unreachable recompile should fail after parsing its options'
+        Assert-Equal $output.Contains('unavailable') $true 'Dedicated timeout option should reach recompile execution'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'recompile rejects the generic timeout option' {
+    $project = New-TestUnityProject
+    try {
+        $result = Invoke-BridgeProcess `
+            -WorkingDirectory $project `
+            -BridgeArguments @(
+                '-Command', 'recompile',
+                '-ProjectPath', $project,
+                '-TimeoutSeconds', '1',
+                '-RecompileTimeoutSeconds', '1'
+            )
+        $output = $result.Stdout + $result.Stderr
+
+        Assert-Equal $result.ExitCode 1 'Generic timeout should be rejected for recompile'
+        Assert-Equal $output.Contains('-TimeoutSeconds does not apply to recompile') $true 'Error should name the dedicated timeout option'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Invoke-Test 'does not treat an initially unavailable recompile pipe as a reload' {
+    $project = New-TestUnityProject
+    try {
+        $caught = $null
+        try {
+            Invoke-LocusRecompile `
+                -ProjectPath $project `
+                -RequestTimeoutMilliseconds 100 `
+                -OverallTimeoutSeconds 1
+        }
+        catch {
+            $caught = $_.Exception.Message
+        }
+        Assert-Equal $caught.Contains('unavailable') $true 'A recompile that never connected should fail immediately'
+    }
+    finally {
+        Remove-Item -LiteralPath $project -Recurse -Force
+    }
+}
+
+Write-Host "$script:passed passed, $script:failed failed"
+if ($script:failed -ne 0) {
+    exit 1
+}

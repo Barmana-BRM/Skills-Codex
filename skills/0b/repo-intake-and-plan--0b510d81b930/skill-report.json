@@ -1,0 +1,351 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-08-08T09:01:19.240Z",
+    "slug": "lllllllama-repo-intake-and-plan",
+    "source_url": "https://github.com/lllllllama/ai-paper-reproduction-skill/tree/main/skills/repo-intake-and-plan/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "0b510d81b930751ee79839f0a01658a090b13705659f91a9ac45d7d4b2a8f5f3",
+    "tree_hash": "4b00aa8074d7eb651716634f86378ee5925e6961d3d448b940b78df58cce2805",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    },
+    "upstream_version_raw": null,
+    "upstream_version_normalized": null,
+    "upstream_version_source": "none",
+    "upstream_version_status": "missing",
+    "upstream_commit_sha": "3ab505258a8b16f95f5d1bee4101adbbf3a469ea"
+  },
+  "skill": {
+    "name": "repo-intake-and-plan",
+    "description": "Rigor Intake helper for README-first deep learning repo reproduction. Use when the task is specifically to scan a repository, read the README and common project files, extract documented commands, classify inference, evaluation, and training candidates, and return the smallest trustworthy reproduction plan to the main orchestrator. Do not use for environment setup, asset download, command execution, final reporting, paper lookup, or end-to-end orchestration.",
+    "summary": "Scans deep learning repositories and recommends the smallest trustworthy reproduction target.",
+    "icon": "📦",
+    "author": "lllllllama",
+    "license": "MIT",
+    "category": "research",
+    "tags": [
+      "repository-analysis",
+      "deep-learning",
+      "reproducibility",
+      "readme",
+      "research-planning"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "All four static findings are false positives caused by Markdown backticks, a regular expression, and a supported language label. The scripts read local repository metadata and README content without invoking extracted commands.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/extract_commands.py",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "scripts/extract_commands.py",
+            "line_start": 222,
+            "line_end": 222
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:scripts/extract_commands.py:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/extract_commands.py",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "CODE_BLOCK_RE = re.compile(r\"```(?P<lang>[^\\n`]*)\\n(?P<body>.*?)```\", re.DOTALL | re.IGNORECASE)"
+      },
+      {
+        "id": "external_commands:scripts/extract_commands.py:222:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "scripts/extract_commands.py",
+        "line_start": 222,
+        "line_end": 222,
+        "snippet": "if lang and lang not in {\"bash\", \"shell\", \"sh\", \"zsh\", \"powershell\", \"cmd\"}:"
+      },
+      {
+        "id": "external_commands:SKILL.md:9:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "`repo-intake-and-plan` for compatibility."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "Use `references/repo-scan-rules.md` and helper scripts under `scripts/`."
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:scripts/extract_commands.py:13:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 13 defines a Python regular expression for Markdown fenced code blocks. The backticks are literal pattern characters and do not execute a shell command."
+      },
+      {
+        "id": "external_commands:scripts/extract_commands.py:222:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 222 only recognizes powershell as an allowed Markdown code fence language during command extraction. It does not invoke PowerShell or execute extracted content."
+      },
+      {
+        "id": "external_commands:SKILL.md:9:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Line 9 uses Markdown backticks to format the skill slug. It contains no executable code or command invocation."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Line 50 uses Markdown backticks to format reference and script paths. It contains no executable code or command invocation."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 5,
+    "total_lines": 510,
+    "audit_model": "codex",
+    "audited_at": "2026-08-08T09:01:19.240Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Plan a Trustworthy Repository Reproduction",
+    "value_statement": "Repository reproduction often starts without a clear map of documented setup and experiment paths. This skill scans repository signals and recommends a minimal reproduction target.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "repository intake",
+      "deep learning reproduction",
+      "README analysis",
+      "command extraction",
+      "experiment planning",
+      "research reproducibility"
+    ],
+    "actual_capabilities": [
+      "Scans top-level repository files and high-signal directories.",
+      "Finds README files and common environment or packaging files.",
+      "Extracts shell-like commands from Markdown code blocks and prompts.",
+      "Classifies commands as inference, evaluation, training, or other.",
+      "Marks commands containing placeholders that require user values.",
+      "Recommends a minimal reproduction target while recording ambiguity."
+    ],
+    "limitations": [
+      "Does not execute extracted commands or verify their runtime behavior.",
+      "Does not install environments, download assets, or prepare datasets.",
+      "Uses README evidence and filename signals, which can be incomplete.",
+      "Does not perform paper lookup or produce the final reproduction report."
+    ],
+    "use_cases": [
+      {
+        "title": "Triage a Research Repository",
+        "description": "Map documented commands and select a small reproduction target before allocating compute.",
+        "target_user": "Machine learning researcher"
+      },
+      {
+        "title": "Prepare an Engineering Handoff",
+        "description": "Summarize setup files, entrypoints, and unresolved requirements for an implementation team.",
+        "target_user": "Research engineer"
+      },
+      {
+        "title": "Assess a Student Project",
+        "description": "Separate inference, evaluation, and training paths before beginning a course reproduction assignment.",
+        "target_user": "Graduate student"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Repository Intake",
+        "prompt": "Scan {repository_path} and summarize its README, important files, documented commands, and smallest trustworthy reproduction target.",
+        "scenario": "Use for an initial repository overview."
+      },
+      {
+        "title": "Inference-First Plan",
+        "prompt": "Inspect {repository_path}, prioritize documented inference commands, identify required substitutions, and recommend the smallest runnable inference path.",
+        "scenario": "Use when inference should precede evaluation or training."
+      },
+      {
+        "title": "Compare Experiment Paths",
+        "prompt": "Classify documented commands in {repository_path} as inference, evaluation, training, or other, then compare their evidence and expected complexity.",
+        "scenario": "Use when several reproduction targets appear viable."
+      },
+      {
+        "title": "Conservative Reproduction Handoff",
+        "prompt": "Audit {repository_path} for explicit README evidence, distinguish documented facts from inferences, list ambiguities, and produce a minimal plan for the orchestrator.",
+        "scenario": "Use for a high-confidence planning handoff."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Scan a vision repository and prioritize inference.",
+        "output": [
+          "Repository summary: README, requirements, configs, and demo directories are present.",
+          "Recommended target: documented single-image inference using the provided checkpoint.",
+          "Open issue: the checkpoint location requires a user-supplied value."
+        ]
+      },
+      {
+        "input": "Compare evaluation and training options in a language model repository.",
+        "output": [
+          "Evaluation has an explicit README entrypoint and named configuration.",
+          "Training is documented but requires distributed resources and dataset preparation.",
+          "Recommendation: reproduce evaluation first and defer training."
+        ]
+      },
+      {
+        "input": "Inspect a repository with incomplete documentation.",
+        "output": [
+          "The repository contains packaging files and scripts but no root README.",
+          "Candidate categories rely on filenames and remain inferred.",
+          "Recommendation: request documentation before selecting an execution target."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Provide the repository root and state whether inference, evaluation, or training has priority.",
+      "Treat extracted commands as evidence for planning, not as approved execution instructions.",
+      "Resolve every reported placeholder and ambiguity before environment setup or execution."
+    ],
+    "anti_patterns": [
+      "Do not ask this skill to install dependencies or run experiments.",
+      "Do not treat filename-based classifications as confirmed documentation.",
+      "Do not select expensive training when a documented inference or evaluation target meets the goal."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill execute repository commands?",
+        "answer": "No. It extracts and classifies commands for planning only."
+      },
+      {
+        "question": "Which repository files does it inspect first?",
+        "answer": "It prioritizes README, environment, packaging, setup, and Docker files at the repository root."
+      },
+      {
+        "question": "How are commands classified?",
+        "answer": "README section headings, script names, and command terms indicate inference, evaluation, training, or other categories."
+      },
+      {
+        "question": "Can it identify required command values?",
+        "answer": "Yes. It flags angle-bracket placeholders that require researcher-supplied values."
+      },
+      {
+        "question": "Does it verify that documentation is correct?",
+        "answer": "No. It reports documented evidence and ambiguity but does not test runtime behavior."
+      },
+      {
+        "question": "When should another skill take over?",
+        "answer": "Use another skill for setup, asset downloads, command execution, paper lookup, or final reporting."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "agents",
+      "type": "dir",
+      "path": "agents",
+      "children": [
+        {
+          "name": "openai.yaml",
+          "type": "file",
+          "path": "agents/openai.yaml",
+          "lines": 4
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "repo-scan-rules.md",
+          "type": "file",
+          "path": "references/repo-scan-rules.md",
+          "lines": 50
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "extract_commands.py",
+          "type": "file",
+          "path": "scripts/extract_commands.py",
+          "lines": 308
+        },
+        {
+          "name": "scan_repo.py",
+          "type": "file",
+          "path": "scripts/scan_repo.py",
+          "lines": 97
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 51
+    }
+  ]
+}

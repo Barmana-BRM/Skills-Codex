@@ -1,0 +1,680 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-08-08T08:54:36.809Z",
+    "slug": "lllllllama-minimal-run-and-audit",
+    "source_url": "https://github.com/lllllllama/ai-paper-reproduction-skill/tree/main/skills/minimal-run-and-audit/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "0039e17b11d4c986571a989d78ac32b89edf0186d6982327230678e4646aaa79",
+    "tree_hash": "5db676cab5410d295fb0cb912c58874bf1aec086eadc88c924d96714b0512597",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    },
+    "upstream_version_raw": null,
+    "upstream_version_normalized": null,
+    "upstream_version_source": "none",
+    "upstream_version_status": "missing",
+    "upstream_commit_sha": "3ab505258a8b16f95f5d1bee4101adbbf3a469ea"
+  },
+  "skill": {
+    "name": "minimal-run-and-audit",
+    "description": "Runs a selected short reproduction command, captures execution evidence, extracts metrics, tracks repository changes, and prepares standardized reproduction reports.",
+    "summary": "Run and audit short machine learning reproduction commands with normalized evidence.",
+    "icon": "📦",
+    "author": "lllllllama",
+    "license": "MIT",
+    "category": "research",
+    "tags": [
+      "reproducibility",
+      "machine-learning",
+      "evaluation",
+      "evidence-capture",
+      "repository-audit"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The runner intentionally executes a user-supplied command, which is a confirmed high-risk capability despite avoiding shell interpretation. Two parent-directory references cross the audited package boundary, and the output wrapper dynamically executes a Python module; Markdown backticks and reporting text are false positives.",
+    "remediation": [
+      {
+        "issue": "The runner executes any command supplied through the command argument.",
+        "suggestion": "Require explicit user confirmation and run commands in a constrained environment with documented executable and path controls.",
+        "severity": "high"
+      },
+      {
+        "issue": "Skill instructions reference files outside the audited skill directory.",
+        "suggestion": "Bundle the required guidance inside the skill and use package-local paths so all instructions are included in the audit.",
+        "severity": "high"
+      },
+      {
+        "issue": "The output wrapper imports and executes an ancestor module without integrity verification.",
+        "suggestion": "Vendor the writer into the package or verify a pinned module digest before loading it.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/run_command.py",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/run_command.py",
+            "line_start": 161,
+            "line_end": 161
+          },
+          {
+            "file": "scripts/run_command.py",
+            "line_start": 251,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/reporting-policy.md:23:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/reporting-policy.md",
+        "line_start": 23,
+        "line_end": 25,
+        "snippet": "## Avoid"
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:64:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/run_command.py",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "return subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:161:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/run_command.py",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/run_command.py",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "\"execution_log\": [combined_text] if combined_text else [f\"Command `{command}` exited non-zero.\"],"
+      },
+      {
+        "id": "blocker:scripts/run_command.py:233:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/run_command.py",
+        "line_start": 233,
+        "line_end": 233,
+        "snippet": "\"main_blocker\": f\"Selected command did not finish within {timeout} seconds.\","
+      },
+      {
+        "id": "external_commands:SKILL.md:3:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "description: Rigor Run skill for README-first deep learning repo reproduction. Use when the task is "
+      },
+      {
+        "id": "external_commands:SKILL.md:9:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "`minimal-run-and-audit` for compatibility."
+      },
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "`../../references/agent-operating-principles.md`; this skill should make run"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "- standardized `repro_outputs/` files"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "- `SCIENTIFIC_CHANGELOG.md` for changed scientific meaning and evidence status"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "- `COMPARABILITY_REPORT.md` for README/paper/baseline comparability"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "- `PATCHES.md` when repo files changed"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "Use `references/reporting-policy.md`, `../../references/research-rigor-principles.md`, `scripts/run_"
+      },
+      {
+        "id": "filesystem:SKILL.md:12:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "`../../references/agent-operating-principles.md`; this skill should make run"
+      },
+      {
+        "id": "filesystem:SKILL.md:58:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "Use `references/reporting-policy.md`, `../../references/research-rigor-principles.md`, `scripts/run_"
+      },
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "evidence auditable without turning every command into a rigid protocol."
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/reporting-policy.md:23:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited line is the heading for a list of reporting practices to avoid. It performs no system discovery or reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:64:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This subprocess call invokes git with internally supplied argument lists for status checks. It does not pass user text to a shell or construct an executable command string."
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:161:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The subprocess executes the user-supplied command argument after tokenization. Shell metacharacters are not interpreted, but the caller can still select any available executable and arguments.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/run_command.py:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown formatting inside an error message. This line neither invokes a shell nor evaluates code."
+      },
+      {
+        "id": "blocker:scripts/run_command.py:233:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line formats a timeout explanation for the report. It does not inspect system configuration or collect reconnaissance data."
+      },
+      {
+        "id": "external_commands:SKILL.md:3:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the repro_outputs directory name in metadata prose. They are not an execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:9:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the installed skill slug in Markdown. No command is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks delimit a documentation path. They are Markdown syntax rather than shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks identify an output directory in an expected-output list. No executable syntax is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format an output filename in Markdown. This is not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format an output filename in Markdown. This is not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format an output filename in Markdown. This is not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format reference and script paths in prose. The line does not evaluate them as shell commands."
+      },
+      {
+        "id": "filesystem:SKILL.md:12:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The instruction directs the agent through parent directories to guidance outside the audited skill package. That external content can alter behavior without appearing in this report.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:58:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The listed research guidance uses a parent-directory path outside the audited package. Following it introduces an unaudited instruction dependency.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line describes making command evidence auditable. It does not request host discovery, credential collection, or system reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unaudited External Module Execution",
+        "description": "The output wrapper resolves a module three parent directories above the script, loads it dynamically, and executes its main function without integrity verification.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/write_outputs.py",
+            "line_start": 11,
+            "line_end": 22
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The code directly uses importlib to execute a Python module outside the audited skill directory. The module is not present in the reported file structure."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Python subprocess.run",
+        "description": "result = subprocess.run(",
+        "locations": [
+          {
+            "file": "scripts/run_command.py",
+            "line_start": 161,
+            "line_end": 161
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The subprocess executes the user-supplied command argument after tokenization. Shell metacharacters are not interpreted, but the caller can still select any available executable and arguments."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "`../../references/agent-operating-principles.md`; this skill should make run",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The instruction directs the agent through parent directories to guidance outside the audited skill package. That external content can alter behavior without appearing in this report."
+      },
+      {
+        "title": "Path traversal sequence",
+        "description": "Use `references/reporting-policy.md`, `../../references/research-rigor-principles.md`, `scripts/run_",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The listed research guidance uses a parent-directory path outside the audited package. Following it introduces an unaudited instruction dependency."
+      },
+      {
+        "title": "Unaudited External Module Execution",
+        "description": "The output wrapper resolves a module three parent directories above the script, loads it dynamically, and executes its main function without integrity verification.",
+        "locations": [
+          {
+            "file": "scripts/write_outputs.py",
+            "line_start": 11,
+            "line_end": 22
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The code directly uses importlib to execute a Python module outside the audited skill directory. The module is not present in the reported file structure."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 5,
+    "total_lines": 408,
+    "audit_model": "codex",
+    "audited_at": "2026-08-08T08:54:36.809Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Run and Audit Reproduction Commands",
+    "value_statement": "Short reproduction runs often produce inconsistent evidence and unclear results. This skill executes a selected command and organizes outcomes, metrics, logs, and repository changes.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "machine learning reproducibility",
+      "reproduction command audit",
+      "evaluation evidence",
+      "smoke test reporting",
+      "metric extraction",
+      "repository change tracking"
+    ],
+    "actual_capabilities": [
+      "Executes a selected non-training command with a configurable timeout.",
+      "Captures standard output, standard error, exit status, and timeout state.",
+      "Extracts numeric metrics from command output using a defined text pattern.",
+      "Compares Git status before and after execution to identify changed paths.",
+      "Classifies runs as successful, partial, or blocked and prepares normalized evidence."
+    ],
+    "limitations": [
+      "It does not select the reproduction target or design the experiment.",
+      "It does not install dependencies, obtain assets, or configure environments.",
+      "It is intended for short verification commands, not training or long-running jobs.",
+      "Automatic metric extraction may misidentify values in unstructured output."
+    ],
+    "use_cases": [
+      {
+        "title": "Verify a documented inference command",
+        "description": "Run a repository inference example and capture its outcome, logs, metrics, and file changes.",
+        "target_user": "Machine learning engineer"
+      },
+      {
+        "title": "Audit a reproduction smoke test",
+        "description": "Produce concise evidence showing whether a selected smoke test succeeded, failed, or timed out.",
+        "target_user": "Research reproducibility reviewer"
+      },
+      {
+        "title": "Normalize evaluation evidence",
+        "description": "Convert a short evaluation attempt into consistent artifacts for team review and comparison.",
+        "target_user": "Open source maintainer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a smoke test",
+        "prompt": "Run the selected smoke command in [repository path] with a [timeout] second limit. Report the outcome and captured evidence.",
+        "scenario": "A beginner has one documented command and needs a clear result."
+      },
+      {
+        "title": "Audit an inference example",
+        "prompt": "Execute [inference command] in [repository path]. Capture logs, numeric metrics, timeout state, and repository changes without modifying scientific behavior.",
+        "scenario": "An engineer needs evidence from a documented inference workflow."
+      },
+      {
+        "title": "Compare an evaluation result",
+        "prompt": "Run [evaluation command] and compare the observed metric with [expected baseline]. Mark unsupported comparisons and document any changed files.",
+        "scenario": "A reviewer needs a bounded comparison against a published or documented baseline."
+      },
+      {
+        "title": "Audit a patched reproduction",
+        "prompt": "Execute [command] after the approved patches. Separate execution facts from inferences and document patch effects, comparability limits, metrics, and blockers.",
+        "scenario": "An advanced reproduction includes controlled repository changes requiring traceable evidence."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Run the documented CPU smoke test with a 60 second timeout.",
+        "output": "Status: successful. The command completed within the limit, produced one accuracy metric, and created no repository changes."
+      },
+      {
+        "input": "Run the evaluation command and record why it stops.",
+        "output": "Status: blocked. The executable was unavailable, so no evaluation metric was observed and no files changed."
+      },
+      {
+        "input": "Audit a command that exceeds the allowed runtime.",
+        "output": "Status: partial. The command timed out after the configured limit, and the available output was retained for review."
+      }
+    ],
+    "best_practices": [
+      "Confirm the exact command, repository path, and timeout before execution.",
+      "Use short documented inference, evaluation, smoke, or sanity commands.",
+      "Review reported file changes and disclose any effect on scientific meaning."
+    ],
+    "anti_patterns": [
+      "Do not use this skill to start training or resume long-running jobs.",
+      "Do not treat extracted metrics as validated scientific conclusions.",
+      "Do not hide preprocessing, checkpoint, evaluation, or metric changes."
+    ],
+    "faq": [
+      {
+        "question": "What commands can this skill run?",
+        "answer": "It can run a selected executable with arguments. Use it only for short, trusted, non-training verification commands."
+      },
+      {
+        "question": "Does it use a shell?",
+        "answer": "The runner tokenizes the command and launches the executable directly. Shell operators and expansions are not interpreted."
+      },
+      {
+        "question": "How are metrics collected?",
+        "answer": "It scans command output for named numeric values and selects a likely primary metric."
+      },
+      {
+        "question": "How are file changes detected?",
+        "answer": "It compares Git status snapshots taken before and after the command."
+      },
+      {
+        "question": "Can it run model training?",
+        "answer": "No. The skill explicitly excludes training startup, resume operations, and long-running training state."
+      },
+      {
+        "question": "Does it prove reproduction success?",
+        "answer": "No. It records execution evidence and comparability limits, but scientific validation still requires expert review."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "agents",
+      "type": "dir",
+      "path": "agents",
+      "children": [
+        {
+          "name": "openai.yaml",
+          "type": "file",
+          "path": "agents/openai.yaml",
+          "lines": 4
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "reporting-policy.md",
+          "type": "file",
+          "path": "references/reporting-policy.md",
+          "lines": 29
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "run_command.py",
+          "type": "file",
+          "path": "scripts/run_command.py",
+          "lines": 289
+        },
+        {
+          "name": "write_outputs.py",
+          "type": "file",
+          "path": "scripts/write_outputs.py",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 59
+    }
+  ]
+}

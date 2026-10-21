@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-shopee-account-fbs",
+      "title": "Shopee 平台仓储履约",
+      "description": "Shopee 平台仓储履约。用于对齐仓库和 SKU，读取入库、在库、出库与异常，准备授权补货或处理动作。输入需明确账户、国家、平台仓、SKU、在库与入库单；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "fbs",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "在途不当可售；库存状态和仓型不可混合；避免重复创建入库单",
+      "legacy_path": "sealeap-athena-shopee-account-fbs",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-fbs/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-fbs/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-fbs/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-first-mile",
+      "title": "Shopee 头程物流",
+      "description": "Shopee 头程物流。用于核对交仓预约、运输节点与单据，跟踪异常并准备授权物流操作。输入需明确账户、国家、采购/入库单、包裹、路线和时限；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "first-mile",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "预约不等于已交接；承运事件和平台回传延迟分别说明",
+      "legacy_path": "sealeap-athena-shopee-account-first-mile",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-first-mile/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-first-mile/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-first-mile/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-logistics",
+      "title": "Shopee 物流配置与轨迹",
+      "description": "Shopee 物流配置与轨迹。用于核对可用物流渠道、费用与限制，读取轨迹并处理授权的配置或单据动作。输入需明确账户、国家、订单或物流渠道、仓库和包裹；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "logistics",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "估计到达不当实际签收；物流设置改变可能影响现有订单",
+      "legacy_path": "sealeap-athena-shopee-account-logistics",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-logistics/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-logistics/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-logistics/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-orders",
+      "title": "Shopee 订单核对",
+      "description": "Shopee 订单核对。用于读取订单头与行项目，按订单 ID 对齐支付、费用、取消和履约状态。输入需明确账户、地区、订单 ID 或期间、订单状态；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "orders",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "订单金额与结算收入不同；分页完整性和时区须核对；只显示必要买家信息",
+      "legacy_path": "sealeap-athena-shopee-account-orders",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-orders/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-orders/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-orders/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-returns-refunds",
+      "title": "Shopee 退货退款",
+      "description": "Shopee 退货退款。用于读取售后请求与订单行，核对金额上限、退货与退款状态，准备或执行授权处理。输入需明确账户、地区、售后单、金额、原因、期限和证据；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "returns-refunds",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "退货申请、收货、退款与到账不同；不可因 API 超时重复退款",
+      "legacy_path": "sealeap-athena-shopee-account-returns-refunds",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-returns-refunds/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-returns-refunds/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-returns-refunds/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-sbs",
+      "title": "Shopee 仓配服务",
+      "description": "Shopee 仓配服务。用于确认具体仓配模式和可用操作，再核对库存及货件状态并处理授权任务。输入需明确账户、国家、仓配服务资格、SKU、货件或订单；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "sbs",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "缩写不能代替实际业务定义；不同仓型不混库存或履约状态",
+      "legacy_path": "sealeap-athena-shopee-account-sbs",
+      "entrypoint": "sealeap-athena-shopee-order-fulfillment",
+      "guide_path": "references/capabilities/shopee-account-sbs/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-sbs/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-sbs/tool-routing.md"
+    }
+  ]
+}

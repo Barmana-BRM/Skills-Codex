@@ -1,0 +1,632 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-04T14:53:42.444Z",
+    "slug": "199-biotechnologies-deep-research",
+    "source_url": "https://github.com/199-biotechnologies/claude-deep-research-skill/tree/main/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "0c8e777eb13d37b4d5130f59c9237a82528224ba31b58b774cd490a742df8620",
+    "tree_hash": "f32d8b813a1db20c83751375acf47d5cbf7720bae8633038e608f4bf5c899f13",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "deep-research",
+    "description": "Guides Claude, Codex, and Claude Code through structured multi-source research with citation tracking, evidence records, claim verification, and report packaging.",
+    "summary": "Create citation-tracked research reports from multi-source evidence and explicit quality gates.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "199-biotechnologies",
+    "license": "MIT",
+    "category": "research",
+    "tags": [
+      "deep research",
+      "citations",
+      "evidence tracking",
+      "research reports",
+      "source verification"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem",
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most Markdown backtick and install-path findings are false positives. Three script command references are confirmed because they direct agents to run relative Python scripts with user-supplied paths. No prompt injection evidence found, but provider configuration may be persisted in report artifacts.",
+    "remediation": [
+      {
+        "issue": "Relative Python script commands in the skill instructions",
+        "suggestion": "Use bundled script paths or require explicit user confirmation before running validation commands. Validate report paths before execution.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Provider configuration can be written to report artifacts",
+        "suggestion": "Redact API keys and tokens from run_manifest.json. Store only provider names and nonsecret settings.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "README.md",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "README.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "README.md",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 97
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "sensitive:.gitignore:22:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": ".gitignore",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "Thumbs.db"
+      },
+      {
+        "id": "network:README.md:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "git clone https://github.com/199-biotechnologies/claude-deep-research-skill.git ~/.claude/skills/dee"
+      },
+      {
+        "id": "filesystem:README.md:9:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "README.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "git clone https://github.com/199-biotechnologies/claude-deep-research-skill.git ~/.claude/skills/dee"
+      },
+      {
+        "id": "filesystem:README.md:9:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "git clone https://github.com/199-biotechnologies/claude-deep-research-skill.git ~/.claude/skills/dee"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 29,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 68,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 69,
+        "snippet": "- `python scripts/validate_report.py --report [path]`"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 70,
+        "snippet": "- `python scripts/verify_citations.py --report [path]`"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 86,
+        "snippet": "- `python scripts/md_to_html.py [markdown_path]`"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 88,
+        "snippet": "**Output files (all to `~/Documents/[Topic]_Research_[YYYYMMDD]/`):**"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 89,
+        "snippet": "- `sources.jsonl` — stable source registry with canonical IDs"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 90,
+        "snippet": "- `evidence.jsonl` — append-only evidence store with quotes and locators"
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 91,
+        "snippet": "- `claims.jsonl` — atomic claim ledger with support status"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 97,
+        "snippet": "- `run_manifest.json` — query, mode, assumptions, provider config"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "sensitive:.gitignore:22:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": ".gitignore line 22 contains Thumbs.db, an operating system cache file name. It is not a SQLite database file or sensitive data."
+      },
+      {
+        "id": "network:README.md:9:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "README.md line 9 shows a GitHub clone URL for installation. It is documentation for fetching the skill, not a runtime network request or exfiltration path."
+      },
+      {
+        "id": "filesystem:README.md:9:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "README.md line 9 installs the skill into the standard Claude skills directory under ~/.claude. This is an expected manual installation path, not hidden data access."
+      },
+      {
+        "id": "filesystem:README.md:9:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The hidden path is the documented Claude skills installation directory. The line does not instruct reading, modifying, or exfiltrating unrelated hidden files."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "SKILL.md line 18 opens a Markdown code fence for a decision tree. It is not Ruby backtick execution and contains no shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "SKILL.md line 29 closes a Markdown code fence. The surrounding block is static workflow text, not executable Ruby or shell code."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.66,
+        "reason": "SKILL.md line 68 lists a Python validation command with a user-supplied report path. Relative script execution can run local code and process sensitive report content.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.66,
+        "reason": "SKILL.md line 69 lists a Python citation verification command with a user-supplied report path. This is legitimate tooling, but it is still local command execution.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.66,
+        "reason": "SKILL.md line 70 lists a Python HTML conversion command with a user-supplied Markdown path. The relative script path and document input create command execution risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "SKILL.md line 86 documents an output folder path in inline Markdown. It is filesystem output guidance, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "SKILL.md line 88 names sources.jsonl as an output artifact. It is a file name in documentation, not an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "SKILL.md line 89 names evidence.jsonl as an output artifact. It is a documented data file, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "SKILL.md line 90 names claims.jsonl as an output artifact. It is not a shell command or Ruby backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "SKILL.md line 91 names run_manifest.json and describes its contents. The backticks mark a file name, not executable code."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Potential Secret Persistence in Research Manifest",
+        "description": "The README tells users to configure search provider keys, and the output contract stores provider config in run_manifest.json. Provider secrets should not be written to report artifacts.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 16,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 91
+          }
+        ],
+        "confidence": 0.67,
+        "confidence_reasoning": "README.md line 20 explicitly references provider keys, and SKILL.md line 91 says provider config is stored. The text does not prove keys are persisted, so confidence is medium."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- `python scripts/validate_report.py --report [path]`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.66,
+        "confidence_reasoning": "SKILL.md line 68 lists a Python validation command with a user-supplied report path. Relative script execution can run local code and process sensitive report content."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- `python scripts/verify_citations.py --report [path]`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 70
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.66,
+        "confidence_reasoning": "SKILL.md line 69 lists a Python citation verification command with a user-supplied report path. This is legitimate tooling, but it is still local command execution."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- `python scripts/md_to_html.py [markdown_path]`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 86
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.66,
+        "confidence_reasoning": "SKILL.md line 70 lists a Python HTML conversion command with a user-supplied Markdown path. The relative script path and document input create command execution risk."
+      },
+      {
+        "title": "Potential Secret Persistence in Research Manifest",
+        "description": "The README tells users to configure search provider keys, and the output contract stores provider config in run_manifest.json. Provider secrets should not be written to report artifacts.",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 16,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 91
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.67,
+        "confidence_reasoning": "README.md line 20 explicitly references provider keys, and SKILL.md line 91 says provider config is stored. The text does not prove keys are persisted, so confidence is medium."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 276,
+    "audit_model": "codex",
+    "audited_at": "2026-07-04T14:53:42.444Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build Citation-Tracked Research Reports",
+    "value_statement": "Complex research can lose source context, assumptions, and claim support. This skill guides Claude, Codex, and Claude Code through structured evidence collection and report assembly.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "deep research skill",
+      "citation tracking",
+      "research report generator",
+      "source verification",
+      "evidence ledger",
+      "multi-source analysis",
+      "claim validation"
+    ],
+    "actual_capabilities": [
+      "Guides quick, standard, deep, and ultradeep research modes.",
+      "Defines a phased workflow from scope and planning through retrieval, synthesis, critique, and packaging.",
+      "Requires cited findings, a complete bibliography, and explicit limitations.",
+      "Specifies evidence files for sources, quotes, claims, and run metadata.",
+      "Lists optional validation commands for report structure, citations, and HTML conversion."
+    ],
+    "limitations": [
+      "Best suited for complex research, not simple lookups or debugging.",
+      "Requires available search tools or web access for current source collection.",
+      "Referenced helper scripts and templates may need separate packaging or setup.",
+      "Outputs may contain sensitive research context if users provide confidential topics."
+    ],
+    "use_cases": [
+      {
+        "title": "Technology Evaluation",
+        "description": "Compare platforms, methods, or vendors with cited evidence and decision-focused recommendations.",
+        "target_user": "Engineering leader"
+      },
+      {
+        "title": "Scientific Literature Review",
+        "description": "Map recent findings, source quality, and unresolved questions for a technical topic.",
+        "target_user": "Research analyst"
+      },
+      {
+        "title": "Market Landscape Report",
+        "description": "Synthesize trends, competitors, adoption signals, and risks into a structured report.",
+        "target_user": "Product strategist"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Research a Topic",
+        "prompt": "Use deep research mode to explain [topic] for [audience]. Include current sources, key findings, limitations, and a bibliography.",
+        "scenario": "Beginner request for a structured overview."
+      },
+      {
+        "title": "Compare Two Options",
+        "prompt": "Compare [option A] and [option B] for [decision context]. Use cited evidence, tradeoffs, risks, and a recommendation.",
+        "scenario": "Intermediate request for a decision report."
+      },
+      {
+        "title": "Analyze Recent Trends",
+        "prompt": "Research trends in [field] from the last [time period]. Separate confirmed evidence, emerging signals, and uncertain claims.",
+        "scenario": "Advanced request for time-sensitive analysis."
+      },
+      {
+        "title": "Run an Ultradeep Review",
+        "prompt": "Run ultradeep research on [complex question]. Build an evidence ledger, challenge assumptions, verify major claims, and produce a final report.",
+        "scenario": "Advanced request for rigorous synthesis and critique."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Deep research the current state of quantum computing for enterprise planning.",
+        "output": "A cited report with an executive summary, major findings, limitations, recommendations, and a full bibliography."
+      },
+      {
+        "input": "Compare PostgreSQL and Supabase for our application stack.",
+        "output": [
+          "Decision-focused comparison across architecture, operations, security, cost, and team fit.",
+          "Clear recommendation with assumptions and cited support."
+        ]
+      },
+      {
+        "input": "Analyze recent biotech AI platform trends for a product strategy review.",
+        "output": "A market landscape report that separates mature evidence, emerging signals, and open questions."
+      }
+    ],
+    "best_practices": [
+      "State the audience, decision context, and time horizon before starting.",
+      "Ask for citations and limitations to remain visible in the final report.",
+      "Review generated evidence files for confidential data before sharing outputs."
+    ],
+    "anti_patterns": [
+      "Using the skill for one-answer lookups that need only a quick search.",
+      "Accepting uncited claims in the final report.",
+      "Storing provider keys or confidential source material in report artifacts."
+    ],
+    "faq": [
+      {
+        "question": "Does this replace a search engine?",
+        "answer": "No. It organizes multi-source research and uses available search tools to gather evidence."
+      },
+      {
+        "question": "Can it produce HTML or PDF?",
+        "answer": "The skill describes HTML and PDF packaging, but local tool setup may be required."
+      },
+      {
+        "question": "Does it need API keys?",
+        "answer": "Basic use may work without extra keys. Multi-provider search needs configured provider keys."
+      },
+      {
+        "question": "Can it verify citations?",
+        "answer": "It defines citation checks and optional validation commands. Users should still review important citations."
+      },
+      {
+        "question": "Where are outputs stored?",
+        "answer": "The skill directs outputs to a research folder under Documents and uses evidence ledgers."
+      },
+      {
+        "question": "Is it suitable for confidential research?",
+        "answer": "Use caution. Review generated files and redact secrets before sharing or syncing outputs."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": ".gitignore",
+      "type": "file",
+      "path": ".gitignore",
+      "lines": 32
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 120
+    },
+    {
+      "name": "requirements.txt",
+      "type": "file",
+      "path": "requirements.txt",
+      "lines": 15
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 109
+    }
+  ]
+}

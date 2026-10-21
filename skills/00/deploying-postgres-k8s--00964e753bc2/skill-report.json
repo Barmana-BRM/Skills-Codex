@@ -1,0 +1,1781 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T05:56:47.379Z",
+    "slug": "asmayaseen-deploying-postgres-k8s",
+    "source_url": "https://github.com/Asmayaseen/hackathon-2/tree/main/.claude/skills/deploying-postgres-k8s",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "00964e753bc25c6620d5a9e26fdc2563072faa823f2776a674ff752e8538a9bd",
+    "tree_hash": "f6d4627b8cc34952edab3ea357f0324ee0cbd820ee1f67e529718a17651da28a",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "deploying-postgres-k8s",
+    "description": "Guides PostgreSQL deployment on Kubernetes with CloudNativePG, including operator installation, high availability, secrets, backups, monitoring, troubleshooting, and cleanup.",
+    "summary": "Deploy and operate CloudNativePG PostgreSQL clusters on Kubernetes.",
+    "icon": "📦",
+    "author": "Asmayaseen",
+    "license": "MIT",
+    "tags": [
+      "postgresql",
+      "kubernetes",
+      "cloudnativepg",
+      "high-availability",
+      "database-operations"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "env_access"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most external-command findings are false positives caused by Markdown backticks; the verifier performs local structure checks only. Confirmed risks include remote manifest installation, plaintext database credentials, terminal secret disclosure, and destructive PVC deletion. No prompt injection or exfiltration intent was found.",
+    "remediation": [
+      {
+        "issue": "Examples contain plaintext database passwords.",
+        "suggestion": "Use Kubernetes secretKeyRef values and placeholder secret names. Remove literal passwords from manifests, migration commands, and connection examples.",
+        "severity": "high"
+      },
+      {
+        "issue": "Installation and cleanup trust remote manifests without integrity checks.",
+        "suggestion": "Pin immutable artifact digests or verified checksums. Pin Helm chart versions and review downloaded manifests before applying or deleting resources.",
+        "severity": "low"
+      },
+      {
+        "issue": "Credential retrieval commands print secret URIs.",
+        "suggestion": "Reference secrets directly from workloads. For diagnostics, warn users about terminal logs and show redacted output practices.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Cleanup can delete all database persistent volumes.",
+        "suggestion": "Require backup verification, explicit confirmation, namespace selection, and Kubernetes context checks before presenting the PVC deletion command.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 137
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 137,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 157
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 157,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 165
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 173
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 174
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 178
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 184
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 184,
+            "line_end": 188
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 188,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 201
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 201,
+            "line_end": 202
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 202,
+            "line_end": 203
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 207
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 207,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 217
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 217,
+            "line_end": 223
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 223,
+            "line_end": 227
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 227,
+            "line_end": 235
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 235,
+            "line_end": 239
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 239,
+            "line_end": 243
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 243,
+            "line_end": 249
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 249,
+            "line_end": 274
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 274,
+            "line_end": 278
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 278,
+            "line_end": 288
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 288,
+            "line_end": 294
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 294,
+            "line_end": 298
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 298,
+            "line_end": 302
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 302,
+            "line_end": 305
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 305,
+            "line_end": 309
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 309,
+            "line_end": 310
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 310,
+            "line_end": 311
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 311,
+            "line_end": 312
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 312,
+            "line_end": 318
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 318,
+            "line_end": 322
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 322,
+            "line_end": 326
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 326,
+            "line_end": 331
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 331,
+            "line_end": 337
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 337,
+            "line_end": 338
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 353,
+            "line_end": 353
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 190,
+            "line_end": 190
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 209
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 242,
+            "line_end": 242
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:scripts/verify.py:27:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/verify.py",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "print(\"✗ Invalid skill name in frontmatter\")"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 38,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 44,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 51,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 55,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 63,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 67,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 73,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 79,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 94,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 98,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 137,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 137,
+        "line_end": 141,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 157,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 161,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 173,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 174,
+        "snippet": "| `pg-cluster-app` | App credentials (recommended) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 178,
+        "snippet": "| `pg-cluster-superuser` | Superuser credentials |"
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 178,
+        "line_end": 184,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 184,
+        "line_end": 188,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 188,
+        "line_end": 195,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 201,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 201,
+        "line_end": 202,
+        "snippet": "| `pg-cluster-rw` | 5432 | Read-Write (primary) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 202,
+        "line_end": 203,
+        "snippet": "| `pg-cluster-ro` | 5432 | Read-Only (replicas) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 207,
+        "snippet": "| `pg-cluster-r` | 5432 | Any instance |"
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 207,
+        "line_end": 211,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 217,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 217,
+        "line_end": 223,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 223,
+        "line_end": 227,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 227,
+        "line_end": 235,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 239,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 239,
+        "line_end": 243,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:243:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 243,
+        "line_end": 249,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:249:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 249,
+        "line_end": 274,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 278,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:278:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 278,
+        "line_end": 288,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 288,
+        "line_end": 294,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 294,
+        "line_end": 298,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:298:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 298,
+        "line_end": 302,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:302:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 302,
+        "line_end": 305,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:305:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 305,
+        "line_end": 309,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 309,
+        "line_end": 310,
+        "snippet": "With `enablePodMonitor: true`, metrics available at:"
+      },
+      {
+        "id": "external_commands:SKILL.md:310:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 310,
+        "line_end": 311,
+        "snippet": "- `cnpg_backends_total` - Active connections"
+      },
+      {
+        "id": "external_commands:SKILL.md:311:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 311,
+        "line_end": 312,
+        "snippet": "- `cnpg_pg_replication_lag_seconds` - Replica lag"
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 312,
+        "line_end": 318,
+        "snippet": "- `cnpg_pg_database_size_bytes` - Database size"
+      },
+      {
+        "id": "external_commands:SKILL.md:318:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 318,
+        "line_end": 322,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 322,
+        "line_end": 326,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:326:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 326,
+        "line_end": 331,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:331:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 331,
+        "line_end": 337,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 337,
+        "line_end": 338,
+        "snippet": "| PVC pending | No storage class | Add `storageClass` to spec |"
+      },
+      {
+        "id": "external_commands:SKILL.md:338:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 338,
+        "line_end": 339,
+        "snippet": "| Connection refused | Wrong service name | Use `cluster-rw` for writes |"
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 339,
+        "line_end": 344,
+        "snippet": "| Auth failed | Wrong credentials | Check secret `cluster-app` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 344,
+        "line_end": 354,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:354:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 354,
+        "line_end": 358,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:358:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 358,
+        "line_end": 362,
+        "snippet": "Run: `python scripts/verify.py`"
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 362,
+        "line_end": 363,
+        "snippet": "- `operating-k8s-local` - Local Minikube cluster setup"
+      },
+      {
+        "id": "external_commands:SKILL.md:363:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 363,
+        "line_end": 364,
+        "snippet": "- `scaffolding-fastapi-dapr` - FastAPI services with SQLModel"
+      },
+      {
+        "id": "external_commands:SKILL.md:164:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "--from-literal=password=$(openssl rand -hex 16)"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya"
+      },
+      {
+        "id": "network:SKILL.md:46:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya"
+      },
+      {
+        "id": "network:SKILL.md:56:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "helm repo add cnpg https://cloudnative-pg.github.io/charts"
+      },
+      {
+        "id": "network:SKILL.md:353:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 353,
+        "line_end": 353,
+        "snippet": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya"
+      },
+      {
+        "id": "env_access:SKILL.md:190:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "- name: DATABASE_URL"
+      },
+      {
+        "id": "env_access:SKILL.md:209:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 209,
+        "line_end": 209,
+        "snippet": "- name: DATABASE_URL"
+      },
+      {
+        "id": "env_access:SKILL.md:242:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 242,
+        "line_end": 242,
+        "snippet": "DATABASE_URL=\"postgresql://postgres:password@localhost:5432/learnflow\" alembic upgrade head"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:scripts/verify.py:27:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 27 only prints a local validation error. The verifier reads SKILL.md and performs no system reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:243:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:249:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:278:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:298:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:302:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:305:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:310:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:311:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:318:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:326:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:331:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:338:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:354:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:358:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:363:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backtick operators and do not execute automatically."
+      },
+      {
+        "id": "external_commands:SKILL.md:164:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The fixed openssl command generates a random password for a Kubernetes secret. It contains no variable or user-controlled command input."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This range is a fenced Bash example in Markdown, not a JavaScript template literal. The command substitution uses fixed openssl arguments."
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The quick start applies a remote Kubernetes manifest directly from GitHub without checksum verification. A changed upstream file could create privileged cluster resources.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:46:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The installation applies a remote Kubernetes manifest directly from GitHub without checksum verification. The versioned path reduces but does not eliminate supply-chain risk.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:56:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The Helm repository is legitimate, but the subsequent installation does not pin a chart version or digest. Repository changes can alter installed cluster code.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:353:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The cleanup command trusts the current remote manifest to select resources for deletion. Upstream changes could make the deletion target differ from the installed release.",
+        "severity": "low"
+      },
+      {
+        "id": "env_access:SKILL.md:190:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "DATABASE_URL is populated through a Kubernetes secretKeyRef. The manifest contains neither a connection string nor plaintext credentials."
+      },
+      {
+        "id": "env_access:SKILL.md:209:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The deployment example embeds a database URI with a literal password in YAML. This exposes credentials through source control and Kubernetes object inspection.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:242:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The migration command includes a literal database password. It can leak through shell history, process inspection, logs, or copied commands.",
+        "severity": "high"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Database credentials printed to terminal",
+        "description": "The commands decode and print application and superuser connection URIs. Terminal output, session logs, or screen sharing can expose these credentials.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 184
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "Both kubectl commands explicitly retrieve secret URI values and pipe them through base64 decoding to standard output."
+      },
+      {
+        "title": "Destructive persistent volume deletion",
+        "description": "The cleanup command deletes every matching PostgreSQL persistent volume claim. Running it in the wrong context can cause irreversible database loss.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 349,
+            "line_end": 349
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The command explicitly deletes PVCs selected by the cluster label, and the preceding comment confirms data loss."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Database connection strings",
+        "description": "- name: DATABASE_URL",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 209
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The deployment example embeds a database URI with a literal password in YAML. This exposes credentials through source control and Kubernetes object inspection."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "DATABASE_URL=\"postgresql://postgres:password@localhost:5432/learnflow\" alembic upgrade head",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 242,
+            "line_end": 242
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The migration command includes a literal database password. It can leak through shell history, process inspection, logs, or copied commands."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Database credentials printed to terminal",
+        "description": "The commands decode and print application and superuser connection URIs. Terminal output, session logs, or screen sharing can expose these credentials.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 184
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "Both kubectl commands explicitly retrieve secret URI values and pipe them through base64 decoding to standard output."
+      },
+      {
+        "title": "Destructive persistent volume deletion",
+        "description": "The cleanup command deletes every matching PostgreSQL persistent volume claim. Running it in the wrong context can cause irreversible database loss.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 349,
+            "line_end": 349
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command explicitly deletes PVCs selected by the cluster label, and the preceding comment confirms data loss."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The quick start applies a remote Kubernetes manifest directly from GitHub without checksum verification. A changed upstream file could create privileged cluster resources."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 46
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The installation applies a remote Kubernetes manifest directly from GitHub without checksum verification. The versioned path reduces but does not eliminate supply-chain risk."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "helm repo add cnpg https://cloudnative-pg.github.io/charts",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The Helm repository is legitimate, but the subsequent installation does not pin a chart version or digest. Repository changes can alter installed cluster code."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.ya",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 353,
+            "line_end": 353
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The cleanup command trusts the current remote manifest to select resources for deletion. Upstream changes could make the deletion target differ from the installed release."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 403,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T05:56:47.379Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Deploy PostgreSQL on Kubernetes with CloudNativePG",
+    "value_statement": "Operating PostgreSQL directly on Kubernetes requires careful availability, storage, secret, and backup configuration. This skill provides practical CloudNativePG deployment and operations guidance.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "PostgreSQL Kubernetes",
+      "CloudNativePG",
+      "Kubernetes database",
+      "PostgreSQL high availability",
+      "PostgreSQL backup",
+      "kubectl",
+      "Helm"
+    ],
+    "actual_capabilities": [
+      "Explains CloudNativePG installation using a direct manifest or Helm.",
+      "Provides development and three-instance production cluster configurations.",
+      "Shows bootstrap database, application secret, and service endpoint configuration.",
+      "Documents PostgreSQL access, database creation, migrations, and connectivity checks.",
+      "Provides S3 backup, scheduled backup, Prometheus monitoring, and log guidance.",
+      "Covers readiness checks, common failures, and cluster cleanup commands."
+    ],
+    "limitations": [
+      "It does not provision a Kubernetes cluster, storage class, object store, or monitoring stack.",
+      "Example resource values require workload testing before production use.",
+      "It does not cover managed PostgreSQL services or standalone Docker deployments.",
+      "Some credential examples require security hardening before use."
+    ],
+    "use_cases": [
+      {
+        "title": "Create a local development database",
+        "description": "Build a single-instance CloudNativePG cluster with basic storage and readiness checks.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Prepare a production PostgreSQL cluster",
+        "description": "Define three instances, resource limits, anti-affinity, monitoring, and application connectivity.",
+        "target_user": "Platform engineer"
+      },
+      {
+        "title": "Operate backups and incidents",
+        "description": "Configure S3 backups, inspect logs, test connectivity, and diagnose readiness failures.",
+        "target_user": "Site reliability engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a development cluster",
+        "prompt": "Create a single-instance CloudNativePG cluster in {namespace} using {storage_class} and {storage_size}. Include installation and readiness checks.",
+        "scenario": "Beginner local development setup"
+      },
+      {
+        "title": "Design a production cluster",
+        "prompt": "Design a three-instance PostgreSQL cluster for {workload}. Include resources, storage, anti-affinity, secrets, services, and validation steps.",
+        "scenario": "Intermediate production planning"
+      },
+      {
+        "title": "Add backup and monitoring",
+        "prompt": "Extend my CloudNativePG cluster with {object_store} backups, retention, scheduled backups, PodMonitor metrics, and restore validation steps.",
+        "scenario": "Advanced operational readiness"
+      },
+      {
+        "title": "Review a deployment plan",
+        "prompt": "Review these CloudNativePG requirements: {requirements}. Identify availability, security, storage, backup, migration, observability, and recovery gaps with prioritized changes.",
+        "scenario": "Advanced architecture review"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Create a production cluster with three instances and 100Gi storage.",
+        "output": [
+          "A three-instance CloudNativePG cluster plan with persistent storage and pod anti-affinity.",
+          "Resource requests, limits, monitoring settings, readiness checks, and application service guidance."
+        ]
+      },
+      {
+        "input": "Add daily S3 backups with a 30-day retention period.",
+        "output": [
+          "A backup configuration referencing Kubernetes-managed object store credentials.",
+          "A daily scheduled backup, retention policy, status checks, and restore validation checklist."
+        ]
+      },
+      {
+        "input": "Diagnose a cluster that never becomes ready.",
+        "output": "A focused sequence for checking cluster conditions, pods, storage claims, operator status, events, and PostgreSQL logs."
+      }
+    ],
+    "best_practices": [
+      "Pin operator and chart versions, verify artifacts, and review manifests before cluster changes.",
+      "Store credentials in Kubernetes secrets and avoid printing connection URIs.",
+      "Test backups, restores, failover, storage capacity, and resource limits before production launch."
+    ],
+    "anti_patterns": [
+      "Do not embed database passwords in manifests, shell history, or migration commands.",
+      "Do not delete persistent volume claims before confirming backups, namespace, and Kubernetes context.",
+      "Do not use example resource settings without workload measurements and storage validation."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill create a Kubernetes cluster?",
+        "answer": "No. It assumes a working Kubernetes cluster, kubectl access, and a suitable storage class."
+      },
+      {
+        "question": "Which PostgreSQL operator does it use?",
+        "answer": "It uses CloudNativePG and documents direct manifest and Helm installation paths."
+      },
+      {
+        "question": "Can I use it for local development?",
+        "answer": "Yes. It includes a single-instance development configuration with smaller storage and resource expectations."
+      },
+      {
+        "question": "Does it configure high availability?",
+        "answer": "Yes. The production example uses three instances, automatic failover, and pod anti-affinity."
+      },
+      {
+        "question": "Does it support backups?",
+        "answer": "Yes. It covers S3-compatible object storage, retention, scheduled backups, and related credential references."
+      },
+      {
+        "question": "Are the examples production ready without changes?",
+        "answer": "No. Validate storage, resources, credentials, network controls, backup recovery, and operator versions for your environment."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "verify.py",
+          "type": "file",
+          "path": "scripts/verify.py",
+          "lines": 39
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 364
+    }
+  ]
+}
