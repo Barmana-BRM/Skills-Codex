@@ -1,0 +1,2951 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-12T09:19:55.034Z",
+    "slug": "0xdarkmatter-container-orchestration",
+    "source_url": "https://github.com/0xDarkMatter/claude-mods/tree/main/skills/container-orchestration",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "408e053e4e11a9f740b5f75d8ea4bcfef53d2d41cdc8eee4be56c42cd6bba373",
+    "tree_hash": "e1addbca4680ca5dfa85d7b5f37ee910c780a28278b725306487fd1a84ddde75",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "container-orchestration",
+    "description": "Provides practical Docker, Docker Compose, Kubernetes, Helm, and AWS ECS/Fargate patterns for building, deploying, and operating containerized applications.",
+    "summary": "Create and review container images, local stacks, Kubernetes resources, Helm charts, and ECS/Fargate configurations.",
+    "icon": "📦",
+    "version": "1.0.2",
+    "author": "0xDarkMatter",
+    "license": "MIT",
+    "tags": [
+      "docker",
+      "kubernetes",
+      "helm",
+      "aws-ecs",
+      "containers"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "env_access",
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static alerts are false positives from Markdown formatting, fixed test commands, localhost health checks, and normal container configuration. Confirmed risks include weak database credentials, plaintext production secret examples, and an exposed debug listener. The Compose template also publishes unauthenticated Redis.",
+    "remediation": [
+      {
+        "issue": "Runnable Compose examples use a predictable PostgreSQL password and publish the database port.",
+        "suggestion": "Require DB_PASSWORD without a fallback, avoid publishing the database port, or bind it only to 127.0.0.1 for local use.",
+        "severity": "high"
+      },
+      {
+        "issue": "Production Kubernetes examples embed database and API credentials in Secret stringData.",
+        "suggestion": "Remove literal credentials and use ExternalSecret references, sealed secrets, or clearly marked placeholders that cannot be deployed unchanged.",
+        "severity": "high"
+      },
+      {
+        "issue": "The Compose template publishes Redis without authentication.",
+        "suggestion": "Do not publish Redis by default. When host access is required, bind to 127.0.0.1 and configure Redis authentication.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The debug container listens on all interfaces without access controls.",
+        "suggestion": "Bind debugpy to localhost, require a protected tunnel, and warn users never to publish the debug port in shared environments.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "assets/Dockerfile.template",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "assets/Dockerfile.template",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 218,
+            "line_end": 218
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 214,
+            "line_end": 214
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 218,
+            "line_end": 218
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 277,
+            "line_end": 277
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 328,
+            "line_end": 328
+          },
+          {
+            "file": "references/helm-patterns.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 54
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 98,
+            "line_end": 98
+          },
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 185,
+            "line_end": 185
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 186,
+            "line_end": 186
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 190,
+            "line_end": 190
+          },
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 163
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "assets/Dockerfile.template",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 157,
+            "line_end": 157
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 135,
+            "line_end": 135
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 115
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 115,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 168
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 168,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 184
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 184,
+            "line_end": 188
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 188,
+            "line_end": 208
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 208,
+            "line_end": 214
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 214,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 215,
+            "line_end": 216
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 216,
+            "line_end": 217
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 217,
+            "line_end": 218
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 218,
+            "line_end": 219
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 219,
+            "line_end": 220
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 220,
+            "line_end": 221
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 221,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 227
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 227,
+            "line_end": 228
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 232
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 232,
+            "line_end": 236
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 236,
+            "line_end": 237
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 7,
+            "line_end": 7
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 87,
+            "line_end": 88
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 102,
+            "line_end": 103
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 122,
+            "line_end": 124
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 252,
+            "line_end": 252
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "scripts/build-push.sh",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 130,
+            "line_end": 130
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 130,
+            "line_end": 130
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 133,
+            "line_end": 133
+          },
+          {
+            "file": "tests/run.sh",
+            "line_start": 26,
+            "line_end": 26
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:assets/docker-compose.template.yml:31:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8000/health\"]"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:22:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "- DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-myapp}"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:23:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- REDIS_URL=redis://redis:6379/0"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:52:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:98:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "#     - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-mya"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:99:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "#     - REDIS_URL=redis://redis:6379/0"
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:22:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "- DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-myapp}"
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:51:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "POSTGRES_USER: ${DB_USER:-postgres}"
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:60:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "test: [\"CMD-SHELL\", \"pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-myapp}\"]"
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:98:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "assets/docker-compose.template.yml",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "#     - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-mya"
+      },
+      {
+        "id": "external_commands:assets/Dockerfile.template:44:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "assets/Dockerfile.template",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "&& useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser"
+      },
+      {
+        "id": "network:assets/Dockerfile.template:62:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/Dockerfile.template",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "CMD curl -f http://localhost:${PORT}/health || exit 1"
+      },
+      {
+        "id": "network:assets/Dockerfile.template:68:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "assets/Dockerfile.template",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "CMD [\"python\", \"-m\", \"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]"
+      },
+      {
+        "id": "blocker:assets/Dockerfile.template:43:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/Dockerfile.template",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "RUN groupadd --gid 1000 appgroup \\"
+      },
+      {
+        "id": "blocker:assets/Dockerfile.template:44:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/Dockerfile.template",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "&& useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser"
+      },
+      {
+        "id": "external_commands:references/dockerfile-patterns.md:38:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "RUN useradd --create-home --shell /bin/bash appuser"
+      },
+      {
+        "id": "external_commands:references/dockerfile-patterns.md:157:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "&& useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser"
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:218:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 218,
+        "line_end": 218,
+        "snippet": "CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:214:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 214,
+        "line_end": 214,
+        "snippet": "CMD curl -f http://localhost:8000/health || exit 1"
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:218:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 218,
+        "line_end": 218,
+        "snippet": "CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:277:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 277,
+        "line_end": 277,
+        "snippet": "LABEL org.opencontainers.image.source=\"https://github.com/org/repo\""
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:45:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "CMD [\"python\", \"-m\", \"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\"]"
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:328:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "CMD [\"python\", \"-m\", \"debugpy\", \"--listen\", \"0.0.0.0:5678\", \"-m\", \"src.main\"]"
+      },
+      {
+        "id": "filesystem:references/dockerfile-patterns.md:252:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 252,
+        "line_end": 252,
+        "snippet": "RUN --mount=type=cache,target=/root/.cache/pip \\"
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:185:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "ARG API_KEY"
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:186:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 186,
+        "line_end": 186,
+        "snippet": "ENV API_KEY=${API_KEY}"
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:190:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "ENV API_KEY=\"\"  # Set at runtime"
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:286:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 286,
+        "line_end": 286,
+        "snippet": ".env"
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:287:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 287,
+        "line_end": 287,
+        "snippet": ".env.*"
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:102:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/"
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:70:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "RUN addgroup --system --gid 1001 nodejs"
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "RUN adduser --system --uid 1001 nextjs"
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:156:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "RUN groupadd --gid 1000 appgroup \\"
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:157:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/dockerfile-patterns.md",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "&& useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser"
+      },
+      {
+        "id": "blocker:references/ecs-fargate.md:28:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/ecs-fargate.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "level (Fargate requires valid CPU/memory pairs, e.g. 0.25 vCPU / 0.5 GB up to"
+      },
+      {
+        "id": "network:references/helm-patterns.md:44:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/helm-patterns.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "repository: https://charts.bitnami.com/bitnami"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:47:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "references/k8s-manifests.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "DATABASE_URL: postgres://user:pass@db:5432/app"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:64:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "references/k8s-manifests.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "- secretKey: DATABASE_URL"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:118:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "references/k8s-manifests.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "- name: DATABASE_URL"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:122:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "references/k8s-manifests.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "key: DATABASE_URL"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:48:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/k8s-manifests.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "API_KEY: supersecretkey"
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/k8s-manifests.md",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "topologyKey: kubernetes.io/hostname"
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:365:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/k8s-manifests.md",
+        "line_start": 365,
+        "line_end": 366,
+        "snippet": "concurrencyPolicy: Forbid"
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:330:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/k8s-manifests.md",
+        "line_start": 330,
+        "line_end": 331,
+        "snippet": "- Ingress"
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:10:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/build-push.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "#          unaffected. Under --dry-run the planned `docker build` command is"
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:93:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/build-push.sh",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "IMAGE_NAME=\"${IMAGE_NAME:-$(basename \"$(pwd)\")}\""
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:135:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/build-push.sh",
+        "line_start": 135,
+        "line_end": 135,
+        "snippet": "--build-arg BUILD_DATE=\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\" \\"
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:136:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/build-push.sh",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "--build-arg VCS_REF=\"$(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')\" \\"
+      },
+      {
+        "id": "network:scripts/build-push.sh:121:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build-push.sh",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "echo \"  Install Docker: https://docs.docker.com/get-docker/\" >&2"
+      },
+      {
+        "id": "filesystem:scripts/build-push.sh:119:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/build-push.sh",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "if ! command -v docker >/dev/null 2>&1; then"
+      },
+      {
+        "id": "filesystem:scripts/build-push.sh:136:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/build-push.sh",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "--build-arg VCS_REF=\"$(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')\" \\"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 55,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 58,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 73,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 77,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 115,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 121,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 168,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 172,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 184,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 184,
+        "line_end": 188,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 188,
+        "line_end": 208,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 208,
+        "line_end": 214,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:214:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 214,
+        "line_end": 215,
+        "snippet": "| `kubectl get pods` | List pods |"
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 215,
+        "line_end": 216,
+        "snippet": "| `kubectl logs <pod>` | View logs |"
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 216,
+        "line_end": 217,
+        "snippet": "| `kubectl exec -it <pod> -- sh` | Shell into pod |"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 217,
+        "line_end": 218,
+        "snippet": "| `kubectl apply -f manifest.yaml` | Apply config |"
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 218,
+        "line_end": 219,
+        "snippet": "| `kubectl rollout restart deployment/app` | Restart deployment |"
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 219,
+        "line_end": 220,
+        "snippet": "| `kubectl rollout status deployment/app` | Check rollout |"
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 220,
+        "line_end": 221,
+        "snippet": "| `kubectl describe pod <pod>` | Debug pod |"
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 221,
+        "line_end": 225,
+        "snippet": "| `kubectl port-forward svc/app 8080:80` | Local port forward |"
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 226,
+        "snippet": "- `./references/dockerfile-patterns.md` - Advanced Dockerfile techniques"
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 227,
+        "snippet": "- `./references/k8s-manifests.md` - Full Kubernetes manifest examples"
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 227,
+        "line_end": 228,
+        "snippet": "- `./references/helm-patterns.md` - Helm chart structure and values"
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 228,
+        "line_end": 232,
+        "snippet": "- `./references/ecs-fargate.md` - Amazon ECS on AWS Fargate (task definitions, services, awsvpc netw"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 232,
+        "line_end": 236,
+        "snippet": "- `./scripts/build-push.sh` - Build and push Docker image"
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 237,
+        "snippet": "- `./assets/Dockerfile.template` - Production Dockerfile template"
+      },
+      {
+        "id": "network:SKILL.md:51:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "CMD curl -f http://localhost:8000/health || exit 1"
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8000/health\"]"
+      },
+      {
+        "id": "network:SKILL.md:54:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "CMD [\"python\", \"-m\", \"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\"]"
+      },
+      {
+        "id": "env_access:SKILL.md:89:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "- DATABASE_URL=postgres://user:pass@db:5432/app"
+      },
+      {
+        "id": "env_access:SKILL.md:163:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "- name: DATABASE_URL"
+      },
+      {
+        "id": "blocker:SKILL.md:104:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "POSTGRES_USER: user"
+      },
+      {
+        "id": "external_commands:tests/run.sh:3:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "tests/run.sh",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "# `docker build`/`docker push` and never calls a real registry."
+      },
+      {
+        "id": "external_commands:tests/run.sh:7:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "tests/run.sh",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "# through the no-docker `--dry-run` path, stream separation (data on stdout,"
+      },
+      {
+        "id": "external_commands:tests/run.sh:10:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "tests/run.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "# added/moved). A sentinel `docker` on PATH proves the help/parse/dry-run paths"
+      },
+      {
+        "id": "external_commands:tests/run.sh:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "tests/run.sh",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "# Sentinel `docker`: records any invocation into $DOCKER_SENTINEL_LOG, then"
+      },
+      {
+        "id": "external_commands:tests/run.sh:18:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "HERE=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:19:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "SKILL=\"$(dirname \"$HERE\")\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:26:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "SB=\"$(mktemp -d)\"; trap 'rm -rf \"$SB\"' EXIT"
+      },
+      {
+        "id": "external_commands:tests/run.sh:28:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "ok() { PASS=$((PASS+1)); printf '  PASS  %s\\n' \"$1\"; }"
+      },
+      {
+        "id": "external_commands:tests/run.sh:29:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "no() { FAIL=$((FAIL+1)); printf '  FAIL  %s\\n' \"$1\"; }"
+      },
+      {
+        "id": "external_commands:tests/run.sh:53:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "hdr=\"$(head -25 \"$V\")\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:64:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --help 2>/dev/null)\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:87:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 87,
+        "line_end": 88,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" DOCKER_SENTINEL_LOG=\"$SB/docker.log\" \\"
+      },
+      {
+        "id": "external_commands:tests/run.sh:96:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=svc bash \"$V\" --dry-run --push --tag dev 2>/dev/null)\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:102:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 102,
+        "line_end": 103,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=app bash \"$V\" --dry-run \\"
+      },
+      {
+        "id": "external_commands:tests/run.sh:109:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "err=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=x bash \"$V\" --dry-run 2>&1 1>/dev/null)\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:111:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "dat=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=x bash \"$V\" --dry-run 2>/dev/null)\""
+      },
+      {
+        "id": "external_commands:tests/run.sh:122:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 122,
+        "line_end": 124,
+        "snippet": "new_data=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=myapp bash \"$V\" --dry-run \\"
+      },
+      {
+        "id": "external_commands:tests/run.sh:130:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "if OLD_SRC=\"$(git -C \"$SKILL/../../..\" cat-file -p \"$OLD_BLOB\" 2>/dev/null)\"; then"
+      },
+      {
+        "id": "external_commands:tests/run.sh:132:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "tests/run.sh",
+        "line_start": 132,
+        "line_end": 134,
+        "snippet": "old_data=\"$(cd \"$SB\" && PATH=\"$NO_DOCKER_PATH\" DOCKER_SENTINEL_LOG=\"$SB/old-docker.log\" \\"
+      },
+      {
+        "id": "external_commands:tests/run.sh:10:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "tests/run.sh",
+        "line_start": 10,
+        "line_end": 33,
+        "snippet": "# added/moved). A sentinel `docker` on PATH proves the help/parse/dry-run paths"
+      },
+      {
+        "id": "filesystem:tests/run.sh:130:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "tests/run.sh",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "if OLD_SRC=\"$(git -C \"$SKILL/../../..\" cat-file -p \"$OLD_BLOB\" 2>/dev/null)\"; then"
+      },
+      {
+        "id": "filesystem:tests/run.sh:41:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "printf 'docker %s\\n' \"$*\" >> \"${DOCKER_SENTINEL_LOG:-/dev/null}\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:52:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "bash -n \"$V\" 2>/dev/null && ok \"bash -n build-push.sh\" || no \"bash -n build-push.sh\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:62:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --help >/dev/null 2>&1; expect_exit \"--help exits 0\" 0 $?"
+      },
+      {
+        "id": "filesystem:tests/run.sh:63:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" bash \"$V\" -h     >/dev/null 2>&1; expect_exit \"-h exits 0\"     0 $?"
+      },
+      {
+        "id": "filesystem:tests/run.sh:64:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --help 2>/dev/null)\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:72:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" DOCKER_SENTINEL_LOG=\"$SB/docker.log\" bash \"$V\" --help >/dev/null 2>&1"
+      },
+      {
+        "id": "filesystem:tests/run.sh:77:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --bogus >/dev/null 2>&1; expect_exit \"unknown flag -> 2\" 2 $?"
+      },
+      {
+        "id": "filesystem:tests/run.sh:78:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --tag   >/dev/null 2>&1; expect_exit \"missing --tag value -> 2\" 2 $"
+      },
+      {
+        "id": "filesystem:tests/run.sh:79:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" bash \"$V\" --registry >/dev/null 2>&1; expect_exit \"missing --registry value -"
+      },
+      {
+        "id": "filesystem:tests/run.sh:81:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "PATH=\"$NO_DOCKER_PATH\" DOCKER_SENTINEL_LOG=\"$SB/docker.log\" bash \"$V\" --bogus >/dev/null 2>&1"
+      },
+      {
+        "id": "filesystem:tests/run.sh:88:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "IMAGE_NAME=myapp bash \"$V\" --dry-run --tag v1 --registry ghcr.io/acme 2>/dev/null)\"; rc=$?"
+      },
+      {
+        "id": "filesystem:tests/run.sh:96:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "out=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=svc bash \"$V\" --dry-run --push --tag dev 2>/dev/null)\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:103:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "--dockerfile Dockerfile.prod --context ./builds/app 2>/dev/null)\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:109:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "err=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=x bash \"$V\" --dry-run 2>&1 1>/dev/null)\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:111:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "dat=\"$(PATH=\"$NO_DOCKER_PATH\" IMAGE_NAME=x bash \"$V\" --dry-run 2>/dev/null)\""
+      },
+      {
+        "id": "filesystem:tests/run.sh:123:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "--tag v1 --registry ghcr.io/acme 2>/dev/null \\"
+      },
+      {
+        "id": "filesystem:tests/run.sh:130:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "if OLD_SRC=\"$(git -C \"$SKILL/../../..\" cat-file -p \"$OLD_BLOB\" 2>/dev/null)\"; then"
+      },
+      {
+        "id": "filesystem:tests/run.sh:133:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "tests/run.sh",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "IMAGE_NAME=myapp bash \"$SB/old-build-push.sh\" --tag v1 --registry ghcr.io/acme 2>/dev/null \\"
+      },
+      {
+        "id": "filesystem:tests/run.sh:26:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "tests/run.sh",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "SB=\"$(mktemp -d)\"; trap 'rm -rf \"$SB\"' EXIT"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:assets/docker-compose.template.yml:31:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:22:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The local Compose template constructs a database URL with the predictable default password \"postgres\" while publishing the database port, creating a usable weak credential.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:23:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a container-internal Redis endpoint without embedded credentials; the line does not access host environment secrets."
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:52:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "POSTGRES_PASSWORD falls back to the predictable value \"postgres\" in a runnable template, so unchanged deployments expose a weak database credential.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:98:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.93,
+        "reason": "The optional worker example repeats the database URL with the predictable default password \"postgres\" and can propagate that weak credential when enabled.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:assets/docker-compose.template.yml:99:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a container-internal Redis endpoint without embedded credentials; the line does not access host environment secrets."
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:22:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is ordinary YAML data or Compose variable interpolation, with no LLM role token, instruction override, or prompt manipulation."
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:51:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is ordinary YAML data or Compose variable interpolation, with no LLM role token, instruction override, or prompt manipulation."
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:60:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is ordinary YAML data or Compose variable interpolation, with no LLM role token, instruction override, or prompt manipulation."
+      },
+      {
+        "id": "blocker:assets/docker-compose.template.yml:98:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is ordinary YAML data or Compose variable interpolation, with no LLM role token, instruction override, or prompt manipulation."
+      },
+      {
+        "id": "external_commands:assets/Dockerfile.template:44:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The /bin/bash value configures a non-root account login shell in a Dockerfile example; it does not invoke a shell on untrusted input."
+      },
+      {
+        "id": "network:assets/Dockerfile.template:62:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "network:assets/Dockerfile.template:68:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Binding an application server to 0.0.0.0 is a normal container pattern and does not itself initiate network access or bypass authentication."
+      },
+      {
+        "id": "blocker:assets/Dockerfile.template:43:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "blocker:assets/Dockerfile.template:44:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "external_commands:references/dockerfile-patterns.md:38:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The /bin/bash value configures a non-root account login shell in a Dockerfile example; it does not invoke a shell on untrusted input."
+      },
+      {
+        "id": "external_commands:references/dockerfile-patterns.md:157:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The /bin/bash value configures a non-root account login shell in a Dockerfile example; it does not invoke a shell on untrusted input."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:218:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "urllib.request is used only for a localhost container health check and does not transmit data to an external service."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:214:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:218:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:277:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is example OCI source metadata, not a runtime network request."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:45:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Binding an application server to 0.0.0.0 is a normal container pattern and does not itself initiate network access or bypass authentication."
+      },
+      {
+        "id": "network:references/dockerfile-patterns.md:328:hardcoded-ip-address",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The debug image starts debugpy on 0.0.0.0:5678 without access controls, which can expose a remote debugging interface if the port is published.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:references/dockerfile-patterns.md:252:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The path is a BuildKit cache mount for pip downloads inside an image build, not access to host secrets or hidden user data."
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:185:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These lines are explicitly labeled WRONG in security documentation to demonstrate what not to place in an image; they are not active skill credentials."
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:186:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These lines are explicitly labeled WRONG in security documentation to demonstrate what not to place in an image; they are not active skill credentials."
+      },
+      {
+        "id": "env_access:references/dockerfile-patterns.md:190:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The documented runtime variable is intentionally empty and contains no secret value."
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:286:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The .env patterns are entries in a .dockerignore example, so they prevent environment files from entering the build context."
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:287:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The .env patterns are entries in a .dockerignore example, so they prevent environment files from entering the build context."
+      },
+      {
+        "id": "sensitive:references/dockerfile-patterns.md:102:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile copies the public CA trust bundle into a scratch image; it does not copy private keys or application credentials."
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:70:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:156:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "blocker:references/dockerfile-patterns.md:157:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The Dockerfile creates a fixed non-root account for container hardening and performs no system discovery."
+      },
+      {
+        "id": "blocker:references/ecs-fargate.md:28:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is prose describing valid Fargate CPU and memory pairs, not a system discovery command."
+      },
+      {
+        "id": "network:references/helm-patterns.md:44:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the public Bitnami Helm repository used as an explicit chart dependency source."
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:47:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "A file labeled as a production Kubernetes example embeds a plaintext database URL with user:pass in Secret stringData, encouraging credentials in source control.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:64:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is a variable name or Secret reference and contains no credential value."
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:118:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is a variable name or Secret reference and contains no credential value."
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:122:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is a variable name or Secret reference and contains no credential value."
+      },
+      {
+        "id": "env_access:references/k8s-manifests.md:48:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "A file labeled as a production Kubernetes example embeds an API key directly in Secret stringData, encouraging plaintext secrets in source control.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a Kubernetes scheduling or job policy field, not host reconnaissance."
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:365:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a Kubernetes scheduling or job policy field, not host reconnaissance."
+      },
+      {
+        "id": "blocker:references/k8s-manifests.md:330:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Ingress is a declared Kubernetes NetworkPolicy type, not a command that scans networks or enumerates services."
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:10:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:93:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script captures output from fixed utilities using quoted values; it does not evaluate user input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:135:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script captures output from fixed utilities using quoted values; it does not evaluate user input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/build-push.sh:136:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script captures output from fixed utilities using quoted values; it does not evaluate user input as shell code."
+      },
+      {
+        "id": "network:scripts/build-push.sh:121:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This URL is printed as Docker installation documentation and is never requested by the script."
+      },
+      {
+        "id": "filesystem:scripts/build-push.sh:119:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:scripts/build-push.sh:136:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:188:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:214:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "network:SKILL.md:51:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL targets localhost for a container health check and does not contact an external host."
+      },
+      {
+        "id": "network:SKILL.md:54:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Binding an application server to 0.0.0.0 is a normal container pattern and does not itself initiate network access or bypass authentication."
+      },
+      {
+        "id": "env_access:SKILL.md:89:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The primary Docker Compose example includes a literal user:pass database credential without clearly marking it as unsafe, so generated configurations may preserve it.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:163:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is a variable name or Secret reference and contains no credential value."
+      },
+      {
+        "id": "blocker:SKILL.md:104:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched text is ordinary YAML data or Compose variable interpolation, with no LLM role token, instruction override, or prompt manipulation."
+      },
+      {
+        "id": "external_commands:tests/run.sh:3:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:tests/run.sh:7:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:tests/run.sh:10:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:tests/run.sh:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code formatting or shell-script comments, not executable command substitution."
+      },
+      {
+        "id": "external_commands:tests/run.sh:18:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:19:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:26:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:28:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:29:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:53:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:64:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:87:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:96:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:102:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:109:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:111:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:122:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:130:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:132:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution captures output from controlled test commands and fixed fixtures; values are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:tests/run.sh:10:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched backticks appear in a test comment describing Docker, so no template evaluation or command execution occurs."
+      },
+      {
+        "id": "filesystem:tests/run.sh:130:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The fixed relative path locates the repository root for a test-only git lookup using a hardcoded blob identifier; no user-controlled traversal exists."
+      },
+      {
+        "id": "filesystem:tests/run.sh:41:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:52:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:62:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:63:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:64:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:72:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:77:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:78:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:79:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:81:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:88:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:96:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:103:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:109:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:111:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:123:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:130:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:133:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The script redirects expected test or diagnostic output to /dev/null, which does not read sensitive files or expose data."
+      },
+      {
+        "id": "filesystem:tests/run.sh:26:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The test uses mktemp to create a unique directory and removes it through an EXIT trap, which is a standard controlled test pattern."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unauthenticated Redis Published on Host Port",
+        "description": "The local Compose template runs Redis without authentication and publishes port 6379 on the host, potentially exposing data and commands to reachable clients.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 70,
+            "line_end": 76
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The service command enables persistence without authentication, and the ports mapping publishes Redis beyond the Compose network by default."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Database connection strings",
+        "description": "- DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-myapp}",
+        "locations": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The local Compose template constructs a database URL with the predictable default password \"postgres\" while publishing the database port, creating a usable weak credential."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}",
+        "locations": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 52,
+            "line_end": 52
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "POSTGRES_PASSWORD falls back to the predictable value \"postgres\" in a runnable template, so unchanged deployments expose a weak database credential."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "#     - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-mya",
+        "locations": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 98,
+            "line_end": 98
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.93,
+        "confidence_reasoning": "The optional worker example repeats the database URL with the predictable default password \"postgres\" and can propagate that weak credential when enabled."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "DATABASE_URL: postgres://user:pass@db:5432/app",
+        "locations": [
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 47,
+            "line_end": 47
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "A file labeled as a production Kubernetes example embeds a plaintext database URL with user:pass in Secret stringData, encouraging credentials in source control."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "API_KEY: supersecretkey",
+        "locations": [
+          {
+            "file": "references/k8s-manifests.md",
+            "line_start": 48,
+            "line_end": 48
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "A file labeled as a production Kubernetes example embeds an API key directly in Secret stringData, encouraging plaintext secrets in source control."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "- DATABASE_URL=postgres://user:pass@db:5432/app",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 89
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The primary Docker Compose example includes a literal user:pass database credential without clearly marking it as unsafe, so generated configurations may preserve it."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Hardcoded IP address",
+        "description": "CMD [\"python\", \"-m\", \"debugpy\", \"--listen\", \"0.0.0.0:5678\", \"-m\", \"src.main\"]",
+        "locations": [
+          {
+            "file": "references/dockerfile-patterns.md",
+            "line_start": 328,
+            "line_end": 328
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "medium",
+        "confidence": 0.95,
+        "confidence_reasoning": "The debug image starts debugpy on 0.0.0.0:5678 without access controls, which can expose a remote debugging interface if the port is published."
+      },
+      {
+        "title": "Unauthenticated Redis Published on Host Port",
+        "description": "The local Compose template runs Redis without authentication and publishes port 6379 on the host, potentially exposing data and commands to reachable clients.",
+        "locations": [
+          {
+            "file": "assets/docker-compose.template.yml",
+            "line_start": 70,
+            "line_end": 76
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "The service command enables persistence without authentication, and the ports mapping publishes Redis beyond the Compose network by default."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 9,
+    "total_lines": 1985,
+    "audit_model": "codex",
+    "audited_at": "2026-07-12T09:19:55.034Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Design and Operate Container Platforms",
+    "value_statement": "Container deployments require consistent image, networking, configuration, and runtime decisions. This skill provides reusable patterns for Docker, Kubernetes, Helm, and ECS/Fargate.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Docker orchestration",
+      "Kubernetes manifests",
+      "Helm charts",
+      "AWS ECS",
+      "AWS Fargate",
+      "container deployment"
+    ],
+    "actual_capabilities": [
+      "Creates multi-stage Dockerfile patterns with non-root users, health checks, and production stages.",
+      "Drafts Docker Compose stacks with application, PostgreSQL, Redis, volume, and network configuration.",
+      "Provides Kubernetes Deployment, Service, Ingress, ConfigMap, Secret, NetworkPolicy, and CronJob patterns.",
+      "Guides Helm chart structure, values, dependencies, and reusable templates.",
+      "Explains ECS/Fargate task definitions, services, networking, load balancing, secrets, and scaling.",
+      "Builds and optionally pushes Docker images through a configurable shell script with dry-run support."
+    ],
+    "limitations": [
+      "Generated configurations require review for application ports, resources, credentials, and cloud account settings.",
+      "The skill does not provision clusters, cloud accounts, registries, or networking infrastructure by itself.",
+      "The included build script requires Docker and performs a registry push only when explicitly requested.",
+      "Examples do not replace organization-specific security, reliability, cost, or compliance controls."
+    ],
+    "use_cases": [
+      {
+        "title": "Package an application",
+        "description": "Create a production Dockerfile and local Compose stack for a service with database and cache dependencies.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Deploy to Kubernetes",
+        "description": "Draft workload, service, ingress, configuration, secret reference, resource, and health probe manifests.",
+        "target_user": "Platform engineer"
+      },
+      {
+        "title": "Choose a managed runtime",
+        "description": "Compare ECS/Fargate and Kubernetes against operational complexity, scaling, networking, portability, and team experience.",
+        "target_user": "Cloud architect"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a Dockerfile",
+        "prompt": "Create a production Dockerfile for [application]. Use [runtime version], a non-root user, dependency caching, and health endpoint [path].",
+        "scenario": "Beginner packaging task"
+      },
+      {
+        "title": "Build a local stack",
+        "prompt": "Create a Docker Compose setup for [service], [database], and [cache]. Use environment placeholders, health checks, named volumes, and internal networks.",
+        "scenario": "Local development environment"
+      },
+      {
+        "title": "Design Kubernetes resources",
+        "prompt": "Design Kubernetes resources for [application]. Include deployment strategy, probes, resources, service, ingress, configuration, external secret references, and network policy.",
+        "scenario": "Production cluster deployment"
+      },
+      {
+        "title": "Evaluate orchestration platforms",
+        "prompt": "Compare ECS/Fargate and Kubernetes for [workload]. Evaluate scaling, networking, security, cost, portability, operations, and migration risk. Recommend an implementation plan.",
+        "scenario": "Advanced platform architecture"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Create a production container plan for a Python API with PostgreSQL and Redis.",
+        "output": [
+          "A multi-stage Python image runs as a non-root user and exposes health and readiness endpoints.",
+          "The local stack keeps data services on an internal network and loads credentials from external configuration.",
+          "The deployment plan defines resource limits, rolling updates, persistent data, and service health checks."
+        ]
+      },
+      {
+        "input": "Should a small AWS team deploy this stateless API on ECS/Fargate or Kubernetes?",
+        "output": "Recommendation: use ECS/Fargate when AWS integration and low operational overhead outweigh portability needs. Reassess Kubernetes when workload diversity or platform requirements grow."
+      }
+    ],
+    "best_practices": [
+      "Pin image versions and scan base images and dependencies before release.",
+      "Run containers as non-root and apply minimal filesystem, network, and IAM permissions.",
+      "Store credentials in managed secret systems and keep literal values out of manifests and images."
+    ],
+    "anti_patterns": [
+      "Do not deploy example credentials, default passwords, or plaintext Secret values.",
+      "Do not expose databases, caches, or remote debuggers on all host interfaces.",
+      "Do not run generated deployment commands before reviewing the target cluster, account, namespace, and registry."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill execute deployments automatically?",
+        "answer": "No. It provides patterns and a Docker build script. Cluster and cloud deployment still require explicit commands and credentials."
+      },
+      {
+        "question": "Which container platforms are covered?",
+        "answer": "The skill covers Docker, Docker Compose, Kubernetes, Helm, and AWS ECS on Fargate."
+      },
+      {
+        "question": "Can it generate production-ready manifests?",
+        "answer": "It generates strong starting points, but every manifest needs review for security, resources, networking, availability, and organization standards."
+      },
+      {
+        "question": "How should secrets be handled?",
+        "answer": "Use managed secret stores, External Secrets, sealed secrets, or runtime injection. Never commit real credential values."
+      },
+      {
+        "question": "Does the build script push images by default?",
+        "answer": "No. Pushing requires the explicit push option. Use dry-run to inspect the resolved build plan without invoking Docker."
+      },
+      {
+        "question": "When should ECS/Fargate be preferred over Kubernetes?",
+        "answer": "Prefer ECS/Fargate for AWS-focused workloads needing lower platform overhead. Prefer Kubernetes when portability, ecosystem breadth, or advanced scheduling is essential."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "docker-compose.template.yml",
+          "type": "file",
+          "path": "assets/docker-compose.template.yml",
+          "lines": 141
+        },
+        {
+          "name": "Dockerfile.template",
+          "type": "file",
+          "path": "assets/Dockerfile.template",
+          "lines": 69
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "dockerfile-patterns.md",
+          "type": "file",
+          "path": "references/dockerfile-patterns.md",
+          "lines": 341
+        },
+        {
+          "name": "ecs-fargate.md",
+          "type": "file",
+          "path": "references/ecs-fargate.md",
+          "lines": 131
+        },
+        {
+          "name": "helm-patterns.md",
+          "type": "file",
+          "path": "references/helm-patterns.md",
+          "lines": 377
+        },
+        {
+          "name": "k8s-manifests.md",
+          "type": "file",
+          "path": "references/k8s-manifests.md",
+          "lines": 382
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "build-push.sh",
+          "type": "file",
+          "path": "scripts/build-push.sh",
+          "lines": 158
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 238
+    },
+    {
+      "name": "tests",
+      "type": "dir",
+      "path": "tests",
+      "children": [
+        {
+          "name": "run.sh",
+          "type": "file",
+          "path": "tests/run.sh",
+          "lines": 148
+        }
+      ]
+    }
+  ]
+}

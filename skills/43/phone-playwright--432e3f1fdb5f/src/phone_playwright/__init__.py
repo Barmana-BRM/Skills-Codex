@@ -1,0 +1,62 @@
+"""Phone-Playwright 顶层包入口。
+
+暴露最符合直觉的工厂方法:
+from phone_playwright import sync_phone_playwright, async_phone_playwright
+"""
+
+from phone_playwright.api.sync_api import (
+    sync_phone_playwright,
+    SyncPhonePlaywright,
+    SyncPhoneDevice,
+    SyncPhonePage,
+    SyncPhoneLocator,
+)
+from phone_playwright.api.async_api import (
+    async_phone_playwright,
+    AsyncPhonePlaywright,
+    AsyncPhoneDevice,
+    AsyncPhonePage,
+)
+from phone_playwright.core.locator import PhoneLocator
+from phone_playwright.core.assertions import expect, AsyncExpect, SyncExpect
+from phone_playwright.models.geometry import Rect
+from phone_playwright.models.schema import CompactElement, PageSnapshot
+from phone_playwright.models.actions import ActionResult
+from phone_playwright.models.exceptions import (
+    PhonePlaywrightError,
+    DeviceOfflineError,
+    ActionabilityTimeoutError,
+    SelectorNotFoundError,
+    OffscreenElementError,
+)
+
+# Playwright 惯用名无缝兼容别名
+async_playwright = async_phone_playwright
+sync_playwright = sync_phone_playwright
+
+__all__ = [
+    "sync_phone_playwright",
+    "async_phone_playwright",
+    "sync_playwright",
+    "async_playwright",
+    "SyncPhonePlaywright",
+    "SyncPhoneDevice",
+    "SyncPhonePage",
+    "SyncPhoneLocator",
+    "PhoneLocator",
+    "AsyncPhonePlaywright",
+    "AsyncPhoneDevice",
+    "AsyncPhonePage",
+    "Rect",
+    "CompactElement",
+    "PageSnapshot",
+    "ActionResult",
+    "expect",
+    "AsyncExpect",
+    "SyncExpect",
+    "PhonePlaywrightError",
+    "DeviceOfflineError",
+    "ActionabilityTimeoutError",
+    "SelectorNotFoundError",
+    "OffscreenElementError",
+]

@@ -1,0 +1,1117 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-13T17:31:00.994Z",
+    "slug": "consiliency-supabase-patterns",
+    "source_url": "https://github.com/Consiliency/treesitter-chunker/tree/main/.ai-dev-kit/skills/supabase-patterns",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "499534250a9017db0fe9f377c5f81da8a12151610b3806e6bdb81a92660e938b",
+    "tree_hash": "4bda1b1317ed62b2ca1b04bb42c6f8ba510d8e9df791d1885c85e0d3f9c15ef6",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "supabase-patterns",
+    "description": "Framework-neutral Supabase guidance for Row Level Security, typed clients, realtime subscriptions, storage, migrations, and production security checks.",
+    "summary": "Apply reusable Supabase security and integration patterns across backend projects.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "Consiliency",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "supabase",
+      "postgresql",
+      "row-level-security",
+      "realtime",
+      "database-security"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "All 44 static findings are false positives caused by SQL identifiers, Markdown code fences, template literals, or public Supabase client configuration. However, two cookbook examples define privileged functions without a fixed search path, creating a conditional privilege-escalation risk.",
+    "remediation": [
+      {
+        "issue": "The SECURITY DEFINER examples use unqualified relations and do not pin search_path.",
+        "suggestion": "Add SET search_path = '' to each function and schema-qualify every referenced table and function.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 158
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 158,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 166
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 166,
+            "line_end": 174
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 175
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 175,
+            "line_end": 203
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 215,
+            "line_end": 222
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 222,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 233
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:cookbook/rls-policies.md:76:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 76,
+        "line_end": 76,
+        "snippet": "WHERE profiles.id = auth.uid()"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:94:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "team_id IN ("
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:95:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "SELECT team_id FROM team_members"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:96:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "WHERE user_id = auth.uid()"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:106:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "WHERE team_members.team_id = posts.team_id"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:107:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "AND team_members.user_id = auth.uid()"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:120:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 120,
+        "line_end": 121,
+        "snippet": "auth.uid() = user_id"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:130:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 130,
+        "line_end": 131,
+        "snippet": "auth.uid() = user_id"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:142:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 142,
+        "line_end": 143,
+        "snippet": "OR auth.uid() = user_id"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:157:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "WHERE id = auth.uid()"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:176:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "SELECT team_id FROM team_members"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:177:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "WHERE user_id = auth.uid()"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:185:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "USING (team_id = ANY(get_user_team_ids()));"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:222:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 222,
+        "line_end": 223,
+        "snippet": "-- BAD: Missing WITH CHECK allows inserting with any user_id"
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:247:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/rls-policies.md",
+        "line_start": 247,
+        "line_end": 247,
+        "snippet": "WHERE user_id = auth.uid()"
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "- THEN: Read and execute `./cookbook/rls-policies.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "- THEN: Read and execute `./cookbook/realtime-subscriptions.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "- THEN: Read and execute `./cookbook/storage-patterns.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 72,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 76,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 91,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 95,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 113,
+        "snippet": "```sql"
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 117,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 139,
+        "snippet": "```typescript"
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 143,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 158,
+        "snippet": "```typescript"
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 162,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 166,
+        "snippet": "```typescript"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 174,
+        "snippet": ".upload(`${userId}/avatar.png`, file, {"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 175,
+        "snippet": ".getPublicUrl(`${userId}/avatar.png`);"
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 175,
+        "line_end": 203,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 211,
+        "snippet": "```sql"
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 215,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 215,
+        "line_end": 222,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 222,
+        "line_end": 226,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 233,
+        "snippet": "```bash"
+      },
+      {
+        "id": "env_access:SKILL.md:123:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "process.env.SUPABASE_URL!,"
+      },
+      {
+        "id": "env_access:SKILL.md:124:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "process.env.SUPABASE_ANON_KEY!"
+      },
+      {
+        "id": "env_access:SKILL.md:123:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "process.env.SUPABASE_URL!,"
+      },
+      {
+        "id": "env_access:SKILL.md:124:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "process.env.SUPABASE_ANON_KEY!"
+      },
+      {
+        "id": "sensitive:SKILL.md:123:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "process.env.SUPABASE_URL!,"
+      },
+      {
+        "id": "sensitive:SKILL.md:124:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "process.env.SUPABASE_ANON_KEY!"
+      },
+      {
+        "id": "blocker:SKILL.md:206:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 206,
+        "line_end": 206,
+        "snippet": "id UUID PRIMARY KEY DEFAULT gen_random_uuid(),"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:cookbook/rls-policies.md:76:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line compares a profile identifier with auth.uid() inside an RLS policy; it does not inspect the host system."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:94:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a team_id membership condition in an RLS example, not system reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:95:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The SELECT reads an application membership table to enforce tenant access; it does not enumerate system information."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:96:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The predicate restricts membership rows to the authenticated user and has no reconnaissance behavior."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:106:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line joins application team identifiers within an authorization policy; it does not probe the environment."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:107:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The auth.uid() comparison limits access to the current user and is unrelated to system discovery."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:120:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an ownership check in an RLS policy, with no host or network enumeration."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:130:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This authenticated-user predicate is a documented access-control condition, not reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:142:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line grants owners access to their application rows and does not gather system details."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:157:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The query checks the current user's profile while evaluating authorization; it is not system reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:176:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This SELECT returns application team identifiers for an RLS helper and does not inspect system metadata."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:177:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The predicate filters team membership by auth.uid(), which is normal authorization logic."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:185:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This RLS expression checks whether a row belongs to one of the user's teams; it performs no reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:222:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a warning comment that labels an intentionally unsafe INSERT policy before presenting the corrected pattern."
+      },
+      {
+        "id": "blocker:cookbook/rls-policies.md:247:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This permission lookup filters application records by the current user and does not enumerate the system."
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Backticks format a relative Markdown file path; no Ruby interpolation or shell execution syntax is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks delimit a cookbook filename in prose and do not invoke a command interpreter."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is inline Markdown around a storage cookbook path, not executable backtick syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched token opens a fenced project-tree example and cannot execute a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched token closes a Markdown code fence and has no execution semantics."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This opens a documented Bash command example; no Ruby backtick expression or automatic execution mechanism exists."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This closes the Bash example's Markdown fence and is not a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This token opens a SQL documentation block and does not execute external commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is the closing fence for a SQL example, with no shell behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This opens a TypeScript example and is inert Markdown."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks close a TypeScript code fence and cannot invoke a process."
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This token begins a documented TypeScript realtime example, not executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line only closes a Markdown code block."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This opens a TypeScript storage example and does not execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks form a JavaScript template literal for an object-storage key, with no shell interpreter involved."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This template literal builds a storage object path for getPublicUrl and cannot launch an external command."
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line closes a TypeScript code fence and has no command-execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This opens a SQL schema example and is inert Markdown."
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This token closes the SQL example and does not invoke an external command."
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This begins a Python model example and contains no process-execution call."
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a closing Markdown fence rather than Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This opens a documented Bash type-generation example; the Markdown itself does not automatically execute the command."
+      },
+      {
+        "id": "env_access:SKILL.md:123:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The example reads the standard Supabase project URL for client initialization and does not disclose or transmit environment data."
+      },
+      {
+        "id": "env_access:SKILL.md:124:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "SUPABASE_ANON_KEY is the public client credential protected by RLS, and the example does not expose a service-role secret."
+      },
+      {
+        "id": "env_access:SKILL.md:123:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a direct read of a named public endpoint variable in sample client code, not broad environment enumeration."
+      },
+      {
+        "id": "env_access:SKILL.md:124:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The code accesses one named anonymous client key and never inspects the environment object or exports its contents."
+      },
+      {
+        "id": "sensitive:SKILL.md:123:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet references process.env.SUPABASE_URL and contains no file read, .env path, or sensitive file operation."
+      },
+      {
+        "id": "sensitive:SKILL.md:124:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet reads a public Supabase anonymous key variable and does not access an environment file or service-role credential."
+      },
+      {
+        "id": "blocker:SKILL.md:206:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "gen_random_uuid() supplies a PostgreSQL table default in a schema example and performs no system reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unpinned Search Path in Privileged Functions",
+        "description": "Two SECURITY DEFINER functions omit a fixed search_path and use unqualified relations, allowing object shadowing to execute code with owner privileges.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "cookbook/rls-policies.md",
+            "line_start": 152,
+            "line_end": 161
+          },
+          {
+            "file": "cookbook/rls-policies.md",
+            "line_start": 172,
+            "line_end": 180
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "Both examples explicitly use SECURITY DEFINER without SET search_path and reference unqualified tables. Exploitability depends on schema creation privileges, but the unsafe pattern is clear."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Unpinned Search Path in Privileged Functions",
+        "description": "Two SECURITY DEFINER functions omit a fixed search_path and use unqualified relations, allowing object shadowing to execute code with owner privileges.",
+        "locations": [
+          {
+            "file": "cookbook/rls-policies.md",
+            "line_start": 152,
+            "line_end": 161
+          },
+          {
+            "file": "cookbook/rls-policies.md",
+            "line_start": 172,
+            "line_end": 180
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "Both examples explicitly use SECURITY DEFINER without SET search_path and reference unqualified tables. Exploitability depends on schema creation privileges, but the unsafe pattern is clear."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 538,
+    "audit_model": "codex",
+    "audited_at": "2026-07-13T17:31:00.994Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build Secure Supabase Backends",
+    "value_statement": "Supabase projects can expose data when RLS, storage, and realtime rules are incomplete. This skill provides reusable security patterns, migrations, client examples, and review checklists.",
+    "seo_keywords": [
+      "Supabase patterns",
+      "Supabase RLS",
+      "row level security",
+      "PostgreSQL policies",
+      "realtime subscriptions",
+      "storage security",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Explains how to enable and force Row Level Security on Supabase tables.",
+      "Provides ownership, public-read, team, role, soft-delete, and time-based policy examples.",
+      "Shows typed Supabase client initialization, queries, inserts, and generated database types.",
+      "Demonstrates realtime subscriptions with explicit cleanup.",
+      "Illustrates user-scoped storage paths and public URL retrieval.",
+      "Supplies migration structure, policy testing steps, and production security checklists."
+    ],
+    "limitations": [
+      "The guidance is generic and does not inspect a deployed Supabase project automatically.",
+      "Referenced realtime and storage cookbook files are absent from this package.",
+      "Examples use placeholder tables, claims, and identifiers that require project-specific adaptation.",
+      "The package includes no automated policy tests or deployment safeguards."
+    ],
+    "use_cases": [
+      {
+        "title": "Design Application Policies",
+        "description": "Create ownership or team-based RLS policies for a new Supabase feature.",
+        "target_user": "Backend developers"
+      },
+      {
+        "title": "Review Database Access",
+        "description": "Compare existing policies against common mistakes and production security checks.",
+        "target_user": "Application security reviewers"
+      },
+      {
+        "title": "Standardize Supabase Migrations",
+        "description": "Establish repeatable migration, type-generation, and policy-testing conventions across services.",
+        "target_user": "Platform engineering teams"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Add Basic Ownership",
+        "prompt": "Create Supabase RLS policies for a posts table. Users may select, insert, update, and delete only rows matching their authenticated user ID.",
+        "scenario": "A beginner needs owner-only access for one table."
+      },
+      {
+        "title": "Design Team Access",
+        "prompt": "Design RLS for posts and team_members. Members may read team posts, while team administrators may update them. Include assumptions and policy tests.",
+        "scenario": "A multi-tenant application needs role-aware access."
+      },
+      {
+        "title": "Audit Existing Policies",
+        "prompt": "Review these Supabase tables and policies for missing RLS, unsafe USING clauses, missing WITH CHECK clauses, and excessive realtime exposure: [paste schema and policies].",
+        "scenario": "A security reviewer is preparing a release."
+      },
+      {
+        "title": "Plan a Secure Migration",
+        "prompt": "Produce a migration plan for this Supabase schema change: [describe change]. Cover RLS, storage, realtime, rollback, role tests, and generated client types.",
+        "scenario": "An advanced team needs a production change plan."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Design owner-only access for a posts table.",
+        "output": [
+          "Enable and force Row Level Security before exposing the table.",
+          "Use authenticated user ownership checks for read, update, and delete operations.",
+          "Use a matching insertion check to prevent assigning rows to another user.",
+          "Test anonymous access and two distinct authenticated users."
+        ]
+      },
+      {
+        "input": "Review a team policy that checks membership but ignores administrator roles.",
+        "output": "The review separates member read access from administrator update access, recommends explicit role checks, and lists cross-team denial tests."
+      },
+      {
+        "input": "Prepare a production checklist for a realtime table.",
+        "output": [
+          "Confirm RLS covers every operation before enabling realtime.",
+          "Exclude sensitive columns from change payloads.",
+          "Verify subscription cleanup and expected channel scope.",
+          "Test anonymous, member, and unauthorized user behavior."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Enable RLS when each table is created, then test every operation with realistic user roles.",
+      "Keep schema and policy changes in reviewed migrations with a rollback plan.",
+      "Use anonymous keys in clients and reserve service-role credentials for protected server environments."
+    ],
+    "anti_patterns": [
+      "Do not rely on client-side filters as a substitute for Row Level Security.",
+      "Do not use USING alone for inserts or updates that require ownership validation.",
+      "Do not expose service-role keys, sensitive columns, or unrestricted storage buckets to clients."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill deploy changes to Supabase?",
+        "answer": "No. It provides patterns and commands, but deployment requires your project credentials, review, and explicit execution."
+      },
+      {
+        "question": "Does it support frameworks beyond JavaScript?",
+        "answer": "Yes. The database and policy guidance is framework-neutral, although most client examples use TypeScript."
+      },
+      {
+        "question": "Can it generate complete RLS policies?",
+        "answer": "It can draft policies from your schema and access rules. You must validate them against actual roles and data relationships."
+      },
+      {
+        "question": "Does the package cover storage and realtime fully?",
+        "answer": "It includes brief examples and checklists. The referenced dedicated storage and realtime cookbook files are not included."
+      },
+      {
+        "question": "Are Supabase anonymous keys safe in client code?",
+        "answer": "They are designed for public clients. Strong RLS and storage policies must enforce authorization because the key is not secret."
+      },
+      {
+        "question": "What project details improve the result?",
+        "answer": "Provide table schemas, relationships, user roles, current policies, storage rules, realtime needs, and expected access for each operation."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "cookbook",
+      "type": "dir",
+      "path": "cookbook",
+      "children": [
+        {
+          "name": "rls-policies.md",
+          "type": "file",
+          "path": "cookbook/rls-policies.md",
+          "lines": 295
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 243
+    }
+  ]
+}

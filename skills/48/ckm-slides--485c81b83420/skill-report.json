@@ -1,0 +1,632 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T20:00:44.878Z",
+    "slug": "nextlevelbuilder-ckm-slides",
+    "source_url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/slides/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "a7953a252222c662ebe5578c2cc452dc2bc2b7dc5501ccb72ad92d27e6998dab",
+    "tree_hash": "7b7c998a3c8cf005ac0771d47d18506d0fcd5f66c89f0a72f093bc13315e0c42",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "ckm-slides",
+    "description": "Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies.",
+    "summary": "Build responsive HTML slide decks with charts, persuasive copy, and reusable presentation structures.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "nextlevelbuilder",
+    "license": "MIT",
+    "tags": [
+      "presentations",
+      "html-slides",
+      "chartjs",
+      "pitch-decks",
+      "copywriting"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by Markdown inline code, layout wording, HTML comments, and keyboard event handling. Two low-risk network dependencies are confirmed because generated decks may fetch Chart.js or background images from public CDNs. No prompt injection text was found in the reviewed files.",
+    "remediation": [
+      {
+        "issue": "External script dependency in generated HTML",
+        "suggestion": "Offer a local Chart.js option, or document the CDN dependency with integrity and crossorigin attributes.",
+        "severity": "low"
+      },
+      {
+        "issue": "Third-party background image example",
+        "suggestion": "Prefer local or user-supplied image assets, and explain that remote images may disclose viewer requests.",
+        "severity": "low"
+      },
+      {
+        "issue": "Argument-controlled reference path",
+        "suggestion": "Replace dynamic reference loading with an explicit allowlist, such as mapping only the create subcommand to references/create.md.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/html-template.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "references/html-template.md",
+            "line_start": 278,
+            "line_end": 278
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/html-template.md",
+            "line_start": 161,
+            "line_end": 161
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:references/html-template.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/html-template.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js\"></script>"
+      },
+      {
+        "id": "network:references/html-template.md:278:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/html-template.md",
+        "line_start": 278,
+        "line_end": 278,
+        "snippet": "<div class=\"slide slide-with-bg\" style=\"background-image: url('https://images.pexels.com/...')\">"
+      },
+      {
+        "id": "filesystem:references/html-template.md:161:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/html-template.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "</div><!-- /.slide-deck -->"
+      },
+      {
+        "id": "sensitive:references/html-template.md:190:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "references/html-template.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }"
+      },
+      {
+        "id": "sensitive:references/html-template.md:191:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "references/html-template.md",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }"
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/layout-patterns.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "| Feature Grid | Show capabilities (3-6 cards) | `animate-stagger` |"
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:16:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/layout-patterns.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "| Team Grid | Introduce people | `animate-stagger` |"
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:50:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/layout-patterns.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "### Feature Grid (3 columns)"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "| `create` | Create strategic presentation slides | `references/create.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "| Layout Patterns | `references/layout-patterns.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "| HTML Template | `references/html-template.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "| Copywriting Formulas | `references/copywriting-formulas.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "| Slide Strategies | `references/slide-strategies.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "1. Parse subcommand from `$ARGUMENTS` (first word)"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "2. Load corresponding `references/{subcommand}.md`"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:references/html-template.md:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "low",
+        "reason": "The HTML template loads Chart.js from jsdelivr, so generated decks may make a remote script request. This is a legitimate CDN dependency, but it creates supply-chain and availability risk."
+      },
+      {
+        "id": "network:references/html-template.md:278:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "low",
+        "reason": "The background image example uses a remote Pexels URL, so copied output may fetch third-party media. This is not malicious, but it is a real external network dependency and privacy consideration."
+      },
+      {
+        "id": "filesystem:references/html-template.md:161:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 161 is an HTML closing comment, \"<!-- /.slide-deck -->\", not file access. The slash-dot sequence is only a common CSS selector annotation in template markup."
+      },
+      {
+        "id": "sensitive:references/html-template.md:190:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 190 checks e.key for keyboard navigation and does not reference certificates, key files, or secrets. The word \"key\" refers to a browser keyboard event property."
+      },
+      {
+        "id": "sensitive:references/html-template.md:191:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 191 also checks e.key for arrow-key navigation. It does not access private keys, certificate files, or sensitive material."
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line describes a presentation layout named Feature Grid and an animation class. It contains no host, network, identity, or environment reconnaissance instruction."
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:16:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line describes a Team Grid slide layout for introducing people. It is presentation guidance, not a request to enumerate users, systems, or infrastructure."
+      },
+      {
+        "id": "blocker:references/layout-patterns.md:50:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is a Markdown heading for a three-column feature grid CSS pattern. It does not instruct the agent to inspect system state or gather sensitive information."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown inline code around a subcommand and reference filename. There is no Ruby code, shell interpolation, or command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format a reference file path in a Markdown table. This is documentation, not shell or Ruby backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line lists references/html-template.md as a knowledge-base file using Markdown inline code. It does not execute or spawn any command."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line lists references/copywriting-formulas.md in a Markdown table. The backticks are formatting and do not invoke a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line lists references/slide-strategies.md as a reference document. No executable command or external process is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line refers to parsing $ARGUMENTS inside Markdown instructions. It is not Ruby backtick execution, although the adjacent dynamic routing deserves separate semantic review."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line uses Markdown inline code to describe a reference file pattern. It does not execute shell commands, but the argument-controlled path pattern is addressed as a semantic finding."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Argument-Controlled Reference Loading",
+        "description": "The routing instructions parse `$ARGUMENTS` and load `references/{subcommand}.md` without stating that subcommands must be whitelisted. A malicious or mistaken subcommand could lead the agent to request an unintended reference path if followed literally.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 41
+          }
+        ],
+        "confidence": 0.62,
+        "confidence_reasoning": "The dynamic path pattern is explicit, but this is prose guidance rather than executable code. The risk depends on how strictly the host agent constrains file reads."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Argument-Controlled Reference Loading",
+        "description": "The routing instructions parse `$ARGUMENTS` and load `references/{subcommand}.md` without stating that subcommands must be whitelisted. A malicious or mistaken subcommand could lead the agent to request an unintended reference path if followed literally.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.62,
+        "confidence_reasoning": "The dynamic path pattern is explicit, but this is prose guidance rather than executable code. The risk depends on how strictly the host agent constrains file reads."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js\"></script>",
+        "locations": [
+          {
+            "file": "references/html-template.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "The HTML template loads Chart.js from jsdelivr, so generated decks may make a remote script request. This is a legitimate CDN dependency, but it creates supply-chain and availability risk."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "<div class=\"slide slide-with-bg\" style=\"background-image: url('https://images.pexels.com/...')\">",
+        "locations": [
+          {
+            "file": "references/html-template.md",
+            "line_start": 278,
+            "line_end": 278
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.72,
+        "confidence_reasoning": "The background image example uses a remote Pexels URL, so copied output may fetch third-party media. This is not malicious, but it is a real external network dependency and privacy consideration."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 662,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T20:00:44.878Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Create Strategic HTML Slide Decks",
+    "value_statement": "Presentation teams need persuasive decks that combine narrative, layout, and charts. This skill guides Claude, Codex, and Claude Code to produce responsive HTML slides.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "HTML slide deck",
+      "Chart.js presentations",
+      "AI presentation design",
+      "pitch deck generator",
+      "responsive slide layouts",
+      "copywriting formulas",
+      "design tokens"
+    ],
+    "actual_capabilities": [
+      "Generates HTML presentation structures with progress bars, slide counters, and keyboard navigation.",
+      "Applies responsive 16:9 slide layouts with tablet and mobile breakpoints.",
+      "Uses Chart.js examples for line, bar, doughnut, and radar charts.",
+      "Maps deck goals to strategies such as YC Seed Deck, Sales Pitch, and Product Demo.",
+      "Applies copywriting formulas such as PAS, AIDA, FAB, and Before-After-Bridge.",
+      "Suggests CSS animation classes for fade, scale, count, and staggered reveal effects."
+    ],
+    "limitations": [
+      "It relies on user-provided facts, metrics, and brand requirements.",
+      "Generated decks may need visual review before client or executive use.",
+      "Chart.js and image examples use external URLs unless assets are localized.",
+      "It creates HTML presentation guidance, not native PowerPoint or Keynote files."
+    ],
+    "use_cases": [
+      {
+        "title": "Investor Pitch Decks",
+        "description": "Create an HTML fundraising deck with problem, solution, market, traction, team, and ask slides.",
+        "target_user": "Startup founder"
+      },
+      {
+        "title": "Sales and Demo Decks",
+        "description": "Turn product notes into a persuasive sales flow with proof, differentiators, pricing, and next steps.",
+        "target_user": "Revenue team"
+      },
+      {
+        "title": "Executive Data Updates",
+        "description": "Build stakeholder slides with responsive layouts, KPI sections, and Chart.js visualizations.",
+        "target_user": "Product or operations leader"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a Basic Deck",
+        "scenario": "Beginner request with a topic and slide count.",
+        "prompt": "Create a 7-slide HTML presentation about our new analytics product. Include a title, problem, solution, features, proof, pricing, and CTA."
+      },
+      {
+        "title": "Build a Sales Pitch",
+        "scenario": "Intermediate request with audience and persuasion goal.",
+        "prompt": "Create a sales pitch deck for mid-market finance teams. Use a cost-of-inaction slide, a product demo section, and a clear next step."
+      },
+      {
+        "title": "Design with Data",
+        "scenario": "Intermediate request that needs charts and metrics.",
+        "prompt": "Create a QBR deck for leadership. Include KPI slides, a Chart.js revenue trend, risks, decisions needed, and a closing summary."
+      },
+      {
+        "title": "Create a Fundraising Narrative",
+        "scenario": "Advanced request with strategy, copywriting, and layout constraints.",
+        "prompt": "Create a YC-style seed deck for an AI workflow startup. Use PAS and FAB copy, 16:9 responsive layouts, design tokens, and a confident investor narrative."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Create a 9-slide sales deck for a cybersecurity platform.",
+        "output": "A sales deck outline with a personalized hook, problem, cost of inaction, solution, proof, differentiators, ROI, objection handling, and CTA."
+      },
+      {
+        "input": "Create a board update with product adoption data.",
+        "output": "A leadership deck plan with KPI cards, a revenue trend chart, roadmap status, risks, decisions needed, and a concise closing slide."
+      },
+      {
+        "input": "Create a seed pitch for a developer productivity startup.",
+        "output": "A YC-style deck structure with market pain, product solution, traction, business model, team, financials, and a clear fundraising ask."
+      }
+    ],
+    "best_practices": [
+      "Provide the audience, deck goal, slide count, and any required brand tokens.",
+      "Supply real metrics and source context before asking for charts or proof slides.",
+      "Review external assets and replace placeholder image URLs before publishing."
+    ],
+    "anti_patterns": [
+      "Do not request a persuasive deck without naming the target audience.",
+      "Do not invent metrics, customer names, or proof points for business slides.",
+      "Do not publish generated HTML without checking responsive layout and asset loading."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill create?",
+        "answer": "It creates strategic HTML presentation guidance with layouts, copy formulas, charts, and responsive slide structure."
+      },
+      {
+        "question": "Can it create data visualizations?",
+        "answer": "Yes. It includes Chart.js examples and slide patterns for KPI dashboards and chart-based updates."
+      },
+      {
+        "question": "Does it support investor decks?",
+        "answer": "Yes. It includes structures for YC Seed, Guy Kawasaki, Series A, and related fundraising presentations."
+      },
+      {
+        "question": "Can I use it with Claude Code or Codex?",
+        "answer": "Yes. The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Does it generate PowerPoint files?",
+        "answer": "No. It focuses on HTML slides and presentation planning, not native PowerPoint or Keynote export."
+      },
+      {
+        "question": "What should I provide for best results?",
+        "answer": "Provide the audience, objective, core message, slide count, brand rules, and real metrics or proof points."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "copywriting-formulas.md",
+          "type": "file",
+          "path": "references/copywriting-formulas.md",
+          "lines": 85
+        },
+        {
+          "name": "create.md",
+          "type": "file",
+          "path": "references/create.md",
+          "lines": 5
+        },
+        {
+          "name": "html-template.md",
+          "type": "file",
+          "path": "references/html-template.md",
+          "lines": 296
+        },
+        {
+          "name": "layout-patterns.md",
+          "type": "file",
+          "path": "references/layout-patterns.md",
+          "lines": 138
+        },
+        {
+          "name": "slide-strategies.md",
+          "type": "file",
+          "path": "references/slide-strategies.md",
+          "lines": 95
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 43
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T04:06:04.695Z",
+    "slug": "bellabe-diagnostic-action",
+    "source_url": "https://github.com/BellaBe/lean-os/tree/main/.claude/skills/action-diagnostic",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "581bea72a75c955cfe6a0b75ce1723bebb36bcfd5f36640962b8534522576fb3",
+    "tree_hash": "450782a11c254c9087ccdae85a5635aea759fe8fe13ee9680e08b5ddc8ab30b5",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "diagnostic-action",
+    "description": "Use for root cause analysis, debugging, incident explanation, and failure analysis when a user asks why a problem happened.",
+    "summary": "Explains likely causes, mechanisms, evidence, confidence, and missing data for observed problems.",
+    "icon": "📦",
+    "version": "1.0",
+    "author": "BellaBe",
+    "license": "MIT",
+    "tags": [
+      "diagnostics",
+      "root-cause-analysis",
+      "debugging",
+      "incident-review",
+      "failure-analysis"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The static system reconnaissance alert is a false positive because SKILL.md line 13 only shows an example user question for diagnostic use. I found no prompt injection, exfiltration intent, network behavior, scripts, or external command guidance in the reviewed file.",
+    "remediation": [],
+    "risk_factor_evidence": [],
+    "static_findings": [
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "- “Why did this happen?”"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "SKILL.md line 13 is a quoted example of when to use the diagnostic skill, not an instruction to inspect the host system. The file contains only reasoning guidance and no reconnaissance commands or system data collection."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 40,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T04:06:04.695Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Diagnose Root Causes and Incidents",
+    "value_statement": "Problems are hard to explain when symptoms, evidence, and assumptions are mixed together. This skill structures diagnostic reasoning into hypotheses, mechanisms, confidence, and missing data.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "root cause analysis",
+      "diagnostic reasoning",
+      "incident investigation",
+      "debugging assistant",
+      "failure analysis",
+      "hypothesis ranking",
+      "problem diagnosis"
+    ],
+    "actual_capabilities": [
+      "Restates symptoms and scope before analysis.",
+      "Generates multiple plausible causes for a reported problem.",
+      "Explains the mechanism behind each hypothesis.",
+      "Ranks hypotheses by likelihood and impact.",
+      "Identifies missing data and open questions."
+    ],
+    "limitations": [
+      "Does not prescribe fixes unless the user asks for them.",
+      "Cannot confirm a cause without reliable evidence.",
+      "Does not replace logs, telemetry, or expert review.",
+      "May need domain details to rank hypotheses accurately."
+    ],
+    "use_cases": [
+      {
+        "title": "Investigate Service Incidents",
+        "description": "An operations engineer can compare likely failure causes after an outage or degraded service.",
+        "target_user": "Operations engineer"
+      },
+      {
+        "title": "Explain Product Failures",
+        "description": "A product manager can understand why a feature failed before requesting remediation.",
+        "target_user": "Product manager"
+      },
+      {
+        "title": "Debug Unclear Behavior",
+        "description": "A developer can organize symptoms, evidence, and unknowns before making code changes.",
+        "target_user": "Software developer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Explain a Problem",
+        "scenario": "Beginner diagnosis",
+        "prompt": "Diagnose why this happened: [symptoms]. Restate the scope, list likely causes, and explain what evidence would separate them."
+      },
+      {
+        "title": "Rank Likely Causes",
+        "scenario": "Intermediate incident review",
+        "prompt": "Analyze these symptoms and logs: [details]. Rank possible causes by likelihood and impact, with evidence for and against each."
+      },
+      {
+        "title": "Compare Hypotheses",
+        "scenario": "Advanced failure analysis",
+        "prompt": "Build a diagnostic matrix for [incident]. Include mechanisms, supporting evidence, contradicting evidence, confidence, and missing data."
+      },
+      {
+        "title": "Run a Full Incident Diagnosis",
+        "scenario": "Expert root cause review",
+        "prompt": "Perform a full root cause analysis for [incident]. Scope the problem, generate hypotheses, rank them, and list decisive follow-up data."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Checkout latency increased after a release, but error rates stayed normal.",
+        "output": "The likely causes are a slower query path, a cache miss pattern, or added downstream latency. The next data needed is trace timing by dependency."
+      },
+      {
+        "input": "A weekly report stopped arriving after a permissions change.",
+        "output": "The strongest hypothesis is blocked access to the report source. Other causes include scheduler failure or changed notification rules. Audit logs would disambiguate."
+      },
+      {
+        "input": "A test suite became flaky only on CI.",
+        "output": "Likely causes include timing assumptions, resource contention, or environment differences. Compare local and CI runtime data before selecting a root cause."
+      }
+    ],
+    "best_practices": [
+      "Provide symptoms, timing, recent changes, and known non-causes.",
+      "Ask for confidence levels when decisions depend on certainty.",
+      "Separate diagnosis from remediation until the cause is clear."
+    ],
+    "anti_patterns": [
+      "Using the skill to request fixes before diagnosis is complete.",
+      "Providing only a conclusion without symptoms or evidence.",
+      "Treating ranked hypotheses as proven causes."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill do?",
+        "answer": "It structures root cause analysis for observed problems and explains likely causes with evidence and confidence."
+      },
+      {
+        "question": "Can it fix the problem?",
+        "answer": "It does not focus on fixes. Ask explicitly for remediation when you want suggested actions."
+      },
+      {
+        "question": "What information should I provide?",
+        "answer": "Share symptoms, timing, logs, recent changes, scope, and any evidence that rules out known causes."
+      },
+      {
+        "question": "Is it only for software incidents?",
+        "answer": "No. It can analyze technical, operational, or workflow failures when the symptoms are clear."
+      },
+      {
+        "question": "How does it handle uncertainty?",
+        "answer": "It lists multiple hypotheses, explains mechanisms, ranks confidence, and identifies missing data."
+      },
+      {
+        "question": "Can Claude, Codex, and Claude Code use it?",
+        "answer": "Yes. The report lists support for Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 40
+    }
+  ]
+}

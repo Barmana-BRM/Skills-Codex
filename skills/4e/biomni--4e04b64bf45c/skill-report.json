@@ -1,0 +1,3841 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T14:06:54.384Z",
+    "slug": "davila7-biomni",
+    "source_url": "https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/scientific/biomni",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "4e04b64bf45c8e78d1e426beaeac8e732aa2bafb92561c6d1fc16b3095611a33",
+    "tree_hash": "b5acab94988eac33a87d5cc9330a6b686f38015deebe0b1ab567facb05133a50",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "biomni",
+    "description": "Run multi-step biomedical research workflows across genomics, drug discovery, molecular biology, and clinical analysis with the Biomni autonomous agent.",
+    "summary": "Plan, execute, and document biomedical analyses with an autonomous research agent.",
+    "icon": "📦",
+    "author": "davila7",
+    "license": "MIT",
+    "tags": [
+      "biomedical-research",
+      "bioinformatics",
+      "genomics",
+      "drug-discovery",
+      "scientific-agents"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "scripts",
+      "filesystem",
+      "env_access",
+      "network",
+      "external_commands"
+    ],
+    "category": "research"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most scanner hits are Markdown formatting, placeholder credentials, documentation links, or fixed subprocess calls. Confirmed issues include credential exposure, unsafe secret storage, generated-code injection, unescaped HTML, unpinned package execution, and full-privilege LLM code execution.",
+    "remediation": [
+      {
+        "issue": "Biomni executes LLM-generated code with full host privileges.",
+        "suggestion": "Require an isolated container or virtual machine with restricted filesystem, network, process, and credential access before running agent tasks.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Custom data paths are inserted into generated Python source.",
+        "suggestion": "Avoid source generation or serialize paths with a safe literal encoder. Pass values as arguments and test malicious quotes and newlines.",
+        "severity": "high"
+      },
+      {
+        "issue": "Setup and troubleshooting flows expose or weakly store API keys.",
+        "suggestion": "Use hidden input, never print secret values, prefer a secret manager, and create local credential files with owner-only permissions.",
+        "severity": "high"
+      },
+      {
+        "issue": "HTML reports embed conversation content and titles without escaping.",
+        "suggestion": "Use a maintained Markdown renderer with HTML disabled or sanitize all generated HTML with an allow-list policy.",
+        "severity": "high"
+      },
+      {
+        "issue": "The MCP example automatically executes an unpinned registry package.",
+        "suggestion": "Pin an audited package version and integrity value. Require explicit approval before installation and provide only narrowly scoped credentials.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "references/api_reference.md",
+            "line_start": 385,
+            "line_end": 391
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/api_reference.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 369,
+            "line_end": 369
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 299,
+            "line_end": 299
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 145,
+            "line_end": 145
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 273,
+            "line_end": 273
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/api_reference.md",
+            "line_start": 348,
+            "line_end": 348
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 355,
+            "line_end": 355
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 218,
+            "line_end": 218
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 219,
+            "line_end": 219
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 113,
+            "line_end": 113
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 125,
+            "line_end": 125
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 149,
+            "line_end": 149
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 168,
+            "line_end": 168
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 184,
+            "line_end": 184
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 203,
+            "line_end": 203
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 260,
+            "line_end": 260
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 367,
+            "line_end": 367
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 107,
+            "line_end": 107
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 114,
+            "line_end": 114
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 116,
+            "line_end": 116
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 125,
+            "line_end": 125
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 142,
+            "line_end": 142
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 158,
+            "line_end": 158
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 294,
+            "line_end": 294
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 296,
+            "line_end": 296
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 304,
+            "line_end": 304
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 306,
+            "line_end": 306
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 316,
+            "line_end": 316
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 327,
+            "line_end": 327
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 328,
+            "line_end": 328
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 289,
+            "line_end": 289
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 114,
+            "line_end": 114
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 126,
+            "line_end": 126
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 259,
+            "line_end": 259
+          },
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 284,
+            "line_end": 284
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 189,
+            "line_end": 189
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 92,
+            "line_end": 92
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 113,
+            "line_end": 113
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 343,
+            "line_end": 343
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 344,
+            "line_end": 344
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 344,
+            "line_end": 344
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 269,
+            "line_end": 269
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 270,
+            "line_end": 270
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 271
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 272,
+            "line_end": 272
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 273,
+            "line_end": 273
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 307,
+            "line_end": 307
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 271
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 69,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 71,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 219,
+            "line_end": 219
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 145,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 148,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 173
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 184
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 184,
+            "line_end": 190
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 190,
+            "line_end": 198
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 198,
+            "line_end": 204
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 204,
+            "line_end": 218
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 218,
+            "line_end": 237
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 237,
+            "line_end": 238
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 238,
+            "line_end": 242
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 242,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 251,
+            "line_end": 256
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 256,
+            "line_end": 258
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 258,
+            "line_end": 259
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 259,
+            "line_end": 260
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 260,
+            "line_end": 263
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 263,
+            "line_end": 265
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 265,
+            "line_end": 266
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 266,
+            "line_end": 280
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "scripts:references/api_reference.md:385:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "references/api_reference.md",
+        "line_start": 385,
+        "line_end": 391,
+        "snippet": "from biomni.exceptions import ("
+      },
+      {
+        "id": "filesystem:references/api_reference.md:47:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/api_reference.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "mcp_config='./.biomni/mcp_config.json'"
+      },
+      {
+        "id": "filesystem:references/api_reference.md:369:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/api_reference.md",
+        "line_start": 369,
+        "line_end": 369,
+        "snippet": "mcp_config='./.biomni/mcp_config.json'"
+      },
+      {
+        "id": "env_access:references/api_reference.md:348:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/api_reference.md",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "\"FDA_API_KEY\": \"${FDA_API_KEY}\""
+      },
+      {
+        "id": "env_access:references/api_reference.md:355:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/api_reference.md",
+        "line_start": 355,
+        "line_end": 355,
+        "snippet": "\"BRAVE_API_KEY\": \"${BRAVE_API_KEY}\""
+      },
+      {
+        "id": "blocker:references/api_reference.md:418:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/api_reference.md",
+        "line_start": 418,
+        "line_end": 418,
+        "snippet": "3. **Use caching** to avoid redundant data downloads"
+      },
+      {
+        "id": "network:references/llm_providers.md:114:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/llm_providers.md",
+        "line_start": 114,
+        "line_end": 114,
+        "snippet": "export AZURE_OPENAI_ENDPOINT=\"https://your-resource.openai.azure.com/\""
+      },
+      {
+        "id": "network:references/llm_providers.md:126:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/llm_providers.md",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "default_config.azure_openai_endpoint = \"https://your-resource.openai.azure.com/\""
+      },
+      {
+        "id": "network:references/llm_providers.md:259:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/llm_providers.md",
+        "line_start": 259,
+        "line_end": 259,
+        "snippet": "default_config.custom_llm_endpoint = \"http://localhost:8000/v1/chat/completions\""
+      },
+      {
+        "id": "network:references/llm_providers.md:284:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/llm_providers.md",
+        "line_start": 284,
+        "line_end": 284,
+        "snippet": "export CUSTOM_LLM_ENDPOINT=\"http://localhost:8000/v1/chat/completions\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "references/llm_providers.md",
+        "line_start": 363,
+        "line_end": 363,
+        "snippet": "print(os.getenv('ANTHROPIC_API_KEY'))"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "references/llm_providers.md",
+        "line_start": 363,
+        "line_end": 363,
+        "snippet": "print(os.getenv('ANTHROPIC_API_KEY'))"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:218:aws-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "AWS credential environment variables",
+        "file": "references/llm_providers.md",
+        "line_start": 218,
+        "line_end": 218,
+        "snippet": "export AWS_ACCESS_KEY_ID=\"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:219:aws-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "AWS credential environment variables",
+        "file": "references/llm_providers.md",
+        "line_start": 219,
+        "line_end": 219,
+        "snippet": "export AWS_SECRET_ACCESS_KEY=\"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:27:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "export ANTHROPIC_API_KEY=\"sk-ant-...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:30:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "echo \"ANTHROPIC_API_KEY=sk-ant-...\" >> .env"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:56:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "default_config.anthropic_api_key = \"sk-ant-...\"  # Or use env var"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:74:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "export OPENAI_API_KEY=\"sk-...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:96:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "default_config.openai_api_key = \"sk-...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:113:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 113,
+        "line_end": 113,
+        "snippet": "export AZURE_OPENAI_API_KEY=\"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:125:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 125,
+        "line_end": 125,
+        "snippet": "default_config.azure_openai_api_key = \"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:149:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "export GOOGLE_API_KEY=\"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:168:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 168,
+        "line_end": 168,
+        "snippet": "default_config.google_api_key = \"...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:184:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 184,
+        "line_end": 184,
+        "snippet": "export GROQ_API_KEY=\"gsk_...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:203:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 203,
+        "line_end": 203,
+        "snippet": "default_config.groq_api_key = \"gsk_...\""
+      },
+      {
+        "id": "env_access:references/llm_providers.md:260:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 260,
+        "line_end": 260,
+        "snippet": "default_config.custom_llm_api_key = \"...\"  # If required"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 363,
+        "line_end": 363,
+        "snippet": "print(os.getenv('ANTHROPIC_API_KEY'))"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:367:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/llm_providers.md",
+        "line_start": 367,
+        "line_end": 367,
+        "snippet": "print(default_config.anthropic_api_key)"
+      },
+      {
+        "id": "sensitive:references/llm_providers.md:29:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/llm_providers.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "# Or in .env file"
+      },
+      {
+        "id": "sensitive:references/llm_providers.md:30:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/llm_providers.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "echo \"ANTHROPIC_API_KEY=sk-ant-...\" >> .env"
+      },
+      {
+        "id": "blocker:references/llm_providers.md:239:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/llm_providers.md",
+        "line_start": 239,
+        "line_end": 239,
+        "snippet": "default_config.aws_access_key_id = \"...\""
+      },
+      {
+        "id": "blocker:references/llm_providers.md:102:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/llm_providers.md",
+        "line_start": 102,
+        "line_end": 103,
+        "snippet": "- GPT-4 Turbo recommended for cost-effectiveness"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "sections.append(f\"**Query:**\\n```\\n{content}\\n```\\n\")"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 69,
+        "line_end": 71,
+        "snippet": "if include_code and ('```' in content or 'import ' in content):"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 71,
+        "line_end": 88,
+        "snippet": "parts = content.split('```')"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "sections.append(f\"```{lang}\\n{code}\\n```\\n\")"
+      },
+      {
+        "id": "network:scripts/generate_report.py:189:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/generate_report.py",
+        "line_start": 189,
+        "line_end": 189,
+        "snippet": "<p><a href=\"https://github.com/snap-stanford/biomni\">github.com/snap-stanford/biomni</a></p>"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:129:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 129,
+        "line_end": 129,
+        "snippet": "border-bottom: 3px solid #3498db;"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:135:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 135,
+        "line_end": 135,
+        "snippet": "border-bottom: 2px solid #95a5a6;"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:149:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "border: 1px solid #ddd;"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:160:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "border-top: 1px solid #ddd;"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "border-left: 4px solid #3498db;"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:351:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 351,
+        "line_end": 351,
+        "snippet": "print(f\"❌ Invalid JSON in input file: {args.input}\")"
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:25:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/setup_environment.py",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:47:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/setup_environment.py",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:67:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/setup_environment.py",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:219:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/setup_environment.py",
+        "line_start": 219,
+        "line_end": 219,
+        "snippet": "subprocess.run([sys.executable, str(test_file)], check=True)"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:41:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "print(\"   https://docs.conda.io/en/latest/miniconda.html\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:92:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 92,
+        "line_end": 92,
+        "snippet": "print(\"   Get your API key from: https://console.anthropic.com/\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:99:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "print(\"   Get your API key from: https://platform.openai.com/api-keys\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:106:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "print(\"   Get your API key from: https://makersuite.google.com/app/apikey\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:113:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 113,
+        "line_end": 113,
+        "snippet": "print(\"   Get your API key from: https://console.groq.com/keys\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:343:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 343,
+        "line_end": 343,
+        "snippet": "print(\"  - GitHub: https://github.com/snap-stanford/biomni\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:344:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/setup_environment.py",
+        "line_start": 344,
+        "line_end": 344,
+        "snippet": "print(\"  - Paper: https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1\")"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:344:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "scripts/setup_environment.py",
+        "line_start": 344,
+        "line_end": 344,
+        "snippet": "print(\"  - Paper: https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1\")"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:299:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/setup_environment.py",
+        "line_start": 299,
+        "line_end": 299,
+        "snippet": "print(\"2. Shell export (add to .bashrc/.zshrc)\")"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:145:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/setup_environment.py",
+        "line_start": 145,
+        "line_end": 145,
+        "snippet": "with open(env_file, 'w') as f:"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:212:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/setup_environment.py",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "with open(test_file, 'w') as f:"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:273:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/setup_environment.py",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "with open(example_file, 'w') as f:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:82:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "def setup_api_keys() -> Dict[str, str]:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:88:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "api_keys = {}"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:93:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "anthropic_key = input(\"   Enter ANTHROPIC_API_KEY (or press Enter to skip): \").strip()"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:95:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "api_keys['ANTHROPIC_API_KEY'] = anthropic_key"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:100:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "openai_key = input(\"   Enter OPENAI_API_KEY (or press Enter to skip): \").strip()"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:102:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "api_keys['OPENAI_API_KEY'] = openai_key"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:107:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "google_key = input(\"   Enter GOOGLE_API_KEY (or press Enter to skip): \").strip()"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:109:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "api_keys['GOOGLE_API_KEY'] = google_key"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:114:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 114,
+        "line_end": 114,
+        "snippet": "groq_key = input(\"   Enter GROQ_API_KEY (or press Enter to skip): \").strip()"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:116:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "api_keys['GROQ_API_KEY'] = groq_key"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:118:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "if not api_keys:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:122:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "return api_keys"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:125:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 125,
+        "line_end": 125,
+        "snippet": "def save_api_keys(api_keys: Dict[str, str], method: str = 'env_file'):"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:142:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "existing_vars.update(api_keys)"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:158:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "for key, value in api_keys.items():"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:294:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 294,
+        "line_end": 294,
+        "snippet": "api_keys = setup_api_keys()"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:296:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 296,
+        "line_end": 296,
+        "snippet": "if api_keys:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:304:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "save_api_keys(api_keys, method='shell_export')"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:306:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 306,
+        "line_end": 306,
+        "snippet": "save_api_keys(api_keys, method='env_file')"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:316:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 316,
+        "line_end": 316,
+        "snippet": "if api_keys and data_path:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:327:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 327,
+        "line_end": 327,
+        "snippet": "if api_keys:"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:328:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/setup_environment.py",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "print(f\"✓ API keys configured: {', '.join(api_keys.keys())}\")"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:128:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/setup_environment.py",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "env_file = Path.cwd() / '.env'"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:130:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/setup_environment.py",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "# Read existing .env if present"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:144:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/setup_environment.py",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "# Write to .env"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:298:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/setup_environment.py",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "print(\"1. .env file (recommended, local to this directory)\")"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:328:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/setup_environment.py",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "print(f\"✓ API keys configured: {', '.join(api_keys.keys())}\")"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 39,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 41,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 42,
+        "snippet": "Configure API keys (store in `.env` file or environment variables):"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 45,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 47,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 51,
+        "snippet": "Use `scripts/setup_environment.py` for interactive setup assistance."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 62,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 70,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 84,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 87,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "- Anthropic Claude (recommended): `claude-sonnet-4-20250514`, `claude-opus-4-20250514`"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "- OpenAI: `gpt-4`, `gpt-4-turbo`"
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 91,
+        "snippet": "- Google Gemini: `gemini-2.0-flash-exp`"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 94,
+        "snippet": "- Groq: `llama-3.3-70b-versatile`"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 100,
+        "snippet": "See `references/llm_providers.md` for detailed LLM configuration instructions."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 120,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 125,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 133,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 136,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 145,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 145,
+        "line_end": 148,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 148,
+        "line_end": 159,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 162,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 171,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 173,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 184,
+        "snippet": "See `references/use_cases.md` for comprehensive task examples across all biomedical domains."
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 184,
+        "line_end": 190,
+        "snippet": "Data is automatically downloaded to the specified `path` on first use."
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 190,
+        "line_end": 198,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 198,
+        "line_end": 204,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 204,
+        "line_end": 218,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 218,
+        "line_end": 237,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 237,
+        "line_end": 238,
+        "snippet": "- **Set reasonable timeouts** - Adjust `default_config.timeout_seconds` for complex tasks"
+      },
+      {
+        "id": "external_commands:SKILL.md:238:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 238,
+        "line_end": 242,
+        "snippet": "- **Monitor iterations** - Track `max_iterations` to prevent runaway loops"
+      },
+      {
+        "id": "external_commands:SKILL.md:242:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 242,
+        "line_end": 251,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 251,
+        "line_end": 256,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:256:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 256,
+        "line_end": 258,
+        "snippet": "Detailed documentation available in the `references/` directory:"
+      },
+      {
+        "id": "external_commands:SKILL.md:258:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 258,
+        "line_end": 259,
+        "snippet": "- **`api_reference.md`** - Complete API documentation for A1 class, configuration, and evaluation"
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 259,
+        "line_end": 260,
+        "snippet": "- **`llm_providers.md`** - LLM provider setup (Anthropic, OpenAI, Azure, Google, Groq, AWS)"
+      },
+      {
+        "id": "external_commands:SKILL.md:260:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 260,
+        "line_end": 263,
+        "snippet": "- **`use_cases.md`** - Comprehensive task examples for all biomedical domains"
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 265,
+        "snippet": "Helper scripts in the `scripts/` directory:"
+      },
+      {
+        "id": "external_commands:SKILL.md:265:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 265,
+        "line_end": 266,
+        "snippet": "- **`setup_environment.py`** - Interactive environment and API key configuration"
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 280,
+        "snippet": "- **`generate_report.py`** - Enhanced PDF report generation with custom formatting"
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 280,
+        "line_end": 284,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 284,
+        "line_end": 287,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 287,
+        "line_end": 291,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:291:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 291,
+        "line_end": 294,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 294,
+        "line_end": 297,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 297,
+        "line_end": 308,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:269:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "- **GitHub**: https://github.com/snap-stanford/biomni"
+      },
+      {
+        "id": "network:SKILL.md:270:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 270,
+        "line_end": 270,
+        "snippet": "- **Web Platform**: https://biomni.stanford.edu"
+      },
+      {
+        "id": "network:SKILL.md:271:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 271,
+        "line_end": 271,
+        "snippet": "- **Paper**: https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1"
+      },
+      {
+        "id": "network:SKILL.md:272:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 272,
+        "snippet": "- **Model**: https://huggingface.co/biomni/Biomni-R0-32B-Preview"
+      },
+      {
+        "id": "network:SKILL.md:273:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "- **Evaluation Dataset**: https://huggingface.co/datasets/biomni/Eval1"
+      },
+      {
+        "id": "network:SKILL.md:307:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 307,
+        "line_end": 307,
+        "snippet": "- GitHub Issues: https://github.com/snap-stanford/biomni/issues"
+      },
+      {
+        "id": "network:SKILL.md:271:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "SKILL.md",
+        "line_start": 271,
+        "line_end": 271,
+        "snippet": "- **Paper**: https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1"
+      },
+      {
+        "id": "env_access:SKILL.md:43:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "export ANTHROPIC_API_KEY=\"your-key-here\""
+      },
+      {
+        "id": "env_access:SKILL.md:289:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 289,
+        "line_end": 289,
+        "snippet": "echo $ANTHROPIC_API_KEY"
+      },
+      {
+        "id": "sensitive:SKILL.md:41:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "Configure API keys (store in `.env` file or environment variables):"
+      },
+      {
+        "id": "sensitive:SKILL.md:290:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 290,
+        "line_end": 290,
+        "snippet": "# Or check .env file in working directory"
+      },
+      {
+        "id": "blocker:SKILL.md:231:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 231,
+        "snippet": "- Avoid exposing sensitive credentials"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "scripts:references/api_reference.md:385:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited code is a fixed Python from-import statement for documented exception classes. It is not a dynamic import expression."
+      },
+      {
+        "id": "filesystem:references/api_reference.md:47:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a relative MCP configuration path. It does not enumerate hidden files or read unrelated user data."
+      },
+      {
+        "id": "filesystem:references/api_reference.md:369:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a relative MCP configuration path. It does not enumerate hidden files or read unrelated user data."
+      },
+      {
+        "id": "env_access:references/api_reference.md:348:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The MCP example contains environment-variable placeholders, not embedded credential values or code that reads the host environment."
+      },
+      {
+        "id": "env_access:references/api_reference.md:355:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The MCP example contains environment-variable placeholders, not embedded credential values or code that reads the host environment."
+      },
+      {
+        "id": "blocker:references/api_reference.md:418:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is caching advice in documentation. It performs no system discovery or reconnaissance."
+      },
+      {
+        "id": "network:references/llm_providers.md:114:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a placeholder Azure endpoint or a localhost endpoint. It does not initiate a network request."
+      },
+      {
+        "id": "network:references/llm_providers.md:126:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a placeholder Azure endpoint or a localhost endpoint. It does not initiate a network request."
+      },
+      {
+        "id": "network:references/llm_providers.md:259:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a placeholder Azure endpoint or a localhost endpoint. It does not initiate a network request."
+      },
+      {
+        "id": "network:references/llm_providers.md:284:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line documents a placeholder Azure endpoint or a localhost endpoint. It does not initiate a network request."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:python-getenv-function",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The troubleshooting example reads an API key and prints its value. Following it can expose a live secret in terminals, logs, or recordings.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:getenv-function-call",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The getenv call is passed directly to print, disclosing the API key rather than checking only whether it exists.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:218:aws-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:219:aws-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:27:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:30:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:56:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:74:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:96:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:113:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:125:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:149:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:168:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:184:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:203:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:260:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is a provider configuration example using an obvious placeholder or credential variable name. It contains no live secret."
+      },
+      {
+        "id": "env_access:references/llm_providers.md:363:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "This example prints the full ANTHROPIC_API_KEY value. Terminal history, captured output, or support logs could retain the secret.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:references/llm_providers.md:367:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The example prints the configured Anthropic API key directly. It should report presence or a masked suffix instead.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:references/llm_providers.md:29:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The guide recommends storing an API key in a local .env file without requiring restrictive permissions or exclusion from version control.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:references/llm_providers.md:30:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The shell command appends a credential to .env without setting file permissions. A substituted live key can become readable or accidentally committed.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:references/llm_providers.md:239:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is provider configuration or pricing prose. It does not inspect the system or scan a network."
+      },
+      {
+        "id": "blocker:references/llm_providers.md:102:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line is provider configuration or pricing prose. It does not inspect the system or scan a network."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are literal Markdown fence text used to format a report. No shell, interpreter, or command runner receives them."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are literal Markdown fence text used to format a report. No shell, interpreter, or command runner receives them."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are literal Markdown fence text used to format a report. No shell, interpreter, or command runner receives them."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are literal Markdown fence text used to format a report. No shell, interpreter, or command runner receives them."
+      },
+      {
+        "id": "network:scripts/generate_report.py:189:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL is a static attribution link embedded in generated HTML. The script makes no request to it."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:129:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:135:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:149:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:160:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:351:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched CSS color syntax or an invalid-JSON error message. The code performs no reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:25:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The subprocess uses a fixed conda executable and fixed argument list with shell disabled. User input cannot alter the command."
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:47:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The subprocess uses a fixed conda executable and fixed argument list with shell disabled. User input cannot alter the command."
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:67:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The subprocess uses a fixed conda executable and fixed argument list with shell disabled. User input cannot alter the command."
+      },
+      {
+        "id": "external_commands:scripts/setup_environment.py:219:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The subprocess executes test_biomni.py after an unescaped custom data path is interpolated into that file. A crafted path can inject Python statements.",
+        "severity": "high"
+      },
+      {
+        "id": "network:scripts/setup_environment.py:41:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:92:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:99:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:106:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:113:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:343:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:344:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "network:scripts/setup_environment.py:344:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The script only prints a legitimate installation, provider, repository, or paper URL. It does not connect to the address."
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:299:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line only names common shell startup files in explanatory text. It does not open, modify, or enumerate them."
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:145:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The script writes collected API keys to .env as plaintext without creating the file with owner-only permissions.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:212:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This writes Python source containing an unescaped user-selected path. The generated file is executed immediately on line 219.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/setup_environment.py:273:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "This writes an example Python file containing an unescaped custom path. Running the generated example can execute path-injected statements.",
+        "severity": "medium"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:82:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:88:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:93:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The script collects the Anthropic API key with input(), which echoes the secret on screen instead of using hidden credential input.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:95:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:100:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The script collects the OpenAI API key with visible input, exposing it to screen capture and nearby observers.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:102:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:107:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The script collects the Google API key with visible input rather than a non-echoing secret prompt.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:109:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:114:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The script collects the Groq API key with visible input rather than a non-echoing secret prompt.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:116:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:118:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:122:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:125:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:142:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "Collected API keys are merged into variables that are written to a plaintext .env file without an owner-only permission step.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:158:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The loop sends each key value to print on line 159. Selecting shell export therefore discloses every collected credential on screen.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:294:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:296:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:304:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This branch calls shell_export, whose implementation prints each raw credential value to the terminal.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:306:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "This branch persists collected credentials in a plaintext .env file without enforcing owner-only permissions.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:316:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:327:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "env_access:scripts/setup_environment.py:328:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line names or passes the local api_keys dictionary without reading host environment variables or exposing a value at that location."
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:128:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The path targets .env for credential storage. New files use ambient umask permissions, and the script applies no explicit owner-only mode.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:130:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The script reads every existing .env value and later rewrites the file alongside newly collected credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:144:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The following write stores API keys in plaintext .env content without restricting file permissions.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:298:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The setup recommends local .env storage but does not mention owner-only permissions or mandatory version-control exclusion.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/setup_environment.py:328:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line prints only configured credential variable names. The word keys does not refer to certificate or private-key files."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:184:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:238:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:242:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:256:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:258:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:260:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:265:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:287:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:291:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The scanner matched Markdown fences or inline-code formatting in documentation. The cited text does not use Ruby or shell backtick substitution."
+      },
+      {
+        "id": "network:SKILL.md:269:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:270:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:271:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:272:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:273:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:307:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "network:SKILL.md:271:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a visible project, paper, model, dataset, or issue-tracker reference. It does not initiate network access."
+      },
+      {
+        "id": "env_access:SKILL.md:43:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The export command uses the explicit placeholder your-key-here. It does not contain or retrieve a live API key."
+      },
+      {
+        "id": "env_access:SKILL.md:289:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The troubleshooting command echoes the full Anthropic API key, which can expose it in terminal output or captured logs.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:SKILL.md:41:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The instructions recommend .env credential storage without requiring restrictive permissions or version-control exclusion.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:SKILL.md:290:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The troubleshooting guidance directs users to inspect a credential-bearing .env file, increasing accidental display or support-log disclosure risk.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:SKILL.md:231:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line advises users not to expose credentials. It performs no system reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unsandboxed LLM-Generated Code Execution",
+        "description": "The skill states that Biomni executes LLM-generated code with full system privileges. Prompt or data manipulation could therefore become arbitrary host code execution.",
+        "severity": "critical",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 233
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 67,
+            "line_end": 71
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The documentation explicitly states full-privilege generated-code execution and describes generation and execution as standard agent behavior."
+      },
+      {
+        "title": "Custom Path Enables Generated Python Injection",
+        "description": "A user-supplied data path is interpolated without escaping into generated Python source. The setup script then executes that source.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 174,
+            "line_end": 176
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 199,
+            "line_end": 219
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "A path containing quotes and newlines can break the Python string, insert statements, and reach the immediate subprocess execution."
+      },
+      {
+        "title": "Stored Script Injection in HTML Reports",
+        "description": "Conversation content and report titles enter HTML without escaping. A crafted conversation file can create active script or markup in the generated report.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 57,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 111,
+            "line_end": 117
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 197,
+            "line_end": 254
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The converter concatenates untrusted message text into tags and code blocks without HTML escaping or sanitization."
+      },
+      {
+        "title": "Unpinned MCP Package Executes with an API Key",
+        "description": "The MCP example uses npx with automatic approval and no package version. The downloaded package receives the Brave API key and agent privileges.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/api_reference.md",
+            "line_start": 351,
+            "line_end": 355
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "The documented command executes the latest registry package through npx -y and provides a credential in its environment."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Unsandboxed LLM-Generated Code Execution",
+        "description": "The skill states that Biomni executes LLM-generated code with full system privileges. Prompt or data manipulation could therefore become arbitrary host code execution.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 233
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 67,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The documentation explicitly states full-privilege generated-code execution and describes generation and execution as standard agent behavior."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Python getenv function",
+        "description": "print(os.getenv('ANTHROPIC_API_KEY'))",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The troubleshooting example reads an API key and prints its value. Following it can expose a live secret in terminals, logs, or recordings."
+      },
+      {
+        "title": "getenv function call",
+        "description": "print(os.getenv('ANTHROPIC_API_KEY'))",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The getenv call is passed directly to print, disclosing the API key rather than checking only whether it exists."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "print(os.getenv('ANTHROPIC_API_KEY'))",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 363,
+            "line_end": 363
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "This example prints the full ANTHROPIC_API_KEY value. Terminal history, captured output, or support logs could retain the secret."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "print(default_config.anthropic_api_key)",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 367,
+            "line_end": 367
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The example prints the configured Anthropic API key directly. It should report presence or a masked suffix instead."
+      },
+      {
+        "title": "Environment file access",
+        "description": "# Or in .env file",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 29,
+            "line_end": 29
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The guide recommends storing an API key in a local .env file without requiring restrictive permissions or exclusion from version control."
+      },
+      {
+        "title": "Environment file access",
+        "description": "echo \"ANTHROPIC_API_KEY=sk-ant-...\" >> .env",
+        "locations": [
+          {
+            "file": "references/llm_providers.md",
+            "line_start": 30,
+            "line_end": 30
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The shell command appends a credential to .env without setting file permissions. A substituted live key can become readable or accidentally committed."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "subprocess.run([sys.executable, str(test_file)], check=True)",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 219,
+            "line_end": 219
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The subprocess executes test_biomni.py after an unescaped custom data path is interpolated into that file. A crafted path can inject Python statements."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "with open(env_file, 'w') as f:",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 145,
+            "line_end": 145
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The script writes collected API keys to .env as plaintext without creating the file with owner-only permissions."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "with open(test_file, 'w') as f:",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 212,
+            "line_end": 212
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This writes Python source containing an unescaped user-selected path. The generated file is executed immediately on line 219."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "anthropic_key = input(\"   Enter ANTHROPIC_API_KEY (or press Enter to skip): \").strip()",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 93,
+            "line_end": 93
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script collects the Anthropic API key with input(), which echoes the secret on screen instead of using hidden credential input."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "openai_key = input(\"   Enter OPENAI_API_KEY (or press Enter to skip): \").strip()",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 100,
+            "line_end": 100
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script collects the OpenAI API key with visible input, exposing it to screen capture and nearby observers."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "google_key = input(\"   Enter GOOGLE_API_KEY (or press Enter to skip): \").strip()",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 107,
+            "line_end": 107
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script collects the Google API key with visible input rather than a non-echoing secret prompt."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "groq_key = input(\"   Enter GROQ_API_KEY (or press Enter to skip): \").strip()",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 114,
+            "line_end": 114
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script collects the Groq API key with visible input rather than a non-echoing secret prompt."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "existing_vars.update(api_keys)",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 142,
+            "line_end": 142
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.91,
+        "confidence_reasoning": "Collected API keys are merged into variables that are written to a plaintext .env file without an owner-only permission step."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "for key, value in api_keys.items():",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 158,
+            "line_end": 158
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The loop sends each key value to print on line 159. Selecting shell export therefore discloses every collected credential on screen."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "save_api_keys(api_keys, method='shell_export')",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 304,
+            "line_end": 304
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "This branch calls shell_export, whose implementation prints each raw credential value to the terminal."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "save_api_keys(api_keys, method='env_file')",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 306,
+            "line_end": 306
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "This branch persists collected credentials in a plaintext .env file without enforcing owner-only permissions."
+      },
+      {
+        "title": "Environment file access",
+        "description": "env_file = Path.cwd() / '.env'",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 128,
+            "line_end": 128
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The path targets .env for credential storage. New files use ambient umask permissions, and the script applies no explicit owner-only mode."
+      },
+      {
+        "title": "Environment file access",
+        "description": "# Read existing .env if present",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 130,
+            "line_end": 130
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The script reads every existing .env value and later rewrites the file alongside newly collected credentials."
+      },
+      {
+        "title": "Environment file access",
+        "description": "# Write to .env",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 144,
+            "line_end": 144
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The following write stores API keys in plaintext .env content without restricting file permissions."
+      },
+      {
+        "title": "Environment file access",
+        "description": "print(\"1. .env file (recommended, local to this directory)\")",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 298,
+            "line_end": 298
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The setup recommends local .env storage but does not mention owner-only permissions or mandatory version-control exclusion."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "echo $ANTHROPIC_API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 289,
+            "line_end": 289
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The troubleshooting command echoes the full Anthropic API key, which can expose it in terminal output or captured logs."
+      },
+      {
+        "title": "Environment file access",
+        "description": "Configure API keys (store in `.env` file or environment variables):",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The instructions recommend .env credential storage without requiring restrictive permissions or version-control exclusion."
+      },
+      {
+        "title": "Environment file access",
+        "description": "# Or check .env file in working directory",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 290,
+            "line_end": 290
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The troubleshooting guidance directs users to inspect a credential-bearing .env file, increasing accidental display or support-log disclosure risk."
+      },
+      {
+        "title": "Custom Path Enables Generated Python Injection",
+        "description": "A user-supplied data path is interpolated without escaping into generated Python source. The setup script then executes that source.",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 174,
+            "line_end": 176
+          },
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 199,
+            "line_end": 219
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "A path containing quotes and newlines can break the Python string, insert statements, and reach the immediate subprocess execution."
+      },
+      {
+        "title": "Stored Script Injection in HTML Reports",
+        "description": "Conversation content and report titles enter HTML without escaping. A crafted conversation file can create active script or markup in the generated report.",
+        "locations": [
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 57,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 111,
+            "line_end": 117
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 197,
+            "line_end": 254
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The converter concatenates untrusted message text into tags and code blocks without HTML escaping or sanitization."
+      },
+      {
+        "title": "Unpinned MCP Package Executes with an API Key",
+        "description": "The MCP example uses npx with automatic approval and no package version. The downloaded package receives the Brave API key and agent privileges.",
+        "locations": [
+          {
+            "file": "references/api_reference.md",
+            "line_start": 351,
+            "line_end": 355
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The documented command executes the latest registry package through npx -y and provides a credential in its environment."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Python file write/append",
+        "description": "with open(example_file, 'w') as f:",
+        "locations": [
+          {
+            "file": "scripts/setup_environment.py",
+            "line_start": 273,
+            "line_end": 273
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "This writes an example Python file containing an unescaped custom path. Running the generated example can execute path-injected statements."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 2860,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T14:06:54.384Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Run Biomedical Research Workflows",
+    "value_statement": "Complex biomedical analyses require coordinated reasoning, data access, and reproducible reporting. Biomni guides an autonomous agent through these multi-step research workflows.",
+    "seo_keywords": [
+      "Claude biomedical research",
+      "Codex bioinformatics",
+      "Claude Code genomics",
+      "Biomni agent",
+      "autonomous biomedical AI",
+      "CRISPR screen design",
+      "single-cell RNA-seq",
+      "GWAS interpretation",
+      "ADMET prediction",
+      "drug discovery workflow"
+    ],
+    "actual_capabilities": [
+      "Decomposes biomedical questions into multi-step tasks and executes them through the Biomni A1 agent.",
+      "Supports CRISPR design, single-cell analysis, GWAS interpretation, ADMET prediction, and clinical genomics research.",
+      "Uses an approximately 11 GB biomedical data lake that downloads on first use.",
+      "Configures Anthropic, OpenAI, Azure, Google, Groq, AWS Bedrock, or custom LLM endpoints.",
+      "Connects external biomedical tools through Model Context Protocol configuration.",
+      "Saves conversation histories and formats them as Markdown or HTML research reports."
+    ],
+    "limitations": [
+      "Biomni executes LLM-generated code with host privileges unless users provide isolation.",
+      "Operation requires the external Biomni package, provider credentials, network access, and substantial local storage.",
+      "Biomedical results require expert review and are not validated medical diagnoses or treatment recommendations.",
+      "The included report script does not create PDF files and falls back to HTML."
+    ],
+    "use_cases": [
+      {
+        "title": "Design Molecular Screens",
+        "description": "Develop CRISPR screening strategies, candidate priorities, controls, and validation plans for a defined phenotype.",
+        "target_user": "Molecular biologists"
+      },
+      {
+        "title": "Analyze Omics Data",
+        "description": "Plan quality control, clustering, differential expression, pathway analysis, and interpretation for genomics datasets.",
+        "target_user": "Bioinformaticians"
+      },
+      {
+        "title": "Prioritize Translational Evidence",
+        "description": "Combine variants, phenotypes, pathways, and drug evidence to generate reviewable research hypotheses.",
+        "target_user": "Translational researchers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Summarize a Gene",
+        "prompt": "Summarize the known function of [gene] and list major associated diseases. Cite the databases used and identify uncertain claims.",
+        "scenario": "Beginner gene research"
+      },
+      {
+        "title": "Compare Expression Groups",
+        "prompt": "Analyze [dataset path] for differential expression between [groups]. Report quality checks, significant genes, methods, and limitations.",
+        "scenario": "Intermediate omics analysis"
+      },
+      {
+        "title": "Design a CRISPR Screen",
+        "prompt": "Design a CRISPR knockout screen for [phenotype] in [cell type]. Define controls, library strategy, prioritization criteria, and validation steps.",
+        "scenario": "Advanced experimental planning"
+      },
+      {
+        "title": "Integrate Causal Evidence",
+        "prompt": "Integrate [GWAS file], [single-cell dataset], and [pathway constraints] to prioritize causal genes. Explain each processing step and uncertainty.",
+        "scenario": "Expert multi-omics research"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Prioritize genes for an autophagy CRISPR screen in HEK293 cells.",
+        "output": [
+          "Ranked gene candidates with pathway and essentiality evidence.",
+          "Screen controls, selection strategy, and expected technical limitations.",
+          "Validation experiments for the strongest candidates."
+        ]
+      },
+      {
+        "input": "Interpret significant variants from a disease GWAS summary file.",
+        "output": [
+          "Variant-to-gene mapping with supporting evidence.",
+          "Enriched pathways and plausible disease mechanisms.",
+          "Uncertainty notes and recommended follow-up analyses."
+        ]
+      },
+      {
+        "input": "Compare ADMET properties for a small set of candidate compounds.",
+        "output": [
+          "A comparative property summary for absorption, distribution, metabolism, excretion, and toxicity.",
+          "Risk flags, evidence limitations, and priorities for experimental testing."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Run Biomni inside an isolated environment and review generated code before execution.",
+      "Use deidentified data, least-privilege credentials, and approved provider configurations.",
+      "Set task constraints, timeouts, and iteration limits while preserving sources and conversation history."
+    ],
+    "anti_patterns": [
+      "Do not run autonomous generated code on a sensitive production host.",
+      "Do not print credentials or store them in broadly readable plaintext files.",
+      "Do not treat generated biomedical conclusions as validated clinical guidance."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill require?",
+        "answer": "It requires Python, the Biomni package, an LLM provider credential, network access, and approximately 11 GB of storage."
+      },
+      {
+        "question": "Which LLM providers are supported?",
+        "answer": "The documentation covers Anthropic, OpenAI, Azure OpenAI, Google Gemini, Groq, AWS Bedrock, and custom endpoints."
+      },
+      {
+        "question": "Does Biomni execute code?",
+        "answer": "Yes. Biomni generates and executes analysis code, so use a sandbox and inspect sensitive workflows."
+      },
+      {
+        "question": "Can it analyze local datasets?",
+        "answer": "Yes. Prompts can reference local dataset paths, subject to Biomni dependencies, formats, and available resources."
+      },
+      {
+        "question": "Does it generate PDF reports?",
+        "answer": "Biomni can save conversation history as PDF. The included helper script only produces Markdown or HTML."
+      },
+      {
+        "question": "Can results support clinical decisions?",
+        "answer": "Results can support research review, but qualified experts must validate them before clinical or laboratory use."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "api_reference.md",
+          "type": "file",
+          "path": "references/api_reference.md",
+          "lines": 461
+        },
+        {
+          "name": "llm_providers.md",
+          "type": "file",
+          "path": "references/llm_providers.md",
+          "lines": 494
+        },
+        {
+          "name": "use_cases.md",
+          "type": "file",
+          "path": "references/use_cases.md",
+          "lines": 868
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "generate_report.py",
+          "type": "file",
+          "path": "scripts/generate_report.py",
+          "lines": 371
+        },
+        {
+          "name": "setup_environment.py",
+          "type": "file",
+          "path": "scripts/setup_environment.py",
+          "lines": 356
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 310
+    }
+  ]
+}

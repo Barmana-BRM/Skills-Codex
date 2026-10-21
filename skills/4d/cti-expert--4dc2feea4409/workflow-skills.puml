@@ -1,0 +1,135 @@
+@startuml
+title cti-expert v2.12 — end-to-end tool & skill flow (one skill, two layers)
+skinparam shadowing false
+skinparam dpi 150
+skinparam defaultFontName "Segoe UI"
+skinparam BoxPadding 14
+skinparam sequence {
+  ArrowColor #34495E
+  LifeLineBorderColor #9BB7D4
+  LifeLineBackgroundColor #F4F8FD
+  ParticipantBorderColor #2C6FBB
+  ParticipantBackgroundColor #EAF2FB
+  ActorBorderColor #2C6FBB
+  ActorBackgroundColor #EAF2FB
+  GroupBorderColor #C8901F
+  GroupBackgroundColor #FFF3D6
+  GroupHeaderFontColor #7A5810
+}
+
+actor "Analyst" as A
+
+box "entry" #FBFCFE
+  participant "**/cti** router\n<size:10>SKILL.md · 9 registered commands</size>" as CTI
+end box
+
+box "LAYER 1 · broad collector" #F4F8FD
+  participant "**scripts/**\n<size:10>57 techniques</size>" as L1
+end box
+
+box "typed surface" #FBFCFE
+  participant "**harness/tools.py**\n<size:10>92 @tool · MCP + SDK</size>\n<size:10>HARNESS_BACKEND: claude · codex · omp · OpenAI-compatible</size>" as MCP
+end box
+
+box "LAYER 2 · intel_engine (vendored deep pipeline)" #F4F8FD
+  participant "**Quarry**\n<size:10>optional bridge</size>" as Q
+  participant "**WebPivot**\n<size:10>collect_core → pivot_extract</size>" as WP
+  participant "**BinaryPivot**" as BP
+  database "**knowledge base**\n<size:10>knowledge/ · cases/<id>/</size>" as KB
+  participant "**IntelAnalysis**\n<size:10>intel.py open|loop · harness phases</size>" as IA
+  participant "**IntelGraph**" as IG
+  participant "**IntelReport**\n<size:10>house_report</size>" as IR
+end box
+
+A -> CTI : **/cti <target>**  [~--deep | ~--quick | ~--passive | ~--free-only]
+activate CTI
+CTI -> CTI : classify selector type\n<size:10>domain · URL · IP · email · username · phone · wallet · hash · APK · onion</size>
+
+group #FFF3D6 STEP 0 — RECALL · INTAKE · QUARRY
+  CTI -> MCP : which_cases · kb_entity · domain_verdict
+  MCP -> KB : look up seed across **every prior case**
+  KB --> CTI : already attributed?  ->  //stop (unless ~--extend)//
+  CTI -> MCP : **case_scope**  target class + purpose -> scope.json\n<size:10>no_spend / no-contact posture gates every later phase</size>
+  opt QUARRY_ENABLED / --quarry (asked once per case)
+    CTI -> MCP : **quarry**
+    MCP -> Q : reuse a finished scan, or start one and **wait — no time limit**
+    Q --> KB : rows imported through the **rung table**\n<size:10>owner -> edges · kit / neighbour -> facts only</size>
+  end
+end
+
+group #FFF3D6 ACQUIRE  //collect raw data//
+  alt domain / URL / IP
+    CTI -> L1 : /sweep · /query · /subdomain · /github-osint\n/threat-check · /scam-check · /dork-sweep · /icp
+    CTI -> MCP : pivot_extract · fallback_probe · subdomain_enum\nimpersonation_hunt · search_pivot · censys · **cert_pivot**
+    MCP -> WP : **collect_core.collect_many**  (cache reuse · onion isolation · egress gate)\n<size:10>keyless first, premium if keyed · entitlement measured per case · every call under CTI_CALL_TIMEOUT (5000 s)</size>
+    WP --> MCP : favicon · trackers · wallets · emails · phones · Telegram · WHOIS eras · TLS · JARM\n**ChongLuaDao** verdict · **Webamon** scan corpus + same-kit siblings · MO-neighbours\n<size:10>dead page -> archive / **gated-urlscan recovery** · crypto reference + token contracts = facts, never clusters</size>
+    WP -> KB : cases/<id>/raw/<host>.json + **collection_outcomes.json**\n<size:10>ran · empty · error · timed_out · skipped_no_key · skipped_policy — failed layers are re-runnable</size>
+  else file · APK · exe
+    CTI -> MCP : **analyze_artifact** · hash_id
+    MCP -> BP : signing cert · package · permissions · embedded C2 · Firebase · S3 · wallets
+    BP --> MCP : **WebPivot-shaped pivot JSON**  //same graph as the web infra//
+    CTI -> MCP : **anyrun_lookup** //read-only//  ·  **anyrun_submit** / **webamon_scan** //ask-first, gated//
+  else username · email · phone · wallet
+    CTI -> L1 : /username · /email-deep · /phone · /breach-deep\n/stealer-log · /saas-map · /msftrecon · /crypto-balance
+    CTI -> MCP : intelx_search · deep_profile · phone_osint · cld
+  end
+  CTI -> MCP : kb_ingest  (ingest_webpivot · noise_filters decide fact vs edge)
+  MCP -> KB : persist entities + edges
+end
+
+group #FFF3D6 ENRICH  //cross-type harness loop — every selector type is a node//
+  loop until converged / cold   (case_loop · harness)
+    CTI -> MCP : **case_frontier** · propose
+    MCP -> KB : typed candidates  <size:10>co-tenancy guards hold shared certs / IPs back as **leads, not seeds**</size>
+    MCP -> IA : **Plan phase** (read-only PLAN_TOOLS) re-ranks · drops · adds cross-type pivots
+    alt free / urlscan pivot, ≤ 25 estimated hits
+      MCP -> WP : run automatically  (corpus_search · pivot_routes)
+    else metered · oversized · unknown size
+      MCP --> A : digest-bound **proposal.json**
+      A -> MCP : **harness approve** / **case_approve**  (audit.gate enforces it)
+      MCP -> WP : run the approved pivots
+    end
+    WP -> KB : rows rung-aware -> typed nodes · new owner-linked domains seed the next round
+  end
+  CTI -> MCP : **reference_check** · case_enrich  //BENIGN noise vs SIGNAL//
+end
+
+group #FFF3D6 ASSESS  //correlate · attribute · calibrate//
+  CTI -> MCP : case_clusters · kb_cluster · risk_signals · case_timeline
+  MCP -> IA : Collect -> Correlate -> Verify -> Assess  (schema-forced)
+  IA -> KB : tier each relation  <size:10>only registrant e-mail / phone is a decisive join key</size>
+  IA --> CTI : **assessment.md / assessment.json** · clusters · **ICD-203 judgment** + ACH
+end
+
+group #FFF3D6 DELIVER  //package output//
+  CTI -> MCP : **render_diagram**
+  MCP -> IG : case graph  ->  PNG / SVG / Mermaid + lifecycle timeline
+  CTI -> MCP : **render_report**  ·  //house_report//
+  MCP -> IR : composed from the case dir  ->  cases/<id>/report/CTI-REPORT-*.{md,pdf,docx}
+  CTI -> L1 : build_report_data.py -> REPORT.json -> generate-cti-{html,iocs,docx-hybrid}
+  CTI -> MCP : misp_export //(local)// · misp_push / misp_publish //ask-first// · **api_usage**
+end
+
+CTI --> A : **base bundle: .md · .json · .csv · IOC bundle (STIX 2.1 · JSONL)**\n+ relationship graph  +  chosen presentation (PDF / DOCX / HTML / all)
+deactivate CTI
+
+legend right
+  **The 9 registered commands** //(work from a cold prompt, any project)//
+  ====
+  **/cti** <target>            recall -> intake -> Quarry -> harness loop | pipeline
+  **/cti-recall** <seed>       have I seen this before?  — run first
+  **/cti-case** <ID> <seeds>   collect -> ingest -> cluster -> assess
+  **/cti-pivot** <url|ip>      artifacts from ONE target
+  **/cti-cluster** <domain>    expand + correlate an existing case
+  **/cti-check** <indicator>   operator link, or shared noise?
+  **/cti-report** <ID>         graph + house report (PDF/DOCX)
+  **/cti-status**              backend tier · MCP tools · credit balances
+  **/cti-proxy**               egress proxy / rotation pool for every collector
+  ----
+  Everything else is a **convention command** — available
+  once the skill is loaded via /cti or /cti-expert.
+  ----
+  **Keyless by default.** Premium keys only upgrade a tier;
+  a missing key degrades to a note, never breaks the run.
+endlegend
+@enduml

@@ -1,0 +1,127 @@
+---
+name: grok-search
+description: |
+  Enhanced web search and real-time content retrieval via Grok API with forced tool routing. Use when: (1) Web search / information retrieval / fact-checking, (2) Webpage content extraction / URL parsing, (3) Breaking knowledge cutoff limits for current information, (4) Real-time news and technical documentation, (5) Multi-source information aggregation. Triggers: "search for", "find information about", "latest news", "current", "fetch webpage", "get content from URL". IMPORTANT: This skill REPLACES built-in WebSearch/WebFetch with Grok Search tools.
+---
+
+# Grok Search
+
+Enhanced web search via Grok API. Standalone CLI only (no MCP dependency).
+
+## Implementation Layout
+
+- `scripts/groksearch_cli.py` - CLI entrypoint and compatibility facade
+- `scripts/groksearch/` - internal modules for config, HTTP retry, Grok provider, Tavily calls, formatting, and commands
+
+## Execution Methods
+
+Run `scripts/groksearch_cli.py` via Bash:
+
+```bash
+# Prerequisites: pip install httpx tenacity
+# Environment: GROK_API_URL, GROK_API_KEY (required); TAVILY_API_KEY (optional)
+
+# Web search (Grok only)
+python scripts/groksearch_cli.py web_search --query "search terms" [--platform "GitHub"] [--min-results 3] [--max-results 10]
+
+# Web search with Tavily extra sources (parallel + URL-deduplicated merge)
+python scripts/groksearch_cli.py web_search --query "..." --extra-sources 5
+
+# Fetch webpage (default: Grok)
+python scripts/groksearch_cli.py web_fetch --url "https://..." [--out file.md]
+
+# Fetch via Tavily extract endpoint
+python scripts/groksearch_cli.py web_fetch --url "https://..." --via tavily
+
+# Map a website's structure (Tavily)
+python scripts/groksearch_cli.py web_map --url "https://docs.example.com" [--instructions "API only"] [--max-depth 2] [--max-breadth 20] [--limit 50] [--timeout 150]
+
+# Crawl a website's pages with extraction (Tavily; own 100 RPM limit)
+python scripts/groksearch_cli.py web_crawl --url "https://docs.example.com" [--instructions "API only"] [--max-depth 2] [--limit 50] [--select-paths "/docs/.*"] [--exclude-paths "/blog/.*"] [--timeout 150]
+
+# Run a cited research task (Tavily; async submit + poll; own 20 RPM limit)
+python scripts/groksearch_cli.py web_research --input "question to investigate" [--model mini|pro|auto] [--output-length short|standard|long] [--citation-format numbered|mla|apa|chicago] [--output-schema schema.json]
+
+# Check config
+python scripts/groksearch_cli.py get_config_info [--no-test]
+
+# Switch model
+python scripts/groksearch_cli.py switch_model --model "grok-2-latest"
+
+# Toggle built-in tools
+python scripts/groksearch_cli.py toggle_builtin_tools --action on|off|status [--root /path/to/project]
+```
+
+## Tool Routing Policy
+
+### Forced Replacement Rules
+
+| Scenario | Disabled | Force Use |
+|----------|----------|-----------|
+| Web Search | `WebSearch` | CLI `web_search` |
+| Web Fetch | `WebFetch` | CLI `web_fetch` |
+
+### Tool Capability Matrix
+
+| Tool | Parameters | Output |
+|------|------------|--------|
+| `web_search` | `query`(required), `platform`/`min_results`/`max_results`(optional), `extra_sources`(int, 0=disabled) | `[{title,url,description,provider?}]` |
+| `web_fetch` | `url`(required), `out`(optional), `via`(grok\|tavily, default grok) | Structured Markdown |
+| `web_map` | `url`(required), `instructions`/`max_depth`/`max_breadth`/`limit`/`timeout`(optional) | `{base_url,results,response_time}` JSON |
+| `web_crawl` | `url`(required), `instructions`/`max_depth`/`max_breadth`/`limit`/`select_paths`/`exclude_paths`/`timeout`(optional; unset falls back to `TAVILY_CRAWL_*`) | `{base_url,results,response_time,usage?}` JSON |
+| `web_research` | `input`(required), `model`/`output_length`/`citation_format`(optional; unset falls back to `TAVILY_RESEARCH_*`) | `{request_id,status,content,sources,usage?}` JSON |
+| `get_config_info` | `no_test`(optional) | `{api_url,status,connection_test,tavily_*}` |
+| `switch_model` | `model`(required) | `{previous_model,current_model}` |
+| `toggle_builtin_tools` | `action`(on/off/status), `root`(optional) | `{blocked,deny_list}` |
+
+## Search Workflow
+
+### Phase 1: Query Construction
+- **Intent Recognition**: Broad search → `web_search` | Deep retrieval → `web_fetch`
+- **Parameter Optimization**: Set `platform` for specific sources, adjust result counts
+
+### Phase 2: Search Execution
+1. Start with `web_search` for structured summaries
+2. Use `web_fetch` on key URLs if summaries insufficient
+3. Retry with adjusted query if first round unsatisfactory
+
+### Phase 3: URL Verification & Hallucination Guard (MANDATORY)
+
+**Background**: Grok API calls without explicit web-search activation return results from parametric memory, which frequently fabricates URLs (observed 25% liveness rate in testing). All Grok-returned URLs MUST be verified before citation.
+
+**Verification Protocol**:
+1. **URL Liveness Check**: Issue HEAD/GET request to each Grok-returned URL; non-2xx status = unreliable
+2. **Tavily Fallback Triggers** (invoke `web_search` with `--extra-sources N` when ANY apply):
+   - URL liveness rate < 50% in Grok results
+   - Query contains version numbers, release dates, API signatures, or "latest"/"recent" temporal markers (high hallucination surface)
+   - Multiple Grok runs return contradictory URLs for the same factual claim
+   - Grok result descriptions contain specifics (dates/versions/methods) that cannot be confirmed from live URLs
+3. **Tavily Grounding**: When triggered, re-run the same query with `--extra-sources 5-10` to obtain Tavily search results; prioritize these over failed Grok URLs
+4. **Content Extraction**: For critical factual claims, use `web_fetch --via tavily` on verified URLs to extract authoritative source text
+
+**Citation Discipline**:
+- **ONLY** verified-live URLs may appear in final output
+- Fabricated Grok URLs must be dropped entirely (do not present them with a disclaimer; omit them)
+- When Tavily sources replace Grok sources, cite Tavily URLs and mark provider as `tavily`
+- For time-sensitive queries with no live sources, state "Unable to verify current information" rather than citing dead links
+
+### Phase 4: Result Synthesis
+1. Cross-reference multiple sources
+2. **Must annotate source and date** for time-sensitive info
+3. **Must include source URLs**: `Title [<sup>1</sup>](URL)`
+
+## Error Handling
+
+| Error | Recovery |
+|-------|----------|
+| Connection Failure | Run `get_config_info`, verify API URL/Key |
+| No Results | Broaden search terms |
+| Fetch Timeout | Try alternative sources |
+
+## Anti-Patterns
+
+| Prohibited | Correct |
+|------------|---------|
+| No source citation | Include `Source [<sup>1</sup>](URL)` |
+| Give up after one failure | Retry at least once |
+| Use built-in WebSearch/WebFetch | Use GrokSearch tools/CLI |

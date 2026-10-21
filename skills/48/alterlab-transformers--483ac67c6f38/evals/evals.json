@@ -1,0 +1,82 @@
+{
+  "skill": "alterlab-transformers",
+  "evals": [
+    {
+      "id": "pipeline-quick-inference",
+      "prompt": "I have a list of customer review strings and just want sentiment labels quickly without setting up any training. What's the fastest way to do this with Hugging Face?",
+      "expected_output": "Invokes alterlab-transformers and uses the Pipeline API for quick inference: pipeline('text-classification') (or sentiment-analysis) applied over the list of reviews, with no manual model/tokenizer wiring. Notes that pipelines are the fast path for simple inference and can take a model='model-id' argument to pin a specific checkpoint.",
+      "assertions": [
+        { "type": "should_trigger", "value": true },
+        { "type": "output_contains", "value": "pipeline" },
+        { "type": "behavior", "value": "Uses the transformers pipeline() API for quick text-classification inference without manual configuration or training." }
+      ]
+    },
+    {
+      "id": "fine-tune-trainer",
+      "prompt": "I want to fine-tune a pre-trained BERT model on my own labeled text dataset for a domain-specific classification task. How do I set up the training loop?",
+      "expected_output": "Invokes alterlab-transformers for fine-tuning with the Trainer API: load the model with AutoModelForSequenceClassification.from_pretrained, tokenize the dataset, define TrainingArguments (output_dir, num_train_epochs, per_device_train_batch_size, eval_strategy), construct a Trainer with model/args/train_dataset and processing_class=tokenizer (the v5 name for the old tokenizer= argument), and call trainer.train(). May mention the datasets, evaluate, and accelerate packages, mixed precision, and that report_to defaults to 'none' in v5.",
+      "assertions": [
+        { "type": "should_trigger", "value": true },
+        { "type": "output_contains", "value": "Trainer" },
+        { "type": "behavior", "value": "Sets up fine-tuning via TrainingArguments + Trainer on a custom dataset and calls trainer.train()." }
+      ]
+    },
+    {
+      "id": "generation-decoding-strategy",
+      "prompt": "I'm loading a causal language model with AutoModelForCausalLM and want to generate longer, more diverse completions. How do I control the decoding with temperature, top-k and top-p instead of greedy output?",
+      "expected_output": "Invokes alterlab-transformers for text generation: load with AutoModelForCausalLM.from_pretrained and AutoTokenizer, tokenize with return_tensors='pt', and call model.generate(**inputs, max_new_tokens=..., do_sample=True, temperature=..., top_k=..., top_p=...) to control sampling vs greedy/beam decoding, then tokenizer.decode the output. Explains the decoding-strategy parameters.",
+      "assertions": [
+        { "type": "should_trigger", "value": true },
+        { "type": "output_contains", "value": "generate" },
+        { "type": "behavior", "value": "Uses AutoModelForCausalLM + model.generate with sampling parameters (temperature/top-k/top-p) to control decoding strategy." }
+      ]
+    },
+    {
+      "id": "image-classification-vision",
+      "prompt": "I have a folder of product photos and want to run a pre-trained vision transformer to classify what each image contains. Which Hugging Face setup do I need?",
+      "expected_output": "Invokes alterlab-transformers for a computer-vision task: uses pipeline('image-classification') with a pinned checkpoint such as google/vit-base-patch16-224 (or loads AutoModelForImageClassification with its AutoImageProcessor) on the photos, and notes the vision dependencies (pillow, plus torchvision for the default v5 image-processor backend; timm only for timm-backed models). Confirms transformers supports CV tasks beyond NLP, including image classification and object detection.",
+      "assertions": [
+        { "type": "should_trigger", "value": true },
+        { "type": "output_contains", "value": "image-classification" },
+        { "type": "behavior", "value": "Handles the vision task with an image-classification pipeline/model and notes the pillow/torchvision vision dependencies." }
+      ]
+    },
+    {
+      "id": "v5-migration-dtype-removed-pipelines",
+      "prompt": "After upgrading to transformers 5 my old analysis script warns that torch_dtype is deprecated and pipeline('summarization', model='facebook/bart-large-cnn') no longer exists. How should I rewrite the model loading and the summarization step?",
+      "expected_output": "Invokes alterlab-transformers for a v4-to-v5 migration: replaces torch_dtype= with dtype= (noting the v5 default is dtype='auto', the checkpoint dtype), explains that the summarization/translation/question-answering pipelines were removed in v5, and rewrites the step as pipeline('text-generation') with a small open chat model (e.g. Qwen/Qwen3-0.6B) prompted with an instruction and chat messages, reading the reply from generated_text[-1]['content'] and using max_new_tokens rather than max_length. May mention that TensorFlow/Flax support was removed.",
+      "assertions": [
+        { "type": "should_trigger", "value": true },
+        { "type": "output_contains", "value": "dtype" },
+        { "type": "behavior", "value": "Replaces torch_dtype with dtype and replaces the removed summarization pipeline with a text-generation pipeline driven by a chat model and max_new_tokens." }
+      ]
+    },
+    {
+      "id": "near-miss-scikit-learn",
+      "prompt": "I have a tabular CSV of numeric and categorical features and want to train a RandomForest classifier with a preprocessing pipeline and cross-validated hyperparameter tuning. How do I build that?",
+      "expected_output": "Does NOT invoke this skill; defers to alterlab-scikit-learn. The task is classical machine learning on tabular features (RandomForest, ColumnTransformer preprocessing, GridSearchCV), which has nothing to do with pre-trained transformer models. The response should point to alterlab-scikit-learn for the tabular ML pipeline.",
+      "assertions": [
+        { "type": "should_not_trigger", "value": true },
+        { "type": "output_contains", "value": "alterlab-scikit-learn" }
+      ]
+    },
+    {
+      "id": "near-miss-pytorch-lightning",
+      "prompt": "I'm writing a custom convolutional neural network from scratch and want to structure the training loop, multi-GPU strategy, and checkpointing cleanly with a LightningModule and Trainer. How should I organize it?",
+      "expected_output": "Does NOT invoke this skill; defers to alterlab-pytorch-lightning. The user is building a custom-architecture CNN and wants Lightning's LightningModule/Trainer training-loop organization, not loading or fine-tuning a pre-trained Hugging Face transformer via the transformers Trainer. The response should point to alterlab-pytorch-lightning.",
+      "assertions": [
+        { "type": "should_not_trigger", "value": true },
+        { "type": "output_contains", "value": "alterlab-pytorch-lightning" }
+      ]
+    },
+    {
+      "id": "near-miss-text-as-data",
+      "prompt": "For my political-science paper I want to discover the main themes in 20,000 parliamentary speeches with BERTopic and then show reviewers the topics are valid and stable across seeds. How should I design and validate that analysis?",
+      "expected_output": "Does NOT invoke this skill; defers to alterlab-text-as-data. The request is a social-science text-as-data measurement design (topic discovery with BERTopic, topic validity and stability checks for a paper), not loading, running, or fine-tuning a Hugging Face transformers checkpoint. The response should point to alterlab-text-as-data.",
+      "assertions": [
+        { "type": "should_not_trigger", "value": true },
+        { "type": "output_contains", "value": "alterlab-text-as-data" }
+      ]
+    }
+  ]
+}

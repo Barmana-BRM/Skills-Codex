@@ -1,0 +1,30 @@
+{
+  "_comment": "How WebPivot presents itself when fetching, and how it recognises a page that refused to serve. Both are DATA because both go stale on a schedule nobody controls: a browser ships a new major version every few weeks, and Cloudflare rewords its interstitial. RULE 1: generic constants only.",
+  "ua_pool": {
+    "_comment": "User-Agent strings rotated across requests so a multi-page crawl does not hit a target from one identical fingerprint. KEEP THESE FRESH — a UA advertising a browser two years stale is itself a bot tell, and that is the whole reason this list is tunable without a redeploy. ANDROID CHROME ONLY (project decision): every default fetch/screenshot/archive request presents as an Android device, never desktop/iOS — use real, current Android Chrome strings.",
+    "values": [
+      "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36",
+      "Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36",
+      "Mozilla/5.0 (Linux; Android 15; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36"
+    ]
+  },
+  "cloudflare_body_markers": {
+    "_comment": "Lowercased substrings that identify a Cloudflare managed-challenge / interstitial body rather than the site's real content. Getting this wrong is expensive in both directions: miss a marker and the challenge page is collected AS the site (its favicon and DOM hash then cluster every challenged domain together); add something too generic and real pages are discarded as challenges. Cloudflare rewords these and localises them, so extend as you meet new ones.",
+    "values": [
+      "challenges.cloudflare.com",
+      "cf_chl_",
+      "cf-chl",
+      "__cf_chl",
+      "just a moment",
+      "attention required",
+      "cloudflare to restrict",
+      "cf-mitigated",
+      "ray id",
+      "enable javascript and cookies to continue",
+      "checking your browser",
+      "even geduld",
+      "cf_clearance",
+      "turnstile"
+    ]
+  }
+}

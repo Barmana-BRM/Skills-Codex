@@ -1,0 +1,670 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T04:29:29.803Z",
+    "slug": "google-labs-code-stitch-design",
+    "source_url": "https://github.com/google-labs-code/stitch-skills/tree/main/skills/stitch-design/",
+    "source_ref": "main",
+    "model": "claude",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "c15a17ec8ebee55da6bc478b2a1817509b3239a8d81942c35a36b2e9acbbd6a8",
+    "tree_hash": "3c0c21f90bbdd89e5a972506c4e6e1b8449a9e8445864cfc3c165e370afe9ba7",
+    "provenance": {
+      "model_requested": "claude-sonnet-4.6",
+      "model_effective": "claude:claude-sonnet-4.6",
+      "fallback_chain": [
+        {
+          "agent": "claude",
+          "model": "claude-sonnet-4.6",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "stitch-design",
+    "description": "Create and refine high-fidelity UI designs with Stitch MCP, using prompt enhancement, design system synthesis, and asset download workflows.",
+    "summary": "Guide Stitch MCP workflows for UI generation, design editing, and reusable design system documentation.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "google-labs-code",
+    "license": "MIT",
+    "tags": [
+      "ui-design",
+      "design-systems",
+      "stitch-mcp",
+      "prompt-engineering",
+      "prototyping"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by Markdown code formatting, UI terminology, and relative documentation links. One medium-risk semantic issue remains: the workflow recommends shell-based downloads of generated HTML and screenshots without explicit validation or confirmation safeguards.",
+    "remediation": [
+      {
+        "issue": "Asset downloads use curl through a command runner without stated validation rules.",
+        "suggestion": "Require confirmation before downloading, restrict URLs to trusted Stitch-provided download URLs, sanitize filenames, and write only under .stitch/designs.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 82
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "workflows/text-to-design.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "workflows/text-to-design.md",
+            "line_start": 15,
+            "line_end": 15
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:README.md:22:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "README.md",
+        "line_start": 22,
+        "line_end": 23,
+        "snippet": "- Stitch MCP Server access"
+      },
+      {
+        "id": "blocker:references/design-mappings.md:11:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/design-mappings.md",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "| \"list of things\" | \"responsive card grid with hover states and subtle elevations\" |"
+      },
+      {
+        "id": "blocker:references/prompt-keywords.md:42:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/prompt-keywords.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "- grid layout, flexbox"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "2.  **Design System Synthesis** — Analyze existing Stitch projects to create `.stitch/DESIGN.md` \"so"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "5.  **Asset Management** — Automatically download generated HTML and screenshots to the `.stitch/des"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "| \"Design a [page]...\" | [text-to-design](workflows/text-to-design.md) | `generate_screen_from_text`"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "| \"Edit this [screen]...\" | [edit-design](workflows/edit-design.md) | `edit_screens` + `Download` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "| \"Create/Update .stitch/DESIGN.md\" | [generate-design-md](workflows/generate-design-md.md) | `get_s"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "- **Project Scope**: Maintain the current `projectId`. Use `list_projects` if unknown."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "- **Design System**: Check for `.stitch/DESIGN.md`. If it exists, incorporate its tokens (colors, ty"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 65,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 68,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 82,
+        "snippet": "After any tool call, always surface the `outputComponents` (Text Description and Suggestions) to the"
+      },
+      {
+        "id": "blocker:workflows/generate-design-md.md:24:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "workflows/generate-design-md.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "- Analyze the HTML and screenshot to capture the \"vibe\" (e.g., \"Airy,\" \"Professional,\" \"Vibrant\")."
+      },
+      {
+        "id": "blocker:workflows/generate-design-md.md:57:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "workflows/generate-design-md.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "(Whitespace strategy and grid alignment)"
+      },
+      {
+        "id": "filesystem:workflows/text-to-design.md:12:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "workflows/text-to-design.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "Before calling the Stitch MCP tool, apply the [Prompt Enhancement Pipeline](../SKILL.md#prompt-enhan"
+      },
+      {
+        "id": "filesystem:workflows/text-to-design.md:15:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "workflows/text-to-design.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- Use specific [Design Mappings](../references/design-mappings.md) and [Prompting Keywords](../refer"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:README.md:22:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line only lists Stitch MCP Server access as a prerequisite. It does not describe scanning networks, enumerating hosts, or probing services."
+      },
+      {
+        "id": "blocker:references/design-mappings.md:11:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The phrase is a UI design mapping for card grids and hover states. It is not system reconnaissance or discovery guidance."
+      },
+      {
+        "id": "blocker:references/prompt-keywords.md:42:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line lists layout terms such as grid layout and flexbox for UI prompting. It contains no instructions to inspect systems or infrastructure."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks wrap a filename in Markdown documentation. There is no Ruby code, shell execution, or user-controlled command construction."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify the .stitch/designs directory in prose. This is documentation text, not an executable backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The line names Stitch MCP tool actions in a Markdown table. It does not invoke a shell or interpolate input into a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks mark tool names in documentation. They are not Ruby shell backticks and do not execute external commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The line documents a Stitch workflow and file name with Markdown code formatting. No shell command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks format a projectId field and list_projects tool name. This is non-executable Markdown reference text."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line references .stitch/DESIGN.md and a workflow name in documentation. It does not contain command execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The snippet is an opening Markdown fence for an example prompt template. It is not a Ruby or shell backtick execution context."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The snippet is a closing Markdown code fence. It does not execute code or instruct a command runner."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks format the outputComponents field name in prose. This is safe documentation and not a shell execution primitive."
+      },
+      {
+        "id": "blocker:workflows/generate-design-md.md:24:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The workflow analyzes screenshots already returned by Stitch MCP for design-system synthesis. It does not instruct capturing the local screen or uploading user screenshots."
+      },
+      {
+        "id": "blocker:workflows/generate-design-md.md:57:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The phrase describes whitespace and grid alignment in a generated design document. It is UI layout terminology, not system reconnaissance."
+      },
+      {
+        "id": "filesystem:workflows/text-to-design.md:12:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ segment is a relative Markdown link to another file inside the skill package. It is not user-controlled filesystem access or path traversal."
+      },
+      {
+        "id": "filesystem:workflows/text-to-design.md:15:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ segments are relative Markdown links to bundled reference documents. They do not direct file reads or writes outside an intended boundary."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unvalidated Asset Download Command",
+        "description": "The workflow tells agents to download HTML and screenshot URLs to .stitch/designs using curl -o via run_command or similar. Without explicit URL validation, filename sanitization, and user confirmation, this can fetch untrusted remote content and write files into the local project.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "workflows/text-to-design.md",
+            "line_start": 34,
+            "line_end": 38
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The instruction directly combines remote URL downloads, shell execution, and local file writes. The intent is legitimate asset management, but the workflow lacks safety constraints around trusted sources and output paths."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unvalidated Asset Download Command",
+        "description": "The workflow tells agents to download HTML and screenshot URLs to .stitch/designs using curl -o via run_command or similar. Without explicit URL validation, filename sanitization, and user confirmation, this can fetch untrusted remote content and write files into the local project.",
+        "locations": [
+          {
+            "file": "workflows/text-to-design.md",
+            "line_start": 34,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The instruction directly combines remote URL downloads, shell execution, and local file writes. The intent is legitimate asset management, but the workflow lacks safety constraints around trusted sources and output paths."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 11,
+    "total_lines": 605,
+    "audit_model": "claude",
+    "audited_at": "2026-07-09T04:29:29.803Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Generate Stitch UI Designs",
+    "value_statement": "Design prompts often lack the detail needed for consistent, production-quality UI outputs. This skill turns rough requests into structured Stitch MCP workflows, reusable design system notes, and saved design assets.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Stitch MCP",
+      "UI design",
+      "UX design",
+      "design system",
+      "prompt enhancement",
+      "screen generation",
+      "design assets"
+    ],
+    "actual_capabilities": [
+      "Enhances vague UI requests into structured prompts with design vocabulary and layout details.",
+      "Routes design tasks to text generation, screen editing, or design system synthesis workflows.",
+      "Uses Stitch MCP tools to generate new screens from enhanced text prompts.",
+      "Analyzes Stitch project screens to create a .stitch/DESIGN.md design system reference.",
+      "Downloads generated HTML and screenshot assets into a project design directory."
+    ],
+    "limitations": [
+      "Requires access to a configured Stitch MCP server and a valid Stitch project.",
+      "Does not implement generated designs as application code by itself.",
+      "Generated quality depends on the available project context and Stitch model output.",
+      "Asset download steps should be reviewed before writing remote content locally."
+    ],
+    "use_cases": [
+      {
+        "title": "Create a polished landing page concept",
+        "description": "Turn a short product idea into a detailed Stitch prompt and generate a high-fidelity screen.",
+        "target_user": "Founder or product marketer"
+      },
+      {
+        "title": "Maintain visual consistency across screens",
+        "description": "Capture colors, typography, spacing, and component style rules from existing Stitch screens.",
+        "target_user": "Designer or design systems lead"
+      },
+      {
+        "title": "Refine generated UI with targeted edits",
+        "description": "Improve a screen through focused edit instructions instead of regenerating the entire design.",
+        "target_user": "Frontend engineer or prototyper"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Generate a simple page",
+        "scenario": "Beginner request for a new UI screen.",
+        "prompt": "Design a desktop landing page for a productivity app. Make it clean, trustworthy, and focused on one primary call to action."
+      },
+      {
+        "title": "Use an existing design system",
+        "scenario": "Create a screen that should match existing project styles.",
+        "prompt": "Generate a pricing page for this Stitch project. Use the existing .stitch/DESIGN.md colors, typography, spacing, and button styles."
+      },
+      {
+        "title": "Edit a generated screen",
+        "scenario": "Refine a specific design without full regeneration.",
+        "prompt": "Edit the current dashboard screen. Keep the layout, but make the cards feel more premium and improve the empty states."
+      },
+      {
+        "title": "Create design system documentation",
+        "scenario": "Advanced workflow for documenting reusable visual rules.",
+        "prompt": "Analyze the representative Stitch screens in this project and create a .stitch/DESIGN.md file with color roles, typography rules, component styling, and layout principles."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Design a landing page for a mountain resort.",
+        "output": "A structured Stitch prompt describing serene luxury, glassmorphism surfaces, full-width hero imagery, premium typography, and clear booking calls to action."
+      },
+      {
+        "input": "Create a design system file from my Stitch project.",
+        "output": [
+          "Project atmosphere summary",
+          "Named color roles with hex values",
+          "Typography and component styling guidance",
+          "Layout principles for future screens"
+        ]
+      },
+      {
+        "input": "Make this screen feel more professional.",
+        "output": "Targeted edit guidance that adjusts spacing, hierarchy, shadows, color contrast, and button treatment while preserving the existing layout."
+      }
+    ],
+    "best_practices": [
+      "Provide the Stitch projectId and intended device type before generation starts.",
+      "Create or update .stitch/DESIGN.md before generating multiple related screens.",
+      "Use targeted edit workflows for polish when the base layout is already correct."
+    ],
+    "anti_patterns": [
+      "Do not regenerate from scratch for small visual changes or copy adjustments.",
+      "Do not download generated assets without checking the source URL and destination path.",
+      "Do not use vague prompts when brand tone, platform, or page structure matters."
+    ],
+    "faq": [
+      {
+        "question": "What is Stitch Design for?",
+        "answer": "It helps Claude, Codex, and Claude Code create, edit, and document UI designs through Stitch MCP workflows."
+      },
+      {
+        "question": "Do I need Stitch MCP access?",
+        "answer": "Yes. The main workflows require Stitch MCP tools and a projectId for generation, editing, or screen analysis."
+      },
+      {
+        "question": "Can it build React components?",
+        "answer": "No. It produces design prompts, Stitch screens, design documentation, and downloaded assets, not production component code."
+      },
+      {
+        "question": "What is .stitch/DESIGN.md?",
+        "answer": "It is a local design system reference that records visual themes, colors, typography, component styles, and layout rules."
+      },
+      {
+        "question": "Can it improve an existing screen?",
+        "answer": "Yes. The edit workflow supports targeted changes to existing Stitch screens when the base structure should remain."
+      },
+      {
+        "question": "Are downloaded assets safe by default?",
+        "answer": "Downloads should be reviewed. Only trusted Stitch-provided URLs should be saved, and outputs should stay under .stitch/designs."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "examples",
+      "type": "dir",
+      "path": "examples",
+      "children": [
+        {
+          "name": "DESIGN.md",
+          "type": "file",
+          "path": "examples/DESIGN.md",
+          "lines": 23
+        },
+        {
+          "name": "enhanced-prompt.md",
+          "type": "file",
+          "path": "examples/enhanced-prompt.md",
+          "lines": 29
+        },
+        {
+          "name": "metadata.json",
+          "type": "file",
+          "path": "examples/metadata.json",
+          "lines": 23
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "design-mappings.md",
+          "type": "file",
+          "path": "references/design-mappings.md",
+          "lines": 46
+        },
+        {
+          "name": "prompt-keywords.md",
+          "type": "file",
+          "path": "references/prompt-keywords.md",
+          "lines": 115
+        },
+        {
+          "name": "tool-schemas.md",
+          "type": "file",
+          "path": "references/tool-schemas.md",
+          "lines": 76
+        }
+      ]
+    },
+    {
+      "name": "workflows",
+      "type": "dir",
+      "path": "workflows",
+      "children": [
+        {
+          "name": "edit-design.md",
+          "type": "file",
+          "path": "workflows/edit-design.md",
+          "lines": 45
+        },
+        {
+          "name": "generate-design-md.md",
+          "type": "file",
+          "path": "workflows/generate-design-md.md",
+          "lines": 64
+        },
+        {
+          "name": "text-to-design.md",
+          "type": "file",
+          "path": "workflows/text-to-design.md",
+          "lines": 48
+        }
+      ]
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 51
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 85
+    }
+  ]
+}

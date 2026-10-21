@@ -1,0 +1,2176 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T11:40:29.425Z",
+    "slug": "c0ntr0lledcha0s-triaging-issues",
+    "source_url": "https://github.com/C0ntr0lledCha0s/claude-code-plugin-automations/tree/main/github-workflows/skills/triaging-issues",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "42785187aa6eb0c1fe41ad54ec6cc4ff40f49defa42aba5d8eb6c529c1bec0e1",
+    "tree_hash": "dbd58ed26aafa6035ca38434e96d462cd4c29c066ec62a891a35e1b24920166e",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "triaging-issues",
+    "description": "Triages GitHub issues by classifying priority, checking duplicates, mapping dependencies, assessing quality, and applying selected repository updates through GitHub CLI.",
+    "summary": "Review, organize, and act on GitHub issues with consistent triage workflows.",
+    "icon": "📦",
+    "version": "1.1.0",
+    "author": "C0ntr0lledCha0s",
+    "license": "MIT",
+    "tags": [
+      "github-issues",
+      "issue-triage",
+      "duplicate-detection",
+      "dependency-mapping",
+      "github-cli"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "productivity"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Static detections for command substitution, subprocess use, device redirection, Markdown fences, and reconnaissance phrases are false positives in context. The scripts still perform repository mutations through GitHub CLI. Bulk changes lack preview guards, and documented option-style calls do not match positional parsing.",
+    "remediation": [
+      {
+        "issue": "Bulk commands mutate many GitHub issues without a preview or confirmation step.",
+        "suggestion": "Add a dry-run default, display the matched issue count and planned changes, then require explicit confirmation before mutations.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Documented option-style arguments do not match the scripts' positional argument parsing.",
+        "suggestion": "Use getopts or document positional syntax, validate issue identifiers, and complete all preflight checks before closing or editing issues.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/duplicate-detection.sh",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 131,
+            "line_end": 131
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 134,
+            "line_end": 134
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 160,
+            "line_end": 160
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 185,
+            "line_end": 185
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 188,
+            "line_end": 188
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 191,
+            "line_end": 191
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 194,
+            "line_end": 194
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 197,
+            "line_end": 197
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 107,
+            "line_end": 107
+          },
+          {
+            "file": "scripts/validate-issue.py",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 131
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 144,
+            "line_end": 144
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 167,
+            "line_end": 167
+          },
+          {
+            "file": "scripts/relationship-mapper.sh",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "scripts/validate-issue.py",
+            "line_start": 121,
+            "line_end": 121
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:19:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "target=$(gh issue view \"$issue_number\" --json title,body)"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:21:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "title=$(echo \"$target\" | jq -r '.title')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:23:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "body=$(echo \"$target\" | jq -r '.body // \"\"')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:30:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "keywords=$(echo \"$title $body\" | tr '[:upper:]' '[:lower:]' | grep -oE '\\w{4,}' | sort -u | head -20"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:34:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "search_terms=$(echo \"$keywords\" | head -5 | tr '\\n' ' ')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:51:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "issues=$(gh issue list --state open --json number,title --limit 200)"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:54:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "count=$(echo \"$issues\" | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:64:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "similar=$(gh issue list --search \"is:open \\\"$title\\\"\" --json number --limit 5 | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:83:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "data1=$(gh issue view \"$issue1\" --json title,body)"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:85:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "data2=$(gh issue view \"$issue2\" --json title,body)"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:97:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "title1=$(echo \"$data1\" | jq -r '.title' | tr '[:upper:]' '[:lower:]')"
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:99:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/duplicate-detection.sh",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "title2=$(echo \"$data2\" | jq -r '.title' | tr '[:upper:]' '[:lower:]')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:44:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "issues=$(gh issue list --search \"$filter\" --json number,title,labels --limit 100)"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:47:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "count=$(echo \"$issues\" | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:59:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "number=$(echo \"$issue\" | jq -r '.number')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:61:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "title=$(echo \"$issue\" | jq -r '.title')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:95:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "cutoff_date=$(date -d \"$days days ago\" +%Y-%m-%d 2>/dev/null || date -v-${days}d +%Y-%m-%d)"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:131:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 131,
+        "line_end": 131,
+        "snippet": "issues=$(gh issue list --search \"$filter\" --json number --limit 100)"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:134:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "count=$(echo \"$issues\" | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:160:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "owner=$(gh repo view --json owner -q '.owner.login')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:185:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "total_open=$(gh issue list --state open --json number --limit 5000 | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:188:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 188,
+        "line_end": 188,
+        "snippet": "needs_triage=$(gh issue list --label \"needs-triage\" --json number --limit 5000 | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:191:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "high_priority=$(gh issue list --label \"priority:high\" --json number --limit 5000 | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:194:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "bugs=$(gh issue list --label \"bug\" --state open --json number --limit 5000 | jq 'length')"
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:197:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 197,
+        "line_end": 197,
+        "snippet": "features=$(gh issue list --label \"feature\" --state open --json number --limit 5000 | jq 'length')"
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:31:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "if ! gh auth status >/dev/null 2>&1; then"
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:77:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "gh issue edit \"$number\" --add-label \"$labels\" 2>/dev/null && \\"
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:95:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "cutoff_date=$(date -d \"$days days ago\" +%Y-%m-%d 2>/dev/null || date -v-${days}d +%Y-%m-%d)"
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:144:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "gh issue edit \"$number\" --add-label \"$label\" 2>/dev/null && \\"
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:167:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/issue-helpers.sh",
+        "line_start": 167,
+        "line_end": 167,
+        "snippet": "gh project item-add \"$project_number\" --owner \"$owner\" --url \"$url\" 2>/dev/null && \\"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:20:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "issue_data=$(gh issue view \"$issue_number\" --json title,body,labels)"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:23:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "title=$(echo \"$issue_data\" | jq -r '.title')"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:30:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "body=$(echo \"$issue_data\" | jq -r '.body // \"\"')"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:35:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "ref_num=$(echo \"$ref\" | tr -d '#')"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:38:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "ref_title=$(gh issue view \"$ref_num\" --json title 2>/dev/null | jq -r '.title' || echo \"Unknown\")"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:95:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "num=$(echo \"$issue\" | jq -r '.number')"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:97:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "title=$(echo \"$issue\" | jq -r '.title' | cut -c1-30)"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:103:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "body=$(echo \"$issue\" | jq -r '.body // \"\"')"
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:107:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "ref_num=$(echo \"$ref\" | tr -d '#')"
+      },
+      {
+        "id": "filesystem:scripts/relationship-mapper.sh:38:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/relationship-mapper.sh",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "ref_title=$(gh issue view \"$ref_num\" --json title 2>/dev/null | jq -r '.title' || echo \"Unknown\")"
+      },
+      {
+        "id": "external_commands:scripts/validate-issue.py:21:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/validate-issue.py",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "result = subprocess.run(['gh'] + args, capture_output=True, text=True, check=True)"
+      },
+      {
+        "id": "filesystem:scripts/validate-issue.py:121:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/validate-issue.py",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "print(f\"\\nChecking {len(issues)} issues...\\n\")"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 58,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 61,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 63,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 76,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 79,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 82,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 85,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 88,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 91,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 94,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 97,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 100,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 109,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 127,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 131,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 156,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 159,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 162,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 187,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:187:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 187,
+        "line_end": 192,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 205,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 205,
+        "line_end": 214,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:214:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 214,
+        "line_end": 247,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 247,
+        "line_end": 254,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:254:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 254,
+        "line_end": 279,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 279,
+        "line_end": 282,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 282,
+        "line_end": 285,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 285,
+        "line_end": 292,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:292:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 292,
+        "line_end": 314,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:314:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 314,
+        "line_end": 323,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:323:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 323,
+        "line_end": 329,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:329:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 329,
+        "line_end": 336,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 336,
+        "line_end": 368,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:368:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 368,
+        "line_end": 375,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:375:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 375,
+        "line_end": 401,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:401:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 401,
+        "line_end": 405,
+        "snippet": "Adding label: `needs-more-info`"
+      },
+      {
+        "id": "external_commands:SKILL.md:405:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 405,
+        "line_end": 470,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:470:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 470,
+        "line_end": 482,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:482:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 482,
+        "line_end": 487,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:487:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 487,
+        "line_end": 496,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:496:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 496,
+        "line_end": 501,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:501:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 501,
+        "line_end": 510,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:510:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 510,
+        "line_end": 515,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:515:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 515,
+        "line_end": 524,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:524:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 524,
+        "line_end": 578,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:578:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 578,
+        "line_end": 591,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:591:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 591,
+        "line_end": 595,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:595:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 595,
+        "line_end": 612,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:612:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 612,
+        "line_end": 616,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:616:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 616,
+        "line_end": 635,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "blocker:SKILL.md:176:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "Actual: Timeout error \"OAuth provider did not respond\""
+      },
+      {
+        "id": "blocker:SKILL.md:650:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 650,
+        "line_end": 651,
+        "snippet": "- Permission denied → Need triage access"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:19:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:21:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:23:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:30:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:34:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:51:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:54:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:64:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:83:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:85:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:97:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/duplicate-detection.sh:99:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:44:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:47:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:59:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:61:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:95:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution computes a date with fixed date commands; the days value is used as an argument and is never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:131:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:134:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:160:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:185:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:188:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:191:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:194:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/issue-helpers.sh:197:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:31:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:77:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:95:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:144:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "filesystem:scripts/issue-helpers.sh:167:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:20:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:23:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:30:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:35:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:38:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures structured output from a fixed, read-only GitHub CLI command; dynamic values are quoted and never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:95:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:97:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:103:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/relationship-mapper.sh:107:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution captures output from fixed text-processing commands; input expansions are quoted and are never evaluated as shell code."
+      },
+      {
+        "id": "filesystem:scripts/relationship-mapper.sh:38:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code only redirects status or error output to /dev/null; it does not read or modify an arbitrary filesystem path."
+      },
+      {
+        "id": "external_commands:scripts/validate-issue.py:21:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "subprocess.run receives an argument list with the fixed gh executable and never enables shell parsing, so caller values remain single arguments."
+      },
+      {
+        "id": "filesystem:scripts/validate-issue.py:121:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text only prints newline escapes around an issue count; it contains no filesystem path or traversal operation."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:187:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:214:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:254:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:292:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:314:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:323:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:329:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:368:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:375:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:401:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:405:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:470:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:482:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:487:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:496:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:501:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:510:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:515:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:524:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:578:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:591:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:595:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:612:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:616:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown fences or inline formatting in documentation, not Ruby or shell execution syntax."
+      },
+      {
+        "id": "blocker:SKILL.md:176:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The timeout phrase appears in a sample issue report and does not instruct the agent to inspect the host system."
+      },
+      {
+        "id": "blocker:SKILL.md:650:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The permission guidance describes a common GitHub authorization error and does not perform network discovery."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Bulk Repository Changes Lack a Preview Guard",
+        "description": "Batch triage, bulk labeling, and project assignment immediately mutate matching GitHub issues. A broad filter can alter up to 100 issues without confirmation.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 36,
+            "line_end": 79
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 122,
+            "line_end": 168
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The functions call gh issue edit and gh project item-add inside loops without a dry-run or interactive confirmation."
+      },
+      {
+        "title": "Documented Arguments Can Leave Partial Repository Changes",
+        "description": "SKILL.md documents option-style helper calls, but the shell script parses positional parameters only. Duplicate closure can finish before its malformed follow-up command fails.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 470,
+            "line_end": 481
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 104,
+            "line_end": 118
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 207,
+            "line_end": 225
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The documentation passes --filter and --original flags, while main forwards raw arguments to functions that read fixed positional slots."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Bulk Repository Changes Lack a Preview Guard",
+        "description": "Batch triage, bulk labeling, and project assignment immediately mutate matching GitHub issues. A broad filter can alter up to 100 issues without confirmation.",
+        "locations": [
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 36,
+            "line_end": 79
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 122,
+            "line_end": 168
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The functions call gh issue edit and gh project item-add inside loops without a dry-run or interactive confirmation."
+      },
+      {
+        "title": "Documented Arguments Can Leave Partial Repository Changes",
+        "description": "SKILL.md documents option-style helper calls, but the shell script parses positional parameters only. Duplicate closure can finish before its malformed follow-up command fails.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 470,
+            "line_end": 481
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 104,
+            "line_end": 118
+          },
+          {
+            "file": "scripts/issue-helpers.sh",
+            "line_start": 207,
+            "line_end": 225
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The documentation passes --filter and --original flags, while main forwards raw arguments to functions that read fixed positional slots."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 9,
+    "total_lines": 1739,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T11:40:29.425Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Triage GitHub Issues with Clear Priorities",
+    "value_statement": "Unsorted GitHub issues delay decisions and hide duplicates. This skill classifies issues, maps relationships, checks quality, and prepares focused triage actions.",
+    "seo_keywords": [
+      "GitHub issue triage",
+      "duplicate issue detection",
+      "issue classification",
+      "dependency mapping",
+      "issue quality",
+      "GitHub CLI",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Classifies issues by type, priority, scope, and estimated effort.",
+      "Searches open issues for possible duplicates using keywords and title comparisons.",
+      "Maps referenced issues, blocking language, labels, and dependency relationships.",
+      "Checks issue quality using title, description, labels, reproduction details, and environment information.",
+      "Can label issue sets, close duplicates, add project items, and generate triage reports through GitHub CLI."
+    ],
+    "limitations": [
+      "Requires GitHub CLI authentication, Bash, jq, and Python for the included scripts.",
+      "Duplicate detection uses basic keyword and title matching, not semantic or TF-IDF scoring.",
+      "Some documented option-style commands conflict with the scripts' positional interfaces.",
+      "Batch mutation commands do not provide a dry-run or confirmation step."
+    ],
+    "use_cases": [
+      {
+        "title": "Review Incoming Reports",
+        "description": "Classify new issues, assess completeness, and prepare labels or information requests.",
+        "target_user": "Open-source maintainer"
+      },
+      {
+        "title": "Organize a Product Backlog",
+        "description": "Identify duplicates, priorities, dependencies, and issues ready for planning.",
+        "target_user": "Product manager"
+      },
+      {
+        "title": "Analyze Engineering Blockers",
+        "description": "Map issue relationships and highlight work that unlocks dependent tasks.",
+        "target_user": "Engineering lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Review One Issue",
+        "prompt": "Review GitHub issue #{issue_number}. Classify its type and priority, assess its quality, and recommend next steps without changing the repository.",
+        "scenario": "A beginner needs a structured review of one issue."
+      },
+      {
+        "title": "Check for Duplicates",
+        "prompt": "Compare issue #{issue_number} with related open issues. Rank likely duplicates, explain the evidence, and recommend whether to link or close each candidate.",
+        "scenario": "A maintainer wants evidence before resolving a duplicate."
+      },
+      {
+        "title": "Prepare Batch Triage",
+        "prompt": "Review issues matching {filter}. Propose labels, priorities, and information requests. Show a dry-run summary and do not modify GitHub.",
+        "scenario": "A product manager wants a reviewable batch plan."
+      },
+      {
+        "title": "Plan from Dependencies",
+        "prompt": "Analyze open issues for dependencies, duplicates, quality gaps, and priority. Produce a recommended execution order, then request confirmation before any repository changes.",
+        "scenario": "An engineering lead needs a dependency-aware triage plan."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review issue #42 without making changes.",
+        "output": "Issue #42 is a high-priority backend bug. It needs environment details and logs before assignment. Issue #38 may be related."
+      },
+      {
+        "input": "Find likely duplicates of the authentication timeout report.",
+        "output": [
+          "Issue #38 is the strongest match because it reports the same timeout and component.",
+          "Issue #27 concerns login but reports a different failure mode.",
+          "Recommendation: verify #38 before closing or linking any issue."
+        ]
+      },
+      {
+        "input": "Summarize dependency blockers in the current backlog.",
+        "output": "Issue #42 blocks two profile tasks and should start first. Issue #50 has no blockers and can proceed in parallel."
+      }
+    ],
+    "best_practices": [
+      "Review duplicate evidence and reporter context before closing an issue.",
+      "Run batch operations as a dry-run and confirm the matched issue set.",
+      "Document classification, priority, and relationship decisions in clear repository comments."
+    ],
+    "anti_patterns": [
+      "Do not close duplicates using title similarity alone.",
+      "Do not run broad mutation filters without reviewing every matched issue.",
+      "Do not assign priority or effort without evidence from impact, urgency, and scope."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill change GitHub issues?",
+        "answer": "Yes. Some helper commands add labels, close duplicates, comment, or add project items."
+      },
+      {
+        "question": "What tools are required?",
+        "answer": "The scripts require GitHub CLI, Bash, jq, Python, and authenticated repository access."
+      },
+      {
+        "question": "How are duplicates detected?",
+        "answer": "The included script extracts keywords and compares titles across open issues."
+      },
+      {
+        "question": "Can it process many issues?",
+        "answer": "Yes. Batch commands support up to 100 matching issues, but they lack built-in preview confirmation."
+      },
+      {
+        "question": "Does it validate issue quality?",
+        "answer": "Yes. It checks titles, descriptions, labels, reproduction details, issue references, and environment information."
+      },
+      {
+        "question": "Can it map dependencies?",
+        "answer": "Yes. It extracts issue references, scans blocking language, and generates text or DOT relationship output."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "issue-lifecycle-guide.md",
+          "type": "file",
+          "path": "references/issue-lifecycle-guide.md",
+          "lines": 54
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "duplicate-detection.sh",
+          "type": "file",
+          "path": "scripts/duplicate-detection.sh",
+          "lines": 149
+        },
+        {
+          "name": "issue-helpers.sh",
+          "type": "file",
+          "path": "scripts/issue-helpers.sh",
+          "lines": 272
+        },
+        {
+          "name": "relationship-mapper.sh",
+          "type": "file",
+          "path": "scripts/relationship-mapper.sh",
+          "lines": 163
+        },
+        {
+          "name": "validate-issue.py",
+          "type": "file",
+          "path": "scripts/validate-issue.py",
+          "lines": 196
+        }
+      ]
+    },
+    {
+      "name": "templates",
+      "type": "dir",
+      "path": "templates",
+      "children": [
+        {
+          "name": "bug-report-template.md",
+          "type": "file",
+          "path": "templates/bug-report-template.md",
+          "lines": 38
+        },
+        {
+          "name": "feature-request-template.md",
+          "type": "file",
+          "path": "templates/feature-request-template.md",
+          "lines": 36
+        },
+        {
+          "name": "issue-response-templates.md",
+          "type": "file",
+          "path": "templates/issue-response-templates.md",
+          "lines": 176
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 655
+    }
+  ]
+}

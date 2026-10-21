@@ -1,0 +1,2761 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T11:53:27.585Z",
+    "slug": "egadams-voice-agent-expert",
+    "source_url": "https://github.com/EGAdams/planner/tree/main/.claude/skills/voice-agent-expert",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "014b0d5c44607e3491b0793da3f068a9a5b967acb537e326cc639e2b34f8c871",
+    "tree_hash": "bbfa63c1532f523bafec5428842eab14053fa7ca7b5cafe92afdffacb878d60e",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "voice-agent-expert",
+    "description": "Troubleshooting reference and helper scripts for local LiveKit and Letta voice agent development.",
+    "summary": "Debug local LiveKit and Letta voice agent setup, routing, tokens, and duplicate process failures.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "EGAdams",
+    "license": "MIT",
+    "tags": [
+      "voice-agents",
+      "livekit",
+      "letta",
+      "webrtc",
+      "diagnostics"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "network",
+      "external_commands",
+      "env_access"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The skill appears intended for local LiveKit and Letta debugging, not covert exfiltration. Several findings are confirmed because helper scripts read .env files, handle API secrets, spawn shell commands, and start local services with hardcoded paths. Many markdown backtick and localhost URL findings are false positives, but the package needs hardening before broad marketplace distribution.",
+    "remediation": [
+      {
+        "issue": "Hardcoded absolute paths and .env locations",
+        "suggestion": "Replace author-specific paths with configurable options and ask before reading any .env file.",
+        "severity": "high"
+      },
+      {
+        "issue": "Shell command execution and broad process control",
+        "suggestion": "Use subprocess argument arrays, avoid shell=True, and require confirmation before killing processes.",
+        "severity": "high"
+      },
+      {
+        "issue": "LiveKit bound to all network interfaces",
+        "suggestion": "Bind development services to localhost by default and document firewall requirements for other bindings.",
+        "severity": "high"
+      },
+      {
+        "issue": "Generated LiveKit token is printed to terminal output",
+        "suggestion": "Label the token as sensitive, keep its lifetime short, and avoid writing it to logs.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Temporary PID, lock, and log files use predictable paths",
+        "suggestion": "Use safer runtime directories, validate ownership, and avoid manual deletion except after confirmation.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 133,
+            "line_end": 133
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 133,
+            "line_end": 133
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 98,
+            "line_end": 98
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "README.md",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "README.md",
+            "line_start": 115,
+            "line_end": 115
+          },
+          {
+            "file": "README.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "README.md",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "README.md",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 11,
+            "line_end": 11
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:133:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "## 📝 Aliases (Add to ~/.bashrc)"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:56:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "/home/adamsl/planner/.venv/bin/python3 /home/adamsl/planner/.claude/skills/voice-agent-expert/script"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:68:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "| **Generate token** | `/home/adamsl/planner/.venv/bin/python3 /home/adamsl/planner/.claude/skills/v"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:69:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "| **Diagnostic** | `/home/adamsl/planner/.venv/bin/python3 /home/adamsl/planner/.claude/skills/voice"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:133:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "## 📝 Aliases (Add to ~/.bashrc)"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:67:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "| **Check stale rooms** | `grep \"waiting for participants\" /tmp/livekit.log` |"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:95:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "ls -la /tmp/letta_voice_agent.*"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:98:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "rm -f /tmp/letta_voice_agent.{pid,lock}"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:102:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "- `/tmp/letta_voice_agent.pid` - Tracks running agent"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:103:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "QUICK_REFERENCE.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "- `/tmp/letta_voice_agent.lock` - Prevents race conditions (30s)"
+      },
+      {
+        "id": "network:README.md:48:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "# http://localhost:8888/test-simple.html"
+      },
+      {
+        "id": "filesystem:README.md:45:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "/home/adamsl/planner/.venv/bin/python3 /home/adamsl/planner/.claude/skills/voice-agent-expert/script"
+      },
+      {
+        "id": "filesystem:README.md:115:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "/home/adamsl/planner/.venv/bin/python3 chat_with_letta.py"
+      },
+      {
+        "id": "filesystem:README.md:136:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "- **PID file locking** (`/tmp/letta_voice_agent.pid`)"
+      },
+      {
+        "id": "filesystem:README.md:137:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "- **Lock files during startup** (`/tmp/letta_voice_agent.lock`)"
+      },
+      {
+        "id": "external_commands:scripts/diagnose_voice_system.py:11:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "result = subprocess.run(cmd, shell=True, capture_output=True, text=True)"
+      },
+      {
+        "id": "external_commands:scripts/diagnose_voice_system.py:111:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:68:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "livekit_env = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:69:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "planner_env = Path(\"/home/adamsl/planner/.env\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:89:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "venv_python = \"/home/adamsl/planner/.venv/bin/python3\""
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:111:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:112:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "print(\"/home/adamsl/planner/.venv/bin/python3 letta_voice_agent.py start\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:118:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "print(\"  python3 /home/adamsl/planner/.claude/skills/voice-agent-expert/scripts/generate_token.py\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:16:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "code, output = run_cmd(f\"ss -tlnp 2>/dev/null | grep :{port}\")"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:93:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "code, _ = run_cmd(f\"{venv_python} -c 'import {import_name}' 2>/dev/null\")"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:72:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "livekit_vars = [\"LIVEKIT_URL\", \"LIVEKIT_API_KEY\", \"LIVEKIT_API_SECRET\", \"DEEPGRAM_API_KEY\"]"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:81:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "if check_env_var(planner_env, \"OPENAI_API_KEY\") or check_env_var(livekit_env, \"OPENAI_API_KEY\"):"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:82:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "print(\"      ✅ OPENAI_API_KEY is set\")"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:84:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "print(\"      ❌ OPENAI_API_KEY is MISSING\")"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:85:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "issues.append(\"Set OPENAI_API_KEY in .env file\")"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:68:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "livekit_env = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:69:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "planner_env = Path(\"/home/adamsl/planner/.env\")"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:85:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "issues.append(\"Set OPENAI_API_KEY in .env file\")"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:111:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")"
+      },
+      {
+        "id": "blocker:scripts/diagnose_voice_system.py:16:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scripts/diagnose_voice_system.py",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "code, output = run_cmd(f\"ss -tlnp 2>/dev/null | grep :{port}\")"
+      },
+      {
+        "id": "network:scripts/generate_token.py:57:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/generate_token.py",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "print(\"1. Go to: https://agents-playground.livekit.io/\")"
+      },
+      {
+        "id": "filesystem:scripts/generate_token.py:9:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/generate_token.py",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:16:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/generate_token.py",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "os.environ.setdefault(key, value)"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:27:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/generate_token.py",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "api_key = os.environ.get('LIVEKIT_API_KEY')"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:28:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/generate_token.py",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "api_secret = os.environ.get('LIVEKIT_API_SECRET')"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:29:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/generate_token.py",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "livekit_url = os.environ.get('LIVEKIT_URL', 'ws://localhost:7880')"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:27:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/generate_token.py",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "api_key = os.environ.get('LIVEKIT_API_KEY')"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:28:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/generate_token.py",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "api_secret = os.environ.get('LIVEKIT_API_SECRET')"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:31:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/generate_token.py",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "if not api_key or not api_secret:"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:32:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/generate_token.py",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "print(\"ERROR: LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set\")"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:36:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/generate_token.py",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "token = api.AccessToken(api_key, api_secret) \\"
+      },
+      {
+        "id": "sensitive:scripts/generate_token.py:9:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/generate_token.py",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "external_commands:scripts/start_voice_system.py:14:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/start_voice_system.py:95:python-os-exec-variants",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python os.exec variants",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "os.execv("
+      },
+      {
+        "id": "network:scripts/start_voice_system.py:85:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "print(\"Connect via: https://agents-playground.livekit.io/\")"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:61:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:71:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "planner_env = Path(\"/home/adamsl/planner/.env\")"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:88:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "print(\"  python3 /home/adamsl/planner/.claude/skills/voice-agent-expert/scripts/generate_token.py\")"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:96:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "\"/home/adamsl/planner/.venv/bin/python3\","
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:97:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "[\"/home/adamsl/planner/.venv/bin/python3\", LETTA_VOICE_AGENT_EXE, \"start\"]"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:15:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "f\"ss -tlnp 2>/dev/null | grep :{port}\","
+      },
+      {
+        "id": "env_access:scripts/start_voice_system.py:68:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "os.environ[key] = value"
+      },
+      {
+        "id": "env_access:scripts/start_voice_system.py:78:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "os.environ.setdefault(key, value)"
+      },
+      {
+        "id": "sensitive:scripts/start_voice_system.py:61:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")"
+      },
+      {
+        "id": "sensitive:scripts/start_voice_system.py:71:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "planner_env = Path(\"/home/adamsl/planner/.env\")"
+      },
+      {
+        "id": "blocker:scripts/start_voice_system.py:15:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scripts/start_voice_system.py",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "f\"ss -tlnp 2>/dev/null | grep :{port}\","
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- The framework calls `llm_node`, **not** `generate_reply`."
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "3. **Use `dev` mode for local testing**"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- `start` can sit waiting for dispatch and look \"broken.\""
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- If you're actively testing locally, `dev` mode is the fast path."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 45,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 52,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 58,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 60,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 64,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 73,
+        "snippet": "Watch your logs for your 🎤 marker (or equivalent logging) that proves `llm_node` is being hit."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 75,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 78,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 80,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 82,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 95,
+        "snippet": "**Reason:** The client appends `/rtc`, and some configs end up producing a double-slash."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "- You overrode the wrong method (`generate_reply` instead of `llm_node`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:nohup-background-persistent-process",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "nohup (background persistent process)",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &"
+      },
+      {
+        "id": "network:SKILL.md:53:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "curl -v http://localhost:7880/ 2>&1 | head -20"
+      },
+      {
+        "id": "network:SKILL.md:41:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &"
+      },
+      {
+        "id": "network:SKILL.md:74:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "ws://127.0.0.1:7880//rtc"
+      },
+      {
+        "id": "filesystem:SKILL.md:44:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "/home/adamsl/planner/.venv/bin/python3 letta_voice_agent.py dev > /tmp/letta_voice_agent.log 2>&1 &"
+      },
+      {
+        "id": "filesystem:SKILL.md:41:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &"
+      },
+      {
+        "id": "filesystem:SKILL.md:44:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "/home/adamsl/planner/.venv/bin/python3 letta_voice_agent.py dev > /tmp/letta_voice_agent.log 2>&1 &"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:133:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.64,
+        "reason": "The skill tells users to add aliases to ~/.bashrc. Shell startup files are persistence points, even though the shown aliases appear benign.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:56:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:68:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:69:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:133:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.64,
+        "reason": "The skill tells users to add aliases to ~/.bashrc. Shell startup files are persistence points, even though the shown aliases appear benign.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:67:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:95:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:98:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "The command deletes predictable files under /tmp that are used for PID and lock state. Removing those files can bypass duplicate-process protection.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:102:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "filesystem:QUICK_REFERENCE.md:103:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "network:README.md:48:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a printed or documented URL for localhost or the LiveKit playground. The code does not send data to that URL automatically."
+      },
+      {
+        "id": "filesystem:README.md:45:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:README.md:115:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:README.md:136:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "filesystem:README.md:137:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is documentation for expected local log or lock files. It does not create, modify, or delete files by itself."
+      },
+      {
+        "id": "external_commands:scripts/diagnose_voice_system.py:11:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "The helper executes shell command strings with shell=True. Current call sites are mostly fixed, but this is still a command-execution surface.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/diagnose_voice_system.py:111:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The printed export command loads every variable from a .env file through shell substitution. That can expose secrets to the shell environment.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:68:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:69:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:89:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:111:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:112:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:118:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:16:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The use of /dev/null is only stderr redirection in a diagnostic command. It does not access a sensitive device file."
+      },
+      {
+        "id": "filesystem:scripts/diagnose_voice_system.py:93:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The use of /dev/null is only stderr redirection in a diagnostic command. It does not access a sensitive device file."
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:72:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:81:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:82:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This line prints only the name or status of a missing key. It does not read or disclose the secret value."
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:84:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This line prints only the name or status of a missing key. It does not read or disclose the secret value."
+      },
+      {
+        "id": "env_access:scripts/diagnose_voice_system.py:85:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This line prints only the name or status of a missing key. It does not read or disclose the secret value."
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:68:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:69:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:85:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This line prints only the name or status of a missing key. It does not read or disclose the secret value."
+      },
+      {
+        "id": "sensitive:scripts/diagnose_voice_system.py:111:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:scripts/diagnose_voice_system.py:16:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command checks known local development ports for troubleshooting. It is not scanning remote hosts or broad address ranges."
+      },
+      {
+        "id": "network:scripts/generate_token.py:57:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a printed or documented URL for localhost or the LiveKit playground. The code does not send data to that URL automatically."
+      },
+      {
+        "id": "filesystem:scripts/generate_token.py:9:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:16:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:27:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:28:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:29:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "LIVEKIT_URL is a service endpoint configuration with a localhost fallback. It is not a credential or sensitive secret."
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:27:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:28:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:31:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:32:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This line prints only the name or status of a missing key. It does not read or disclose the secret value."
+      },
+      {
+        "id": "env_access:scripts/generate_token.py:36:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/generate_token.py:9:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/start_voice_system.py:14:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.66,
+        "reason": "The startup helper checks ports through shell=True and shell pipelines. The current port values are fixed, but the command-execution pattern remains risky.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/start_voice_system.py:95:python-os-exec-variants",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "The script replaces itself with a hardcoded local Python executable and voice-agent file. That starts external code after loading environment secrets.",
+        "severity": "high"
+      },
+      {
+        "id": "network:scripts/start_voice_system.py:85:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a printed or documented URL for localhost or the LiveKit playground. The code does not send data to that URL automatically."
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:61:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:71:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:88:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "This is a user-facing command example with an author-specific path. It is not a hidden file read by the packaged code."
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:96:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:97:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/start_voice_system.py:15:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The use of /dev/null is only stderr redirection in a diagnostic command. It does not access a sensitive device file."
+      },
+      {
+        "id": "env_access:scripts/start_voice_system.py:68:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/start_voice_system.py:78:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/start_voice_system.py:61:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "sensitive:scripts/start_voice_system.py:71:environment-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:scripts/start_voice_system.py:15:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command checks known local development ports for troubleshooting. It is not scanning remote hosts or broad address ranges."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The hit is markdown inline code or a fenced code block delimiter. It is not Ruby backtick execution or executable source code."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:nohup-background-persistent-process",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The reset workflow starts LiveKit as a persistent background process. This can leave a service running after the user expects debugging to end.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:53:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a printed or documented URL for localhost or the LiveKit playground. The code does not send data to that URL automatically."
+      },
+      {
+        "id": "network:SKILL.md:41:hardcoded-ip-address",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The command binds LiveKit to 0.0.0.0, which listens on all interfaces. That can expose a local dev service beyond localhost.",
+        "severity": "high"
+      },
+      {
+        "id": "network:SKILL.md:74:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The address is a loopback WebSocket example used to explain a local double-slash issue. It does not expose a public listener."
+      },
+      {
+        "id": "filesystem:SKILL.md:44:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.62,
+        "reason": "The package references hidden local paths in commands or configuration. In a marketplace skill, those paths need explicit user review.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:41:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "The workflow writes service logs to predictable files under /tmp. Shared temporary paths can create disclosure or tampering risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:44:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "The workflow writes service logs to predictable files under /tmp. Shared temporary paths can create disclosure or tampering risk.",
+        "severity": "medium"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Broad Process Termination Instructions",
+        "description": "The reset guidance tells users to kill LiveKit and voice-agent processes before restarting services. Broad process matching can disrupt unrelated local work if run without confirmation.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 44
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 124,
+            "line_end": 130
+          }
+        ],
+        "confidence": 0.88,
+        "confidence_reasoning": "Both cited sections contain process-kill and restart guidance for local services. The commands are operationally plausible and not merely scanner artifacts."
+      },
+      {
+        "title": "Connection Token Printed to Terminal",
+        "description": "The token generator creates a LiveKit JWT and prints it directly to terminal output. This is useful for setup but can leak session access through copied logs.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 44,
+            "line_end": 53
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "The code directly creates a JWT and prints it under a token label. The behavior is intentional, but the token is still sensitive."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "## 📝 Aliases (Add to ~/.bashrc)",
+        "locations": [
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 133,
+            "line_end": 133
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.64,
+        "confidence_reasoning": "The skill tells users to add aliases to ~/.bashrc. Shell startup files are persistence points, even though the shown aliases appear benign."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "## 📝 Aliases (Add to ~/.bashrc)",
+        "locations": [
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 133,
+            "line_end": 133
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.64,
+        "confidence_reasoning": "The skill tells users to add aliases to ~/.bashrc. Shell startup files are persistence points, even though the shown aliases appear benign."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "result = subprocess.run(cmd, shell=True, capture_output=True, text=True)",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 11,
+            "line_end": 11
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.72,
+        "confidence_reasoning": "The helper executes shell command strings with shell=True. Current call sites are mostly fixed, but this is still a command-execution surface."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The printed export command loads every variable from a .env file through shell substitution. That can expose secrets to the shell environment."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "livekit_env = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 68,
+            "line_end": 68
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "planner_env = Path(\"/home/adamsl/planner/.env\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 69,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "livekit_vars = [\"LIVEKIT_URL\", \"LIVEKIT_API_KEY\", \"LIVEKIT_API_SECRET\", \"DEEPGRAM_API_KEY\"]",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 72,
+            "line_end": 72
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "if check_env_var(planner_env, \"OPENAI_API_KEY\") or check_env_var(livekit_env, \"OPENAI_API_KEY\"):",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards."
+      },
+      {
+        "title": "Environment file access",
+        "description": "livekit_env = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 68,
+            "line_end": 68
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Environment file access",
+        "description": "planner_env = Path(\"/home/adamsl/planner/.env\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 69,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Environment file access",
+        "description": "print(\"export $(grep -v '^#' /home/adamsl/ottomator-agents/livekit-agent/.env | xargs)\")",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python environment access",
+        "description": "os.environ.setdefault(key, value)",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 16,
+            "line_end": 16
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python environment access",
+        "description": "api_key = os.environ.get('LIVEKIT_API_KEY')",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 27,
+            "line_end": 27
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python environment access",
+        "description": "api_secret = os.environ.get('LIVEKIT_API_SECRET')",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "api_key = os.environ.get('LIVEKIT_API_KEY')",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 27,
+            "line_end": 27
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "api_secret = os.environ.get('LIVEKIT_API_SECRET')",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "if not api_key or not api_secret:",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "token = api.AccessToken(api_key, api_secret) \\",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 36,
+            "line_end": 36
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code handles named API keys or secrets for LiveKit, Deepgram, or OpenAI. These values are credentials and require explicit handling safeguards."
+      },
+      {
+        "title": "Environment file access",
+        "description": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "result = subprocess.run(",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.66,
+        "confidence_reasoning": "The startup helper checks ports through shell=True and shell pipelines. The current port values are fixed, but the command-execution pattern remains risky."
+      },
+      {
+        "title": "Python os.exec variants",
+        "description": "os.execv(",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 95,
+            "line_end": 95
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "The script replaces itself with a hardcoded local Python executable and voice-agent file. That starts external code after loading environment secrets."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 61,
+            "line_end": 61
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "planner_env = Path(\"/home/adamsl/planner/.env\")",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python environment access",
+        "description": "os.environ[key] = value",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 68,
+            "line_end": 68
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Python environment access",
+        "description": "os.environ.setdefault(key, value)",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Environment file access",
+        "description": "env_file = Path(\"/home/adamsl/ottomator-agents/livekit-agent/.env\")",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 61,
+            "line_end": 61
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Environment file access",
+        "description": "planner_env = Path(\"/home/adamsl/planner/.env\")",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "sensitive",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code references local .env files that can contain API keys and service credentials. Reading or exporting those files is sensitive behavior."
+      },
+      {
+        "title": "Hardcoded IP address",
+        "description": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The command binds LiveKit to 0.0.0.0, which listens on all interfaces. That can expose a local dev service beyond localhost."
+      },
+      {
+        "title": "Broad Process Termination Instructions",
+        "description": "The reset guidance tells users to kill LiveKit and voice-agent processes before restarting services. Broad process matching can disrupt unrelated local work if run without confirmation.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 44
+          },
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 124,
+            "line_end": 130
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "Both cited sections contain process-kill and restart guidance for local services. The commands are operationally plausible and not merely scanner artifacts."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Temp directory access",
+        "description": "rm -f /tmp/letta_voice_agent.{pid,lock}",
+        "locations": [
+          {
+            "file": "QUICK_REFERENCE.md",
+            "line_start": 98,
+            "line_end": 98
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The command deletes predictable files under /tmp that are used for PID and lock state. Removing those files can bypass duplicate-process protection."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "venv_python = \"/home/adamsl/planner/.venv/bin/python3\"",
+        "locations": [
+          {
+            "file": "scripts/diagnose_voice_system.py",
+            "line_start": 89,
+            "line_end": 89
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "\"/home/adamsl/planner/.venv/bin/python3\",",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 96,
+            "line_end": 96
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "[\"/home/adamsl/planner/.venv/bin/python3\", LETTA_VOICE_AGENT_EXE, \"start\"]",
+        "locations": [
+          {
+            "file": "scripts/start_voice_system.py",
+            "line_start": 97,
+            "line_end": 97
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The script uses a hardcoded hidden virtualenv path to execute local Python code. This is not portable and can run unexpected local binaries."
+      },
+      {
+        "title": "nohup (background persistent process)",
+        "description": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The reset workflow starts LiveKit as a persistent background process. This can leave a service running after the user expects debugging to end."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "/home/adamsl/planner/.venv/bin/python3 letta_voice_agent.py dev > /tmp/letta_voice_agent.log 2>&1 &",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.62,
+        "confidence_reasoning": "The package references hidden local paths in commands or configuration. In a marketplace skill, those paths need explicit user review."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "nohup ./livekit-server --dev --bind 0.0.0.0 > /tmp/livekit.log 2>&1 &",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "The workflow writes service logs to predictable files under /tmp. Shared temporary paths can create disclosure or tampering risk."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "/home/adamsl/planner/.venv/bin/python3 letta_voice_agent.py dev > /tmp/letta_voice_agent.log 2>&1 &",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "The workflow writes service logs to predictable files under /tmp. Shared temporary paths can create disclosure or tampering risk."
+      },
+      {
+        "title": "Connection Token Printed to Terminal",
+        "description": "The token generator creates a LiveKit JWT and prints it directly to terminal output. This is useful for setup but can leak session access through copied logs.",
+        "locations": [
+          {
+            "file": "scripts/generate_token.py",
+            "line_start": 44,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code directly creates a JWT and prints it under a token label. The behavior is intentional, but the token is still sensitive."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 685,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T11:53:27.585Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Troubleshoot LiveKit Letta Voice Agents",
+    "value_statement": "Voice agent failures are hard to diagnose when audio, WebRTC, tokens, and process state interact. This skill gives focused checks, workflows, and helper scripts for LiveKit and Letta debugging.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "LiveKit voice agent",
+      "Letta agent",
+      "WebRTC troubleshooting",
+      "voice agent debugging",
+      "LiveKit token",
+      "AI voice assistant",
+      "agent diagnostics"
+    ],
+    "actual_capabilities": [
+      "Explains START versus DEV mode behavior for local voice testing.",
+      "Lists common LiveKit, Letta, WebRTC, token, and duplicate-process failures.",
+      "Provides checks for local ports, processes, logs, and service status.",
+      "Includes scripts for diagnostics, connection token creation, and interactive startup.",
+      "Documents duplicate prevention using PID and lock files."
+    ],
+    "limitations": [
+      "Uses hardcoded absolute paths from the original author workstation.",
+      "Helper scripts expect Linux commands, LiveKit, Letta, and specific Python packages.",
+      "Reads .env files and handles API secrets during token generation.",
+      "Does not provide production deployment hardening or key rotation guidance."
+    ],
+    "use_cases": [
+      {
+        "title": "Fix Local Voice Chat Setup",
+        "description": "Diagnose why a local LiveKit and Letta voice session fails to connect or respond.",
+        "target_user": "Local AI developer"
+      },
+      {
+        "title": "Debug Audio Cutoffs",
+        "description": "Trace intermittent audio failures to duplicate workers, stale rooms, or wrong agent mode.",
+        "target_user": "Voice product engineer"
+      },
+      {
+        "title": "Prepare Support Runbooks",
+        "description": "Turn repeated LiveKit and Letta failures into repeatable checks and escalation steps.",
+        "target_user": "Support engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Diagnose a Connection Failure",
+        "scenario": "Beginner troubleshooting for a failed local voice session.",
+        "prompt": "My LiveKit and Letta voice agent does not connect. Ask for the error, then guide me through the safest checks first."
+      },
+      {
+        "title": "Choose the Correct Agent Mode",
+        "scenario": "Compare START and DEV mode for local testing.",
+        "prompt": "Explain whether I should use START mode or DEV mode for local voice chat, and list the symptoms of choosing the wrong mode."
+      },
+      {
+        "title": "Investigate Duplicate Workers",
+        "scenario": "Intermediate debugging for audio cutoffs and stale sessions.",
+        "prompt": "Help me determine whether duplicate voice-agent workers or stale LiveKit rooms are causing audio cutoffs."
+      },
+      {
+        "title": "Design a Safer Startup Workflow",
+        "scenario": "Advanced hardening of the startup and token workflow.",
+        "prompt": "Review my local LiveKit and Letta startup workflow for security risks, secret handling, and safer process management."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "My voice agent joins the room but never responds.",
+        "output": [
+          "Probable cause: duplicate voice-agent workers or the wrong LiveKit hook.",
+          "Confirm that only one worker is active and that local testing uses DEV mode.",
+          "Check logs for the routing marker that proves Letta is receiving messages."
+        ]
+      },
+      {
+        "input": "The playground says my token is invalid.",
+        "output": [
+          "Generate a fresh LiveKit token because tokens expire after several hours.",
+          "Confirm the LiveKit URL matches the server endpoint used by the browser.",
+          "Treat the token as sensitive and avoid sharing logs that contain it."
+        ]
+      },
+      {
+        "input": "Audio cuts out after a few seconds.",
+        "output": [
+          "Check for duplicate voice-agent workers before changing model or audio settings.",
+          "Restart the worker cleanly after stopping stale processes and clearing stale rooms.",
+          "Verify that the active worker is the one receiving current logs."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Review every command before running it against local services or shell startup files.",
+      "Move hardcoded paths into configuration before sharing this workflow across machines.",
+      "Treat generated LiveKit tokens and .env contents as sensitive credentials."
+    ],
+    "anti_patterns": [
+      "Do not run broad process-kill commands without confirming the matching processes.",
+      "Do not bind local development services to all interfaces without network controls.",
+      "Do not paste generated tokens or .env-derived output into public issue reports."
+    ],
+    "faq": [
+      {
+        "question": "What systems does this skill target?",
+        "answer": "It targets local LiveKit and Letta voice agent development and troubleshooting."
+      },
+      {
+        "question": "Does this skill run commands automatically?",
+        "answer": "It includes scripts and command guidance. Users should review commands before execution."
+      },
+      {
+        "question": "Can it generate LiveKit tokens?",
+        "answer": "Yes. The token script reads LiveKit credentials and prints a connection token."
+      },
+      {
+        "question": "Is it ready for production deployment?",
+        "answer": "No. It is a local debugging reference and lacks production hardening guidance."
+      },
+      {
+        "question": "Why do duplicate processes matter?",
+        "answer": "Duplicate workers can compete for the same audio stream and create timeouts or cutoffs."
+      },
+      {
+        "question": "Why does the audit flag risk?",
+        "answer": "The package reads .env files, handles API secrets, starts processes, and uses hardcoded paths."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "diagnose_voice_system.py",
+          "type": "file",
+          "path": "scripts/diagnose_voice_system.py",
+          "lines": 125
+        },
+        {
+          "name": "generate_token.py",
+          "type": "file",
+          "path": "scripts/generate_token.py",
+          "lines": 67
+        },
+        {
+          "name": "start_voice_system.py",
+          "type": "file",
+          "path": "scripts/start_voice_system.py",
+          "lines": 102
+        }
+      ]
+    },
+    {
+      "name": "QUICK_REFERENCE.md",
+      "type": "file",
+      "path": "QUICK_REFERENCE.md",
+      "lines": 140
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 146
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 105
+    }
+  ]
+}

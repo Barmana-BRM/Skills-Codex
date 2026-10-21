@@ -1,0 +1,3923 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T05:11:47.860Z",
+    "slug": "agentsecops-container-grype",
+    "source_url": "https://github.com/AgentSecOps/SecOpsAgentKit/tree/main/skills/devsecops/container-grype",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "4064e3c28098dbcefe40f3f317088b3b5bdfb5e675bd1174dee97055dc337064",
+    "tree_hash": "013ce566078989f332e0b1fccf3ac27054fd9f889c65cd4a3319b3271b5fffca",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "container-grype",
+    "description": "Guides Grype scans for container images, filesystems, and SBOMs. Provides CI examples, severity gates, report formats, and CVSS, EPSS, and CISA KEV prioritization.",
+    "summary": "Scan container artifacts with Grype and prioritize actionable vulnerabilities.",
+    "icon": "📦",
+    "version": "0.1.0",
+    "author": "AgentSecOps",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "container-security",
+      "grype",
+      "vulnerability-scanning",
+      "sbom",
+      "devsecops"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem",
+      "env_access",
+      "scripts"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static matches are false positives caused by Markdown formatting, defensive examples, and normal Grype configuration. Confirmed risks include unpinned pipe-to-shell installers, Docker socket exposure, and unquoted Tekton parameters that permit command injection. Semantic review also found bypassable security gates, broad ignore rules, and mutable CI dependencies.",
+    "remediation": [
+      {
+        "issue": "Remote installers are piped directly into shell interpreters.",
+        "suggestion": "Download a versioned release, verify its published checksum or signature, and execute only the verified local file.",
+        "severity": "critical"
+      },
+      {
+        "issue": "The Jenkins example exposes the host Docker socket to the scanner container.",
+        "suggestion": "Scan a registry image or SBOM without the socket, or use an isolated rootless builder with narrowly scoped access.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Tekton parameters are inserted into shell commands without quoting or validation.",
+        "suggestion": "Pass parameters through environment variables, quote every expansion, and validate image references and severity values against strict allowlists.",
+        "severity": "high"
+      },
+      {
+        "issue": "CI examples use mutable action branches and latest container tags.",
+        "suggestion": "Pin actions to reviewed commit SHAs and container images to immutable digests or exact release versions.",
+        "severity": "high"
+      },
+      {
+        "issue": "Some scanner failures and findings do not fail the pipeline.",
+        "suggestion": "Remove unconditional success handling, parse every scanner result, and enforce documented severity thresholds before deployment.",
+        "severity": "high"
+      },
+      {
+        "issue": "The example Grype configuration contains broad active ignore rules.",
+        "suggestion": "Comment out sample ignores and require exact CVE, package, justification, owner, and expiration details for every suppression.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 298,
+            "line_end": 298
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 301,
+            "line_end": 301
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 304,
+            "line_end": 304
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 307,
+            "line_end": 307
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 310,
+            "line_end": 310
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 134,
+            "line_end": 134
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 250,
+            "line_end": 250
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 291,
+            "line_end": 291
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 248,
+            "line_end": 248
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 260,
+            "line_end": 260
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 272,
+            "line_end": 272
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 274,
+            "line_end": 274
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 276,
+            "line_end": 276
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 277,
+            "line_end": 277
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 283,
+            "line_end": 283
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 328,
+            "line_end": 328
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 337,
+            "line_end": 337
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 348,
+            "line_end": 348
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 369,
+            "line_end": 369
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 370,
+            "line_end": 370
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 373,
+            "line_end": 373
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 368,
+            "line_end": 368
+          },
+          {
+            "file": "references/vulnerability_remediation.md",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 107
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 107,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 132
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 132,
+            "line_end": 134
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 134,
+            "line_end": 137
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 137,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 142
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 142,
+            "line_end": 144
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 144,
+            "line_end": 147
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 149
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 152
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 152,
+            "line_end": 154
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 154,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 166
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 166,
+            "line_end": 168
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 168,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 174
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 240,
+            "line_end": 240
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 205,
+            "line_end": 205
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 269,
+            "line_end": 269
+          },
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 5,
+            "line_end": 5
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 151,
+            "line_end": 151
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 191,
+            "line_end": 191
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 192,
+            "line_end": 192
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 193,
+            "line_end": 193
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 217,
+            "line_end": 217
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 260,
+            "line_end": 260
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 261,
+            "line_end": 261
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 288,
+            "line_end": 288
+          },
+          {
+            "file": "references/cisa_kev.md",
+            "line_start": 184,
+            "line_end": 184
+          },
+          {
+            "file": "references/vulnerability_remediation.md",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 324,
+            "line_end": 324
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 325,
+            "line_end": 325
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 326,
+            "line_end": 326
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 327,
+            "line_end": 327
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 328,
+            "line_end": 328
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 329,
+            "line_end": 329
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 323,
+            "line_end": 323
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 323,
+            "line_end": 323
+          },
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 107,
+            "line_end": 107
+          },
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 107,
+            "line_end": 107
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 147,
+            "line_end": 147
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 132,
+            "line_end": 132
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 147,
+            "line_end": 147
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 156,
+            "line_end": 156
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 157,
+            "line_end": 157
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 163,
+            "line_end": 163
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "assets/rule-template.yaml",
+            "line_start": 165,
+            "line_end": 165
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 423,
+            "line_end": 423
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 423,
+            "line_end": 423
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 424,
+            "line_end": 424
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 425,
+            "line_end": 425
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 427,
+            "line_end": 427
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 430,
+            "line_end": 430
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 432,
+            "line_end": 432
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 437,
+            "line_end": 437
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 444,
+            "line_end": 444
+          }
+        ]
+      },
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 138,
+            "line_end": 138
+          },
+          {
+            "file": "references/EXAMPLE.md",
+            "line_start": 137,
+            "line_end": 137
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:assets/ci-config-template.yml:298:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "See artifacts: `sast-results`"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:301:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 301,
+        "line_end": 301,
+        "snippet": "See artifacts: `dependency-scan-results`"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:304:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "See artifacts: `secrets-scan-results`"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:307:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 307,
+        "line_end": 307,
+        "snippet": "See artifacts: `container-scan-results`"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:310:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 310,
+        "line_end": 310,
+        "snippet": "See artifacts: `iac-scan-results`"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:134:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "critical_count=$(python3 -c \"import json; data=json.load(open('${{ env.REPORT_DIR }}/safety-results."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:250:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 250,
+        "line_end": 250,
+        "snippet": "critical_count=$(python3 -c \"import json; data=json.load(open('${{ env.REPORT_DIR }}/checkov-results"
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:291:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 291,
+        "line_end": 291,
+        "snippet": "**Scan Date**: $(date -u +\"%Y-%m-%d %H:%M:%S UTC\")"
+      },
+      {
+        "id": "network:assets/ci-config-template.yml:240:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 240,
+        "line_end": 240,
+        "snippet": "curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash"
+      },
+      {
+        "id": "filesystem:assets/ci-config-template.yml:323:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 323,
+        "line_end": 323,
+        "snippet": "const report = fs.readFileSync('consolidated-report/security-summary.md', 'utf8');"
+      },
+      {
+        "id": "filesystem:assets/ci-config-template.yml:323:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 323,
+        "line_end": 323,
+        "snippet": "const report = fs.readFileSync('consolidated-report/security-summary.md', 'utf8');"
+      },
+      {
+        "id": "env_access:assets/ci-config-template.yml:164:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "blocker:assets/ci-config-template.yml:240:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "assets/ci-config-template.yml",
+        "line_start": 240,
+        "line_end": 240,
+        "snippet": "curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:248:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 248,
+        "line_end": 248,
+        "snippet": "imageTag: '$(Build.BuildId)'"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:260:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 260,
+        "line_end": 260,
+        "snippet": "tags: $(imageTag)"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:272:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 272,
+        "line_end": 272,
+        "snippet": "grype $(imageName):$(imageTag) \\"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:274:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 274,
+        "line_end": 274,
+        "snippet": "-o json > $(Build.ArtifactStagingDirectory)/grype-results.json"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:276:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 276,
+        "line_end": 276,
+        "snippet": "grype $(imageName):$(imageTag) \\"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:277:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 277,
+        "line_end": 277,
+        "snippet": "-o table > $(Build.ArtifactStagingDirectory)/grype-report.txt"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:283:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 283,
+        "line_end": 283,
+        "snippet": "PathtoPublish: '$(Build.ArtifactStagingDirectory)'"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:328:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "value: $(params.image-name):$(params.image-tag)"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:337:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 337,
+        "line_end": 337,
+        "snippet": "value: $(params.image-name):$(params.image-tag)"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:348:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "value: $(params.image-name):$(params.image-tag)"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:369:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 369,
+        "line_end": 369,
+        "snippet": "grype $(params.IMAGE) \\"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:370:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 370,
+        "line_end": 370,
+        "snippet": "--fail-on $(params.SEVERITY_THRESHOLD) \\"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:373:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 373,
+        "line_end": 373,
+        "snippet": "grype $(params.IMAGE) -o table | tee /workspace/grype-report.txt"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:368:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 368,
+        "line_end": 368,
+        "snippet": "#!/bin/sh"
+      },
+      {
+        "id": "network:assets/grype-ci-config.yml:205:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 205,
+        "line_end": 205,
+        "snippet": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/"
+      },
+      {
+        "id": "network:assets/grype-ci-config.yml:269:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/"
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:205:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 205,
+        "line_end": 205,
+        "snippet": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/"
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:269:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/"
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:140:docker-socket-access",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Docker socket access",
+        "file": "assets/grype-ci-config.yml",
+        "line_start": 140,
+        "line_end": 140,
+        "snippet": "args '-v /var/run/docker.sock:/var/run/docker.sock'"
+      },
+      {
+        "id": "network:assets/grype-config.yaml:5:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/grype-config.yaml",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "# Documentation: https://github.com/anchore/grype#configuration"
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:107:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "assets/grype-config.yaml",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "cache-dir: ~/.grype/db"
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:89:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/grype-config.yaml",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "- \"**/node_modules/.bin/**\""
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:107:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/grype-config.yaml",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "cache-dir: ~/.grype/db"
+      },
+      {
+        "id": "network:assets/rule-template.yaml:43:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "- \"https://owasp.org/www-community/attacks/SQL_Injection\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:44:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "- \"https://cwe.mitre.org/data/definitions/89.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:45:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "- \"https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:73:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "See: https://owasp.org/www-community/attacks/SQL_Injection"
+      },
+      {
+        "id": "network:assets/rule-template.yaml:118:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "- \"https://cwe.mitre.org/data/definitions/798.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:119:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "- \"https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_password\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:151:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 151,
+        "line_end": 151,
+        "snippet": "See: https://cwe.mitre.org/data/definitions/798.html"
+      },
+      {
+        "id": "network:assets/rule-template.yaml:191:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "- \"https://owasp.org/www-community/attacks/xss/\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:192:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "- \"https://cwe.mitre.org/data/definitions/79.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:193:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "- \"https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:217:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 217,
+        "line_end": 217,
+        "snippet": "See: https://owasp.org/www-community/attacks/xss/"
+      },
+      {
+        "id": "network:assets/rule-template.yaml:260:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 260,
+        "line_end": 260,
+        "snippet": "- \"https://cwe.mitre.org/data/definitions/327.html\""
+      },
+      {
+        "id": "network:assets/rule-template.yaml:261:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 261,
+        "line_end": 261,
+        "snippet": "- \"https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testin"
+      },
+      {
+        "id": "network:assets/rule-template.yaml:288:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule-template.yaml",
+        "line_start": 288,
+        "line_end": 288,
+        "snippet": "See: https://cwe.mitre.org/data/definitions/327.html"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "assets/rule-template.yaml",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "- Node.js: process.env.API_KEY"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "assets/rule-template.yaml",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "- Node.js: process.env.API_KEY"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:147:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "assets/rule-template.yaml",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "- Python: os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:162:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "assets/rule-template.yaml",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "api_key = os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:132:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "api_key = \"...\""
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:147:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "- Python: os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "- Node.js: process.env.API_KEY"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:156:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "api_key = \"sk-1234567890abcdef\""
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:157:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "api.authenticate(api_key)"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:162:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "api_key = os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:163:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "if not api_key:"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:164:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "raise ValueError(\"API_KEY environment variable not set\")"
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:165:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule-template.yaml",
+        "line_start": 165,
+        "line_end": 165,
+        "snippet": "api.authenticate(api_key)"
+      },
+      {
+        "id": "sensitive:assets/rule-template.yaml:148:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "assets/rule-template.yaml",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "- Node.js: process.env.API_KEY"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:70:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "- Python: cursor.execute(\"SELECT * FROM users WHERE id = ?\", (user_id,))"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "- JavaScript: db.query(\"SELECT * FROM users WHERE id = $1\", [userId])"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:83:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "user_id = request.GET['id']"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "query = \"SELECT * FROM users WHERE id = \" + user_id"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:89:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "user_id = request.GET['id']"
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:90:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule-template.yaml",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "query = \"SELECT * FROM users WHERE id = ?\""
+      },
+      {
+        "id": "network:references/cisa_kev.md:184:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/cisa_kev.md",
+        "line_start": 184,
+        "line_end": 184,
+        "snippet": "curl -s https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json \\"
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:190:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/cvss_guide.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "### Valid Suppression Reasons"
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:34:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/cvss_guide.md",
+        "line_start": 34,
+        "line_end": 35,
+        "snippet": "- Critical SQL injection allowing full database access"
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:90:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/cvss_guide.md",
+        "line_start": 90,
+        "line_end": 91,
+        "snippet": "- Adjacent (A): Requires local network access"
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:91:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/cvss_guide.md",
+        "line_start": 91,
+        "line_end": 92,
+        "snippet": "- Local (L): Requires local system access"
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:143:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/cvss_guide.md",
+        "line_start": 143,
+        "line_end": 144,
+        "snippet": "- Internal tools with limited access"
+      },
+      {
+        "id": "scripts:references/EXAMPLE.md:138:document-write-injection",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "document.write injection",
+        "file": "references/EXAMPLE.md",
+        "line_start": 138,
+        "line_end": 138,
+        "snippet": "document.write(userInput);"
+      },
+      {
+        "id": "scripts:references/EXAMPLE.md:137:innerhtml-assignment-xss-risk",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "innerHTML assignment (XSS risk)",
+        "file": "references/EXAMPLE.md",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "element.innerHTML = userInput;"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:423:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/EXAMPLE.md",
+        "line_start": 423,
+        "line_end": 423,
+        "snippet": "VALID_API_KEY = os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:423:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 423,
+        "line_end": 423,
+        "snippet": "VALID_API_KEY = os.environ.get('API_KEY')"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:424:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 424,
+        "line_end": 424,
+        "snippet": "if not VALID_API_KEY:"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:425:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 425,
+        "line_end": 425,
+        "snippet": "raise ValueError(\"API_KEY environment variable not set\")"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:427:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 427,
+        "line_end": 427,
+        "snippet": "def require_api_key(f):"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:430:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 430,
+        "line_end": 430,
+        "snippet": "api_key = request.headers.get('X-API-Key')"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:432:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 432,
+        "line_end": 432,
+        "snippet": "if not api_key:"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:437:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 437,
+        "line_end": 437,
+        "snippet": "if not hmac.compare_digest(api_key, VALID_API_KEY):"
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:444:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/EXAMPLE.md",
+        "line_start": 444,
+        "line_end": 444,
+        "snippet": "@require_api_key"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:276:c2-keywords",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "C2 keywords",
+        "file": "references/EXAMPLE.md",
+        "line_start": 276,
+        "line_end": 276,
+        "snippet": "- **T1041**: Exfiltration Over C2 Channel"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:97:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "query = \"SELECT * FROM users WHERE id = \" + user_id"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:113:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 113,
+        "line_end": 113,
+        "snippet": "query = \"SELECT * FROM users WHERE id = ?\""
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:242:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 242,
+        "line_end": 242,
+        "snippet": "- **T1078**: Valid Accounts"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:298:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "cursor.execute(\"SELECT * FROM users WHERE id = ?\", (user_id,))"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:301:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 301,
+        "line_end": 301,
+        "snippet": "cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:305:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 305,
+        "line_end": 305,
+        "snippet": "result = session.execute(text(\"SELECT * FROM users WHERE id = :id\"), {\"id\": user_id})"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:314:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 314,
+        "line_end": 314,
+        "snippet": "raise ValueError(\"Invalid user ID format\")"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:438:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 438,
+        "line_end": 438,
+        "snippet": "return jsonify({'error': 'Invalid API key'}), 403"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:471:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 471,
+        "line_end": 471,
+        "snippet": "is_valid = verify_password(\"user_password\", stored_hash)  # True"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:523:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 523,
+        "line_end": 523,
+        "snippet": "raise ValueError(\"Invalid file type\")"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:529:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 529,
+        "line_end": 530,
+        "snippet": "import uuid"
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:381:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/EXAMPLE.md",
+        "line_start": 381,
+        "line_end": 382,
+        "snippet": "- xss"
+      },
+      {
+        "id": "external_commands:references/vulnerability_remediation.md:164:xargs-command-can-execute-arbitrary-commands",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "xargs command (can execute arbitrary commands)",
+        "file": "references/vulnerability_remediation.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "pip list --outdated | cut -d ' ' -f1 | xargs -n1 pip install -U"
+      },
+      {
+        "id": "network:references/vulnerability_remediation.md:350:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/vulnerability_remediation.md",
+        "line_start": 350,
+        "line_end": 350,
+        "snippet": "proxy_pass http://vulnerable-backend;"
+      },
+      {
+        "id": "blocker:references/vulnerability_remediation.md:369:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/vulnerability_remediation.md",
+        "line_start": 369,
+        "line_end": 369,
+        "snippet": "raise SecurityException(\"Invalid input\")"
+      },
+      {
+        "id": "blocker:references/WORKFLOW_CHECKLIST.md:193:malware-type-keywords",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Malware type keywords",
+        "file": "references/WORKFLOW_CHECKLIST.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "[ ] 10. Remove malicious artifacts (malware, backdoors, webshells)"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 44,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 47,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 59,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 66,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 76,
+        "snippet": "2. **Run Grype scan**: Execute `grype <target>` to analyze for vulnerabilities"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 85,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 89,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 98,
+        "snippet": "2. Run Grype scan with `--fail-on` threshold"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 107,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 107,
+        "line_end": 117,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 118,
+        "snippet": "[ ] 1. Run full Grype scan with JSON output: `grype <target> -o json > results.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 132,
+        "snippet": "[ ] 2. Use helper script to extract high-risk CVEs: `./scripts/prioritize_cves.py results.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 134,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 137,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 137,
+        "line_end": 139,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 142,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 144,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 144,
+        "line_end": 147,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 149,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 152,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:152:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 152,
+        "line_end": 154,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 154,
+        "line_end": 161,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 163,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 166,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 168,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 172,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 174,
+        "snippet": "Create `.grype.yaml` to suppress false positives:"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 186,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 186,
+        "line_end": 191,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 193,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 196,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 196,
+        "line_end": 198,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 198,
+        "line_end": 201,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 201,
+        "line_end": 203,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 219,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 219,
+        "line_end": 224,
+        "snippet": "- **Safe Defaults**: Use `--fail-on critical` as minimum threshold for production deployments."
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 224,
+        "line_end": 229,
+        "snippet": "### Scripts (`scripts/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:229:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 229,
+        "line_end": 235,
+        "snippet": "### References (`references/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 246,
+        "snippet": "### Assets (`assets/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:246:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 246,
+        "line_end": 255,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:255:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 255,
+        "line_end": 261,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:261:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 261,
+        "line_end": 266,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 272,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 281,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:281:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 281,
+        "line_end": 285,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 285,
+        "line_end": 294,
+        "snippet": "- **CI/CD**: Integrate with GitHub Actions, GitLab CI, Jenkins, CircleCI using `--fail-on` threshold"
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 294,
+        "line_end": 299,
+        "snippet": "**Symptoms**: `grype db update` fails with network errors"
+      },
+      {
+        "id": "external_commands:SKILL.md:299:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 299,
+        "line_end": 300,
+        "snippet": "- Use `grype db update --verbose` for detailed error messages"
+      },
+      {
+        "id": "external_commands:SKILL.md:300:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 300,
+        "line_end": 307,
+        "snippet": "- Consider using offline database: `grype db import /path/to/database.tar.gz`"
+      },
+      {
+        "id": "external_commands:SKILL.md:307:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 307,
+        "line_end": 310,
+        "snippet": "- Create `.grype.yaml` ignore file with specific CVE suppressions"
+      },
+      {
+        "id": "external_commands:SKILL.md:310:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 310,
+        "line_end": 318,
+        "snippet": "- Use `--only-fixed` to focus on actionable findings"
+      },
+      {
+        "id": "external_commands:SKILL.md:318:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 318,
+        "line_end": 319,
+        "snippet": "- Exclude unnecessary paths: `--exclude '/usr/share/doc/**'`"
+      },
+      {
+        "id": "external_commands:SKILL.md:263:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 263,
+        "snippet": "for image in $(docker images --format '{{.Repository}}:{{.Tag}}' | grep prod); do"
+      },
+      {
+        "id": "external_commands:SKILL.md:264:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 264,
+        "line_end": 264,
+        "snippet": "grype $image -o json >> daily-scan-$(date +%Y%m%d).json"
+      },
+      {
+        "id": "external_commands:SKILL.md:261:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 261,
+        "line_end": 266,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "- https://github.com/anchore/grype"
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- https://www.cve.org/"
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- https://nvd.nist.gov/"
+      },
+      {
+        "id": "network:SKILL.md:324:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 324,
+        "line_end": 324,
+        "snippet": "- [Grype GitHub Repository](https://github.com/anchore/grype)"
+      },
+      {
+        "id": "network:SKILL.md:325:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 325,
+        "line_end": 325,
+        "snippet": "- [Grype Documentation](https://github.com/anchore/grype#getting-started)"
+      },
+      {
+        "id": "network:SKILL.md:326:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 326,
+        "line_end": 326,
+        "snippet": "- [NIST National Vulnerability Database](https://nvd.nist.gov/)"
+      },
+      {
+        "id": "network:SKILL.md:327:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 327,
+        "line_end": 327,
+        "snippet": "- [CISA Known Exploited Vulnerabilities](https://www.cisa.gov/known-exploited-vulnerabilities-catalo"
+      },
+      {
+        "id": "network:SKILL.md:328:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "- [FIRST EPSS (Exploit Prediction Scoring System)](https://www.first.org/epss/)"
+      },
+      {
+        "id": "network:SKILL.md:329:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 329,
+        "line_end": 329,
+        "snippet": "- [CVSS Specification](https://www.first.org/cvss/specification-document)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:assets/ci-config-template.yml:298:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format artifact names in generated Markdown inside a quoted heredoc. They are literal text and cannot invoke a shell command."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:301:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format artifact names in generated Markdown inside a quoted heredoc. They are literal text and cannot invoke a shell command."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:304:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format artifact names in generated Markdown inside a quoted heredoc. They are literal text and cannot invoke a shell command."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:307:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format artifact names in generated Markdown inside a quoted heredoc. They are literal text and cannot invoke a shell command."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:310:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format artifact names in generated Markdown inside a quoted heredoc. They are literal text and cannot invoke a shell command."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:134:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution runs a fixed Python parser against a report path defined as a constant workflow environment value. No user-controlled command text reaches the shell."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:250:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The substitution runs a fixed Python parser against a report path defined as a constant workflow environment value. No user-controlled command text reaches the shell."
+      },
+      {
+        "id": "external_commands:assets/ci-config-template.yml:291:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The date expression appears inside a single-quoted heredoc delimiter, so shell expansion is disabled. It is emitted as literal Markdown text."
+      },
+      {
+        "id": "network:assets/ci-config-template.yml:240:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This URL is used to download an installer that is immediately executed. The mutable upstream script creates a supply-chain exposure even though the domain is legitimate."
+      },
+      {
+        "id": "filesystem:assets/ci-config-template.yml:323:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The workflow reads one fixed, locally generated Markdown report before posting it to the same pull request. There is no arbitrary path access or sensitive-file read."
+      },
+      {
+        "id": "filesystem:assets/ci-config-template.yml:323:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The workflow reads one fixed, locally generated Markdown report before posting it to the same pull request. There is no arbitrary path access or sensitive-file read."
+      },
+      {
+        "id": "env_access:assets/ci-config-template.yml:164:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The standard GitHub token is passed to the Gitleaks action for repository API access. The line does not expose, log, or send the token to an unrelated endpoint."
+      },
+      {
+        "id": "blocker:assets/ci-config-template.yml:240:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The template pipes an unpinned remote installer directly into bash. A compromised branch, repository, or connection endpoint would gain code execution in the CI runner.",
+        "severity": "critical"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:248:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:260:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:272:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:274:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:276:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:277:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:283:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Azure Pipelines macro syntax using a fixed image name and service-generated build or artifact values. It is not shell command substitution over arbitrary user input."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:328:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This Tekton expression passes pipeline parameters as task data at the YAML layer. The line itself does not invoke a shell; unsafe shell use is adjudicated separately where the parameter is executed."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:337:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This Tekton expression passes pipeline parameters as task data at the YAML layer. The line itself does not invoke a shell; unsafe shell use is adjudicated separately where the parameter is executed."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:348:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This Tekton expression passes pipeline parameters as task data at the YAML layer. The line itself does not invoke a shell; unsafe shell use is adjudicated separately where the parameter is executed."
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:369:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "Tekton substitutes the user-supplied IMAGE parameter directly into an unquoted shell command. Shell metacharacters in the parameter can inject commands into the task.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:370:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "Tekton substitutes the severity parameter directly into an unquoted shell command. A crafted parameter value can alter arguments or inject additional shell commands.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:373:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The user-supplied IMAGE parameter is expanded unquoted in a second shell pipeline. This repeats the command-injection path in the report-generation command.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:assets/grype-ci-config.yml:368:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a standard shell shebang for a Tekton task. A shebang selects an interpreter but is not independently a command-injection vector."
+      },
+      {
+        "id": "network:assets/grype-ci-config.yml:205:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This URL supplies executable installer content from a mutable main branch. Its direct use in CI creates a real external supply-chain dependency."
+      },
+      {
+        "id": "network:assets/grype-ci-config.yml:269:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This URL supplies executable installer content from a mutable main branch. Its direct use in CI creates a real external supply-chain dependency."
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:205:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The CircleCI example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:269:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The Azure Pipelines example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:assets/grype-ci-config.yml:140:docker-socket-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The Jenkins container mounts the host Docker socket. Code in that container can control the Docker daemon and commonly obtain host-level access.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:assets/grype-config.yaml:5:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears only in a comment that links to official Grype configuration documentation. It does not cause a network request."
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:107:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The path configures Grype standard vulnerability-database cache under the current user home. It does not access unrelated hidden files or sensitive credentials."
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:89:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an exclusion glob for node_modules binaries, not code that opens a hidden file. It reduces the paths Grype scans."
+      },
+      {
+        "id": "filesystem:assets/grype-config.yaml:107:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The path configures Grype standard vulnerability-database cache under the current user home. It does not access unrelated hidden files or sensitive credentials."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:43:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:44:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:45:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:73:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:118:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:119:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:151:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:191:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:192:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:193:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:217:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:260:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:261:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "network:assets/rule-template.yaml:288:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is an OWASP or CWE citation in a security-rule example. The YAML does not fetch the resource or transmit any data."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:147:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:162:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:132:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:147:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:148:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:156:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:157:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:162:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:163:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:164:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "env_access:assets/rule-template.yaml:165:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "sensitive:assets/rule-template.yaml:148:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is educational text or sample code showing secure secret handling inside a rule template. It is not executed by the skill and contains no live credential."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:70:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:83:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:89:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "blocker:assets/rule-template.yaml:90:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched SQL text is labeled as vulnerable or fixed sample content for a detection rule. It performs no reconnaissance and is not runtime code."
+      },
+      {
+        "id": "network:references/cisa_kev.md:184:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example downloads the public CISA KEV catalog over HTTPS to a local file. It sends no credentials or local data and targets the official CISA domain."
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:190:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched phrase is explanatory CVSS or suppression guidance. It contains no command, network probe, or reconnaissance workflow."
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:34:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched phrase is explanatory CVSS or suppression guidance. It contains no command, network probe, or reconnaissance workflow."
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:90:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched phrase is explanatory CVSS or suppression guidance. It contains no command, network probe, or reconnaissance workflow."
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:91:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched phrase is explanatory CVSS or suppression guidance. It contains no command, network probe, or reconnaissance workflow."
+      },
+      {
+        "id": "blocker:references/cvss_guide.md:143:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched phrase is explanatory CVSS or suppression guidance. It contains no command, network probe, or reconnaissance workflow."
+      },
+      {
+        "id": "scripts:references/EXAMPLE.md:138:document-write-injection",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The unsafe DOM operation is explicitly labeled as a vulnerable example in a security reference. It is inert Markdown content and is immediately accompanied by remediation guidance."
+      },
+      {
+        "id": "scripts:references/EXAMPLE.md:137:innerhtml-assignment-xss-risk",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The unsafe DOM operation is explicitly labeled as a vulnerable example in a security reference. It is inert Markdown content and is immediately accompanied by remediation guidance."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:423:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:423:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:424:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:425:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:427:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:430:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:432:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:437:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "env_access:references/EXAMPLE.md:444:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line belongs to a non-executed secure-authentication example that reads one named API key. It does not enumerate, log, or exfiltrate environment values."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:276:c2-keywords",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The C2 phrase is the name of a MITRE ATT&CK technique in defensive reference material. It provides no command-and-control behavior or malicious instruction."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:97:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:113:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:242:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:298:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:301:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:305:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:314:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:438:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:471:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:523:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:529:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/EXAMPLE.md:381:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched term appears in defensive documentation or labeled secure and vulnerable examples. It does not perform system or network reconnaissance."
+      },
+      {
+        "id": "external_commands:references/vulnerability_remediation.md:164:xargs-command-can-execute-arbitrary-commands",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The documented pipeline invokes a fixed pip command and supplies package names as arguments through xargs. It does not let package output select an arbitrary executable."
+      },
+      {
+        "id": "network:references/vulnerability_remediation.md:350:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a placeholder backend URL in an Nginx virtual-patching example. It neither initiates a request during skill use nor identifies a real external service."
+      },
+      {
+        "id": "blocker:references/vulnerability_remediation.md:369:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The phrase is an exception message in defensive input-validation sample code. It performs no reconnaissance or hostile system action."
+      },
+      {
+        "id": "blocker:references/WORKFLOW_CHECKLIST.md:193:malware-type-keywords",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The malware terms occur in an incident-response eradication checklist. The text directs defenders to remove malicious artifacts and contains no malicious behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:152:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:219:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:229:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:246:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:255:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:261:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:281:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:294:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:299:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:300:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:307:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:310:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:318:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown code-fence or inline-code notation in documentation. It is not Ruby backtick evaluation and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:263:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This documented loop expands Docker image names produced by Docker itself. Valid image references exclude shell metacharacters, so the example does not provide a practical injection path."
+      },
+      {
+        "id": "external_commands:SKILL.md:264:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The substitutions use a Docker-generated image reference and the local date command to form a report filename. No untrusted text is evaluated as a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:261:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is the opening fence of a Bash example, not a program template literal. The scanner conflated Markdown syntax with executable code."
+      },
+      {
+        "id": "network:SKILL.md:19:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:324:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:325:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:326:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:327:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:328:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      },
+      {
+        "id": "network:SKILL.md:329:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a documentation reference to an official Grype, NIST, CISA, FIRST, or CVE resource. It neither performs a request nor transmits data."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Security gates can pass without enforcing findings",
+        "description": "Node audit output is never evaluated, and the IaC stage converts scanner failures into warnings. Vulnerable builds can pass despite the template presenting these checks as gates.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 125,
+            "line_end": 140
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 228,
+            "line_end": 256
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The Node command is followed by no result check, while the IaC block uses || true and leaves exit 1 commented out."
+      },
+      {
+        "title": "Example configuration suppresses broad vulnerability classes",
+        "description": "The bundled Grype configuration ignores every wont-fix vulnerability and all matches for a named package. Copying it can hide real findings without expiry or target-specific justification.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 11,
+            "line_end": 38
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The active ignore rules include fix-state: wont-fix and a package-only pytest match, both broader than the example-specific CVE suppressions."
+      },
+      {
+        "title": "CI examples execute mutable action and image references",
+        "description": "The templates use a GitHub Action from master and Grype container images tagged latest. Future upstream changes can execute without repository review or digest verification.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 196,
+            "line_end": 202
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 121,
+            "line_end": 140
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 364,
+            "line_end": 373
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The files explicitly reference aquasecurity/trivy-action@master, set GRYPE_VERSION to latest, and run anchore/grype:latest."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 240,
+            "line_end": 240
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The template pipes an unpinned remote installer directly into bash. A compromised branch, repository, or connection endpoint would gain code execution in the CI runner."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 205,
+            "line_end": 205
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The CircleCI example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 269,
+            "line_end": 269
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Azure Pipelines example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions."
+      },
+      {
+        "title": "Docker socket access",
+        "description": "args '-v /var/run/docker.sock:/var/run/docker.sock'",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 140,
+            "line_end": 140
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Jenkins container mounts the host Docker socket. Code in that container can control the Docker daemon and commonly obtain host-level access."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "grype $(params.IMAGE) \\",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 369,
+            "line_end": 369
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "Tekton substitutes the user-supplied IMAGE parameter directly into an unquoted shell command. Shell metacharacters in the parameter can inject commands into the task."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--fail-on $(params.SEVERITY_THRESHOLD) \\",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 370,
+            "line_end": 370
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "Tekton substitutes the severity parameter directly into an unquoted shell command. A crafted parameter value can alter arguments or inject additional shell commands."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "grype $(params.IMAGE) -o table | tee /workspace/grype-report.txt",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 373,
+            "line_end": 373
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The user-supplied IMAGE parameter is expanded unquoted in a second shell pipeline. This repeats the command-injection path in the report-generation command."
+      },
+      {
+        "title": "Security gates can pass without enforcing findings",
+        "description": "Node audit output is never evaluated, and the IaC stage converts scanner failures into warnings. Vulnerable builds can pass despite the template presenting these checks as gates.",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 125,
+            "line_end": 140
+          },
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 228,
+            "line_end": 256
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The Node command is followed by no result check, while the IaC block uses || true and leaves exit 1 commented out."
+      },
+      {
+        "title": "CI examples execute mutable action and image references",
+        "description": "The templates use a GitHub Action from master and Grype container images tagged latest. Future upstream changes can execute without repository review or digest verification.",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 196,
+            "line_end": 202
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 121,
+            "line_end": 140
+          },
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 364,
+            "line_end": 373
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The files explicitly reference aquasecurity/trivy-action@master, set GRYPE_VERSION to latest, and run anchore/grype:latest."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Example configuration suppresses broad vulnerability classes",
+        "description": "The bundled Grype configuration ignores every wont-fix vulnerability and all matches for a named package. Copying it can hide real findings without expiry or target-specific justification.",
+        "locations": [
+          {
+            "file": "assets/grype-config.yaml",
+            "line_start": 11,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.97,
+        "confidence_reasoning": "The active ignore rules include fix-state: wont-fix and a package-only pytest match, both broader than the example-specific CVE suppressions."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 240,
+            "line_end": 240
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This URL is used to download an installer that is immediately executed. The mutable upstream script creates a supply-chain exposure even though the domain is legitimate."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 205,
+            "line_end": 205
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This URL supplies executable installer content from a mutable main branch. Its direct use in CI creates a real external supply-chain dependency."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 269,
+            "line_end": 269
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This URL supplies executable installer content from a mutable main branch. Its direct use in CI creates a real external supply-chain dependency."
+      }
+    ],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash",
+        "locations": [
+          {
+            "file": "assets/ci-config-template.yml",
+            "line_start": 240,
+            "line_end": 240
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The template pipes an unpinned remote installer directly into bash. A compromised branch, repository, or connection endpoint would gain code execution in the CI runner."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 205,
+            "line_end": 205
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The CircleCI example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 269,
+            "line_end": 269
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Azure Pipelines example streams an unpinned main-branch installer into a shell. Upstream compromise or an unexpected change would execute with runner permissions."
+      },
+      {
+        "title": "Docker socket access",
+        "description": "args '-v /var/run/docker.sock:/var/run/docker.sock'",
+        "locations": [
+          {
+            "file": "assets/grype-ci-config.yml",
+            "line_start": 140,
+            "line_end": 140
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Jenkins container mounts the host Docker socket. Code in that container can control the Docker daemon and commonly obtain host-level access."
+      }
+    ],
+    "files_scanned": 11,
+    "total_lines": 3469,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T05:11:47.860Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Scan Containers and Prioritize Vulnerabilities",
+    "value_statement": "Container findings are difficult to rank across severity, exploitability, and exposure. This skill guides Grype scans and practical remediation priorities.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Grype vulnerability scanning",
+      "container security",
+      "SBOM analysis",
+      "CVSS prioritization",
+      "EPSS scoring",
+      "CISA KEV",
+      "CI security gates"
+    ],
+    "actual_capabilities": [
+      "Guides Grype scans for container images, local filesystems, and SBOM files.",
+      "Explains table, JSON, SARIF, CycloneDX, and custom template outputs.",
+      "Provides CI examples for GitHub Actions, GitLab, Jenkins, CircleCI, Azure Pipelines, and Tekton.",
+      "Prioritizes findings with CVSS severity, EPSS probability, and CISA KEV status.",
+      "Documents ignore rules, database management, exclusions, and severity thresholds."
+    ],
+    "limitations": [
+      "Requires Grype and access to the selected image, filesystem, or SBOM.",
+      "Database updates and remote image scans may require network access and registry credentials.",
+      "Does not patch vulnerable packages or validate that a remediation preserves application behavior.",
+      "References helper scripts that are not included in the published file structure."
+    ],
+    "use_cases": [
+      {
+        "title": "Gate container releases",
+        "description": "Add a Grype severity threshold and retain scan reports before deployment.",
+        "target_user": "DevOps engineer"
+      },
+      {
+        "title": "Prioritize remediation work",
+        "description": "Rank package findings using KEV status, EPSS probability, CVSS severity, and fix availability.",
+        "target_user": "Application security analyst"
+      },
+      {
+        "title": "Assess software inventories",
+        "description": "Scan archived SPDX, CycloneDX, or Syft SBOMs without rebuilding container images.",
+        "target_user": "Software supply chain lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a basic scan",
+        "prompt": "Show the safest Grype command to scan [image]. Explain each option and use a production severity threshold.",
+        "scenario": "First container scan"
+      },
+      {
+        "title": "Review scan findings",
+        "prompt": "Review this Grype report summary: [findings]. Rank the issues by KEV, EPSS, CVSS, fix availability, and package exposure.",
+        "scenario": "Triage after scanning"
+      },
+      {
+        "title": "Design a CI gate",
+        "prompt": "Design a Grype gate for [CI platform] scanning [image source]. Pin dependencies and retain reports without exposing the Docker socket.",
+        "scenario": "Pipeline integration"
+      },
+      {
+        "title": "Build a remediation program",
+        "prompt": "Create a remediation plan for [portfolio]. Define SLAs, exception evidence, expiry rules, rescan checks, and metrics for KEV and high-EPSS findings.",
+        "scenario": "Organization-wide vulnerability management"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Prioritize three findings: a KEV high, a critical with low EPSS, and a medium with high EPSS.",
+        "output": "Priority 1 is the KEV high because exploitation is confirmed. Priority 2 is the high-EPSS medium. Priority 3 is the low-EPSS critical."
+      },
+      {
+        "input": "Recommend a production gate for a container image.",
+        "output": [
+          "Block releases with critical or high findings that have available fixes.",
+          "Escalate every CISA KEV finding regardless of CVSS score.",
+          "Store SARIF and human-readable reports as restricted build artifacts."
+        ]
+      },
+      {
+        "input": "Explain whether a Grype ignore rule is acceptable.",
+        "output": "Accept the rule only with exact scope, evidence, an owner, an expiration date, and a scheduled rescan. Avoid package-wide or fix-state-wide suppressions."
+      }
+    ],
+    "best_practices": [
+      "Pin scanner actions, images, and installers to reviewed immutable versions.",
+      "Prioritize KEV and high-EPSS findings before relying only on CVSS severity.",
+      "Document every suppression with evidence, ownership, expiration, and periodic review."
+    ],
+    "anti_patterns": [
+      "Do not pipe remote installer content directly into a shell.",
+      "Do not mount the host Docker socket when an image or SBOM scan is sufficient.",
+      "Do not ignore scanner exit codes without enforcing equivalent result checks."
+    ],
+    "faq": [
+      {
+        "question": "What targets can Grype scan?",
+        "answer": "Grype can scan container images, local directories, image archives, and supported SBOM documents."
+      },
+      {
+        "question": "Does this skill install Grype?",
+        "answer": "No. It provides commands and pipeline examples. Install a pinned Grype release through a verified package or artifact."
+      },
+      {
+        "question": "Can it scan without Docker access?",
+        "answer": "Yes. Scan registry images, image archives, directories, or SBOMs when Docker socket access is unavailable or inappropriate."
+      },
+      {
+        "question": "How should findings be prioritized?",
+        "answer": "Address CISA KEV findings first, then high-EPSS issues, critical CVSS findings, and high CVSS findings with reachable vulnerable code."
+      },
+      {
+        "question": "Which report format should I use?",
+        "answer": "Use table output for review, SARIF for code platforms, JSON for automation, and CycloneDX for compatible supply chain tools."
+      },
+      {
+        "question": "When is an ignore rule acceptable?",
+        "answer": "Use one only after validating impact and recording exact scope, evidence, ownership, expiration, and a future review date."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "ci-config-template.yml",
+          "type": "file",
+          "path": "assets/ci-config-template.yml",
+          "lines": 358
+        },
+        {
+          "name": "grype-ci-config.yml",
+          "type": "file",
+          "path": "assets/grype-ci-config.yml",
+          "lines": 406
+        },
+        {
+          "name": "grype-config.yaml",
+          "type": "file",
+          "path": "assets/grype-config.yaml",
+          "lines": 256
+        },
+        {
+          "name": "rule-template.yaml",
+          "type": "file",
+          "path": "assets/rule-template.yaml",
+          "lines": 356
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "cisa_kev.md",
+          "type": "file",
+          "path": "references/cisa_kev.md",
+          "lines": 226
+        },
+        {
+          "name": "cvss_guide.md",
+          "type": "file",
+          "path": "references/cvss_guide.md",
+          "lines": 211
+        },
+        {
+          "name": "EXAMPLE.md",
+          "type": "file",
+          "path": "references/EXAMPLE.md",
+          "lines": 551
+        },
+        {
+          "name": "vulnerability_remediation.md",
+          "type": "file",
+          "path": "references/vulnerability_remediation.md",
+          "lines": 511
+        },
+        {
+          "name": "WORKFLOW_CHECKLIST.md",
+          "type": "file",
+          "path": "references/WORKFLOW_CHECKLIST.md",
+          "lines": 254
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 330
+    }
+  ]
+}

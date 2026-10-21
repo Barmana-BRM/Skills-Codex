@@ -1,0 +1,337 @@
+"""Playwright 风格的 Actionability 状态机与动作引擎。
+
+执行严密的动作可用性检查:
+Attached (节点存在) -> Visible (视口内) -> Stable (坐标静止) -> Enabled (可交互) -> Dispatch (物理下发)。
+在超时窗口内对进场动画施加等待，并在 fill 时执行 Playwright 规范的清空与重置语义，
+全面支持 click, fill, hover (长按), wait_for (显式可见/隐藏状态断言等待)。
+"""
+
+from __future__ import annotations
+import asyncio
+import time
+from typing import TYPE_CHECKING, Literal
+from phone_playwright.models.geometry import Rect
+from phone_playwright.models.actions import ActionResult
+from phone_playwright.models.schema import CompactElement
+from phone_playwright.models.exceptions import (
+    ActionabilityTimeoutError,
+    SelectorNotFoundError,
+    OffscreenElementError,
+)
+from phone_playwright.core.selector import parse_selector
+
+if TYPE_CHECKING:
+    from phone_playwright.drivers.base import BaseDriver
+    from phone_playwright.core.pruner import SemanticPruner
+    from phone_playwright.tracing.recorder import TraceRecorder
+    from phone_playwright.models.schema import PageSnapshot
+
+
+class ActionabilityEngine:
+    """Actionability 状态机执行引擎。"""
+
+    def __init__(
+        self,
+        driver: BaseDriver,
+        pruner: SemanticPruner,
+        poll_interval_s: float = 0.1,
+        stable_sample_count: int = 1,
+        trace_recorder: TraceRecorder | None = None,
+    ) -> None:
+        self.driver = driver
+        self.pruner = pruner
+        self.poll_interval_s = poll_interval_s
+        self.stable_sample_count = stable_sample_count
+        self.trace_recorder = trace_recorder
+        self._cached_elements: list[CompactElement] | None = None
+        self._cached_timestamp: float = 0.0
+
+    def warm_cache(self, elements: list[CompactElement], timestamp: float) -> None:
+        """为快照后紧随的动作执行预置短生命周期温热缓存 (TTL 1.0s)。"""
+        self._cached_elements = elements
+        self._cached_timestamp = timestamp
+
+    def invalidate_cache(self) -> None:
+        """显式清除温热缓存。"""
+        self._cached_elements = None
+        self._cached_timestamp = 0.0
+
+    def _editable_text_of(
+        self, elements: list[CompactElement], bounds: Rect
+    ) -> str | None:
+        """读取与目标边界重合的输入元素当前文本 (用于清空态前后对比观测)。"""
+        target = next(
+            (
+                el
+                for el in elements
+                if el.bounds.intersects(bounds)
+                and (el.bounds.center == bounds.center or el.role == "input")
+            ),
+            None,
+        )
+        return (target.text or None) if target else None
+
+    async def execute_action(
+        self,
+        verb: str,
+        selector_str: str,
+        value: str | None = None,
+        timeout_s: float = 5.0,
+        duration_ms: int = 800,
+        expected_state: Literal["visible", "hidden"] = "visible",
+        stable_sample_count: int | None = None,
+    ) -> ActionResult:
+        """对指定选择器目标执行具备可用性检查的操作。"""
+        selector = parse_selector(selector_str)
+        start_time = time.monotonic()
+        last_bounds: Rect | None = None
+        stable_hits = 0
+        required_samples = stable_sample_count if stable_sample_count is not None else self.stable_sample_count
+
+        vw, vh = await self.driver.get_viewport_size()
+        viewport = Rect(left=0, top=0, right=vw, bottom=vh)
+
+        # 针对 wait_for(state="hidden") 的快速分支处理
+        if verb == "wait_for" and expected_state == "hidden":
+            while time.monotonic() - start_time < timeout_s:
+                try:
+                    raw_tree = await self.driver.dump_raw_tree()
+                    elements = self.pruner.prune_and_distill(raw_tree, vw, vh)
+                except Exception:
+                    await asyncio.sleep(self.poll_interval_s)
+                    continue
+                target_el = selector.find_first(elements)
+                if not target_el or not target_el.bounds.intersects(viewport):
+                    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+                    if self.trace_recorder and self.trace_recorder.is_recording:
+                        await self.trace_recorder.record_action(
+                            name="wait_for",
+                            selector=selector_str,
+                            duration_ms=elapsed_ms,
+                            click_point=None,
+                            metadata={"state": "hidden", "target": selector_str},
+                        )
+                    return ActionResult(
+                        success=True,
+                        verb="wait_for",
+                        target=selector_str,
+                        executed_at_bounds=None,
+                        time_taken_ms=elapsed_ms,
+                    )
+                await asyncio.sleep(self.poll_interval_s)
+
+            raise ActionabilityTimeoutError(
+                selector=selector_str,
+                timeout_s=timeout_s,
+                details="目标元素在超时时间内持续可见，未能转变为隐藏状态",
+            )
+
+        # 常规可用性状态机主循环 (click / fill / hover / wait_for visible)
+        is_first_iteration = True
+        cur_elements: list[CompactElement] = []
+        while time.monotonic() - start_time < timeout_s:
+            now = time.monotonic()
+            # 1. 尝试使用 1.0s 内的快照温热缓存 (仅首轮迭代生效，实现亚秒级极速首击)
+            if is_first_iteration and self._cached_elements and (now - self._cached_timestamp < 1.0):
+                cur_elements = self._cached_elements
+            else:
+                try:
+                    raw_tree = await self.driver.dump_raw_tree()
+                    cur_elements = self.pruner.prune_and_distill(raw_tree, vw, vh)
+                except Exception:
+                    await asyncio.sleep(self.poll_interval_s)
+                    continue
+            is_first_iteration = False
+
+            # 2. Attached 检查：选择器是否匹配到节点
+            target_el = selector.find_first(cur_elements)
+            if not target_el:
+                await asyncio.sleep(self.poll_interval_s)
+                continue
+
+            # 3. Visible & 视口检查：若由于进场动画导致暂未进入视口，继续等待
+            inter = target_el.bounds.intersection(viewport)
+            if inter is None or inter.width < 4 or inter.height < 4:
+                stable_hits = 0
+                await asyncio.sleep(self.poll_interval_s)
+                continue
+
+            # 4. Stable 检查：连续采样判定坐标是否静止 (防滑动/动画中点击)
+            cur_bounds = target_el.bounds
+            if last_bounds and cur_bounds == last_bounds:
+                stable_hits += 1
+            else:
+                stable_hits = 1
+            last_bounds = cur_bounds
+
+            if stable_hits < required_samples:
+                await asyncio.sleep(self.poll_interval_s)
+                continue
+
+            # 5. Enabled 检查 (对交互类动作生效)
+            if verb in ("click", "fill", "hover") and not target_el.enabled:
+                await asyncio.sleep(self.poll_interval_s)
+                continue
+
+            elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+            # 针对 wait_for(state="visible")：元素稳定即可返回
+            if verb == "wait_for":
+                if self.trace_recorder and self.trace_recorder.is_recording:
+                    await self.trace_recorder.record_action(
+                        name="wait_for",
+                        selector=selector_str,
+                        duration_ms=elapsed_ms,
+                        click_point=None,
+                        metadata={"state": "visible", "target": selector_str},
+                    )
+                return ActionResult(
+                    success=True,
+                    verb="wait_for",
+                    target=selector_str,
+                    executed_at_bounds=cur_bounds,
+                    time_taken_ms=elapsed_ms,
+                )
+
+            # 6. 计算安全物理中心坐标 (优先使用视口相交区域中心，防止部分出界导致点击越界) 并下发物理动作
+            click_bounds = inter if inter is not None else target_el.bounds
+            cx, cy = click_bounds.center
+            self.invalidate_cache()
+
+            snapshot_before: PageSnapshot | None = None
+            if self.trace_recorder and self.trace_recorder.is_recording and self.trace_recorder.record_snapshots:
+                from phone_playwright.models.schema import PageSnapshot
+                snapshot_before = PageSnapshot(
+                    timestamp=time.time(),
+                    device_id=self.driver.device_id,
+                    viewport_width=vw,
+                    viewport_height=vh,
+                    elements=cur_elements,
+                )
+
+            if verb == "click":
+                await self.driver.tap(cx, cy)
+                elapsed_ms = int((time.monotonic() - start_time) * 1000)
+                if self.trace_recorder and self.trace_recorder.is_recording:
+                    await self.trace_recorder.record_action(
+                        name="click",
+                        selector=selector_str,
+                        duration_ms=elapsed_ms,
+                        click_point=(cx, cy),
+                        snapshot_before=snapshot_before,
+                    )
+                return ActionResult(
+                    success=True,
+                    verb="click",
+                    target=selector_str,
+                    executed_at_bounds=cur_bounds,
+                    time_taken_ms=elapsed_ms,
+                )
+            elif verb == "fill":
+                # Playwright 契约：点击聚焦输入框 -> 清空 -> 注入，且注入后字段值
+                # 必须精确等于目标文本。部分云手机 ROM (实测天翼云手机) 在输入框
+                # 聚焦/清空瞬态会把系统剪贴板内容自动上屏 (智能剪贴板特性)，使注入
+                # 退化为"剪贴板+新文本"拼接 —— 以注入后整字段精确比对为准，不匹配
+                # 则重清重注一次自愈。
+                text_to_type = value or ""
+                for attempt in range(2):
+                    if time.monotonic() - start_time > timeout_s:
+                        break  # 自愈重注不突破调用方超时预算
+                    await self.driver.tap(cx, cy)
+                    await asyncio.sleep(0.05 if attempt == 0 else 0.5)
+                    clear_text = getattr(self.driver, "clear_text", None)
+                    if callable(clear_text):
+                        try:
+                            await clear_text()
+                        except Exception:
+                            pass
+                        await asyncio.sleep(0.3)
+                    await self.driver.type_text(text_to_type)
+                    if not text_to_type:
+                        break
+                    await asyncio.sleep(0.3)
+                    try:
+                        fresh_tree = await self.driver.dump_raw_tree()
+                        fresh_elements = self.pruner.prune_and_distill(fresh_tree, vw, vh)
+                    except Exception:
+                        break  # 校验通道不可用时按既有语义成功
+                    actual = self._editable_text_of(fresh_elements, cur_bounds)
+                    if actual == text_to_type:
+                        break
+                    if actual is None:
+                        break  # 无法观测 (如键盘弹起导致字段滚出视口) 时不误判
+                elapsed_ms = int((time.monotonic() - start_time) * 1000)
+                if self.trace_recorder and self.trace_recorder.is_recording:
+                    await self.trace_recorder.record_action(
+                        name="fill",
+                        selector=selector_str,
+                        duration_ms=elapsed_ms,
+                        click_point=(cx, cy),
+                        snapshot_before=snapshot_before,
+                        metadata={"text": text_to_type},
+                    )
+                return ActionResult(
+                    success=True,
+                    verb="fill",
+                    target=selector_str,
+                    executed_at_bounds=cur_bounds,
+                    time_taken_ms=elapsed_ms,
+                )
+            elif verb == "hover":
+                # 触发长按 / 悬浮
+                await self.driver.long_press(cx, cy, duration_ms=duration_ms)
+                elapsed_ms = int((time.monotonic() - start_time) * 1000)
+                if self.trace_recorder and self.trace_recorder.is_recording:
+                    await self.trace_recorder.record_action(
+                        name="hover",
+                        selector=selector_str,
+                        duration_ms=elapsed_ms,
+                        click_point=(cx, cy),
+                        snapshot_before=snapshot_before,
+                        metadata={"duration_ms": duration_ms},
+                    )
+                return ActionResult(
+                    success=True,
+                    verb="hover",
+                    target=selector_str,
+                    executed_at_bounds=cur_bounds,
+                    time_taken_ms=elapsed_ms,
+                )
+            else:
+                raise ValueError(f"不支持的动作动词: {verb}")
+
+        # 最终超时后，精确定位超时原因 (包含异常屏障，防止末尾瞬态异常冲垮核心超时断言)
+        elapsed_ms = int((time.monotonic() - start_time) * 1000)
+        failure_error: Exception | None = None
+        try:
+            raw_tree = await self.driver.dump_raw_tree()
+            # 使用极大虚拟视口蒸馏未裁剪的完整节点树，精准区分【未挂载】与【屏幕外】
+            unclipped_elements = self.pruner.prune_and_distill(raw_tree, 1000000, 1000000)
+            target_node = selector.find_first(unclipped_elements)
+            if not target_node:
+                failure_error = SelectorNotFoundError(selector_str)
+            elif not target_node.bounds.intersects(viewport):
+                failure_error = OffscreenElementError(selector_str)
+        except (OffscreenElementError, SelectorNotFoundError) as e:
+            failure_error = e
+        except Exception:
+            pass
+
+        if failure_error is None:
+            failure_error = ActionabilityTimeoutError(
+                selector=selector_str,
+                timeout_s=timeout_s,
+                details=f"目标未能在规定时间内稳定就绪 (stable_hits={stable_hits})",
+            )
+
+        if self.trace_recorder and self.trace_recorder.is_recording:
+            await self.trace_recorder.record_action(
+                name=f"{verb}_failed",
+                selector=selector_str,
+                duration_ms=elapsed_ms,
+                click_point=None,
+                error=str(failure_error),
+                metadata={"error_type": type(failure_error).__name__},
+            )
+
+        raise failure_error

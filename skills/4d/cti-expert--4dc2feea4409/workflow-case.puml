@@ -1,0 +1,99 @@
+@startuml
+title cti-expert v2.12 — /cti and /case: the recursive spider-map pipeline (AEAD)
+skinparam shadowing false
+skinparam dpi 150
+skinparam defaultFontName "Segoe UI"
+skinparam ArrowColor #34495E
+skinparam activity {
+  BackgroundColor #EAF2FB
+  BorderColor #2C6FBB
+  DiamondBackgroundColor #FFF3D6
+  DiamondBorderColor #C8901F
+  StartColor #2C6FBB
+  EndColor #2C6FBB
+}
+
+start
+:**/cti TARGET**   (single entry point)\n//or// **/case TARGET**  ·  **/cti-case CASE-ID seed…**;
+:**classify selector**\ndomain · URL · IP · email · username · phone\nwallet · hash · APK / binary · onion;
+
+partition "**STEP 0 — RECALL · INTAKE · QUARRY**" {
+  :**/cti-recall SEED**   →   which_cases · kb_entity;
+  if (already attributed in a prior case?) then (yes)
+    :reuse the attribution  (~--extend to continue);
+    stop
+  endif
+  :**intake** -> cases/<id>/scope.json\ntarget class + purpose · posture (no_spend · no-contact);
+  :**Quarry** (if enabled for the case)\nreuse a finished scan or start one and **wait with no time limit**\nrows imported through the rung table;
+}
+
+partition "**ACQUIRE**  (collect raw data)" {
+  if (target is a domain / URL / IP?) then (yes)
+    :**collect_core.collect_many** -> **pivot_extract**\ncache reuse · onion isolation · egress gate (hostile -> passive/proxy)\nfavicon · trackers · wallets · emails · phones · Telegram · WHOIS · TLS\n//enrich_live: CT · passive DNS · urlscan · ChongLuaDao · Webamon (+ keyed engines)//;
+    :dead or cloaked page -> Wayback / **gated-urlscan recovery**\n/sweep · /subdomain · /cert-pivot · /icp · /dork-sweep;
+    note right
+      Runs **keyless by default**.
+      **Auto-upgrades** when premium keys are set via
+      /apikeys — see workflow-apikeys.
+      Hostile infra  ->  **~--passive**, no live contact.
+      A .onion never reaches the clearnet collector.
+    end note
+  elseif (target is a file / APK / exe?) then (yes)
+    :**/binary**  — BinaryPivot static IOC extraction\nsigning cert · package · permissions · embedded C2 · wallets;
+    :**/hash-id** -> ANY.RUN TI Lookup //(read-only)//\n//detonation (anyrun_submit · webamon_scan) is ask-first, gated//;
+  else (username / email / phone / wallet / person)
+    :/username · /email-deep · /phone · /breach-deep\n/stealer-log · /saas-map · /msftrecon · /crypto-balance;
+  endif
+  :per-layer outcome -> **collection_outcomes.json**\nran · empty · error · timed_out · skipped_no_key · skipped_policy\n//failed layers stay re-runnable — "empty" is not "error"//;
+  :**kb_ingest** (ingest_webpivot) -> knowledge/\nnoise_filters decide **fact vs edge**;
+}
+
+partition "**ENRICH**  (cross-type loop — recursive)" {
+  repeat :**case_state.frontier / propose**\nevery selector type is a node · rung table owner / kit / neighbour;
+    :co-tenancy guards — multi-tenant certs, shared IPs, reseller WHOIS\n-> **leads, not seeds** · crypto token contracts -> facts only;
+    :**Plan phase** (read-only) re-ranks · drops · adds cross-type pivots;
+    if (free / urlscan pivot with ≤ 25 hits?) then (yes)
+      :run automatically;
+    else (metered · oversized · unknown)
+      :digest-bound **proposal.json**\n-> **harness approve** / case_approve;
+    endif
+    :pivot_routes -> rows rung-aware into the KB\nonly **owner-linked** yields re-enter as seeds;
+  repeat while (converged or cold?) is (no — open frontier) not (yes)
+  :**/cti-check INDICATOR**  — BENIGN shared noise vs SIGNAL operator link;
+}
+
+partition "**ASSESS**  (score + verify)" {
+  :**intel.py open | loop** -> shared.txt · clusters.json · case_graph.json · state.json;
+  :harness Collect -> Correlate -> Verify -> **Assess** (schema-forced)\n-> **assessment.md / assessment.json**\n//only registrant e-mail / phone is a decisive join key//;
+  :/risk · /exposure · /validate · /coverage · **/threat-model** (ACH)\n**ICD-203 judgment** — likelihood band + evidence confidence;
+}
+
+partition "**DELIVER**  (package output)" {
+  :**/cti-report CASE-ID**\n**house_report** -> cases/<id>/report/CTI-REPORT-*.{md,pdf,docx}\nIntelGraph relationship render (PNG / SVG / Mermaid);
+  :build_report_data.py -> REPORT.json\n-> generate-cti-{html, iocs, docx-hybrid};
+  if (sharing outside the org?) then (yes — **opt-in**)
+    :**/redact** -> stable placeholders + reversible map\n**/misp-export** (local) -> /misp push · publish //(ask-first)//;
+  else (no)
+  endif
+  :always save  .md + .json + .csv + IOC bundle (STIX 2.1 · JSONL)\nthen ASK presentation: (a) PDF · (b) DOCX · (c) HTML · (d) all;
+}
+stop
+
+legend right
+  **Keyless / free by default**
+  ====
+  Every phase works with **no API keys**.
+  Premium keys (/apikeys) only //upgrade//
+  Acquire + Enrich — they never gate the pipeline.
+  ----
+  **Approval, not autonomy, gates spend**
+  free pivots ≤ 25 hits run on their own;
+  metered / oversized ones wait for approval.
+  ----
+  **Two separate cost ledgers**
+  model spend  ->  run_cost.jsonl · /cost
+  third-party API credits ->  api_usage
+  ----
+  **/cti-status** — backend tier · MCP tools · credit balances
+endlegend
+@enduml

@@ -1,0 +1,532 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T09:27:09.149Z",
+    "slug": "dataknifeai-device-management",
+    "source_url": "https://github.com/DataKnifeAI/unifi-network-mcp/tree/main/.github/skills/device-management",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "4036c2d8f30a47c0adb5ddff23a1e0ac90901e7c8ea704fe70a114e46a8ae10b",
+    "tree_hash": "a3910738c16e409b3e89846e87df245e3101d997b416c021d1f7d04837f7a697",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "device-management",
+    "description": "Manage UniFi device adoption, inventory, device status, and controller health across network infrastructure.",
+    "summary": "Track UniFi devices, pending adoption, inventory, specifications, and controller status.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DataKnifeAI",
+    "license": "MIT",
+    "tags": [
+      "unifi",
+      "network-management",
+      "device-inventory",
+      "device-adoption",
+      "infrastructure"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The external command findings are Markdown formatting false positives, and the API key finding is a placeholder rather than a hardcoded secret. The main security issue is the curl example that disables TLS certificate verification while sending an API key. No prompt injection or malicious intent was found in SKILL.md.",
+    "remediation": [
+      {
+        "issue": "The curl example disables TLS certificate verification while sending an API key.",
+        "suggestion": "Remove -k from the command, or document trusted certificate setup before users send API credentials.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Credential handling guidance is minimal.",
+        "suggestion": "Tell users to keep UNIFI_API_KEY scoped, private, and out of prompts, logs, screenshots, and shared reports.",
+        "severity": "low"
+      },
+      {
+        "issue": "Device inventory workflows expose sensitive infrastructure data.",
+        "suggestion": "State that users should run inventory and adoption workflows only on UniFi networks they administer.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 68
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 48
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "- `get_pending_devices` - List devices pending adoption"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "- `get_network_devices` - List all adopted devices"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "- `get_network_device_stats` - Get device specifications and status"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "- `get_network_info` - Get controller info and system status"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "**Important Note:** Your UniFi site ID may appear as an empty string (`\"\"`) in API responses. This i"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "- In curl commands, you'll see endpoints like `/sites//devices` (double slashes) when the site ID is"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 50,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 55,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 61,
+        "snippet": "1. Use `get_pending_devices` to find devices awaiting adoption"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 62,
+        "snippet": "1. Use `get_network_devices` to get current inventory"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 68,
+        "snippet": "2. Use `get_network_device_stats` for specifications"
+      },
+      {
+        "id": "env_access:SKILL.md:48:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "curl -k -H \"X-API-KEY: $UNIFI_API_KEY\" \\"
+      },
+      {
+        "id": "blocker:SKILL.md:13:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 14,
+        "snippet": "- Manage device adoption and onboarding process"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 33 uses Markdown inline code for a tool name, not shell backtick execution. No executable command or user-controlled command construction appears there."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 34 is a documented tool name inside Markdown backticks. It does not invoke a process or define executable shell content."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 35 only formats the get_network_device_stats tool name. The backticks are documentation markup, not command execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 36 uses Markdown inline code to name a supported tool. There is no shell invocation, subprocess call, or dynamic execution path."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "Line 40 formats an empty string value with Markdown backticks. It is explanatory text about site IDs, not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Line 44 formats an example URL path in Markdown. The inline backticks do not execute anything or introduce command injection."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "Line 47 starts a fenced bash example in documentation. The static pattern matched the fence marker rather than executable skill code."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "Line 50 closes the fenced bash example. This is Markdown structure, not a shell backtick expression or process execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Line 55 uses inline code for a tool name in a workflow list. It does not execute a shell command or construct external process arguments."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Line 61 is a Markdown reference to get_network_devices. The backticks are presentation markup with no command execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Line 62 is a Markdown reference to get_network_device_stats. No code path or shell execution is present in the skill file."
+      },
+      {
+        "id": "env_access:SKILL.md:48:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "The text uses $UNIFI_API_KEY as a placeholder in documentation and does not contain a real secret. It does not read, log, or exfiltrate environment variables from skill code."
+      },
+      {
+        "id": "blocker:SKILL.md:13:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.74,
+        "reason": "The skill describes authorized UniFi device administration and inventory management. I found no evidence of covert scanning, unauthorized discovery, or malicious reconnaissance instructions."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "TLS Certificate Verification Disabled in API Example",
+        "description": "The curl example uses -k while sending the UniFi API key header. This can expose credentials to interception if users copy the command on an untrusted network.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 49
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The documented command clearly disables TLS certificate validation while transmitting an API key. Legitimate self-signed controller use is possible, so severity is medium rather than high."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "TLS Certificate Verification Disabled in API Example",
+        "description": "The curl example uses -k while sending the UniFi API key header. This can expose credentials to interception if users copy the command on an untrusted network.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The documented command clearly disables TLS certificate validation while transmitting an API key. Legitimate self-signed controller use is possible, so severity is medium rather than high."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 99,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T09:27:09.149Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Manage UniFi Device Inventory",
+    "value_statement": "UniFi teams need clear device status before adopting, tracking, or replacing hardware. This skill helps Claude, Codex, and Claude Code organize inventory and controller health.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "UniFi device management",
+      "network inventory",
+      "device adoption",
+      "controller monitoring",
+      "infrastructure management",
+      "MCP network tools",
+      "UniFi automation"
+    ],
+    "actual_capabilities": [
+      "Lists UniFi devices that are pending adoption.",
+      "Lists adopted network devices for inventory work.",
+      "Retrieves device specifications, firmware, and status details.",
+      "Checks UniFi controller information and system status.",
+      "Explains how to handle empty UniFi site IDs.",
+      "Supports inventory reports and upgrade planning workflows."
+    ],
+    "limitations": [
+      "Requires a configured UniFi MCP server and valid API access.",
+      "The documented tools are mostly read-oriented and do not show a direct adoption command.",
+      "Inventory quality depends on current UniFi controller data.",
+      "Curl examples may need trusted certificate configuration before use."
+    ],
+    "use_cases": [
+      {
+        "title": "Adopt New Network Hardware",
+        "description": "Find pending UniFi devices and prepare adoption notes by model, IP address, and planned role.",
+        "target_user": "Network administrator"
+      },
+      {
+        "title": "Maintain Device Inventory",
+        "description": "Create a current inventory grouped by device type, location, firmware version, and operational status.",
+        "target_user": "IT operations manager"
+      },
+      {
+        "title": "Plan Hardware Refreshes",
+        "description": "Review device specifications and controller status to prioritize upgrades, replacements, and maintenance windows.",
+        "target_user": "Managed service provider technician"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Show Pending Devices",
+        "scenario": "Beginner check before onboarding new hardware.",
+        "prompt": "Use device-management to list devices pending adoption. Include MAC address, IP address, model, and recommended next action."
+      },
+      {
+        "title": "Build Inventory Report",
+        "scenario": "Routine asset review for an existing UniFi network.",
+        "prompt": "List all adopted UniFi devices and group them by type. Include model, firmware, status, and any missing inventory details."
+      },
+      {
+        "title": "Assess Controller Health",
+        "scenario": "Operational review before a maintenance window.",
+        "prompt": "Check UniFi controller information and summarize version, uptime, system status, and maintenance concerns."
+      },
+      {
+        "title": "Plan Lifecycle Actions",
+        "scenario": "Advanced planning across inventory, adoption, and refresh needs.",
+        "prompt": "Review pending devices, adopted devices, device stats, and controller status. Produce a prioritized adoption and upgrade plan with risks."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Show devices pending adoption.",
+        "output": "A concise pending-device list with MAC address, IP address, model, likely site, and recommended onboarding order."
+      },
+      {
+        "input": "Create a device inventory report by type.",
+        "output": "An organized inventory summary grouped by access points, switches, gateways, and unknown devices, with firmware and status notes."
+      },
+      {
+        "input": "Plan a device upgrade strategy.",
+        "output": "A prioritized refresh plan that highlights aging models, firmware gaps, controller health, and suggested maintenance windows."
+      }
+    ],
+    "best_practices": [
+      "Use scoped UniFi API credentials and avoid sharing keys in prompts or reports.",
+      "Verify site IDs before comparing devices across multiple UniFi sites.",
+      "Document device purpose, location, and owner after every adoption workflow."
+    ],
+    "anti_patterns": [
+      "Do not run device discovery against networks you do not administer.",
+      "Do not paste raw API keys, controller URLs, or full device identifiers into shared channels.",
+      "Do not treat inventory output as complete without checking controller sync status."
+    ],
+    "faq": [
+      {
+        "question": "What UniFi tasks does this skill support?",
+        "answer": "It supports pending device review, adopted device inventory, device statistics, controller status, and planning workflows."
+      },
+      {
+        "question": "Does it directly adopt devices?",
+        "answer": "The documented tools focus on listing and review. Confirm write-capable adoption tools before expecting direct adoption actions."
+      },
+      {
+        "question": "Why can the site ID be empty?",
+        "answer": "UniFi APIs can return an empty site ID for the default site. The MCP server may resolve it automatically."
+      },
+      {
+        "question": "Which AI tools can use this skill?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "What access is required?",
+        "answer": "Users need a configured UniFi MCP server and authorized API credentials for the controller they manage."
+      },
+      {
+        "question": "Is inventory data sensitive?",
+        "answer": "Yes. Device names, MAC addresses, IP addresses, models, and firmware can reveal infrastructure details."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 99
+    }
+  ]
+}

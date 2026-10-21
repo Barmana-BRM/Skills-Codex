@@ -1,0 +1,821 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T10:02:25.690Z",
+    "slug": "danielmax937-current-location-weather",
+    "source_url": "https://github.com/DanielMax937/pocker/tree/main/current-location-weather/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "c36415ff0558f264b2e98508c6cd894764bb73d091756f60ead55f3c45136648",
+    "tree_hash": "23a3b9b9d50880de013e2fbf88e0d1b58275f60b03677848c88aa11899202a38",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "current-location-weather",
+    "description": "Fetch current weather for an IP-detected or specified location using a Python helper and public weather services.",
+    "summary": "Fetch current conditions for the current or specified location.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DanielMax937",
+    "license": "MIT",
+    "tags": [
+      "weather",
+      "location",
+      "geolocation",
+      "python",
+      "cli"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "external_commands"
+    ],
+    "category": "productivity"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "No prompt injection, obfuscation, or command-execution abuse was found; the code-fence and obfuscation alerts are false positives. The skill intentionally makes outbound requests to ip-api.com and wttr.in, including automatic IP geolocation over plaintext HTTP, so the remaining concerns are privacy and network-integrity risks.",
+    "remediation": [
+      {
+        "issue": "Automatic IP geolocation sends location context to a third-party service.",
+        "suggestion": "Ask for explicit user confirmation before IP-based lookup, prefer user-supplied locations, and document that ip-api.com receives IP-derived location data.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The geolocation request uses plaintext HTTP.",
+        "suggestion": "Use an HTTPS geolocation provider or remove automatic geolocation if the chosen provider cannot support encrypted requests.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Weather lookups depend on a hardcoded third-party service.",
+        "suggestion": "Document wttr.in as the weather provider and explain that requested locations are sent to that service.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 65,
+            "line_end": 65
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 76
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:scripts/get_weather.py:17:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/get_weather.py",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:scripts/get_weather.py:24:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/get_weather.py",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "with urllib.request.urlopen(\"http://ip-api.com/json/\", timeout=10) as response:"
+      },
+      {
+        "id": "network:scripts/get_weather.py:68:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/get_weather.py",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "req = urllib.request.Request(url, headers={\"User-Agent\": \"curl/7.68.0\"})"
+      },
+      {
+        "id": "network:scripts/get_weather.py:69:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/get_weather.py",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "with urllib.request.urlopen(req, timeout=15) as response:"
+      },
+      {
+        "id": "network:scripts/get_weather.py:24:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/get_weather.py",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "with urllib.request.urlopen(\"http://ip-api.com/json/\", timeout=10) as response:"
+      },
+      {
+        "id": "network:scripts/get_weather.py:62:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/get_weather.py",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "url = f\"https://wttr.in/{encoded_location}?format=j1\""
+      },
+      {
+        "id": "network:scripts/get_weather.py:65:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/get_weather.py",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "url = f\"https://wttr.in/{encoded_location}?format=%l:+%c+%t+%h+%w\""
+      },
+      {
+        "id": "blocker:scripts/get_weather.py:111:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/get_weather.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "return {\"error\": \"Invalid response\", \"message\": \"Could not parse weather data\"}"
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 16,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 21,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 23,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 26,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 29,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 32,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 35,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 40,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 43,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 46,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 64,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 76,
+        "snippet": "```"
+      },
+      {
+        "id": "obfuscation:scripts/get_weather.py:1:heuristic-multiple-bracket-chains-6-jsfuck-obfus",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Multiple bracket chains (6) - JSFuck/obfuscation pattern",
+        "file": "scripts/get_weather.py",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[{}])[, [{}])[, [{}])["
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:scripts/get_weather.py:17:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The import only makes urllib.request available and does not perform a request by itself. Actual outbound network behavior is covered by the later urlopen findings."
+      },
+      {
+        "id": "network:scripts/get_weather.py:24:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.93,
+        "severity": "low",
+        "reason": "The code performs an outbound request to ip-api.com to infer location from the caller IP. This exposes IP-derived location data to a third-party service."
+      },
+      {
+        "id": "network:scripts/get_weather.py:68:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "low",
+        "reason": "The Request object prepares an outbound call to wttr.in using the requested or detected location. This is intended behavior, but it still shares location context with an external service."
+      },
+      {
+        "id": "network:scripts/get_weather.py:69:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "low",
+        "reason": "The urlopen call sends the weather request to wttr.in. The endpoint is part of the skill function, but it is real external network access."
+      },
+      {
+        "id": "network:scripts/get_weather.py:24:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "severity": "medium",
+        "reason": "The hardcoded ip-api.com endpoint uses plaintext HTTP for geolocation. That can expose the request path to network observers and allows response tampering in transit."
+      },
+      {
+        "id": "network:scripts/get_weather.py:62:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "severity": "low",
+        "reason": "The hardcoded wttr.in JSON endpoint is an intended weather provider. It is still an external dependency that receives the requested location."
+      },
+      {
+        "id": "network:scripts/get_weather.py:65:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "severity": "low",
+        "reason": "The hardcoded wttr.in text endpoint is an intended weather provider. It creates a real third-party network request with location context."
+      },
+      {
+        "id": "blocker:scripts/get_weather.py:111:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 111 returns an invalid JSON response error after parsing fails. It does not inspect host, network, account, or environment details."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line opens a Markdown bash code fence for a usage example. It is not Ruby backtick execution and does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line closes a Markdown code fence. There is no shell interpolation or backtick execution primitive here."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line opens a Markdown bash code fence for a documented command example. The detected backticks are formatting, not executable syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line closes the Markdown usage example. It does not invoke a command or evaluate Ruby backticks."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is another Markdown bash fence introducing example invocations of the local weather script. It is documentation, not command execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the closing Markdown fence for the location examples. No dynamic command execution is present on this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line opens a Markdown bash fence for JSON-output examples. It is fenced documentation text, not Ruby shell evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line closes the Markdown command example. The backticks are formatting characters only."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line opens a Markdown block showing sample text output. It is not a shell command or executable code path."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line closes the sample output block. It contains no command execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line opens a Markdown JSON sample block. It is example output, not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line closes the JSON sample block. The content is documentation and has no execution semantics."
+      },
+      {
+        "id": "obfuscation:scripts/get_weather.py:1:heuristic-multiple-bracket-chains-6-jsfuck-obfus",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The actual first line is a normal Python shebang. There are no bracket-chain obfuscation constructs or JSFuck-style payloads in the inspected source."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Automatic IP Geolocation Privacy Exposure",
+        "description": "When no location is provided, the script contacts ip-api.com to infer location from the caller IP before weather lookup. This behavior is disclosed, but it lacks an explicit consent step before sharing approximate location with a third-party service.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 21,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 75
+          }
+        ],
+        "confidence": 0.88,
+        "confidence_reasoning": "The code path calls ip-api.com automatically when location is absent, and the documentation states that IP-based location detection is used. The risk is privacy exposure rather than hidden malware."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "with urllib.request.urlopen(\"http://ip-api.com/json/\", timeout=10) as response:",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 24,
+            "line_end": 24
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.95,
+        "confidence_reasoning": "The hardcoded ip-api.com endpoint uses plaintext HTTP for geolocation. That can expose the request path to network observers and allows response tampering in transit."
+      },
+      {
+        "title": "Automatic IP Geolocation Privacy Exposure",
+        "description": "When no location is provided, the script contacts ip-api.com to infer location from the caller IP before weather lookup. This behavior is disclosed, but it lacks an explicit consent step before sharing approximate location with a third-party service.",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 21,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 75
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The code path calls ip-api.com automatically when location is absent, and the documentation states that IP-based location detection is used. The risk is privacy exposure rather than hidden malware."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(\"http://ip-api.com/json/\", timeout=10) as response:",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 24,
+            "line_end": 24
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.93,
+        "confidence_reasoning": "The code performs an outbound request to ip-api.com to infer location from the caller IP. This exposes IP-derived location data to a third-party service."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "req = urllib.request.Request(url, headers={\"User-Agent\": \"curl/7.68.0\"})",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 68,
+            "line_end": 68
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.84,
+        "confidence_reasoning": "The Request object prepares an outbound call to wttr.in using the requested or detected location. This is intended behavior, but it still shares location context with an external service."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(req, timeout=15) as response:",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 69,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.86,
+        "confidence_reasoning": "The urlopen call sends the weather request to wttr.in. The endpoint is part of the skill function, but it is real external network access."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "url = f\"https://wttr.in/{encoded_location}?format=j1\"",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The hardcoded wttr.in JSON endpoint is an intended weather provider. It is still an external dependency that receives the requested location."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "url = f\"https://wttr.in/{encoded_location}?format=%l:+%c+%t+%h+%w\"",
+        "locations": [
+          {
+            "file": "scripts/get_weather.py",
+            "line_start": 65,
+            "line_end": 65
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The hardcoded wttr.in text endpoint is an intended weather provider. It creates a real third-party network request with location context."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 234,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T10:02:25.690Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Check Current Weather by Location",
+    "value_statement": "Users need quick current weather without configuring an API key. This skill runs a Python helper that detects location or accepts a city.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "current location weather",
+      "weather skill",
+      "IP geolocation weather",
+      "wttr.in",
+      "Python weather script",
+      "AI assistant weather",
+      "local weather lookup"
+    ],
+    "actual_capabilities": [
+      "Fetches current weather from wttr.in for a specified city or region.",
+      "Detects an approximate location from the caller IP when no location is provided.",
+      "Returns concise text output for interactive weather questions.",
+      "Returns structured weather details for programmatic assistant workflows.",
+      "Reports temperature, feels-like temperature, humidity, wind, UV index, visibility, pressure, and cloud cover when JSON output is used.",
+      "Handles HTTP, network, and JSON parsing errors with readable error messages."
+    ],
+    "limitations": [
+      "Requires network access to ip-api.com and wttr.in.",
+      "IP geolocation is approximate and may reflect a VPN, proxy, or service provider location.",
+      "Does not provide authoritative alerts or emergency weather warnings.",
+      "Does not cache results or support offline weather data."
+    ],
+    "use_cases": [
+      {
+        "title": "Plan a Daily Commute",
+        "description": "Check current conditions before deciding on clothing, timing, or umbrella needs.",
+        "target_user": "General users"
+      },
+      {
+        "title": "Check Travel Conditions",
+        "description": "Look up current weather in a destination city before leaving or packing.",
+        "target_user": "Travelers"
+      },
+      {
+        "title": "Add Weather Context to Assistant Tasks",
+        "description": "Use text or structured output when an assistant needs weather context for a workflow.",
+        "target_user": "Developers and automation users"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Current Weather",
+        "scenario": "Beginner request for local conditions.",
+        "prompt": "Use current-location-weather to check the weather where I am now."
+      },
+      {
+        "title": "Specific City Weather",
+        "scenario": "User provides a location for better accuracy.",
+        "prompt": "Check the current weather in Tokyo, Japan, and summarize the temperature, condition, humidity, and wind."
+      },
+      {
+        "title": "Structured Weather Summary",
+        "scenario": "Intermediate request that needs detailed fields.",
+        "prompt": "Get current weather for London with structured output, then summarize temperature, feels-like temperature, humidity, wind, and UV index."
+      },
+      {
+        "title": "Compare Destination Conditions",
+        "scenario": "Advanced workflow using several weather checks.",
+        "prompt": "Check current weather for New York, Berlin, and Seoul, then give a concise packing recommendation for each city."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "What is the weather where I am?",
+        "output": "The assistant returns the detected city and a short current-conditions summary with temperature, humidity, wind, and condition."
+      },
+      {
+        "input": "Check Paris weather and include details for planning a walk.",
+        "output": "The assistant reports current temperature, feels-like temperature, wind, humidity, and a practical note about outdoor comfort."
+      },
+      {
+        "input": "Should I bring an umbrella in Seattle right now?",
+        "output": "The assistant checks current conditions and gives a brief recommendation based on the reported weather."
+      }
+    ],
+    "best_practices": [
+      "Use a specific city when privacy or accuracy matters.",
+      "State whether you want concise text or structured detail before the weather check.",
+      "Verify severe weather, travel, or safety decisions with an official weather source."
+    ],
+    "anti_patterns": [
+      "Do not use auto-detection when you do not want to contact a geolocation service.",
+      "Do not treat current conditions as a long-range forecast.",
+      "Do not rely on this skill for emergency weather alerts or safety-critical decisions."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill need an API key?",
+        "answer": "No. It uses public services that do not require an API key."
+      },
+      {
+        "question": "How does it find my current location?",
+        "answer": "It can contact ip-api.com to estimate location from the caller IP address."
+      },
+      {
+        "question": "Can I avoid IP-based location detection?",
+        "answer": "Yes. Provide a city or region in the request to use that location instead."
+      },
+      {
+        "question": "What weather source does it use?",
+        "answer": "It requests current weather data from wttr.in."
+      },
+      {
+        "question": "Can it return detailed weather fields?",
+        "answer": "Yes. Structured output can include temperature, humidity, wind, UV index, visibility, pressure, and cloud cover."
+      },
+      {
+        "question": "Is it suitable for emergency weather alerts?",
+        "answer": "No. Use an official weather service for warnings, emergency alerts, and safety decisions."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "get_weather.py",
+          "type": "file",
+          "path": "scripts/get_weather.py",
+          "lines": 157
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 77
+    }
+  ]
+}

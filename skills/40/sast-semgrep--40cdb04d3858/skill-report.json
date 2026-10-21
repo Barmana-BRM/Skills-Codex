@@ -1,0 +1,2586 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T06:41:06.811Z",
+    "slug": "agentsecops-sast-semgrep",
+    "source_url": "https://github.com/AgentSecOps/SecOpsAgentKit/tree/main/skills/appsec/sast-semgrep",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "40cdb04d3858fe0f3b3ded6cda2bd802cae34fd45c3d1e48e12f66a17e2010c1",
+    "tree_hash": "fd309bcf76f6e336acbc173e5a41a15bad654590d02dc9bd3dfea58dc84e46f1",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "sast-semgrep",
+    "description": "Guide Semgrep SAST scans, custom security rules, CI integration, and OWASP/CWE-aligned remediation across supported languages.",
+    "summary": "Apply Semgrep workflows and security guidance to find, classify, and remediate source-code vulnerabilities.",
+    "icon": "📦",
+    "version": "0.1.0",
+    "author": "AgentSecOps",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "semgrep",
+      "sast",
+      "secure-code-review",
+      "owasp",
+      "cwe"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "env_access",
+      "filesystem",
+      "scripts"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "All 109 static findings are false positives from documentation, detection rules, or fixed CI commands; none execute as part of the skill. The audit found flawed SSRF and path-containment guidance, plus unpinned CI dependencies that create supply-chain exposure.",
+    "remediation": [
+      {
+        "issue": "The SSRF example catches its own private-IP rejection and then sends the request.",
+        "suggestion": "Reject resolved private, loopback, link-local, and reserved addresses outside the parsing handler. Revalidate every redirect before sending a request.",
+        "severity": "high"
+      },
+      {
+        "issue": "The path traversal example uses a lexical string-prefix test for containment.",
+        "suggestion": "Use Path.relative_to or compare path parents after resolution. Add tests for sibling directories that share the base name prefix.",
+        "severity": "high"
+      },
+      {
+        "issue": "CI templates rely on mutable action, image, package, and ruleset versions.",
+        "suggestion": "Pin actions and images by immutable digest, lock Python packages with hashes, and document a controlled update process.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "assets/ci_config_examples/github-actions.yml",
+            "line_start": 133,
+            "line_end": 133
+          },
+          {
+            "file": "assets/ci_config_examples/gitlab-ci.yml",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 159,
+            "line_end": 159
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 156,
+            "line_end": 156
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 160,
+            "line_end": 160
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 143,
+            "line_end": 143
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 135,
+            "line_end": 135
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 156,
+            "line_end": 163
+          },
+          {
+            "file": "references/rule_library.md",
+            "line_start": 223,
+            "line_end": 223
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 112,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 119
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 119,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 124
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 137
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 137,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 146,
+            "line_end": 150
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 150,
+            "line_end": 154
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 154,
+            "line_end": 158
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 158,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 168
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 168,
+            "line_end": 173
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 204
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 204,
+            "line_end": 213
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 213,
+            "line_end": 220
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 220,
+            "line_end": 221
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 221,
+            "line_end": 222
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 222,
+            "line_end": 223
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 223,
+            "line_end": 228
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 229
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 75,
+            "line_end": 75
+          },
+          {
+            "file": "references/owasp_cwe_mapping.md",
+            "line_start": 261,
+            "line_end": 261
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 373,
+            "line_end": 373
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 404,
+            "line_end": 404
+          },
+          {
+            "file": "references/rule_library.md",
+            "line_start": 385,
+            "line_end": 385
+          },
+          {
+            "file": "references/rule_library.md",
+            "line_start": 327,
+            "line_end": 327
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 280,
+            "line_end": 280
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 281,
+            "line_end": 281
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 282,
+            "line_end": 282
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 283,
+            "line_end": 283
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 284,
+            "line_end": 284
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "assets/rule_template.yaml",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 298,
+            "line_end": 298
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 298,
+            "line_end": 298
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "assets/semgrep_config.yaml",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "assets/semgrep_config.yaml",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ]
+      },
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "references/owasp_cwe_mapping.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 223,
+            "line_end": 223
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 224,
+            "line_end": 224
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 76,
+            "line_end": 76
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 86,
+            "line_end": 86
+          },
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 156,
+            "line_end": 156
+          },
+          {
+            "file": "references/rule_library.md",
+            "line_start": 222,
+            "line_end": 222
+          },
+          {
+            "file": "references/rule_library.md",
+            "line_start": 223,
+            "line_end": 223
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:assets/ci_config_examples/github-actions.yml:133:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/ci_config_examples/github-actions.yml",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "FINDINGS=$(jq '.results | length' results.json)"
+      },
+      {
+        "id": "external_commands:assets/ci_config_examples/gitlab-ci.yml:40:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "assets/ci_config_examples/gitlab-ci.yml",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "CRITICAL=$(jq '[.results[] | select(.extra.severity == \"ERROR\")] | length' results.json)"
+      },
+      {
+        "id": "network:assets/rule_template.yaml:35:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule_template.yaml",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "- https://owasp.org/..."
+      },
+      {
+        "id": "network:assets/rule_template.yaml:36:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule_template.yaml",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "- https://cwe.mitre.org/data/definitions/XXX.html"
+      },
+      {
+        "id": "network:assets/rule_template.yaml:75:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/rule_template.yaml",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "- https://owasp.org/Top10/A03_2021-Injection/"
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "assets/rule_template.yaml",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "- Use environment variables: os.getenv('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "assets/rule_template.yaml",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "- Use environment variables: os.getenv('API_KEY')"
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "assets/rule_template.yaml",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "- Use environment variables: os.getenv('API_KEY')"
+      },
+      {
+        "id": "obfuscation:assets/rule_template.yaml:100:python-pickle-deserialization-rce-risk",
+        "category": "obfuscation",
+        "severity": "critical",
+        "pattern": "Python pickle deserialization (RCE risk)",
+        "file": "assets/rule_template.yaml",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "- pattern: pickle.loads($DATA)"
+      },
+      {
+        "id": "blocker:assets/rule_template.yaml:63:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "assets/rule_template.yaml",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "- Use parameterized queries: cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))"
+      },
+      {
+        "id": "filesystem:assets/semgrep_config.yaml:17:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/semgrep_config.yaml",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "- \"*/.venv/*\""
+      },
+      {
+        "id": "filesystem:assets/semgrep_config.yaml:21:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "assets/semgrep_config.yaml",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- \"*/.git/*\""
+      },
+      {
+        "id": "scripts:references/owasp_cwe_mapping.md:104:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "references/owasp_cwe_mapping.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "- Use of eval() or similar dynamic code execution"
+      },
+      {
+        "id": "network:references/owasp_cwe_mapping.md:261:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/owasp_cwe_mapping.md",
+        "line_start": 261,
+        "line_end": 261,
+        "snippet": "semgrep --config \"r/python.requests.security.audit.requests-http-request\""
+      },
+      {
+        "id": "blocker:references/owasp_cwe_mapping.md:70:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "references/owasp_cwe_mapping.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "- Weak encryption algorithms (DES, RC4)"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:223:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "references/remediation_guide.md",
+        "line_start": 223,
+        "line_end": 223,
+        "snippet": "const data = eval(userInput);"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:224:dynamic-function-constructor",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic function constructor",
+        "file": "references/remediation_guide.md",
+        "line_start": 224,
+        "line_end": 224,
+        "snippet": "const obj = Function(userInput)();"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:77:document-write-injection",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "document.write injection",
+        "file": "references/remediation_guide.md",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "document.write(userInput);"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:76:innerhtml-assignment-xss-risk",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "innerHTML assignment (XSS risk)",
+        "file": "references/remediation_guide.md",
+        "line_start": 76,
+        "line_end": 76,
+        "snippet": "element.innerHTML = userInput;"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:86:innerhtml-assignment-xss-risk",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "innerHTML assignment (XSS risk)",
+        "file": "references/remediation_guide.md",
+        "line_start": 86,
+        "line_end": 86,
+        "snippet": "element.innerHTML = escapeHtml(userInput);"
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:156:python-exec-function",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Python exec() function",
+        "file": "references/remediation_guide.md",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "exec(`ls ${userDir}`);"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:159:node-js-child-process-module",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Node.js child_process module",
+        "file": "references/remediation_guide.md",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "const { execFile } = require('child_process');"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:156:process-exec",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process exec",
+        "file": "references/remediation_guide.md",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "exec(`ls ${userDir}`);"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:160:execute-file",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Execute file",
+        "file": "references/remediation_guide.md",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "execFile('ls', [userDir], (error, stdout) => {"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:143:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "subprocess.run(['ping', '-c', '1', user_host],"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:150:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/remediation_guide.md",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "subprocess.run(['ping', '-c', '1', user_host])"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:136:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "references/remediation_guide.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "subprocess.call(f\"ls {user_directory}\", shell=True)"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:135:python-os-system",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python os.system",
+        "file": "references/remediation_guide.md",
+        "line_start": 135,
+        "line_end": 135,
+        "snippet": "os.system(f\"ping {user_host}\")"
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/remediation_guide.md",
+        "line_start": 156,
+        "line_end": 163,
+        "snippet": "exec(`ls ${userDir}`);"
+      },
+      {
+        "id": "network:references/remediation_guide.md:373:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 373,
+        "line_end": 373,
+        "snippet": "response = requests.get(url)"
+      },
+      {
+        "id": "network:references/remediation_guide.md:404:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/remediation_guide.md",
+        "line_start": 404,
+        "line_end": 404,
+        "snippet": "return requests.get(url, timeout=5)"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:298:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "references/remediation_guide.md",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "secret: process.env.SESSION_SECRET, // Strong random secret"
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:298:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "references/remediation_guide.md",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "secret: process.env.SESSION_SECRET, // Strong random secret"
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:206:python-pickle-deserialization-rce-risk",
+        "category": "obfuscation",
+        "severity": "critical",
+        "pattern": "Python pickle deserialization (RCE risk)",
+        "file": "references/remediation_guide.md",
+        "line_start": 206,
+        "line_end": 206,
+        "snippet": "data = pickle.loads(user_data)"
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:298:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/remediation_guide.md",
+        "line_start": 298,
+        "line_end": 298,
+        "snippet": "secret: process.env.SESSION_SECRET, // Strong random secret"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:244:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "references/remediation_guide.md",
+        "line_start": 244,
+        "line_end": 244,
+        "snippet": "password_hash = hashlib.md5(password.encode()).hexdigest()"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:269:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "references/remediation_guide.md",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "from Crypto.Cipher import DES"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:270:weak-cryptographic-algorithm",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Weak cryptographic algorithm",
+        "file": "references/remediation_guide.md",
+        "line_start": 270,
+        "line_end": 270,
+        "snippet": "cipher = DES.new(key, DES.MODE_ECB)"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:23:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "query = f\"SELECT * FROM users WHERE id = {user_id}\""
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:30:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "query = \"SELECT * FROM users WHERE id = %s\""
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:65:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "String query = \"SELECT * FROM users WHERE id = ?\";"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:149:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "raise ValueError(\"Invalid hostname\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:197:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 197,
+        "line_end": 197,
+        "snippet": "return \"Invalid filename\""
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:389:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 389,
+        "line_end": 389,
+        "snippet": "raise ValueError(\"Invalid protocol\")"
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:398:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/remediation_guide.md",
+        "line_start": 398,
+        "line_end": 398,
+        "snippet": "ip = ipaddress.ip_address(parsed.hostname)"
+      },
+      {
+        "id": "scripts:references/rule_library.md:222:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "references/rule_library.md",
+        "line_start": 222,
+        "line_end": 222,
+        "snippet": "- pattern: eval($ARG)"
+      },
+      {
+        "id": "scripts:references/rule_library.md:223:python-exec-function",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Python exec() function",
+        "file": "references/rule_library.md",
+        "line_start": 223,
+        "line_end": 223,
+        "snippet": "- pattern: exec($ARG)"
+      },
+      {
+        "id": "external_commands:references/rule_library.md:223:process-exec",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process exec",
+        "file": "references/rule_library.md",
+        "line_start": 223,
+        "line_end": 223,
+        "snippet": "- pattern: exec($ARG)"
+      },
+      {
+        "id": "network:references/rule_library.md:385:http-client-library",
+        "category": "network",
+        "severity": "low",
+        "pattern": "HTTP client library",
+        "file": "references/rule_library.md",
+        "line_start": 385,
+        "line_end": 385,
+        "snippet": "def handle_request(...):"
+      },
+      {
+        "id": "network:references/rule_library.md:327:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/rule_library.md",
+        "line_start": 327,
+        "line_end": 327,
+        "snippet": "- https://example.com/docs"
+      },
+      {
+        "id": "blocker:references/rule_library.md:185:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/rule_library.md",
+        "line_start": 185,
+        "line_end": 186,
+        "snippet": "- id: custom-rule-id"
+      },
+      {
+        "id": "blocker:references/rule_library.md:347:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/rule_library.md",
+        "line_start": 347,
+        "line_end": 347,
+        "snippet": "cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")"
+      },
+      {
+        "id": "blocker:references/rule_library.md:350:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/rule_library.md",
+        "line_start": 350,
+        "line_end": 350,
+        "snippet": "cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 40,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 44,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 46,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 53,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 61,
+        "snippet": "2. Run `scripts/semgrep_scan.py` with appropriate rulesets"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 63,
+        "snippet": "2. Use `semgrep --diff` to scan only modified code"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 69,
+        "snippet": "4. Provide inline remediation guidance from `references/remediation_guide.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 72,
+        "snippet": "2. Create custom Semgrep rules in YAML format using `assets/rule_template.yaml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 76,
+        "snippet": "5. Document rules in `references/custom_rules.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 85,
+        "snippet": "1. Add Semgrep to CI/CD pipeline using `assets/ci_config_examples/`"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 96,
+        "snippet": "secrets or proprietary code patterns. Use `--max-lines-per-finding` to limit output."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 97,
+        "snippet": "- **Safe Defaults**: Use `--config=auto` for balanced detection. For security-critical"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 111,
+        "snippet": "applications, use `--config=\"p/security-audit\"` for comprehensive coverage."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 112,
+        "snippet": "- `scripts/semgrep_scan.py` - Full-featured scanning with OWASP/CWE mapping and reporting"
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 113,
+        "snippet": "- `scripts/baseline_scan.sh` - Quick baseline scan for CI/CD"
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 117,
+        "snippet": "- `scripts/diff_scan.sh` - Scan only changed files (for PRs)"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 118,
+        "snippet": "- `references/owasp_cwe_mapping.md` - OWASP Top 10 to CWE mapping with Semgrep rules"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 119,
+        "snippet": "- `references/remediation_guide.md` - Vulnerability remediation patterns by category"
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 119,
+        "line_end": 123,
+        "snippet": "- `references/rule_library.md` - Curated list of useful Semgrep rulesets"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 124,
+        "snippet": "- `assets/rule_template.yaml` - Template for creating custom Semgrep rules"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 125,
+        "snippet": "- `assets/ci_config_examples/` - CI/CD integration examples (GitHub Actions, GitLab CI)"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 131,
+        "snippet": "- `assets/semgrep_config.yaml` - Recommended Semgrep configuration"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 137,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 137,
+        "line_end": 141,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 146,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 146,
+        "line_end": 150,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 150,
+        "line_end": 154,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 154,
+        "line_end": 158,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 162,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 168,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 173,
+        "snippet": "- **GitHub Actions**: Use `semgrep/semgrep-action@v1` with SARIF upload"
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 204,
+        "snippet": "See `assets/ci_config_examples/` for ready-to-use configurations."
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 204,
+        "line_end": 213,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:213:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 213,
+        "line_end": 220,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 220,
+        "line_end": 221,
+        "snippet": "- Use `--exclude-rule` to disable noisy rules"
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 221,
+        "line_end": 222,
+        "snippet": "- Create `.semgrepignore` file to exclude false positive patterns"
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 222,
+        "line_end": 223,
+        "snippet": "- Tune rules using `--severity` filtering"
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 223,
+        "line_end": 228,
+        "snippet": "- Add `# nosemgrep` comments for confirmed false positives (with justification)"
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 228,
+        "line_end": 229,
+        "snippet": "- Use `--exclude` for vendor/generated code"
+      },
+      {
+        "id": "external_commands:SKILL.md:229:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 229,
+        "line_end": 230,
+        "snippet": "- Increase `--jobs` for parallel processing"
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 230,
+        "line_end": 231,
+        "snippet": "- Use targeted rulesets instead of `--config=auto`"
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 236,
+        "snippet": "- Run incremental scans with `--diff`"
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "- Use comprehensive rulesets: `p/security-audit` or `p/owasp-top-ten`"
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 237,
+        "line_end": 245,
+        "snippet": "- Consult `references/rule_library.md` for specialized rules"
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 245,
+        "line_end": 246,
+        "snippet": "See `references/rule_library.md` for guidance on writing effective Semgrep rules."
+      },
+      {
+        "id": "external_commands:SKILL.md:246:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 246,
+        "line_end": 249,
+        "snippet": "Use `assets/rule_template.yaml` as a starting point."
+      },
+      {
+        "id": "external_commands:SKILL.md:249:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 249,
+        "line_end": 262,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:262:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 262,
+        "line_end": 267,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- https://semgrep.dev/docs/"
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "- https://owasp.org/Top10/"
+      },
+      {
+        "id": "network:SKILL.md:23:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- https://cwe.mitre.org/"
+      },
+      {
+        "id": "network:SKILL.md:280:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 280,
+        "line_end": 280,
+        "snippet": "- [Semgrep Documentation](https://semgrep.dev/docs/)"
+      },
+      {
+        "id": "network:SKILL.md:281:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 281,
+        "line_end": 281,
+        "snippet": "- [Semgrep Rule Registry](https://semgrep.dev/explore)"
+      },
+      {
+        "id": "network:SKILL.md:282:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 282,
+        "line_end": 282,
+        "snippet": "- [OWASP Top 10 2021](https://owasp.org/Top10/)"
+      },
+      {
+        "id": "network:SKILL.md:283:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 283,
+        "line_end": 283,
+        "snippet": "- [CWE Top 25](https://cwe.mitre.org/top25/)"
+      },
+      {
+        "id": "network:SKILL.md:284:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 284,
+        "line_end": 284,
+        "snippet": "- [SANS Top 25](https://www.sans.org/top25-software-errors/)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:assets/ci_config_examples/github-actions.yml:133:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The fixed jq command reads a local Semgrep results file and captures only its result count. No untrusted value is evaluated as shell syntax."
+      },
+      {
+        "id": "external_commands:assets/ci_config_examples/gitlab-ci.yml:40:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The fixed jq filter reads a local Semgrep results file and returns an integer. The command substitution contains no user-controlled command text."
+      },
+      {
+        "id": "network:assets/rule_template.yaml:35:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This URL is reference metadata in a Semgrep rule template. The YAML does not issue a network request or transmit data."
+      },
+      {
+        "id": "network:assets/rule_template.yaml:36:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This URL is reference metadata in a Semgrep rule template. The YAML does not issue a network request or transmit data."
+      },
+      {
+        "id": "network:assets/rule_template.yaml:75:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This URL is reference metadata in a Semgrep rule template. The YAML does not issue a network request or transmit data."
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The getenv expression is remediation text recommending environment variables instead of hard-coded secrets. It neither reads an environment variable nor contains a credential."
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The getenv expression is remediation text recommending environment variables instead of hard-coded secrets. It neither reads an environment variable nor contains a credential."
+      },
+      {
+        "id": "env_access:assets/rule_template.yaml:85:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The getenv expression is remediation text recommending environment variables instead of hard-coded secrets. It neither reads an environment variable nor contains a credential."
+      },
+      {
+        "id": "obfuscation:assets/rule_template.yaml:100:python-pickle-deserialization-rce-risk",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "pickle.loads is Semgrep pattern syntax for detecting unsafe deserialization in scanned code. The template never imports or executes pickle."
+      },
+      {
+        "id": "blocker:assets/rule_template.yaml:63:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line is a parameterized-query remediation example inside a rule message. It performs neither system reconnaissance nor database access."
+      },
+      {
+        "id": "filesystem:assets/semgrep_config.yaml:17:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The hidden-directory path is an exclusion glob that prevents Semgrep from scanning that directory. It does not access hidden files."
+      },
+      {
+        "id": "filesystem:assets/semgrep_config.yaml:21:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The hidden-directory path is an exclusion glob that prevents Semgrep from scanning that directory. It does not access hidden files."
+      },
+      {
+        "id": "scripts:references/owasp_cwe_mapping.md:104:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The guide names eval as a vulnerability pattern that security rules should detect. It contains no executable eval call."
+      },
+      {
+        "id": "network:references/owasp_cwe_mapping.md:261:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a Semgrep CLI example selecting a requests-security rule. It does not import a Python HTTP client or make a network request itself."
+      },
+      {
+        "id": "blocker:references/owasp_cwe_mapping.md:70:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "DES and RC4 are listed as weak algorithms to detect. The reference does not implement or recommend either algorithm."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:223:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:224:dynamic-function-constructor",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:77:document-write-injection",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:76:innerhtml-assignment-xss-risk",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:86:innerhtml-assignment-xss-risk",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/remediation_guide.md:156:python-exec-function",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:159:node-js-child-process-module",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:156:process-exec",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:160:execute-file",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:143:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:150:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:136:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:135:python-os-system",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "external_commands:references/remediation_guide.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "network:references/remediation_guide.md:373:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "network:references/remediation_guide.md:404:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:298:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "env_access:references/remediation_guide.md:298:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "obfuscation:references/remediation_guide.md:206:python-pickle-deserialization-rce-risk",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "sensitive:references/remediation_guide.md:298:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:244:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:269:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:270:weak-cryptographic-algorithm",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:23:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable example of vulnerable code in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:30:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:65:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:149:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:197:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:389:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "blocker:references/remediation_guide.md:398:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is a non-executable remediation example in a security guide. It is presented for review and is not invoked by the skill."
+      },
+      {
+        "id": "scripts:references/rule_library.md:222:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "eval and exec appear as Semgrep YAML patterns that detect dangerous calls in target code. They are not executable calls in this skill."
+      },
+      {
+        "id": "scripts:references/rule_library.md:223:python-exec-function",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "eval and exec appear as Semgrep YAML patterns that detect dangerous calls in target code. They are not executable calls in this skill."
+      },
+      {
+        "id": "external_commands:references/rule_library.md:223:process-exec",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "eval and exec appear as Semgrep YAML patterns that detect dangerous calls in target code. They are not executable calls in this skill."
+      },
+      {
+        "id": "network:references/rule_library.md:385:http-client-library",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The function signature is pattern-inside syntax in a Semgrep rule example. It neither imports an HTTP library nor performs network access."
+      },
+      {
+        "id": "network:references/rule_library.md:327:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The example.com URL is placeholder metadata for a custom rule reference. It is not contacted by the skill."
+      },
+      {
+        "id": "blocker:references/rule_library.md:185:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The matched id is a placeholder identifier in a documented Semgrep rule structure. It is unrelated to system reconnaissance."
+      },
+      {
+        "id": "blocker:references/rule_library.md:347:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This SQL statement is a documented Semgrep rule test fixture, with vulnerable and safe cases labeled for test matching. The skill does not execute it."
+      },
+      {
+        "id": "blocker:references/rule_library.md:350:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This SQL statement is a documented Semgrep rule test fixture, with vulnerable and safe cases labeled for test matching. The skill does not execute it."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:213:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:229:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:246:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:249:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:262:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown code delimiters around filenames, options, or fenced examples. They are not Ruby or shell command-substitution operators."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:23:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:280:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:281:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:282:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:283:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      },
+      {
+        "id": "network:SKILL.md:284:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is a visible documentation link to Semgrep or a recognized security standards organization. Markdown does not initiate a network request."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "SSRF Remediation Fails to Block Private IPs",
+        "description": "The safe_fetch example catches and ignores the exception raised for a private IP. It also omits hostname resolution and redirect validation.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 395,
+            "line_end": 404
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The private-address branch raises ValueError inside a try block whose ValueError handler continues execution, so the request still occurs."
+      },
+      {
+        "title": "Path Remediation Uses an Unsafe Prefix Check",
+        "description": "The safe_join example compares resolved paths with string startswith. A sibling directory sharing the base prefix can pass and escape the intended directory.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 181,
+            "line_end": 190
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "Resolved path strings are compared lexically instead of checking path ancestry, which permits prefix-confusion bypasses."
+      },
+      {
+        "title": "CI Examples Use Mutable Dependencies",
+        "description": "CI examples use mutable action tags, latest container tags, and unpinned pip installs. Upstream changes can alter code executed in privileged pipelines.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "assets/ci_config_examples/github-actions.yml",
+            "line_start": 35,
+            "line_end": 39
+          },
+          {
+            "file": "assets/ci_config_examples/github-actions.yml",
+            "line_start": 88,
+            "line_end": 89
+          },
+          {
+            "file": "assets/ci_config_examples/gitlab-ci.yml",
+            "line_start": 9,
+            "line_end": 12
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The examples visibly use action major tags, a latest image tag, and pip installation without an exact version or integrity hash."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "SSRF Remediation Fails to Block Private IPs",
+        "description": "The safe_fetch example catches and ignores the exception raised for a private IP. It also omits hostname resolution and redirect validation.",
+        "locations": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 395,
+            "line_end": 404
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The private-address branch raises ValueError inside a try block whose ValueError handler continues execution, so the request still occurs."
+      },
+      {
+        "title": "Path Remediation Uses an Unsafe Prefix Check",
+        "description": "The safe_join example compares resolved paths with string startswith. A sibling directory sharing the base prefix can pass and escape the intended directory.",
+        "locations": [
+          {
+            "file": "references/remediation_guide.md",
+            "line_start": 181,
+            "line_end": 190
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "Resolved path strings are compared lexically instead of checking path ancestry, which permits prefix-confusion bypasses."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "CI Examples Use Mutable Dependencies",
+        "description": "CI examples use mutable action tags, latest container tags, and unpinned pip installs. Upstream changes can alter code executed in privileged pipelines.",
+        "locations": [
+          {
+            "file": "assets/ci_config_examples/github-actions.yml",
+            "line_start": 35,
+            "line_end": 39
+          },
+          {
+            "file": "assets/ci_config_examples/github-actions.yml",
+            "line_start": 88,
+            "line_end": 89
+          },
+          {
+            "file": "assets/ci_config_examples/gitlab-ci.yml",
+            "line_start": 9,
+            "line_end": 12
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The examples visibly use action major tags, a latest image tag, and pip installation without an exact version or integrity hash."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 9,
+    "total_lines": 2126,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T06:41:06.811Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Audit Code with Semgrep",
+    "value_statement": "Security flaws can remain hidden across large, multilingual repositories. This skill guides focused Semgrep scans, triage, custom rules, CI gates, and standards-aligned remediation.",
+    "seo_keywords": [
+      "Semgrep SAST",
+      "static application security testing",
+      "secure code review",
+      "OWASP Top 10",
+      "CWE mapping",
+      "CI security scanning",
+      "custom Semgrep rules",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Provides Semgrep commands for baseline, differential, and targeted security scans.",
+      "Maps common findings to OWASP Top 10 and CWE categories.",
+      "Supplies GitHub Actions, GitLab CI, and Jenkins integration examples.",
+      "Provides a YAML template for custom Semgrep security rules.",
+      "Explains remediation patterns for injection, XSS, deserialization, cryptography, SSRF, and XXE."
+    ],
+    "limitations": [
+      "The documented scanning scripts are not included in the packaged files.",
+      "It does not perform dynamic testing or runtime exploitation validation.",
+      "It does not replace dedicated dependency or secret scanning.",
+      "Results depend on selected rulesets, language support, and local configuration."
+    ],
+    "use_cases": [
+      {
+        "title": "Review a pull request",
+        "description": "Scan changed code, validate findings in context, and identify verified issues that should block merging.",
+        "target_user": "Application security engineer"
+      },
+      {
+        "title": "Add a CI security gate",
+        "description": "Adapt a pipeline example to publish findings, preserve useful artifacts, and enforce justified severity thresholds.",
+        "target_user": "DevOps engineer"
+      },
+      {
+        "title": "Create organization rules",
+        "description": "Build and test custom Semgrep rules for unsafe patterns specific to an application or engineering standard.",
+        "target_user": "Security-focused developer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a baseline scan",
+        "prompt": "Identify this repository's languages. Run a Semgrep baseline scan, then summarize high-confidence findings by severity, file, CWE, and recommended fix.",
+        "scenario": "A beginner needs an initial security assessment."
+      },
+      {
+        "title": "Review changed code",
+        "prompt": "Scan changes against [base branch] with Semgrep. Separate new findings from existing debt and explain which findings should block the pull request.",
+        "scenario": "A reviewer needs focused pull request triage."
+      },
+      {
+        "title": "Create a custom rule",
+        "prompt": "Create and test a Semgrep rule for [unsafe pattern] in [language]. Include positive and negative fixtures, metadata, and false-positive controls.",
+        "scenario": "A team needs detection for an organization-specific pattern."
+      },
+      {
+        "title": "Design a CI security gate",
+        "prompt": "Design a Semgrep CI gate for [platform]. Pin dependencies, scan changed code, publish SARIF, protect secrets, and define justified failure thresholds.",
+        "scenario": "A mature team needs a controlled enforcement workflow."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review this Python service for SQL injection.",
+        "output": [
+          "High: User-controlled data reaches a formatted SQL query in the account lookup.",
+          "CWE-89 and OWASP A03 apply.",
+          "Use a parameterized query and add a regression test."
+        ]
+      },
+      {
+        "input": "Add Semgrep to this pull request workflow.",
+        "output": [
+          "Workflow plan: scan changed files, publish SARIF, and block verified high-severity findings.",
+          "Dependencies are pinned to immutable versions, and scan artifacts exclude sensitive source excerpts.",
+          "Rollout starts in audit mode before enforcement."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Review every finding in context before blocking a change.",
+      "Pin CI actions, container images, packages, and rulesets to trusted immutable versions.",
+      "Test custom rules with vulnerable and safe fixtures before deployment."
+    ],
+    "anti_patterns": [
+      "Do not treat every Semgrep match as a confirmed vulnerability.",
+      "Do not expose source excerpts, secrets, or unrestricted artifacts in shared reports.",
+      "Do not suppress findings without documented technical justification and an expiration review."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill scan?",
+        "answer": "It guides Semgrep analysis of supported source languages, infrastructure files, and selected security patterns."
+      },
+      {
+        "question": "Does it include an executable scanner?",
+        "answer": "No. The package contains guidance and configuration examples, while several documented scripts are absent."
+      },
+      {
+        "question": "Can it find vulnerable dependencies?",
+        "answer": "No. Use a dedicated software composition analysis tool for dependency vulnerabilities and license risk."
+      },
+      {
+        "question": "Can I use the CI examples directly?",
+        "answer": "Review and pin every dependency first. Adapt permissions, artifacts, rulesets, and failure thresholds to your repository."
+      },
+      {
+        "question": "Does a clean scan prove the code is secure?",
+        "answer": "No. Semgrep coverage depends on rules and language support, so combine it with testing and expert review."
+      },
+      {
+        "question": "How should sensitive findings be handled?",
+        "answer": "Restrict report access, minimize source excerpts, remove secrets, and retain artifacts only for the required period."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "ci_config_examples",
+          "type": "dir",
+          "path": "assets/ci_config_examples",
+          "children": [
+            {
+              "name": "github-actions.yml",
+              "type": "file",
+              "path": "assets/ci_config_examples/github-actions.yml",
+              "lines": 142
+            },
+            {
+              "name": "gitlab-ci.yml",
+              "type": "file",
+              "path": "assets/ci_config_examples/gitlab-ci.yml",
+              "lines": 107
+            },
+            {
+              "name": "jenkins.groovy",
+              "type": "file",
+              "path": "assets/ci_config_examples/jenkins.groovy",
+              "lines": 191
+            }
+          ]
+        },
+        {
+          "name": "rule_template.yaml",
+          "type": "file",
+          "path": "assets/rule_template.yaml",
+          "lines": 121
+        },
+        {
+          "name": "semgrep_config.yaml",
+          "type": "file",
+          "path": "assets/semgrep_config.yaml",
+          "lines": 81
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "owasp_cwe_mapping.md",
+          "type": "file",
+          "path": "references/owasp_cwe_mapping.md",
+          "lines": 301
+        },
+        {
+          "name": "remediation_guide.md",
+          "type": "file",
+          "path": "references/remediation_guide.md",
+          "lines": 472
+        },
+        {
+          "name": "rule_library.md",
+          "type": "file",
+          "path": "references/rule_library.md",
+          "lines": 426
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 285
+    }
+  ]
+}

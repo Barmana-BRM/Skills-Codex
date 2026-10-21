@@ -1,0 +1,915 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T18:17:30.521Z",
+    "slug": "inference-sh-9-image-to-video",
+    "source_url": "https://github.com/inference-sh-9/skills/tree/main/skills/image-to-video/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "b91199a68639d2f3d67b3895eeded3ee83e3af29b447e4dd23f6f408c9a1ee19",
+    "tree_hash": "c2c97aac64165cfe840ac3ce32052385b5fa43c51050692553d0b51ba433eeff",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "image-to-video",
+    "description": "Guide for turning still images into videos with inference.sh models, including model choice, motion prompts, camera movement, and workflow tips.",
+    "summary": "Create image-to-video prompts and choose suitable models for realistic or stylized motion.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "inference-sh-9",
+    "license": "MIT",
+    "tags": [
+      "image-to-video",
+      "ai-video",
+      "motion-prompting",
+      "video-generation",
+      "inference-sh"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The critical confirmed issue is the quick-start command that pipes https://cli.inference.sh directly into sh. Most medium backtick findings are Markdown formatting, model identifiers, or visible infsh examples without hidden execution. The related npx install examples add supply-chain risk, so safer installation guidance is needed before publication.",
+    "remediation": [
+      {
+        "issue": "Remote installer is piped directly into sh.",
+        "suggestion": "Replace the quick-start command with manual download, checksum verification, and an explicit shell invocation after review.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Related skills are installed through npx commands.",
+        "suggestion": "Link to reviewed marketplace pages or require users to inspect package sources before installing related skills.",
+        "severity": "medium"
+      },
+      {
+        "issue": "External CLI use sends media and prompts to network services.",
+        "suggestion": "State the required domains, authentication flow, and data shared with inference.sh before command examples.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 134
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 134,
+            "line_end": 149
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 165
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 210
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 215,
+            "line_end": 231
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 236
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 236,
+            "line_end": 238
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 28,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 30,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 36,
+        "snippet": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 37,
+        "snippet": "| **Wan 2.5 i2v** | `falai/wan-2-5-i2v` | Realistic motion, natural movement | Photorealistic, subtl"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 38,
+        "snippet": "| **Seedance 1.5 Pro** | `bytedance/seedance-1-5-pro` | Stylized, creative, animation-like | Artisti"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 39,
+        "snippet": "| **Seedance 1.0 Pro** | `bytedance/seedance-1-0-pro` | General purpose, good quality | Balanced |"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 40,
+        "snippet": "| **Fabric 1.0** | `falai/fabric-1-0` | Cloth, fabric, liquid, flowing materials | Physics-based flo"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 85,
+        "snippet": "| **Grok Imagine Video** | `xai/grok-imagine-video` | General animation, text-guided | Versatile |"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 94,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 98,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 100,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 104,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 134,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 149,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 171,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 200,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 210,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 215,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 215,
+        "line_end": 231,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 236,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 238,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "Convert still images to animated videos via [inference.sh](https://inference.sh) CLI."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh && infsh login"
+      },
+      {
+        "id": "network:SKILL.md:30:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture"
+      },
+      {
+        "id": "blocker:SKILL.md:14:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh && infsh login"
+      },
+      {
+        "id": "blocker:SKILL.md:77:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "| Liquid | \"coffee steam rising\", \"paint dripping\", \"water pouring\" |"
+      },
+      {
+        "id": "blocker:SKILL.md:143:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "| 10+ seconds | Quality degrades | Avoid unless stitching shorter clips |"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "high",
+        "reason": "The fenced shell block includes a remote install command piped into sh and executable CLI calls. Although it is Markdown, the skill presents it as a quick-start command for users or agents to run."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This range is a Markdown code fence close and explanatory install text, not Ruby backtick execution. It does not itself construct or execute a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "The content describes the installer and checksum locations in prose. The backtick-marked host name is documentation, not shell evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is a Markdown table row with an inline model identifier. No command execution or dynamic shell syntax appears in the cited line."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is a Markdown table row with an inline model identifier. The backticks format an app ID and are not shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is a Markdown table row with an inline model identifier. No executable command or user-controlled shell input is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is a Markdown table row with an inline model identifier. The syntax is documentation formatting, not Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The cited range contains model-selection and motion-guidance prose. It does not contain a command execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This fenced block contains prompt-writing examples with check and cross marks. It is not a shell block and does not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This range is Markdown around a prompt-structure example. It contains no executable shell command or Ruby backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The block shows a natural-language prompt template. Square-bracket placeholders are not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This range is Markdown structure and headings before examples. It does not execute code or construct a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "The range contains documented infsh app run examples with fixed command names and structured inputs. They are intended CLI usage, not hidden execution or command injection."
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This range closes a Markdown code block and lists duration guidance. It does not include executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.74,
+        "reason": "The commands are visible infsh examples for generating and merging clips. They are not dynamically built from untrusted input and do not show shell metacharacter injection."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This range is a code-fence close and section heading. It has no command execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.74,
+        "reason": "The block is an explicit inference.sh workflow using documented app IDs. It sends media to external services by design, but it is not hidden shell execution or injection."
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This range closes a Markdown code block and explains cinemagraph steps. It does not contain a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "The command is a visible infsh example for a specific image-to-video operation. It is legitimate tool usage with no dynamic shell construction."
+      },
+      {
+        "id": "external_commands:SKILL.md:215:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This range contains a closing fence, a mistakes table, and a related-skills heading. No executable command is present in the cited content."
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "medium",
+        "reason": "The related-skills block recommends npx commands that can fetch and install external packages or skills. This creates supply-chain risk if users run it without review."
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.72,
+        "reason": "The range mainly closes a Markdown code block and includes a simple infsh app list command. It is visible documentation with no hidden execution or shell injection."
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The URL is a normal documentation link to the service used by the skill. It does not trigger a network request by itself."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "severity": "critical",
+        "reason": "The hardcoded URL is fetched by curl and piped directly into sh. A compromised server, DNS path, or script would execute code on the user machine."
+      },
+      {
+        "id": "network:SKILL.md:30:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "severity": "low",
+        "reason": "The install note documents remote installer and checksum URLs that users must trust. This is an explicit network dependency, though the text also mentions checksum verification."
+      },
+      {
+        "id": "blocker:SKILL.md:14:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "critical",
+        "reason": "The command curls a remote script and pipes it directly to sh before review. This is a classic remote code execution installation pattern."
+      },
+      {
+        "id": "blocker:SKILL.md:77:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The phrase appears in a prompt-example table about liquid motion. It is not probing the host system or collecting environment information."
+      },
+      {
+        "id": "blocker:SKILL.md:143:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited text is duration guidance for video clips. It has no relationship to host reconnaissance or system inspection."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.96,
+        "confidence_reasoning": "The hardcoded URL is fetched by curl and piped directly into sh. A compromised server, DNS path, or script would execute code on the user machine."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command curls a remote script and pipes it directly to sh before review. This is a classic remote code execution installation pattern."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 28
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The fenced shell block includes a remote install command piped into sh and executable CLI calls. Although it is Markdown, the skill presents it as a quick-start command for users or agents to run."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 236
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The related-skills block recommends npx commands that can fetch and install external packages or skills. This creates supply-chain risk if users run it without review."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.68,
+        "confidence_reasoning": "The install note documents remote installer and checksum URLs that users must trust. This is an explicit network dependency, though the text also mentions checksum verification."
+      }
+    ],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command curls a remote script and pipes it directly to sh before review. This is a classic remote code execution installation pattern."
+      }
+    ],
+    "files_scanned": 1,
+    "total_lines": 239,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T18:17:30.521Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Animate Still Images Into Video",
+    "value_statement": "Static images often need motion for social, product, or presentation use. This skill guides model choice, motion prompts, and workflow steps for image-to-video generation.",
+    "seo_keywords": [
+      "Claude image to video",
+      "Codex image animation",
+      "Claude Code video generation",
+      "image-to-video prompting",
+      "AI video generation",
+      "inference.sh video",
+      "Wan 2.5 i2v",
+      "Seedance video prompts",
+      "cinemagraph prompts",
+      "product animation workflow"
+    ],
+    "actual_capabilities": [
+      "Compares image-to-video models for realistic, stylized, fabric, and general animation needs.",
+      "Provides prompt patterns for camera movement, subject motion, atmosphere, and pacing.",
+      "Gives scenario prompts for landscapes, portraits, products, fabric scenes, and architecture.",
+      "Explains clip duration choices and when to stitch shorter outputs.",
+      "Shows a still-image, animation, upscale, audio, and merge workflow using inference.sh.",
+      "Lists common mistakes that cause artifacts, distortion, or chaotic motion."
+    ],
+    "limitations": [
+      "Requires the inference.sh CLI and access to the referenced video models.",
+      "Provides guidance, not a bundled video generation engine.",
+      "Quality depends on source image resolution, model behavior, and prompt clarity.",
+      "The quick-start install command includes a remote shell pipeline that needs safer replacement."
+    ],
+    "use_cases": [
+      {
+        "title": "Social Video Clips",
+        "description": "Turn campaign stills into short clips with subtle motion and clear camera direction.",
+        "target_user": "Social media manager"
+      },
+      {
+        "title": "Product Motion Tests",
+        "description": "Choose a model and prompt style for product, fabric, or reflective object animation.",
+        "target_user": "Product marketer"
+      },
+      {
+        "title": "Creative Video Prototypes",
+        "description": "Plan image generation, animation, upscaling, audio, and merge steps for a polished short video.",
+        "target_user": "Creative producer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Beginner Landscape Animation",
+        "scenario": "Simple still image animation",
+        "prompt": "Help me animate this landscape image. Recommend a model and write a short prompt with subtle water, cloud, and light motion."
+      },
+      {
+        "title": "Choose The Right Model",
+        "scenario": "Model selection",
+        "prompt": "Compare the available image-to-video models for my image type: [describe image]. Choose one model and explain the motion style."
+      },
+      {
+        "title": "Product Motion Prompt",
+        "scenario": "Product video creation",
+        "prompt": "Create an image-to-video prompt for a product shot. Include one camera move, subtle reflections, and a smooth premium pace."
+      },
+      {
+        "title": "Full Production Workflow",
+        "scenario": "Advanced video pipeline planning",
+        "prompt": "Design a complete still-to-video workflow for [goal]. Include source image preparation, animation, upscaling, audio, stitching, and quality checks."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A fashion product image with flowing fabric.",
+        "output": "Recommended model: Fabric 1.0. Motion should emphasize gentle cloth ripples, restrained camera movement, and short clip length."
+      },
+      {
+        "input": "A portrait that needs a subtle animated social clip.",
+        "output": [
+          "Use Wan 2.5 i2v for face fidelity.",
+          "Prompt for breathing, blinking, soft hair movement, and stable camera framing.",
+          "Keep the clip near four seconds."
+        ]
+      },
+      {
+        "input": "A landscape image that should become a looping background.",
+        "output": "Use subtle water, cloud, and light movement. Keep camera motion slow and limit duration for a cleaner loop."
+      }
+    ],
+    "best_practices": [
+      "Request subtle motion before dramatic action.",
+      "Choose the model based on subject type and desired motion style.",
+      "Keep clips short, then stitch multiple clips when longer duration is needed."
+    ],
+    "anti_patterns": [
+      "Do not combine multiple conflicting camera directions in one prompt.",
+      "Do not ask for complex action scenes from a single still image.",
+      "Do not start from low-resolution source images when quality matters."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help create?",
+        "answer": "It helps turn still images into short videos using model selection and motion prompting guidance."
+      },
+      {
+        "question": "Does the skill generate video by itself?",
+        "answer": "No. It guides use of inference.sh models and CLI workflows for video generation."
+      },
+      {
+        "question": "Which model is best for realistic motion?",
+        "answer": "The guide recommends Wan 2.5 i2v for realistic motion and face fidelity."
+      },
+      {
+        "question": "Which model should I use for fabric or liquid motion?",
+        "answer": "The guide recommends Fabric 1.0 for cloth, fabric, liquid, and flowing material scenes."
+      },
+      {
+        "question": "How long should image-to-video clips be?",
+        "answer": "The guide recommends short clips, often two to five seconds, for higher quality results."
+      },
+      {
+        "question": "Are there security concerns?",
+        "answer": "Yes. The current quick start pipes a remote installer into sh and should be replaced with verified manual steps."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 239
+    }
+  ]
+}

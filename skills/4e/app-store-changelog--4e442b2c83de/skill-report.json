@@ -1,0 +1,502 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T11:57:47.194Z",
+    "slug": "dimillian-app-store-changelog",
+    "source_url": "https://github.com/Dimillian/Skills/tree/main/app-store-changelog",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "8ecc967afa8baa9b75238c4bb045a25a676b77ad6bc5174a01e8ca3b5cbb8d07",
+    "tree_hash": "e53fd0d1a6c3bc3e5f14abcaa38d51da6dfc9d903316265827627da8c4fbea06",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "app-store-changelog",
+    "description": "Generate clear App Store release notes from git history since the last tag or a specified ref.",
+    "summary": "Generates App Store release notes from user-visible git changes.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Dimillian",
+    "license": "MIT",
+    "tags": [
+      "app-store",
+      "release-notes",
+      "changelog",
+      "git",
+      "mobile-apps"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "documentation"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Static command and reconnaissance matches were false positives in context: markdown inline code, local git metadata collection, and guidance to avoid internal details. I found one implementation weakness: the shell helper expands user-supplied git ranges without quoting, which can alter the git log query. No prompt injection, network access, or data exfiltration intent was found.",
+    "remediation": [
+      {
+        "issue": "Unquoted git range expansion in the helper script",
+        "suggestion": "Quote the computed range in both git log calls and validate user-provided refs with git rev-parse before use.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/release-notes-guidelines.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/release-notes-guidelines.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- Avoid internal codenames, ticket IDs, or file paths."
+      },
+      {
+        "id": "blocker:references/release-notes-guidelines.md:21:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/release-notes-guidelines.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- Avoid versions of \"API\", \"refactor\", \"nil\", \"crash log\", or \"dependency\"."
+      },
+      {
+        "id": "external_commands:scripts/collect_release_changes.sh:9:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/collect_release_changes.sh",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "since_ref=\"$(git describe --tags --abbrev=0)\""
+      },
+      {
+        "id": "external_commands:scripts/collect_release_changes.sh:20:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/collect_release_changes.sh",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "repo_root=\"$(git rev-parse --show-toplevel)\""
+      },
+      {
+        "id": "filesystem:scripts/collect_release_changes.sh:8:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/collect_release_changes.sh",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "if git describe --tags --abbrev=0 >/dev/null 2>&1; then"
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- Run `scripts/collect_release_changes.sh` from the repo root to gather commits and touched files."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- If needed, pass a specific tag or ref: `scripts/collect_release_changes.sh v1.2.3 HEAD`."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- `scripts/collect_release_changes.sh`: Collect commits and touched files since last tag."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "- `references/release-notes-guidelines.md`: Language, filtering, and QA rules for App Store notes."
+      },
+      {
+        "id": "blocker:SKILL.md:25:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- Use clear verbs and plain language; avoid internal jargon."
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/release-notes-guidelines.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line tells authors to omit internal identifiers and file paths from public release notes. It reduces information disclosure rather than performing reconnaissance."
+      },
+      {
+        "id": "blocker:references/release-notes-guidelines.md:21:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is plain-language guidance for avoiding technical terms in App Store copy. It does not request system details or collect environment information."
+      },
+      {
+        "id": "external_commands:scripts/collect_release_changes.sh:9:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The command substitution runs a fixed git describe command to find the latest tag. It does not execute user-supplied shell code or contact external services."
+      },
+      {
+        "id": "external_commands:scripts/collect_release_changes.sh:20:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The command substitution runs a fixed git rev-parse command to print the repository root. This is normal local git metadata access for the skill purpose."
+      },
+      {
+        "id": "filesystem:scripts/collect_release_changes.sh:8:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The /dev/null redirection only suppresses probe output from git describe. It does not read sensitive files or write persistent data."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are Markdown inline code around the bundled helper command. They are not Ruby execution syntax, and the command is documented for the release-note workflow."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The backticks are a Markdown example showing optional git refs for the helper script. The line itself does not execute code or hide behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown formatting for a resource filename. This is descriptive documentation, not shell or Ruby command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown formatting for a reference file path. This does not invoke a command or request unsafe access."
+      },
+      {
+        "id": "blocker:SKILL.md:25:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line asks for clear release-note language and avoidance of internal jargon. It is content hygiene guidance, not reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unquoted Git Range Arguments",
+        "description": "The helper accepts optional git refs and expands the computed range without quotes in git log calls. A ref containing spaces or option-like content could alter the log query and expose more history than intended.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 4,
+            "line_end": 5
+          },
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 33,
+            "line_end": 33
+          }
+        ],
+        "confidence": 0.74,
+        "confidence_reasoning": "The script takes refs from positional arguments and later expands the derived range unquoted in git log. This is a clear argument-splitting risk, though it is limited to local git commands."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unquoted Git Range Arguments",
+        "description": "The helper accepts optional git refs and expands the computed range without quotes in git log calls. A ref containing spaces or option-like content could alter the log query and expose more history than intended.",
+        "locations": [
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 4,
+            "line_end": 5
+          },
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "scripts/collect_release_changes.sh",
+            "line_start": 33,
+            "line_end": 33
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The script takes refs from positional arguments and later expands the derived range unquoted in git log. This is a clear argument-splitting risk, though it is limited to local git commands."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 110,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T11:57:47.194Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Generate App Store Release Notes",
+    "value_statement": "Release notes often mix technical commits with user-facing changes. This skill collects git history and turns visible changes into clear App Store copy.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "App Store release notes",
+      "changelog generator",
+      "git release history",
+      "mobile app updates",
+      "App Store update copy",
+      "release documentation",
+      "iOS changelog"
+    ],
+    "actual_capabilities": [
+      "Collects commits and touched files since the last git tag or a specified ref.",
+      "Converts technical commit history into user-facing App Store release notes.",
+      "Filters internal refactors, CI changes, dependencies, and developer-only work.",
+      "Groups visible changes by themes such as New, Improved, and Fixed.",
+      "Checks that each release-note bullet maps to a real change in the selected range."
+    ],
+    "limitations": [
+      "Requires a local git repository with accessible history.",
+      "Does not verify app behavior, QA status, or shipped binaries.",
+      "May need human clarification for ambiguous commits or internal-only changes.",
+      "Does not publish releases or update App Store Connect metadata."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare iOS Release Notes",
+        "description": "Turn recent git commits into concise store update bullets before submitting an app update.",
+        "target_user": "iOS developer"
+      },
+      {
+        "title": "Review User Impact",
+        "description": "Separate visible product changes from internal work before a release review meeting.",
+        "target_user": "release manager"
+      },
+      {
+        "title": "Polish Storefront Copy",
+        "description": "Rewrite technical change summaries into plain language that users can understand quickly.",
+        "target_user": "product marketer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Draft Latest Notes",
+        "scenario": "Beginner request for the default git range.",
+        "prompt": "Use app-store-changelog to create App Store release notes from the latest tag to HEAD."
+      },
+      {
+        "title": "Use Custom Range",
+        "scenario": "Create notes for a known release branch or tag range.",
+        "prompt": "Generate App Store update text for changes from v1.2.3 to HEAD. Group bullets by New, Improved, and Fixed."
+      },
+      {
+        "title": "Filter Technical Work",
+        "scenario": "Remove internal changes before sharing with customers.",
+        "prompt": "Review the collected changes and omit internal refactors, CI updates, dependency changes, and file paths. Keep only user-visible changes."
+      },
+      {
+        "title": "Produce Final Copy",
+        "scenario": "Advanced release copy with a length constraint and verification step.",
+        "prompt": "Create final App Store release notes under 1,000 characters. Include only verified user-facing changes and flag any ambiguous commit separately."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Generate release notes since the latest tag for a bug fix update.",
+        "output": [
+          "Fixed media attachments not opening in full screen.",
+          "Improved timeline loading speed on slow connections.",
+          "Updated search results so recent items appear more reliably."
+        ]
+      },
+      {
+        "input": "Create App Store update copy from v2.4.0 to HEAD and remove internal changes.",
+        "output": [
+          "Added faster account switching from the profile menu.",
+          "Improved upload progress messages for large files.",
+          "Fixed a sign-in issue that could block returning users."
+        ]
+      },
+      {
+        "input": "Summarize this release for App Store users in a shorter format.",
+        "output": "Added smoother account switching, improved uploads for large files, and fixed a sign-in issue for returning users."
+      }
+    ],
+    "best_practices": [
+      "Run the skill from the repository root so git history and file paths resolve correctly.",
+      "Provide the exact tag or ref range when preparing notes for a specific release.",
+      "Review ambiguous commits with the product owner before finalizing storefront copy."
+    ],
+    "anti_patterns": [
+      "Do not include internal ticket IDs, file paths, or implementation names in public notes.",
+      "Do not describe refactors, CI changes, or dependency updates as user-facing improvements.",
+      "Do not publish generated notes without checking that each bullet maps to a real shipped change."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill publish to App Store Connect?",
+        "answer": "No. It drafts release-note text only. You must paste and publish the final copy yourself."
+      },
+      {
+        "question": "Can I choose a specific release range?",
+        "answer": "Yes. Provide a starting tag or ref and an optional ending ref, such as HEAD."
+      },
+      {
+        "question": "What happens if the repository has no tags?",
+        "answer": "The helper script falls back to the available history for the selected ending ref."
+      },
+      {
+        "question": "Will it include internal engineering changes?",
+        "answer": "It is designed to exclude refactors, CI work, dependency bumps, and other internal-only changes."
+      },
+      {
+        "question": "Can it write notes for Android or web releases?",
+        "answer": "The guidance targets App Store copy, but the same workflow can help draft short user-facing release notes."
+      },
+      {
+        "question": "Does it guarantee every change shipped in the app?",
+        "answer": "No. It reads git history and needs human review to confirm shipped behavior and release scope."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "release-notes-guidelines.md",
+          "type": "file",
+          "path": "references/release-notes-guidelines.md",
+          "lines": 35
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "collect_release_changes.sh",
+          "type": "file",
+          "path": "scripts/collect_release_changes.sh",
+          "lines": 34
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 41
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+@startuml
+title cti-expert v2.12 — /webpivot + correlation + premium API-key workflow
+skinparam shadowing false
+skinparam dpi 150
+skinparam defaultFontName "Segoe UI"
+skinparam ArrowColor #34495E
+skinparam activity {
+  BackgroundColor #EAF2FB
+  BorderColor #2C6FBB
+  DiamondBackgroundColor #FFF3D6
+  DiamondBorderColor #C8901F
+  StartColor #2C6FBB
+  EndColor #2C6FBB
+}
+
+start
+:**/webpivot URL**  ·  **/cti-pivot URL|IP**  ·  **/case DOMAIN**;
+if (Quarry enabled for the case?\nQUARRY_API_KEY + QUARRY_MCP_URL) then (yes)
+  :**Quarry bridge** — reuse a finished scan or start one and wait (no time limit)\nimported rows go through the rung table · vendors are not paid twice;
+else (no)
+endif
+:**collect_core.collect_many -> pivot_extract.py**\nfetch page (or saved DOM / Wayback / gated-urlscan recovery) + extract artifacts\nfavicon mmh3 + md5 · GA / GTM / AdSense · verification tokens\nwallets · emails · phones · Telegram · footer · ETag · DOM + template fingerprint;
+:**enrich_live(free_only)**\n//free_only = ~--free-only, scope.json no_spend, or ~--passive//;
+
+fork
+  :**KEYLESS baseline — ALWAYS runs**\ncrt.sh + CT backups · HackerTarget passive DNS · anonymous urlscan\nRDAP · ipwho.is · Shodan InternetDB\nmail / SPF / DMARC · CORS · JARM;
+fork again
+  :**FREE / unlimited keys — run EVEN under ~--free-only**\n**ChongLuaDao** (verdict · IoC · primary .vn WHOIS — fact, never an edge)\n**Validin** (pDNS · cert · favicon · body hash — free Community key)\n**Webamon** (scan corpus · same-kit siblings · servers · feeds);
+fork again
+  if (metered key present AND not free_only?\nresolve order: ENV var -> repo .env -> ~/.config/cti-expert) then (yes)
+    :**METERED engines**  //(only the keys you actually set)//
+    ----
+    **Infrastructure** //(enrich_live)//
+    FOFA · Shodan search · **Censys Platform** (CENSYS_API_KEY + CENSYS_ORG_ID)
+    **Hunter.how** (cert.subject) · Quake (360) · ZoomEye · **Netlas** · SecurityTrails
+    urlscan-Pro · CIRCL pDNS + passive SSL · IPinfo
+    ----
+    **Ownership**
+    WhoisXML (WHOIS history · reverse WHOIS · **MO-neighbours** WHOIS-verify)
+    DNSLytics (GA / AdSense -> sibling domains)
+    ----
+    **Per-selector tools** //(same gate)//
+    IntelX · Hudson Rock · GrayHatWarfare · SerpApi Ads · PublicWWW
+    ANY.RUN TI Lookup //(anyrun_submit: ask-first)//;
+    :**entitlement measured, not assumed**\ncases/<id>/capability_plans.json — a key measured //free// skips Pro calls;
+  else (no key / free_only)
+    :layer recorded **skipped_no_key** / **skipped_policy**\nin collection_outcomes.json — re-runnable later;
+  endif
+end fork
+
+:**api_usage.record(...)** -> MEMORY/api_usage.jsonl\nno local cap: thresholds **warn, never block**\n**vendor HTTP 402 / 429 is the only limit**;
+
+:**cert pivot** (cert_pivot · wp_ct)\nkeyless live fingerprint + CT (crt.sh · CertSpotter · CertIndex · CertKit · Netlas · Censys)\nShodan / Censys fingerprint search · **FOFA cert.sn** on a REAL x509 serial only;
+
+:**correlate — keyless**
+rank_relations  score same-operator siblings, drop shared-infra noise
+cert_overlap · pivot_suggest · impersonation_hunt
+crypto_balance  //(reference + token-contract addresses filtered out)//
+email_hygiene · sensitive_paths;
+
+:**reference_check**  — false-positive ledger\n**BENIGN** shared noise  vs  **SIGNAL** operator fingerprint\nco-tenancy guards keep shared certs / IPs as **leads, not seeds**;
+
+:save  $INTEL_HOME/cases/<CASE-ID>/raw/<host>.json;
+:**kb_ingest** (ingest_webpivot)  ->  knowledge/ (cross-case);
+:**intel.py open | loop** -> clusters.json · case_graph.json -> assessment.md / .json;
+:**render_diagram** (IntelGraph)  ·  **house_report** (IntelReport);
+stop
+
+legend right
+  **Key store — managed by /apikeys**
+  ====
+  repo-root .env  (CTI_API_KEYS_ENV overrides the path)
+  chmod 600 · gitignored · ENV var always wins
+  registry: WebPivot/references/api_keys.json
+  ----
+  Add a key:   /apikeys set censys <KEY>
+  Check:       /apikeys status | test | unlocks
+  Balances:    **/cti-status**
+  ----
+  **Spend gate:** ~--free-only / scope no_spend
+  holds every metered engine; free keys still run.
+  The harness loop proposes metered pivots for
+  approval (proposal.json) instead of spending.
+  ----
+  **No keys set  ->  everything runs keyless / free.**
+  A missing or bad key degrades to a note,
+  it never breaks the run.
+endlegend
+@enduml

@@ -1,0 +1,549 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T12:09:59.213Z",
+    "slug": "humanizerai-detect-ai",
+    "source_url": "https://github.com/humanizerai/agent-skills/tree/main/.agents/skills/detect-ai",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "267a308e4fe661bc143331e08310cf407a517f8ea6d1d2d224b26acc84663906",
+    "tree_hash": "0e58c6f85b90dc4d2bd8b33fd33ede66f068575ade18f1b7993e35afa3152c9c",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "detect-ai",
+    "description": "Analyze text for likely AI authorship using the HumanizerAI API and present a score, metrics, and recommendation.",
+    "summary": "Checks text for AI-writing signals with a HumanizerAI score and concise metrics.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "humanizerai",
+    "license": "MIT",
+    "category": "writing",
+    "tags": [
+      "ai-detection",
+      "content-review",
+      "writing-analysis",
+      "humanizerai",
+      "authenticity"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "env_access"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most external command findings are false positives caused by Markdown backticks and fenced examples, not executable shell code. The meaningful risk is intentional submission of user text to the HumanizerAI API. No hardcoded secret or prompt injection language was found.",
+    "remediation": [
+      {
+        "issue": "Submitted text is sent to a third-party detection API.",
+        "suggestion": "Warn users before sending sensitive text and document HumanizerAI data handling expectations.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The skill depends on an external API and service-specific key.",
+        "suggestion": "Document the required HUMANIZERAI_API_KEY variable and avoid printing the key in errors or logs.",
+        "severity": "low"
+      },
+      {
+        "issue": "Detection results can be misused as proof of authorship.",
+        "suggestion": "Tell users to treat scores as review signals and combine them with human judgment.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 74
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 88
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "When the user invokes `/detect-ai`, you should:"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "Make a POST request to `https://humanizerai.com/api/v1/detect`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 32,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 38,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 54,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 56,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "**IMPORTANT:** The main AI score is `score.overall` (not `score` directly). This is the score to dis"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 74,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:23:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "Make a POST request to `https://humanizerai.com/api/v1/detect`:"
+      },
+      {
+        "id": "network:SKILL.md:88:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "2. Suggest the user get an API key at https://humanizerai.com"
+      },
+      {
+        "id": "env_access:SKILL.md:26:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "Authorization: Bearer $HUMANIZERAI_API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:87:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "1. Check if HUMANIZERAI_API_KEY is set"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 15 uses inline Markdown backticks around the command name. It does not execute Ruby, shell, or any local command."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 23 uses Markdown backticks around the API URL for documentation. The line describes a network request, not shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 25 begins a fenced documentation block for HTTP headers and body. A Markdown code fence is not executable command syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 32 closes the fenced documentation block. There is no command invocation or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 38 opens a fenced JSON example. It is static documentation of an API response, not executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 54 closes the example response block. It contains no shell command or command execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 56 uses inline Markdown backticks to name response fields. This is field-name documentation, not execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 60 starts a fenced output-format example. The block is presentation guidance and does not run local commands."
+      },
+      {
+        "id": "network:SKILL.md:23:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The skill instructs a POST request to a fixed external HumanizerAI endpoint. This intentionally transfers user-supplied text to a third-party service.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:88:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Line 88 only points users to the service homepage for an API key. It does not instruct sending data or credentials to that URL."
+      },
+      {
+        "id": "env_access:SKILL.md:26:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The API key is referenced as an environment variable placeholder, not embedded as a secret. It is used to authenticate the intended HumanizerAI API request."
+      },
+      {
+        "id": "env_access:SKILL.md:87:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The line instructs checking whether the service-specific environment variable is set. It does not expose, log, or transmit the key value."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Third-Party Text Submission",
+        "description": "The skill extracts user text and sends it to https://humanizerai.com/api/v1/detect. This can expose private or regulated content if users submit sensitive text.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 31
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The instructions explicitly extract text from $ARGUMENTS and post it to the HumanizerAI API. This is a clear privacy risk, though it matches the skill's stated purpose."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "Make a POST request to `https://humanizerai.com/api/v1/detect`:",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The skill instructs a POST request to a fixed external HumanizerAI endpoint. This intentionally transfers user-supplied text to a third-party service."
+      },
+      {
+        "title": "Third-Party Text Submission",
+        "description": "The skill extracts user text and sends it to https://humanizerai.com/api/v1/detect. This can expose private or regulated content if users submit sensitive text.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "The instructions explicitly extract text from $ARGUMENTS and post it to the HumanizerAI API. This is a clear privacy risk, though it matches the skill's stated purpose."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 90,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T12:09:59.213Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Detect AI-Written Text",
+    "value_statement": "AI-generated text can be hard to identify before submission or publication. This skill sends text to HumanizerAI and returns a clear score, metrics, and recommendation.",
+    "seo_keywords": [
+      "AI content detector",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "HumanizerAI",
+      "AI writing detection",
+      "text authenticity",
+      "AI score",
+      "content review",
+      "writing analysis"
+    ],
+    "actual_capabilities": [
+      "Accepts text supplied with the /detect-ai command.",
+      "Calls the HumanizerAI detection endpoint through WebFetch.",
+      "Uses HUMANIZERAI_API_KEY for API authentication.",
+      "Reports score.overall as the main AI likelihood score.",
+      "Shows metrics such as perplexity, burstiness, readability, and n-gram score.",
+      "Suggests whether the text may need humanizing based on the score."
+    ],
+    "limitations": [
+      "Requires a HumanizerAI API key in the environment.",
+      "Sends submitted text to a third-party API.",
+      "Detection scores are probabilistic and should not be treated as proof.",
+      "Results depend on HumanizerAI API availability and response format."
+    ],
+    "use_cases": [
+      {
+        "title": "Review Publication Drafts",
+        "description": "Screen articles, posts, and web copy before release to identify AI-writing signals.",
+        "target_user": "Content editor"
+      },
+      {
+        "title": "Check Academic Drafts",
+        "description": "Review essays or research summaries for AI-like patterns before sharing or submitting them.",
+        "target_user": "Student or researcher"
+      },
+      {
+        "title": "Assess Vendor Copy",
+        "description": "Evaluate submitted marketing text when policies require disclosure of AI-assisted writing.",
+        "target_user": "Policy reviewer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Check a Short Passage",
+        "prompt": "/detect-ai Please analyze this paragraph: [paste text]",
+        "scenario": "Beginner check for one paragraph or short response."
+      },
+      {
+        "title": "Review an Article Draft",
+        "prompt": "/detect-ai Analyze this full draft for AI-writing signals. Focus on the overall score and strongest metrics: [paste draft]",
+        "scenario": "Intermediate review before publishing a longer draft."
+      },
+      {
+        "title": "Compare a Revision",
+        "prompt": "/detect-ai Analyze this revised text and tell me whether it still appears AI-generated: [paste revised text]",
+        "scenario": "Check whether editing reduced AI-like signals."
+      },
+      {
+        "title": "Audit Publication Risk",
+        "prompt": "/detect-ai Analyze this publication draft. Summarize the score, metrics, and risk of submitting it as human-written: [paste draft]",
+        "scenario": "Advanced review for policy or editorial workflows."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A short product description that sounds polished and repetitive.",
+        "output": "AI Detection Results: Score 78 out of 100, likely AI-generated. The recommendation is to revise sentence variety and add specific human context."
+      },
+      {
+        "input": "A personal essay draft with uneven sentence length and concrete details.",
+        "output": "AI Detection Results: Score 24 out of 100, likely human-written. The recommendation is to keep the natural structure and review only for clarity."
+      },
+      {
+        "input": "A mixed report section combining original notes with generated summary text.",
+        "output": "AI Detection Results: Score 55 out of 100, mixed signals. The recommendation is to inspect high-scoring sections and rewrite generic passages."
+      }
+    ],
+    "best_practices": [
+      "Remove private or regulated information before running detection.",
+      "Treat the score as a review signal, not a final judgment.",
+      "Check the overall score together with metric patterns and context."
+    ],
+    "anti_patterns": [
+      "Do not submit confidential customer, employee, or legal text without approval.",
+      "Do not accuse an author based only on one score.",
+      "Do not expose the API key in prompts, screenshots, or logs."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill analyze?",
+        "answer": "It analyzes supplied text for signals associated with AI-written content."
+      },
+      {
+        "question": "Does it send text outside my workspace?",
+        "answer": "Yes. The skill posts the supplied text to the HumanizerAI detection API."
+      },
+      {
+        "question": "Do I need an API key?",
+        "answer": "Yes. The skill expects HUMANIZERAI_API_KEY to be available in the environment."
+      },
+      {
+        "question": "Is the score proof that text was AI-written?",
+        "answer": "No. The score is probabilistic and should be reviewed with context."
+      },
+      {
+        "question": "Which score should I trust first?",
+        "answer": "The skill uses score.overall as the main AI likelihood score."
+      },
+      {
+        "question": "Does it work with Claude, Codex, and Claude Code?",
+        "answer": "Yes. The report lists compatibility with Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 90
+    }
+  ]
+}

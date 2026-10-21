@@ -1,0 +1,3120 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T09:10:08.139Z",
+    "slug": "autumnsgrove-docker-workflow",
+    "source_url": "https://github.com/AutumnsGrove/ClaudeSkills/tree/master/docker-workflow",
+    "source_ref": "master",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "4d1f9f78b65562dc58c6432bdb912592ece70c5ded809a04d4d79e7295ee3ffa",
+    "tree_hash": "a9b77fe111a1fbb4743a2d814bb79382c118b79fd0bbfa192de09d25c27b09f5",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "docker-workflow",
+    "description": "Guides Docker containerization with multi-stage builds, Compose orchestration, image optimization, diagnostics, and production practices.",
+    "summary": "Build, optimize, troubleshoot, and harden Docker applications with reusable workflows and examples.",
+    "icon": "📦",
+    "author": "AutumnsGrove",
+    "license": "MIT",
+    "tags": [
+      "docker",
+      "docker-compose",
+      "containerization",
+      "devops",
+      "deployment"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands",
+      "network",
+      "env_access"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static alerts are documentation syntax, local health checks, or protective ignore rules. Confirmed risks include predictable secrets, external diagnostics, credential disclosure, destructive cleanup, exposed Elasticsearch, and mutable images.",
+    "remediation": [
+      {
+        "issue": "Predictable credentials and fallback secrets",
+        "suggestion": "Require externally supplied secrets or Docker secrets, remove public defaults, and document credential rotation before deployment.",
+        "severity": "high"
+      },
+      {
+        "issue": "Unauthenticated services published on host ports",
+        "suggestion": "Enable Elasticsearch security and bind development administration services to loopback or isolated internal networks.",
+        "severity": "high"
+      },
+      {
+        "issue": "Complete environment output can reveal secrets",
+        "suggestion": "Remove the env command or require confirmation and redact variables matching password, token, key, and secret names.",
+        "severity": "high"
+      },
+      {
+        "issue": "Forced Docker cleanup can delete persistent data",
+        "suggestion": "Show affected resources, require explicit confirmation, and separate volume pruning behind a dedicated destructive option.",
+        "severity": "high"
+      },
+      {
+        "issue": "Mutable image references",
+        "suggestion": "Pin every image to a reviewed version or digest and update it through a controlled dependency process.",
+        "severity": "medium"
+      },
+      {
+        "issue": "External connectivity test uses a fixed public address",
+        "suggestion": "Make external diagnostics opt-in and allow users to configure an approved health endpoint.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "examples/.dockerignore",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "examples/.dockerignore",
+            "line_start": 125,
+            "line_end": 125
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 190,
+            "line_end": 190
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 192,
+            "line_end": 192
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 232,
+            "line_end": 232
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 289,
+            "line_end": 289
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 355,
+            "line_end": 355
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 428,
+            "line_end": 428
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 320,
+            "line_end": 320
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 413,
+            "line_end": 413
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 330,
+            "line_end": 330
+          },
+          {
+            "file": "README.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 251,
+            "line_end": 251
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 252,
+            "line_end": 252
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 355,
+            "line_end": 355
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 400,
+            "line_end": 400
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 412,
+            "line_end": 412
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 437,
+            "line_end": 437
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 452,
+            "line_end": 452
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 462,
+            "line_end": 462
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 135
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 135,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 174
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 181
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 181,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 202
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 202,
+            "line_end": 205
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 205,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 217
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 217,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 230
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 230,
+            "line_end": 245
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 245,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 251,
+            "line_end": 253
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 253,
+            "line_end": 271
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 276
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 276,
+            "line_end": 279
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 279,
+            "line_end": 282
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 282,
+            "line_end": 285
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 285,
+            "line_end": 288
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 288,
+            "line_end": 291
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 291,
+            "line_end": 305
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 305,
+            "line_end": 311
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 311,
+            "line_end": 315
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 315,
+            "line_end": 325
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 325,
+            "line_end": 331
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 70,
+            "line_end": 70
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 158,
+            "line_end": 158
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 297,
+            "line_end": 297
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 314,
+            "line_end": 314
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 165,
+            "line_end": 165
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 219,
+            "line_end": 219
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 279,
+            "line_end": 279
+          },
+          {
+            "file": "examples/Dockerfile.multi-stage",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 289,
+            "line_end": 289
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 175,
+            "line_end": 175
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 176,
+            "line_end": 176
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "README.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 146,
+            "line_end": 146
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:examples/.dockerignore:124:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/.dockerignore",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "/.emacs.desktop"
+      },
+      {
+        "id": "filesystem:examples/.dockerignore:125:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/.dockerignore",
+        "line_start": 125,
+        "line_end": 125,
+        "snippet": "/.emacs.desktop.lock"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:180:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 180,
+        "line_end": 180,
+        "snippet": ".env"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:181:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 181,
+        "line_end": 181,
+        "snippet": ".env.local"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:182:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 182,
+        "line_end": 182,
+        "snippet": ".env.*.local"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:183:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 183,
+        "line_end": 183,
+        "snippet": ".env.development"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:184:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 184,
+        "line_end": 184,
+        "snippet": ".env.test"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:185:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": ".env.production"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:186:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 186,
+        "line_end": 186,
+        "snippet": "*.env"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:312:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "examples/.dockerignore",
+        "line_start": 312,
+        "line_end": 312,
+        "snippet": "#    - NEVER include sensitive files (.env, credentials, keys)"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:181:environment-variant-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment variant files",
+        "file": "examples/.dockerignore",
+        "line_start": 181,
+        "line_end": 181,
+        "snippet": ".env.local"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:183:environment-variant-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment variant files",
+        "file": "examples/.dockerignore",
+        "line_start": 183,
+        "line_end": 183,
+        "snippet": ".env.development"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:185:environment-variant-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment variant files",
+        "file": "examples/.dockerignore",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": ".env.production"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:288:credential-json-file",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Credential JSON file",
+        "file": "examples/.dockerignore",
+        "line_start": 288,
+        "line_end": 288,
+        "snippet": "credentials.json"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:289:credential-json-file",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Credential JSON file",
+        "file": "examples/.dockerignore",
+        "line_start": 289,
+        "line_end": 289,
+        "snippet": "service-account.json"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:284:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "examples/.dockerignore",
+        "line_start": 284,
+        "line_end": 284,
+        "snippet": "*.pem"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:285:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "examples/.dockerignore",
+        "line_start": 285,
+        "line_end": 285,
+        "snippet": "*.key"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:286:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "examples/.dockerignore",
+        "line_start": 286,
+        "line_end": 286,
+        "snippet": "*.crt"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:287:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "examples/.dockerignore",
+        "line_start": 287,
+        "line_end": 287,
+        "snippet": "*.p12"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:141:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "Thumbs.db"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:142:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "ehthumbs.db"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:212:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "*.db"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:213:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 213,
+        "line_end": 213,
+        "snippet": "*.sqlite"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:214:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 214,
+        "line_end": 214,
+        "snippet": "*.sqlite3"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:215:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 215,
+        "line_end": 215,
+        "snippet": "db.sqlite3"
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:339:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "examples/.dockerignore",
+        "line_start": 339,
+        "line_end": 339,
+        "snippet": "# db.sqlite3"
+      },
+      {
+        "id": "external_commands:examples/docker-compose.yml:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "examples/docker-compose.yml",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "- \"traefik.http.routers.frontend.rule=Host(`myapp.local`)\""
+      },
+      {
+        "id": "network:examples/docker-compose.yml:23:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- API_URL=http://backend:8000"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:24:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "- NEXT_PUBLIC_API_URL=http://localhost:8000"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:31:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "test: [\"CMD\", \"wget\", \"--no-verbose\", \"--tries=1\", \"--spider\", \"http://localhost:3000/health\"]"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:70:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8000/health\"]"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:158:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "test: [\"CMD\", \"wget\", \"--no-verbose\", \"--tries=1\", \"--spider\", \"http://localhost/health\"]"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:297:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/docker-compose.yml",
+        "line_start": 297,
+        "line_end": 297,
+        "snippet": "test: [\"CMD-SHELL\", \"curl -f http://localhost:9200/_cluster/health || exit 1\"]"
+      },
+      {
+        "id": "network:examples/docker-compose.yml:314:email-sending-capability",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Email sending capability",
+        "file": "examples/docker-compose.yml",
+        "line_start": 314,
+        "line_end": 314,
+        "snippet": "- \"1025:1025\"  # SMTP"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:53:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "examples/docker-compose.yml",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "- DATABASE_URL=postgresql://postgres:password@db:5432/myapp"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:54:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "examples/docker-compose.yml",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "- REDIS_URL=redis://redis:6379/0"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:175:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "examples/docker-compose.yml",
+        "line_start": 175,
+        "line_end": 175,
+        "snippet": "- DATABASE_URL=postgresql://postgres:password@db:5432/myapp"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:176:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "examples/docker-compose.yml",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "- REDIS_URL=redis://:redispassword@redis:6379/0"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:55:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "examples/docker-compose.yml",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "- SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}"
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:93:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "examples/docker-compose.yml",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "POSTGRES_USER: postgres"
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:201:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "examples/docker-compose.yml",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "RABBITMQ_DEFAULT_USER: admin"
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:245:llm-role-tokens-injection",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "LLM role tokens injection",
+        "file": "examples/docker-compose.yml",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "GF_SECURITY_ADMIN_USER: admin"
+      },
+      {
+        "id": "external_commands:examples/Dockerfile.multi-stage:330:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 330,
+        "line_end": 330,
+        "snippet": "# docker run -d -p 3000:3000 -v $(pwd)/src:/app/src myapp:dev"
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:109:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:48:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "CMD node -e \"require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode =="
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:109:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:165:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 165,
+        "line_end": 165,
+        "snippet": "CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1"
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:219:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 219,
+        "line_end": 219,
+        "snippet": "CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:279:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 279,
+        "line_end": 279,
+        "snippet": "CMD wget --no-verbose --tries=1 --spider http://localhost:8000/health || exit 1"
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:112:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "CMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]"
+      },
+      {
+        "id": "filesystem:examples/Dockerfile.multi-stage:93:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "COPY --from=builder /root/.local /home/appuser/.local"
+      },
+      {
+        "id": "filesystem:examples/Dockerfile.multi-stage:99:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "ENV PATH=/home/appuser/.local/bin:$PATH"
+      },
+      {
+        "id": "sensitive:examples/Dockerfile.multi-stage:172:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "examples/Dockerfile.multi-stage",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "# COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/"
+      },
+      {
+        "id": "external_commands:README.md:20:sudo-privilege-escalation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "sudo privilege escalation",
+        "file": "README.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "sudo apt-get install docker.io docker-compose"
+      },
+      {
+        "id": "env_access:README.md:81:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "README.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "- DATABASE_URL=postgresql://db:5432/myapp"
+      },
+      {
+        "id": "sensitive:README.md:142:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "README.md",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": ".env"
+      },
+      {
+        "id": "sensitive:README.md:151:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "README.md",
+        "line_start": 151,
+        "line_end": 151,
+        "snippet": "- Exclude sensitive files (.env, credentials)"
+      },
+      {
+        "id": "blocker:README.md:37:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "README.md",
+        "line_start": 37,
+        "line_end": 38,
+        "snippet": "- Shell access"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:94:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "local health_status=$(docker inspect --format='{{.State.Health.Status}}' \"$container\" 2>/dev/null ||"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:251:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "local size=$(docker image inspect \"$image\" --format='{{.Size}}')"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:252:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 252,
+        "line_end": 252,
+        "snippet": "local size_mb=$((size / 1024 / 1024))"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:355:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 355,
+        "line_end": 355,
+        "snippet": "local health_status=$(docker inspect --format='{{.State.Health.Status}}' \"$container\" 2>/dev/null ||"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:400:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 400,
+        "line_end": 400,
+        "snippet": "local volumes=$(docker inspect --format='{{range .Mounts}}{{.Destination}}{{\"\\n\"}}{{end}}' \"$contain"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:412:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 412,
+        "line_end": 412,
+        "snippet": "local volume_name=$(echo \"$volume\" | tr '/' '_')"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:437:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 437,
+        "line_end": 437,
+        "snippet": "local base=$(docker history \"$image\" --no-trunc | tail -1 | awk '{print $2}')"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:452:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 452,
+        "line_end": 452,
+        "snippet": "local stages=$(docker history \"$image\" --no-trunc --format '{{.CreatedBy}}' | grep -c \"FROM\" || echo"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:462:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 462,
+        "line_end": 462,
+        "snippet": "local layer_count=$(docker history \"$image\" --format '{{.ID}}' | wc -l)"
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:scripts/docker_helper.sh:289:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 289,
+        "line_end": 289,
+        "snippet": "if docker exec \"$container\" ping -c 1 8.8.8.8 &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:94:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "local health_status=$(docker inspect --format='{{.State.Health.Status}}' \"$container\" 2>/dev/null ||"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:137:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "docker inspect --format='Ports: {{json .NetworkSettings.Ports}}' \"$container\" | jq 2>/dev/null || do"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:190:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "if docker exec -it \"$container\" sh -c \"exit\" 2>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:192:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "elif docker exec -it \"$container\" bash -c \"exit\" 2>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:232:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "if ! docker image inspect \"$image\" &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:289:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 289,
+        "line_end": 289,
+        "snippet": "if docker exec \"$container\" ping -c 1 8.8.8.8 &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:355:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 355,
+        "line_end": 355,
+        "snippet": "local health_status=$(docker inspect --format='{{.State.Health.Status}}' \"$container\" 2>/dev/null ||"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:428:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 428,
+        "line_end": 428,
+        "snippet": "if ! docker image inspect \"$image\" &>/dev/null; then"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 49,
+        "snippet": "```dockerignore"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 51,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 73,
+        "snippet": "See `examples/.dockerignore` for comprehensive template."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 89,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 91,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 97,
+        "snippet": "See `examples/Dockerfile.multi-stage` for templates for Node.js, Python, Go, Java, and Rust."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 106,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 110,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 120,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 133,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 135,
+        "snippet": "Create `docker-compose.yml`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 135,
+        "line_end": 172,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 174,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 181,
+        "snippet": "See `examples/docker-compose.yml` for full-featured setup with monitoring, queues, and caching."
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 181,
+        "line_end": 191,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 194,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 202,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 202,
+        "line_end": 205,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 205,
+        "line_end": 211,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 217,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 217,
+        "line_end": 226,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 230,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 230,
+        "line_end": 245,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 245,
+        "line_end": 251,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 251,
+        "line_end": 253,
+        "snippet": "The `scripts/docker_helper.sh` utility provides common debugging operations:"
+      },
+      {
+        "id": "external_commands:SKILL.md:253:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 253,
+        "line_end": 271,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:271:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 271,
+        "line_end": 276,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:276:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 276,
+        "line_end": 279,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 279,
+        "line_end": 282,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 282,
+        "line_end": 285,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 285,
+        "line_end": 288,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 288,
+        "line_end": 291,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:291:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 291,
+        "line_end": 305,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:305:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 305,
+        "line_end": 311,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:311:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 311,
+        "line_end": 315,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:315:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 315,
+        "line_end": 325,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:325:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 325,
+        "line_end": 331,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:331:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 331,
+        "line_end": 347,
+        "snippet": "```dockerfile"
+      },
+      {
+        "id": "external_commands:SKILL.md:347:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 347,
+        "line_end": 351,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 351,
+        "line_end": 363,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:363:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 363,
+        "line_end": 369,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:369:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 369,
+        "line_end": 382,
+        "snippet": "- See `examples/docker-compose.yml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:382:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 382,
+        "line_end": 419,
+        "snippet": "✅ Use specific image versions, not `latest`"
+      },
+      {
+        "id": "external_commands:SKILL.md:419:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 419,
+        "line_end": 441,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:441:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 441,
+        "line_end": 445,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:445:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 445,
+        "line_end": 457,
+        "snippet": "```bash"
+      },
+      {
+        "id": "filesystem:SKILL.md:51:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "See `examples/.dockerignore` for comprehensive template."
+      },
+      {
+        "id": "filesystem:SKILL.md:320:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 320,
+        "line_end": 320,
+        "snippet": "RUN --mount=type=cache,target=/root/.cache/pip \\"
+      },
+      {
+        "id": "filesystem:SKILL.md:413:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 413,
+        "line_end": 413,
+        "snippet": "- **examples/.dockerignore**: Comprehensive ignore patterns"
+      },
+      {
+        "id": "env_access:SKILL.md:146:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 146,
+        "line_end": 146,
+        "snippet": "- DATABASE_URL=postgresql://db:5432/myapp"
+      },
+      {
+        "id": "sensitive:SKILL.md:44:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": ".env"
+      },
+      {
+        "id": "sensitive:SKILL.md:55:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "- Exclude sensitive files (.env, credentials)"
+      },
+      {
+        "id": "obfuscation:scripts/docker_helper.sh:1:heuristic-multiple-bracket-chains-13-jsfuck-obfu",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Multiple bracket chains (13) - JSFuck/obfuscation pattern",
+        "file": "scripts/docker_helper.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "}}{{, }}{{, }}{{"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:examples/.dockerignore:124:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "filesystem:examples/.dockerignore:125:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:180:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:181:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:182:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:183:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:184:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:185:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:186:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:312:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a comment warning users not to include sensitive files. It does not access any file or credential."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:181:environment-variant-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:183:environment-variant-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:185:environment-variant-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:288:credential-json-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:289:credential-json-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:284:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:285:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:286:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:287:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:141:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:142:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:212:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:213:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:214:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:215:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a .dockerignore exclusion rule, so it prevents the named file from entering the build context and does not read it."
+      },
+      {
+        "id": "sensitive:examples/.dockerignore:339:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a comment warning users not to include sensitive files. It does not access any file or credential."
+      },
+      {
+        "id": "external_commands:examples/docker-compose.yml:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Traefik Host rule delimiters inside a YAML label. No shell or Ruby interpreter executes this value."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:23:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:24:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:31:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:70:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:158:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:297:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL targets localhost or a named Compose service for application routing or health checks. It does not contact an external destination."
+      },
+      {
+        "id": "network:examples/docker-compose.yml:314:email-sending-capability",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This line only publishes MailHog's local SMTP test port. It contains no mail-sending logic or external mail destination."
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:53:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The example embeds the predictable PostgreSQL password \"password\" in a connection string. Copying this configuration can expose the database through known credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:54:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This Redis URL identifies an internal Compose service and contains no password or external endpoint. It is ordinary local service configuration."
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:175:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The worker connection string embeds the predictable PostgreSQL password \"password\". The same compose file publishes the database port, increasing misuse risk.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:176:database-connection-strings",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The Redis connection string contains the hardcoded password \"redispassword\". Reusing this example would create a credential known to anyone with the template.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:examples/docker-compose.yml:55:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "SECRET_KEY falls back to a public development value when the variable is absent. An accidental production deployment would use a predictable application secret.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:93:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The word \"USER\" appears in a standard service environment variable name. It is YAML configuration, not an LLM role token or prompt injection."
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:201:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The word \"USER\" appears in a standard service environment variable name. It is YAML configuration, not an LLM role token or prompt injection."
+      },
+      {
+        "id": "blocker:examples/docker-compose.yml:245:llm-role-tokens-injection",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The word \"USER\" appears in a standard service environment variable name. It is YAML configuration, not an LLM role token or prompt injection."
+      },
+      {
+        "id": "external_commands:examples/Dockerfile.multi-stage:330:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The command substitution appears only in a commented Docker usage example. It is not executed while building an image."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:109:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:48:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:109:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:165:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:219:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:279:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This request is a container health check against localhost. It does not transmit data to an external network destination."
+      },
+      {
+        "id": "network:examples/Dockerfile.multi-stage:112:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The address 0.0.0.0 is the standard application bind address inside a container. It is not a remote host or reconnaissance target."
+      },
+      {
+        "id": "filesystem:examples/Dockerfile.multi-stage:93:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The .local path is a conventional Python user-install directory copied between image stages. It does not target host hidden files."
+      },
+      {
+        "id": "filesystem:examples/Dockerfile.multi-stage:99:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The .local path is a conventional Python user-install directory copied between image stages. It does not target host hidden files."
+      },
+      {
+        "id": "sensitive:examples/Dockerfile.multi-stage:172:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This commented example copies the public CA certificate bundle between image stages. It does not contain or access a private key."
+      },
+      {
+        "id": "external_commands:README.md:20:sudo-privilege-escalation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is an explicit package installation instruction for Docker on Ubuntu or Debian. It does not hide privilege use or execute automatically."
+      },
+      {
+        "id": "env_access:README.md:81:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation uses an internal database service URL without embedded credentials. It is an illustrative Compose value, not secret access."
+      },
+      {
+        "id": "sensitive:README.md:142:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The README names .env only to exclude sensitive files from Docker build contexts. It does not read or expose environment data."
+      },
+      {
+        "id": "sensitive:README.md:151:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The README names .env only to exclude sensitive files from Docker build contexts. It does not read or expose environment data."
+      },
+      {
+        "id": "blocker:README.md:37:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The phrase \"Shell access\" describes a documented helper capability. It does not perform network discovery or instruct reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:94:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:251:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:252:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is Bash integer arithmetic on an image size returned by Docker. It neither invokes a shell from data nor evaluates user input."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:355:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:400:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:412:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This substitution converts slashes in a quoted volume path to underscores for a backup filename. It does not evaluate the path as code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:437:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:452:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:462:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This command substitution captures output from fixed Docker inspection or history commands. User-supplied identifiers are quoted and are not evaluated as shell code."
+      },
+      {
+        "id": "external_commands:scripts/docker_helper.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is the Bash shebang for a transparent Docker utility script. A shebang identifies the interpreter and is not itself unsafe execution."
+      },
+      {
+        "id": "network:scripts/docker_helper.sh:289:hardcoded-ip-address",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The network diagnostic makes an actual outbound ICMP request to 8.8.8.8 from the selected container. This creates undeclared external traffic in restricted environments.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:94:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:137:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:190:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:192:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:232:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:289:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:355:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "filesystem:scripts/docker_helper.sh:428:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script redirects diagnostic errors to /dev/null. This standard output suppression neither reads sensitive device data nor changes the device."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:253:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:271:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:276:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:282:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:291:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:305:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:311:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:315:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:325:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:331:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:347:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:363:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:369:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:382:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:419:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:441:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:445:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown code fences or inline code delimiters in documentation. They are not Ruby backticks and do not execute commands."
+      },
+      {
+        "id": "filesystem:SKILL.md:51:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation reference to the provided .dockerignore example. It does not read an arbitrary hidden file."
+      },
+      {
+        "id": "filesystem:SKILL.md:320:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This Dockerfile example mounts a BuildKit cache at pip's conventional cache path. The path is inside the build container, not the host."
+      },
+      {
+        "id": "filesystem:SKILL.md:413:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a documentation reference to the provided .dockerignore example. It does not read an arbitrary hidden file."
+      },
+      {
+        "id": "env_access:SKILL.md:146:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This illustrative URL points to a named internal Compose service and contains no password. It does not access a real database secret."
+      },
+      {
+        "id": "sensitive:SKILL.md:44:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The skill names .env only in a .dockerignore example and exclusion guidance. It instructs users to keep sensitive files out of images."
+      },
+      {
+        "id": "sensitive:SKILL.md:55:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The skill names .env only in a .dockerignore example and exclusion guidance. It instructs users to keep sensitive files out of images."
+      },
+      {
+        "id": "obfuscation:scripts/docker_helper.sh:1:heuristic-multiple-bracket-chains-13-jsfuck-obfu",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The bracket chains come from readable Docker Go-template expressions throughout a Bash script. There is no JavaScript, encoded payload, or obfuscated control flow."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Hardcoded Default Service Credentials",
+        "description": "The example assigns predictable passwords to database, cache, queue, monitoring, and administration services while publishing several host ports.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 202,
+            "line_end": 202
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 246,
+            "line_end": 246
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 268,
+            "line_end": 268
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "Each cited line assigns a literal, predictable password in a runnable Compose example."
+      },
+      {
+        "title": "Unauthenticated Elasticsearch Exposure",
+        "description": "Elasticsearch security is disabled while port 9200 is published, allowing unauthenticated access when the host is reachable.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 289,
+            "line_end": 293
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The configuration explicitly disables xpack security and maps Elasticsearch to a host port."
+      },
+      {
+        "title": "Container Secret Disclosure",
+        "description": "The env command prints every container environment variable, which commonly includes credentials and tokens, into terminal or agent output.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 319,
+            "line_end": 320
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The command directly executes env inside the selected container and prints its complete output."
+      },
+      {
+        "title": "Destructive Cleanup Without Confirmation",
+        "description": "The cleanup command forces removal of stopped containers, unused images, volumes, and networks without a confirmation or preview.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 204,
+            "line_end": 218
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "Every prune command uses -f, and volume pruning can permanently remove application data."
+      },
+      {
+        "title": "Mutable Production Image Tags",
+        "description": "Several runnable services use latest tags, so future pulls can retrieve unreviewed image changes or compromised upstream releases.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 220,
+            "line_end": 220
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 241,
+            "line_end": 241
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 263,
+            "line_end": 263
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 310,
+            "line_end": 310
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The cited image references explicitly use the mutable latest tag."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Database connection strings",
+        "description": "- DATABASE_URL=postgresql://postgres:password@db:5432/myapp",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 53,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The example embeds the predictable PostgreSQL password \"password\" in a connection string. Copying this configuration can expose the database through known credentials."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "- DATABASE_URL=postgresql://postgres:password@db:5432/myapp",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 175,
+            "line_end": 175
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The worker connection string embeds the predictable PostgreSQL password \"password\". The same compose file publishes the database port, increasing misuse risk."
+      },
+      {
+        "title": "Database connection strings",
+        "description": "- REDIS_URL=redis://:redispassword@redis:6379/0",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 176,
+            "line_end": 176
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Redis connection string contains the hardcoded password \"redispassword\". Reusing this example would create a credential known to anyone with the template."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "- SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 55,
+            "line_end": 55
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "SECRET_KEY falls back to a public development value when the variable is absent. An accidental production deployment would use a predictable application secret."
+      },
+      {
+        "title": "Hardcoded Default Service Credentials",
+        "description": "The example assigns predictable passwords to database, cache, queue, monitoring, and administration services while publishing several host ports.",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 202,
+            "line_end": 202
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 246,
+            "line_end": 246
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 268,
+            "line_end": 268
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "Each cited line assigns a literal, predictable password in a runnable Compose example."
+      },
+      {
+        "title": "Unauthenticated Elasticsearch Exposure",
+        "description": "Elasticsearch security is disabled while port 9200 is published, allowing unauthenticated access when the host is reachable.",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 289,
+            "line_end": 293
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The configuration explicitly disables xpack security and maps Elasticsearch to a host port."
+      },
+      {
+        "title": "Container Secret Disclosure",
+        "description": "The env command prints every container environment variable, which commonly includes credentials and tokens, into terminal or agent output.",
+        "locations": [
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 319,
+            "line_end": 320
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The command directly executes env inside the selected container and prints its complete output."
+      },
+      {
+        "title": "Destructive Cleanup Without Confirmation",
+        "description": "The cleanup command forces removal of stopped containers, unused images, volumes, and networks without a confirmation or preview.",
+        "locations": [
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 204,
+            "line_end": 218
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "Every prune command uses -f, and volume pruning can permanently remove application data."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Hardcoded IP address",
+        "description": "if docker exec \"$container\" ping -c 1 8.8.8.8 &>/dev/null; then",
+        "locations": [
+          {
+            "file": "scripts/docker_helper.sh",
+            "line_start": 289,
+            "line_end": 289
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The network diagnostic makes an actual outbound ICMP request to 8.8.8.8 from the selected container. This creates undeclared external traffic in restricted environments."
+      },
+      {
+        "title": "Mutable Production Image Tags",
+        "description": "Several runnable services use latest tags, so future pulls can retrieve unreviewed image changes or compromised upstream releases.",
+        "locations": [
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 220,
+            "line_end": 220
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 241,
+            "line_end": 241
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 263,
+            "line_end": 263
+          },
+          {
+            "file": "examples/docker-compose.yml",
+            "line_start": 310,
+            "line_end": 310
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The cited image references explicitly use the mutable latest tag."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 2499,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T09:10:08.139Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build and Debug Docker Workflows",
+    "value_statement": "Containerizing applications consistently requires many connected Docker decisions. This skill guides builds, Compose services, diagnostics, optimization, and production hardening with reusable examples.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Docker workflow",
+      "Docker Compose",
+      "multi-stage builds",
+      "container debugging",
+      "image optimization",
+      "Docker deployment",
+      "container security"
+    ],
+    "actual_capabilities": [
+      "Creates multi-stage Dockerfile plans for Node.js, Python, Go, Java, and Rust applications.",
+      "Designs Docker Compose services with dependencies, networks, volumes, health checks, and environment-specific overrides.",
+      "Explains layer caching, BuildKit cache mounts, minimal images, and non-root runtime users.",
+      "Provides Docker commands for building, running, inspecting, logging, restarting, and troubleshooting containers.",
+      "Includes a Bash helper for health checks, backups, cleanup, network inspection, and image analysis.",
+      "Reviews container configurations for production readiness, resource limits, monitoring, and deployment practices."
+    ],
+    "limitations": [
+      "Examples require adaptation to the application, directory structure, ports, and package manager.",
+      "The helper script requires local Docker access and can perform destructive cleanup operations.",
+      "The included Compose example contains development credentials and must not be deployed unchanged.",
+      "The skill does not replace vulnerability scanning, secret management, or an orchestration platform."
+    ],
+    "use_cases": [
+      {
+        "title": "Containerize a New Service",
+        "description": "Create a compact, non-root multi-stage image with dependency caching and a practical health check.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Standardize Local Environments",
+        "description": "Define repeatable application, database, cache, and worker services with Compose networks and volumes.",
+        "target_user": "Development team lead"
+      },
+      {
+        "title": "Prepare a Production Deployment",
+        "description": "Review images and Compose settings for security, observability, resource limits, and controlled updates.",
+        "target_user": "Platform engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a Dockerfile",
+        "prompt": "Create a multi-stage Dockerfile for [application] using [runtime]. Use a non-root user, add a health check, and explain each stage.",
+        "scenario": "Beginner containerization"
+      },
+      {
+        "title": "Compose a Local Stack",
+        "prompt": "Design a Docker Compose setup for [services]. Include isolated networks, named volumes, health checks, and development overrides.",
+        "scenario": "Multi-service development"
+      },
+      {
+        "title": "Diagnose a Container",
+        "prompt": "Diagnose [symptom] for container [name]. Provide ordered inspection steps, expected evidence, and reversible fixes before destructive actions.",
+        "scenario": "Operational troubleshooting"
+      },
+      {
+        "title": "Harden a Deployment",
+        "prompt": "Audit these Docker files for secrets, privileges, network exposure, mutable images, resource limits, and recovery risks. Prioritize fixes by impact.",
+        "scenario": "Advanced production review"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Containerize a Node.js API for production.",
+        "output": "A two-stage image plan separates dependency installation from runtime, uses a non-root account, and adds a localhost health check."
+      },
+      {
+        "input": "Why does my Compose service start before PostgreSQL is ready?",
+        "output": [
+          "Add a PostgreSQL health check.",
+          "Use a health-based dependency condition.",
+          "Keep application retry logic for temporary database failures."
+        ]
+      },
+      {
+        "input": "Review this large Python image.",
+        "output": "The review identifies build-only packages, cache retention, layer ordering, and a slim runtime stage as the main reduction opportunities."
+      }
+    ],
+    "best_practices": [
+      "Pin reviewed image versions or digests and update them through a controlled process.",
+      "Keep secrets outside images and Compose files by using a dedicated secret manager.",
+      "Preview cleanup and deployment effects, then require confirmation before data-changing commands."
+    ],
+    "anti_patterns": [
+      "Do not deploy example passwords, fallback secrets, or exposed administration services.",
+      "Do not use mutable latest tags for production images.",
+      "Do not run broad prune commands before reviewing containers, images, networks, and volumes."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill install Docker?",
+        "answer": "No. It provides installation guidance, but Docker and Compose must be installed with appropriate host permissions."
+      },
+      {
+        "question": "Which application runtimes are covered?",
+        "answer": "The examples cover Node.js, Python, Go, Java, and Rust, with patterns adaptable to other runtimes."
+      },
+      {
+        "question": "Can I use the Compose example in production?",
+        "answer": "Not unchanged. Replace credentials, restrict ports, enable service security, pin images, and review resource requirements."
+      },
+      {
+        "question": "Does the helper script modify Docker resources?",
+        "answer": "Yes. Restart, backup, and cleanup commands change resources, and cleanup can permanently remove unused volumes."
+      },
+      {
+        "question": "Does the skill create Kubernetes manifests?",
+        "answer": "No. It focuses on Dockerfiles and Docker Compose, though its image practices can support later orchestration."
+      },
+      {
+        "question": "How should secrets be supplied?",
+        "answer": "Use Docker secrets or an external secret manager, avoid fallback values, and keep secret files outside build contexts."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "examples",
+      "type": "dir",
+      "path": "examples",
+      "children": [
+        {
+          "name": "docker-compose.yml",
+          "type": "file",
+          "path": "examples/docker-compose.yml",
+          "lines": 396
+        },
+        {
+          "name": "Dockerfile.multi-stage",
+          "type": "file",
+          "path": "examples/Dockerfile.multi-stage",
+          "lines": 359
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "docker_helper.sh",
+          "type": "file",
+          "path": "scripts/docker_helper.sh",
+          "lines": 546
+        }
+      ]
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 385
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 458
+    }
+  ]
+}

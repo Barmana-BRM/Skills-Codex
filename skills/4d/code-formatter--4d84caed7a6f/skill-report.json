@@ -1,0 +1,230 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T07:35:47.020Z",
+    "slug": "curiouslearner-code-formatter",
+    "source_url": "https://github.com/CuriousLearner/devkit/tree/main/skills/code-formatter",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "566a6899b739ef0eb5d9566a3932d16a835352cbbc9c7b965063704f0812a2c8",
+    "tree_hash": "8bd9e874db54045e812c42a9bf2b5584ff2589dfe94186e7179087987d114f60",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "code-formatter",
+    "description": "Automatically format code across multiple languages with opinionated configurations.",
+    "summary": "Automatically format code across multiple languages with opinionated configurations.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "CuriousLearner",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "code-formatting",
+      "prettier",
+      "python-formatting",
+      "style-guides",
+      "developer-tools"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The only static finding is a false positive caused by a Markdown code fence in SKILL.md usage examples. No prompt injection, data exfiltration intent, or unsafe runtime behavior was found in the reviewed skill text.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 42
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 42,
+        "snippet": "```"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "SKILL.md lines 37-42 contain a Markdown usage example block with @code-formatter commands. This is not Ruby shell backtick execution and does not execute commands."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 60,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T07:35:47.020Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Format Code Consistently Across Projects",
+    "value_statement": "Inconsistent formatting slows reviews and makes code harder to compare. This skill guides Claude, Codex, and Claude Code to format supported languages with project-aware rules.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code formatter",
+      "Prettier formatting",
+      "Black Python",
+      "gofmt",
+      "rustfmt",
+      "style guide automation",
+      "developer workflow"
+    ],
+    "actual_capabilities": [
+      "Detects common code languages in a directory or requested path.",
+      "Checks for existing formatting configuration files before choosing defaults.",
+      "Applies language-specific formatter guidance for JavaScript, Python, Go, Rust, Java, web files, and data files.",
+      "Supports check-only and language-specific formatting requests.",
+      "Reports formatted files and style decisions after work is complete."
+    ],
+    "limitations": [
+      "Requires the relevant formatter tools to be installed in the working environment.",
+      "Does not define custom formatters beyond the listed language ecosystems.",
+      "Should ask before modifying project formatting configuration files.",
+      "Must skip generated code, vendor directories, binary files, and lock files."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare a pull request",
+        "description": "Format changed files before review so diffs focus on behavior instead of whitespace or style drift.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Standardize a mixed-language repository",
+        "description": "Apply appropriate formatter guidance across web, backend, data, and documentation files in one workflow.",
+        "target_user": "Repository maintainer"
+      },
+      {
+        "title": "Audit formatting without edits",
+        "description": "Run a check-only pass to identify files that need formatting before a release or migration.",
+        "target_user": "Build engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Format the current project",
+        "prompt": "@code-formatter",
+        "scenario": "Beginner request for formatting the active workspace with default behavior."
+      },
+      {
+        "title": "Format one directory",
+        "prompt": "@code-formatter src/",
+        "scenario": "Limit formatting to a specific source directory."
+      },
+      {
+        "title": "Check formatting only",
+        "prompt": "@code-formatter --check-only",
+        "scenario": "Review formatting status without changing files."
+      },
+      {
+        "title": "Format one language",
+        "prompt": "@code-formatter --language python",
+        "scenario": "Advanced request that targets one language ecosystem and its formatter conventions."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A developer asks to format a TypeScript and CSS project.",
+        "output": "The assistant identifies existing Prettier settings, formats supported files, skips lock files, and summarizes the edited paths."
+      },
+      {
+        "input": "A maintainer requests a check-only Python formatting pass.",
+        "output": "The assistant reports which Python files do not match the configured style and recommends the formatter command to run."
+      },
+      {
+        "input": "A team asks to format a repository with Go, Markdown, and YAML files.",
+        "output": "The assistant applies the relevant formatting rules, respects existing configuration, and reports any skipped generated directories."
+      }
+    ],
+    "best_practices": [
+      "Run the skill from the repository root so project configuration files are detected.",
+      "Use check-only mode before large formatting changes or release branches.",
+      "Review the final summary before committing formatting-only changes."
+    ],
+    "anti_patterns": [
+      "Do not format vendor, generated, binary, or lock files.",
+      "Do not overwrite existing formatter configuration without explicit approval.",
+      "Do not mix formatting changes with unrelated feature edits in the same commit."
+    ],
+    "faq": [
+      {
+        "question": "Which languages does this skill cover?",
+        "answer": "It covers JavaScript, TypeScript, Python, Go, Rust, Java, CSS, HTML, JSON, YAML, and Markdown."
+      },
+      {
+        "question": "Does it respect existing project settings?",
+        "answer": "Yes. The skill instructs the assistant to check existing formatter configuration before applying default rules."
+      },
+      {
+        "question": "Can it run without changing files?",
+        "answer": "Yes. Use the check-only request to report formatting issues without modifying files."
+      },
+      {
+        "question": "Will it edit formatter configuration files?",
+        "answer": "It should ask before modifying configuration files such as Prettier, EditorConfig, or Python project settings."
+      },
+      {
+        "question": "Does it install formatter tools?",
+        "answer": "No. The skill provides formatting workflow guidance and expects required tools to exist in the environment."
+      },
+      {
+        "question": "Is this useful with Claude Code and Codex?",
+        "answer": "Yes. It is declared compatible with Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 60
+    }
+  ]
+}

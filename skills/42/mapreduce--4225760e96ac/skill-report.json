@@ -1,0 +1,829 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-13T16:19:32.582Z",
+    "slug": "consiliency-mapreduce",
+    "source_url": "https://github.com/Consiliency/treesitter-chunker/tree/main/.ai-dev-kit/skills/mapreduce",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "ec24c6a59c1ceeb954e87c3b037b94f5962307066f90f398585c356a2bdc1a16",
+    "tree_hash": "a480cf93bdf369b4130bedc84b2f306b02552ba78b3d94d89fd810476c2ec71d",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "MapReduce Skill",
+    "description": "Coordinates parallel AI workers and external providers, then compares or consolidates their outputs using documented workflows and scoring rubrics.",
+    "summary": "Fan out planning, implementation, or debugging tasks and reduce multiple results into one attributed outcome.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "Consiliency",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "multi-agent",
+      "orchestration",
+      "parallel-planning",
+      "code-comparison",
+      "output-synthesis"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Manual review found that most alerts are Markdown wording or deterministic shell examples, but four command-substitution examples invoke external AI CLIs and create data-disclosure or workspace-change risks. Additional review found that generated implementations may be executed during reduction and optional cleanup can irreversibly delete artifacts; no prompt injection language was present.",
+    "remediation": [
+      {
+        "issue": "External provider examples send prompts or local specification content to third-party CLIs, and Codex examples enable full-auto mode.",
+        "suggestion": "Require explicit approval, redact sensitive content, avoid full-auto mode, and document each provider's data handling before invocation.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The reduction workflow can run tests against AI-generated implementations.",
+        "suggestion": "Review generated code first, then compile and test it inside an isolated environment without secrets, network access, or host write permissions.",
+        "severity": "high"
+      },
+      {
+        "issue": "The optional cleanup example uses recursive deletion with wildcards.",
+        "suggestion": "Archive files by default and require a dry run plus explicit confirmation before deleting matched paths.",
+        "severity": "medium"
+      },
+      {
+        "issue": "SKILL.md lacks valid frontmatter and was excluded from static scanning.",
+        "suggestion": "Add valid marketplace frontmatter so future static scans cover the entry file.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 224,
+            "line_end": 225
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 225,
+            "line_end": 228
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 228,
+            "line_end": 229
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 229,
+            "line_end": 230
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 230,
+            "line_end": 253
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "cookbook/parallel-planning.md",
+            "line_start": 84,
+            "line_end": 94
+          },
+          {
+            "file": "cookbook/parallel-planning.md",
+            "line_start": 97,
+            "line_end": 107
+          },
+          {
+            "file": "reference/file-conventions.md",
+            "line_start": 189,
+            "line_end": 189
+          },
+          {
+            "file": "reference/file-conventions.md",
+            "line_start": 190,
+            "line_end": 190
+          },
+          {
+            "file": "reference/file-conventions.md",
+            "line_start": 191,
+            "line_end": 191
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:cookbook/multi-impl.md:224:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 224,
+        "line_end": 225,
+        "snippet": "- `should handle concurrent updates` - race condition in update"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 225,
+        "line_end": 228,
+        "snippet": "- `should validate email format` - missing email regex"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 228,
+        "line_end": 229,
+        "snippet": "- `should handle concurrent updates` - same issue"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:229:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 229,
+        "line_end": 230,
+        "snippet": "- `should paginate correctly` - off-by-one error"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:230:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 230,
+        "line_end": 253,
+        "snippet": "- `should apply rate limits` - not implemented"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:68:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "Bash(\"codex -m gpt-5.1-codex -a full-auto '$(cat specs/user-service-spec.md)"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:71:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "Bash(\"gemini -m gemini-3-pro '$(cat specs/user-service-spec.md)"
+      },
+      {
+        "id": "blocker:cookbook/multi-impl.md:15:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "- Complex algorithms with multiple valid solutions"
+      },
+      {
+        "id": "blocker:cookbook/multi-impl.md:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/multi-impl.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "# Quick validation - check files are non-empty and valid TS"
+      },
+      {
+        "id": "external_commands:cookbook/parallel-planning.md:84:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 84,
+        "line_end": 94,
+        "snippet": "codex -m gpt-5.1-codex -a full-auto \"$(cat <<'EOF'"
+      },
+      {
+        "id": "external_commands:cookbook/parallel-planning.md:97:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 97,
+        "line_end": 107,
+        "snippet": "gemini -m gemini-3-pro \"$(cat <<'EOF'"
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- Complex features with multiple valid approaches"
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:246:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 246,
+        "line_end": 246,
+        "snippet": "| Hybrid | security | Best of both | Complexity |"
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:248:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 248,
+        "line_end": 248,
+        "snippet": "**Resolution**: Hybrid approach"
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:279:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "cookbook/parallel-planning.md",
+        "line_start": 279,
+        "line_end": 280,
+        "snippet": "- Use priority criteria: Feasibility > Risk > Completeness"
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:189:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "reference/file-conventions.md",
+        "line_start": 189,
+        "line_end": 189,
+        "snippet": "mkdir -p .archive/mapreduce/$(date +%Y%m%d)"
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:190:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "reference/file-conventions.md",
+        "line_start": 190,
+        "line_end": 190,
+        "snippet": "mv specs/plans/planner-*.md .archive/mapreduce/$(date +%Y%m%d)/"
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:191:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "reference/file-conventions.md",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "mv implementations/impl-*.ts .archive/mapreduce/$(date +%Y%m%d)/"
+      },
+      {
+        "id": "blocker:reference/file-conventions.md:254:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/file-conventions.md",
+        "line_start": 254,
+        "line_end": 254,
+        "snippet": "## Invalid Outputs"
+      },
+      {
+        "id": "blocker:reference/scoring-rubrics.md:159:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "reference/scoring-rubrics.md",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "| Type errors | tsc/mypy | Correctness -1 per error |"
+      },
+      {
+        "id": "blocker:reference/scoring-rubrics.md:250:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "reference/scoring-rubrics.md",
+        "line_start": 250,
+        "line_end": 251,
+        "snippet": "- [ ] All existing tests pass"
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "category": "metadata",
+        "severity": "low",
+        "pattern": "Unscanned file (invalid_frontmatter) — manual review required",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[unscanned: invalid_frontmatter]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:cookbook/multi-impl.md:224:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks delimit a Markdown test name in a comparison report. They do not execute Ruby or a shell command."
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format a failed test name in Markdown. No executable context or command invocation exists."
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an inline Markdown label for a failed test. It has no Ruby or shell execution semantics."
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:229:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The detected backticks only format a test case name. The surrounding section is a static example report."
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:230:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The text is a Markdown-formatted failed test description. It cannot execute a command."
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:68:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The example invokes Codex in full-auto mode and attempts to include a local specification in the prompt. This can disclose project content and grant an external agent broad workspace access.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:cookbook/multi-impl.md:71:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The example invokes Gemini and attempts to pass local specification content through command substitution. This sends project information to an external provider.",
+        "severity": "medium"
+      },
+      {
+        "id": "blocker:cookbook/multi-impl.md:15:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line describes complex algorithms as a suitable use case. It performs no system discovery or reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/multi-impl.md:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is a comment introducing local TypeScript validation. It does not gather host or environment information."
+      },
+      {
+        "id": "external_commands:cookbook/parallel-planning.md:84:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The shell example invokes Codex in full-auto mode and writes its output into the project. External execution can expose prompt content and modify workspace files.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:cookbook/parallel-planning.md:97:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The shell example invokes Gemini with project planning content and redirects the response into the workspace. This is a real external-provider data transfer and file write.",
+        "severity": "medium"
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line identifies complex features as a planning use case. It contains no system enumeration behavior."
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:246:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a comparison-table row about a hybrid architecture. It does not inspect any system."
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:248:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line records a planning decision in a static output example. It performs no reconnaissance."
+      },
+      {
+        "id": "blocker:cookbook/parallel-planning.md:279:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The word priority appears in conflict-resolution guidance. There is no network access, probing, or discovery."
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:189:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The substitution obtains a local date for a deterministic archive directory. It contains no untrusted input or external communication."
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:190:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The date substitution only selects the documented local archive directory for plan files. It does not create a command-injection path."
+      },
+      {
+        "id": "external_commands:reference/file-conventions.md:191:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command uses a fixed date substitution while moving a documented implementation-file pattern. No attacker-controlled command content is present."
+      },
+      {
+        "id": "blocker:reference/file-conventions.md:254:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a Markdown heading for malformed worker outputs. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:reference/scoring-rubrics.md:159:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line lists type-checking tools in a scoring table. It contains no network operation."
+      },
+      {
+        "id": "blocker:reference/scoring-rubrics.md:250:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is a verification checklist item requiring tests to pass. It does not perform network reconnaissance."
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Manual review covered the complete readable SKILL.md file and found no prompt injection or hidden content. The missing frontmatter is a packaging issue, while executable examples are assessed separately."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Generated Implementations May Be Executed During Reduction",
+        "description": "The workflow tells the reducer to run tests against AI-generated implementations. Generated code can execute arbitrary behavior unless review and isolation occur first.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 88,
+            "line_end": 112
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The documented reducer steps explicitly require static analysis and tests for each generated implementation. Test execution is a direct code-execution boundary."
+      },
+      {
+        "title": "Recursive Wildcard Cleanup Can Delete Project Artifacts",
+        "description": "The optional cleanup example uses recursive deletion on a wildcard path. Matching files can be removed irreversibly without a preview or confirmation step.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "reference/file-conventions.md",
+            "line_start": 183,
+            "line_end": 195
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "The documented cleanup block directly includes rm -rf against the plan-output wildcard. The path is scoped, but deletion remains irreversible."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Generated Implementations May Be Executed During Reduction",
+        "description": "The workflow tells the reducer to run tests against AI-generated implementations. Generated code can execute arbitrary behavior unless review and isolation occur first.",
+        "locations": [
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 88,
+            "line_end": 112
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The documented reducer steps explicitly require static analysis and tests for each generated implementation. Test execution is a direct code-execution boundary."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "Bash(\"codex -m gpt-5.1-codex -a full-auto '$(cat specs/user-service-spec.md)",
+        "locations": [
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 68,
+            "line_end": 68
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The example invokes Codex in full-auto mode and attempts to include a local specification in the prompt. This can disclose project content and grant an external agent broad workspace access."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "Bash(\"gemini -m gemini-3-pro '$(cat specs/user-service-spec.md)",
+        "locations": [
+          {
+            "file": "cookbook/multi-impl.md",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.95,
+        "confidence_reasoning": "The example invokes Gemini and attempts to pass local specification content through command substitution. This sends project information to an external provider."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "codex -m gpt-5.1-codex -a full-auto \"$(cat <<'EOF'",
+        "locations": [
+          {
+            "file": "cookbook/parallel-planning.md",
+            "line_start": 84,
+            "line_end": 94
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.95,
+        "confidence_reasoning": "The shell example invokes Codex in full-auto mode and writes its output into the project. External execution can expose prompt content and modify workspace files."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "gemini -m gemini-3-pro \"$(cat <<'EOF'",
+        "locations": [
+          {
+            "file": "cookbook/parallel-planning.md",
+            "line_start": 97,
+            "line_end": 107
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "The shell example invokes Gemini with project planning content and redirects the response into the workspace. This is a real external-provider data transfer and file write."
+      },
+      {
+        "title": "Recursive Wildcard Cleanup Can Delete Project Artifacts",
+        "description": "The optional cleanup example uses recursive deletion on a wildcard path. Matching files can be removed irreversibly without a preview or confirmation step.",
+        "locations": [
+          {
+            "file": "reference/file-conventions.md",
+            "line_start": 183,
+            "line_end": 195
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The documented cleanup block directly includes rm -rf against the plan-output wildcard. The path is scoped, but deletion remains irreversible."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Unscanned file (invalid_frontmatter) — manual review required",
+        "description": "[unscanned: invalid_frontmatter]",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "metadata",
+        "source_severity": "low",
+        "confidence": 1,
+        "confidence_reasoning": "Force-confirmed metadata/low static finding; AI false-positive verdict rejected."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 1164,
+    "audit_model": "codex",
+    "audited_at": "2026-07-13T16:19:32.582Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Coordinate Parallel AI Work with MapReduce",
+    "value_statement": "Complex tasks benefit from independent perspectives, but comparing results manually takes time. This skill coordinates parallel workers and consolidates their outputs with structured rubrics.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI MapReduce",
+      "multi-agent orchestration",
+      "parallel planning",
+      "code comparison",
+      "agent consensus",
+      "AI workflow",
+      "output synthesis"
+    ],
+    "actual_capabilities": [
+      "Defines map, collect, and reduce phases for parallel AI work.",
+      "Provides examples for Claude subagents and Codex, Gemini, Cursor, and OpenCode CLIs.",
+      "Organizes plans, implementations, diagnoses, reviews, and consolidated artifacts with consistent names.",
+      "Compares generated implementations using correctness, readability, maintainability, performance, and security criteria.",
+      "Consolidates competing plans with attribution, confidence levels, conflict notes, and weighted priorities."
+    ],
+    "limitations": [
+      "This package provides documentation and templates, not an executable orchestration runtime.",
+      "External CLI examples require installed tools, authentication, and approval before project content leaves the environment.",
+      "Referenced reducer definitions and the debug consensus cookbook are not included in this package.",
+      "Consensus and rubric scores do not replace manual security, correctness, or architecture review."
+    ],
+    "use_cases": [
+      {
+        "title": "Compare Architecture Plans",
+        "description": "Generate conservative, aggressive, security, and scalability plans, then combine their strongest decisions into one roadmap.",
+        "target_user": "Technical leads"
+      },
+      {
+        "title": "Select an Implementation",
+        "description": "Produce several implementations, evaluate tests and quality metrics, then select or merge the strongest result.",
+        "target_user": "Software engineers"
+      },
+      {
+        "title": "Build Debugging Consensus",
+        "description": "Collect independent root-cause hypotheses and proposed fixes, then document the most credible verified resolution.",
+        "target_user": "Incident responders"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Compare Two Plans",
+        "prompt": "Create two plans for [feature]. Make one conservative and one delivery-focused. Compare risks, dependencies, and milestones. Produce one consolidated recommendation.",
+        "scenario": "Beginner planning comparison"
+      },
+      {
+        "title": "Generate Implementation Variants",
+        "prompt": "Create three implementations for [component] using the same interface and tests. Score correctness, readability, maintainability, performance, and security. Recommend one result.",
+        "scenario": "Intermediate code comparison"
+      },
+      {
+        "title": "Build a Security-Weighted Roadmap",
+        "prompt": "Generate plans from engineering, product, operations, and security perspectives. Consolidate them into phases. Give security extra weight and document every conflict.",
+        "scenario": "Advanced cross-functional planning"
+      },
+      {
+        "title": "Run a Controlled Multi-Provider Reduction",
+        "prompt": "Use approved providers to analyze [task]. Keep outputs separate and record attribution. Treat generated files as untrusted. Review all content before testing or consolidation.",
+        "scenario": "Advanced multi-provider orchestration"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Create three plans for adding organization-level access controls.",
+        "output": "A consolidated roadmap presents phased delivery, an attribution table, unresolved tradeoffs, a risk matrix, and confidence for each major decision."
+      },
+      {
+        "input": "Compare three implementations of a user service against one test suite.",
+        "output": [
+          "The comparison ranks each implementation across five quality criteria.",
+          "The recommendation selects the strongest base and identifies useful traits from alternatives.",
+          "The report lists failed tests, required fixes, and the final destination."
+        ]
+      },
+      {
+        "input": "Gather several diagnoses for an intermittent authentication failure.",
+        "output": "A consensus report ranks root-cause hypotheses, cites supporting evidence, selects a minimal fix, and lists verification steps."
+      }
+    ],
+    "best_practices": [
+      "Give every worker the same requirements, constraints, interfaces, and acceptance tests.",
+      "Keep provider outputs separate and preserve attribution before consolidation.",
+      "Review and sandbox generated code before compilation, tests, or file changes."
+    ],
+    "anti_patterns": [
+      "Do not use more workers when their perspectives and instructions are identical.",
+      "Do not send secrets, private source, or regulated data to external providers.",
+      "Do not accept a reducer decision without checking evidence, conflicts, and failed validations."
+    ],
+    "faq": [
+      {
+        "question": "What does the MapReduce skill produce?",
+        "answer": "It produces separate worker artifacts and a consolidated plan, implementation comparison, review, or debugging resolution."
+      },
+      {
+        "question": "Does it run multiple providers automatically?",
+        "answer": "No. It documents orchestration patterns. External CLIs and required agents must be installed, configured, and approved separately."
+      },
+      {
+        "question": "Which AI tools are supported?",
+        "answer": "The package supports Claude, Codex, and Claude Code. Its examples also mention Gemini, Cursor, and OpenCode CLIs."
+      },
+      {
+        "question": "How are competing outputs compared?",
+        "answer": "Reducers use weighted rubrics for plans, code, and debugging. They also record attribution, confidence, conflicts, and validation results."
+      },
+      {
+        "question": "Can I use it with sensitive code?",
+        "answer": "Use caution. Review provider policies, remove secrets, obtain approval, and keep generated code inside an isolated test environment."
+      },
+      {
+        "question": "Are all referenced workflow files included?",
+        "answer": "No. The package references reducer agent definitions and a debug consensus cookbook that are absent from the provided file structure."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "cookbook",
+      "type": "dir",
+      "path": "cookbook",
+      "children": [
+        {
+          "name": "multi-impl.md",
+          "type": "file",
+          "path": "cookbook/multi-impl.md",
+          "lines": 284
+        },
+        {
+          "name": "parallel-planning.md",
+          "type": "file",
+          "path": "cookbook/parallel-planning.md",
+          "lines": 291
+        }
+      ]
+    },
+    {
+      "name": "reference",
+      "type": "dir",
+      "path": "reference",
+      "children": [
+        {
+          "name": "file-conventions.md",
+          "type": "file",
+          "path": "reference/file-conventions.md",
+          "lines": 269
+        },
+        {
+          "name": "scoring-rubrics.md",
+          "type": "file",
+          "path": "reference/scoring-rubrics.md",
+          "lines": 320
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 225
+    }
+  ]
+}

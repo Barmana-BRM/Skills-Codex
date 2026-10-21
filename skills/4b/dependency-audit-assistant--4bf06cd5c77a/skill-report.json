@@ -1,0 +1,2240 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T01:03:30.577Z",
+    "slug": "crazydubya-dependency-audit-assistant",
+    "source_url": "https://github.com/CrazyDubya/claude-skills/tree/main/dependency-audit-assistant",
+    "source_ref": "main",
+    "model": "claude",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "8b20c269d5898730616cc7273bff0842b909a317da6372e9350ea5f5fc32d414",
+    "tree_hash": "3471bbb957ea55fb56ce5ce5a24dc45e5c4cd0876d806d3fdfb3c7204cc476fa",
+    "provenance": {
+      "model_requested": "claude-sonnet-4.6",
+      "model_effective": "claude:claude-sonnet-4.6",
+      "fallback_chain": [
+        {
+          "agent": "claude",
+          "model": "claude-sonnet-4.6",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "dependency-audit-assistant",
+    "description": "Audits project dependencies for known vulnerabilities, outdated packages, dependency tree issues, and license compliance concerns.",
+    "summary": "Audit dependencies across common package managers for security, freshness, and license risk.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "CrazyDubya",
+    "license": "MIT",
+    "tags": [
+      "dependency-audit",
+      "vulnerability-scanning",
+      "license-compliance",
+      "package-management",
+      "security-review"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem",
+      "network"
+    ],
+    "category": "security"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from reference documentation or markdown command examples. The real risks are the executable helper script, predictable /tmp/licenses.json usage, and automatic installation of external license tools.",
+    "remediation": [
+      {
+        "issue": "The license helper script installs tools globally when they are missing.",
+        "suggestion": "Ask for explicit confirmation before installing packages, or print installation instructions and exit. Prefer local project tools or isolated environments.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The license helper script writes to a predictable shared temporary file.",
+        "suggestion": "Use mktemp for a unique temporary file and clean it with a trap on exit.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The skill recommends commands that can modify dependencies, including automatic fixes.",
+        "suggestion": "Clearly separate read-only audit commands from modifying commands, and require user approval before running update or fix commands.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "reference/common-vulnerabilities.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 129,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 130,
+            "line_end": 130
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 132,
+            "line_end": 132
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 166
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 166,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 176
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 176,
+            "line_end": 179
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 179,
+            "line_end": 185
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 185,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 238
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 238,
+            "line_end": 272
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "reference/common-vulnerabilities.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "reference/common-vulnerabilities.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 134,
+            "line_end": 134
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 143,
+            "line_end": 143
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 175,
+            "line_end": 175
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:reference/common-vulnerabilities.md:23:node-js-child-process-module",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Node.js child_process module",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- **Common in**: child_process, shell execution libraries"
+      },
+      {
+        "id": "filesystem:reference/common-vulnerabilities.md:32:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "- **Example**: `fs.readFile(basePath + userInput)`"
+      },
+      {
+        "id": "filesystem:reference/common-vulnerabilities.md:74:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "- **Example**: `/(a+)+b/.test(aaaaa...c)` hangs"
+      },
+      {
+        "id": "obfuscation:reference/common-vulnerabilities.md:59:python-pickle-deserialization-rce-risk",
+        "category": "obfuscation",
+        "severity": "critical",
+        "pattern": "Python pickle deserialization (RCE risk)",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "- **Example**: `pickle.loads(untrusted_data)`"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:200:malware-type-keywords",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Malware type keywords",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "- Trojan in popular package"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:208:malware-type-keywords",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Malware type keywords",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 208,
+        "line_end": 208,
+        "snippet": "- Backdoor added"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:18:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "- **Example**: `db.query('SELECT * FROM users WHERE id = ' + userId)`"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:51:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "- **Fix**: Use framework security features, avoid innerHTML"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:75:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "- **Fix**: Timeout regexes, avoid nested quantifiers"
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:216:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "reference/common-vulnerabilities.md",
+        "line_start": 216,
+        "line_end": 217,
+        "snippet": "- Authentication bypass"
+      },
+      {
+        "id": "blocker:reference/licenses.md:215:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/licenses.md",
+        "line_start": 215,
+        "line_end": 215,
+        "snippet": "- Use a paid proprietary alternative"
+      },
+      {
+        "id": "blocker:reference/licenses.md:220:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "reference/licenses.md",
+        "line_start": 220,
+        "line_end": 220,
+        "snippet": "- May avoid license infection (consult lawyer)"
+      },
+      {
+        "id": "external_commands:scripts/check-licenses.sh:117:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "gem_name=$(echo \"$line\" | awk '{print $2}')"
+      },
+      {
+        "id": "external_commands:scripts/check-licenses.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:44:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "if ! command -v npx &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:50:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "if ! npx license-checker --version &> /dev/null 2>&1; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:79:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "if ! command -v pip &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:85:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "if ! command -v pip-licenses &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:104:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "if ! command -v bundle &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:110:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "if command -v license_finder &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:119:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "gem specification \"$gem_name\" license 2>/dev/null || echo \"$gem_name: Unknown\""
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:128:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "if ! command -v go &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:134:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "if ! command -v go-licenses &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:139:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "go-licenses report ./... 2>/dev/null | column -t"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:143:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "go-licenses report ./... 2>/dev/null | grep -i \"gpl\" || echo \"None found\""
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:56:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "npx license-checker --json > /tmp/licenses.json"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:63:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "jq -r 'to_entries[] | .value.licenses' /tmp/licenses.json | sort | uniq -c | sort -rn"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:67:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "jq -r 'to_entries[] | select(.value.licenses | contains(\"GPL\")) | \"\\(.key): \\(.value.licenses)\"' /tm"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:71:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "jq -r 'to_entries[] | select(.value.licenses == \"UNKNOWN\" or .value.licenses == \"\") | .key' /tmp/lic"
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:73:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "rm /tmp/licenses.json"
+      },
+      {
+        "id": "sensitive:scripts/check-licenses.sh:67:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "jq -r 'to_entries[] | select(.value.licenses | contains(\"GPL\")) | \"\\(.key): \\(.value.licenses)\"' /tm"
+      },
+      {
+        "id": "sensitive:scripts/check-licenses.sh:71:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/check-licenses.sh",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "jq -r 'to_entries[] | select(.value.licenses == \"UNKNOWN\" or .value.licenses == \"\") | .key' /tmp/lic"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- npm: `package.json` + `package-lock.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- Yarn: `package.json` + `yarn.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "- pnpm: `package.json` + `pnpm-lock.yaml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "- pip: `requirements.txt` or `setup.py`"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "- Poetry: `pyproject.toml` + `poetry.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "- Pipenv: `Pipfile` + `Pipfile.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "- Bundler: `Gemfile` + `Gemfile.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- Maven: `pom.xml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "- Gradle: `build.gradle` or `build.gradle.kts`"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "- Go modules: `go.mod` + `go.sum`"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "- Cargo: `Cargo.toml` + `Cargo.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "- Composer: `composer.json` + `composer.lock`"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "**npm:** `npm audit --json` or `npm audit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "**Yarn:** `yarn audit --json` or `yarn audit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "**pnpm:** `pnpm audit --json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "**pip:** `pip-audit` or `safety check`"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "**Poetry:** `poetry check`"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "**Bundler:** `bundle audit check --update`"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "**Maven:** `mvn dependency:tree` + OWASP Dependency Check"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "**Go:** `go list -m all` + `govulncheck`"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "**Cargo:** `cargo audit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "**Composer:** `composer audit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "**npm:** `npm outdated --json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "**Yarn:** `yarn outdated --json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "**pip:** `pip list --outdated`"
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "**Poetry:** `poetry show --outdated`"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "**Bundler:** `bundle outdated`"
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "**Cargo:** `cargo outdated`"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "**Go:** `go list -u -m all`"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "5. Reference the license compatibility matrix in `reference/licenses.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "- **npm:** `npx license-checker --json` or `npm-license-crawler`"
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "- **Python:** `pip-licenses`"
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "- **Ruby:** `license_finder`"
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "- **Go:** `go-licenses`"
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 129,
+        "line_end": 129,
+        "snippet": "- **npm:** `npm ls --all`"
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "- **Yarn:** `yarn why <package>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 131,
+        "snippet": "- **pip:** `pipdeptree`"
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "- **Maven:** `mvn dependency:tree`"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 166,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 169,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 176,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 176,
+        "line_end": 179,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 179,
+        "line_end": 185,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:185:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 185,
+        "line_end": 194,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "- Update: `npm update` or `npm audit fix`"
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 238,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:238:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 238,
+        "line_end": 272,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 273,
+        "snippet": "- `scripts/check-licenses.sh`: Extract and check license information"
+      },
+      {
+        "id": "external_commands:SKILL.md:273:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 273,
+        "line_end": 274,
+        "snippet": "- `reference/licenses.md`: License compatibility matrix"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 279,
+        "snippet": "- `reference/common-vulnerabilities.md`: Common vulnerability patterns"
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 279,
+        "line_end": 285,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 285,
+        "line_end": 288,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 288,
+        "line_end": 292,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:292:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 292,
+        "line_end": 295,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:295:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 295,
+        "line_end": 299,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:299:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 299,
+        "line_end": 302,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:302:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 302,
+        "line_end": 306,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:306:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 306,
+        "line_end": 309,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 309,
+        "line_end": 313,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:175:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 175,
+        "line_end": 175,
+        "snippet": "Notes: Review migration guide at https://react.dev/blog/2022/03/08/react-18-upgrade-guide"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:reference/common-vulnerabilities.md:23:node-js-child-process-module",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "filesystem:reference/common-vulnerabilities.md:32:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "filesystem:reference/common-vulnerabilities.md:74:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "obfuscation:reference/common-vulnerabilities.md:59:python-pickle-deserialization-rce-risk",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:200:malware-type-keywords",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:208:malware-type-keywords",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:18:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:51:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:75:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/common-vulnerabilities.md:216:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/licenses.md:215:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "blocker:reference/licenses.md:220:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is reference documentation describing vulnerability patterns or license options. It does not implement the dangerous behavior."
+      },
+      {
+        "id": "external_commands:scripts/check-licenses.sh:117:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution parses local bundle output with awk and stores a quoted gem name. There is no eval, shell concatenation, or direct command injection pattern."
+      },
+      {
+        "id": "external_commands:scripts/check-licenses.sh:1:unix-shell-invocation",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "medium",
+        "reason": "This is an executable shell script that runs package-manager and license-auditing commands. The behavior is aligned with the skill purpose, but it creates real local execution risk and should require user consent."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:44:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:50:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:79:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:85:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:104:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:110:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:119:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:128:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:134:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:139:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:143:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The /dev/null usage only suppresses command output while checking for installed tools. It does not read sensitive files or expose filesystem contents."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:56:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "medium",
+        "reason": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:63:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "medium",
+        "reason": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:67:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "medium",
+        "reason": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:71:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "medium",
+        "reason": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "id": "filesystem:scripts/check-licenses.sh:73:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "severity": "medium",
+        "reason": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "id": "sensitive:scripts/check-licenses.sh:67:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The detector matched the substring in /tmp/licenses.json, not a certificate or private key path. The command reads license metadata only."
+      },
+      {
+        "id": "sensitive:scripts/check-licenses.sh:71:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The detector matched the substring in /tmp/licenses.json, not a certificate or private key path. The command reads license metadata only."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:185:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:238:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:273:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:292:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:295:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:299:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:302:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:306:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The backtick pattern is markdown formatting for package manager names and user-authorized audit commands. It is not Ruby backtick execution or hidden command execution."
+      },
+      {
+        "id": "network:SKILL.md:175:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The URL is a React migration guide cited as documentation for a sample outdated package report. It is not an automatic network request or data exfiltration path."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Automatic Global Tool Installation",
+        "description": "The helper script installs missing tools with npm install -g, pip install, and go install before running license checks. This can change the user environment and fetch code from external package registries without a separate confirmation step.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 50,
+            "line_end": 52
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 84,
+            "line_end": 87
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 133,
+            "line_end": 136
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "The install commands are explicit and run when tools are missing. The behavior is useful for setup but has real supply-chain and environment-modification impact."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unix shell invocation",
+        "description": "#!/bin/bash",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "This is an executable shell script that runs package-manager and license-auditing commands. The behavior is aligned with the skill purpose, but it creates real local execution risk and should require user consent."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "npx license-checker --json > /tmp/licenses.json",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 56,
+            "line_end": 56
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "jq -r 'to_entries[] | .value.licenses' /tmp/licenses.json | sort | uniq -c | sort -rn",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 63,
+            "line_end": 63
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "jq -r 'to_entries[] | select(.value.licenses | contains(\"GPL\")) | \"\\(.key): \\(.value.licenses)\"' /tm",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 67,
+            "line_end": 67
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "jq -r 'to_entries[] | select(.value.licenses == \"UNKNOWN\" or .value.licenses == \"\") | .key' /tmp/lic",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "rm /tmp/licenses.json",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The script uses a predictable shared path, /tmp/licenses.json, for intermediate output. This can cause file clobbering or symlink race issues on shared systems."
+      },
+      {
+        "title": "Automatic Global Tool Installation",
+        "description": "The helper script installs missing tools with npm install -g, pip install, and go install before running license checks. This can change the user environment and fetch code from external package registries without a separate confirmation step.",
+        "locations": [
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 50,
+            "line_end": 52
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 84,
+            "line_end": 87
+          },
+          {
+            "file": "scripts/check-licenses.sh",
+            "line_start": 133,
+            "line_end": 136
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The install commands are explicit and run when tools are missing. The behavior is useful for setup but has real supply-chain and environment-modification impact."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 1099,
+    "audit_model": "claude",
+    "audited_at": "2026-07-09T01:03:30.577Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Audit Dependencies for Security Risk",
+    "value_statement": "Dependency risks are hard to prioritize across package managers and license rules. This skill guides Claude, Codex, and Claude Code through practical audits with clear remediation steps.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "dependency audit",
+      "vulnerability scanning",
+      "license compliance",
+      "npm audit",
+      "package security",
+      "software supply chain",
+      "outdated dependencies"
+    ],
+    "actual_capabilities": [
+      "Detects common package managers from lock files and manifest files.",
+      "Suggests security audit commands for npm, Yarn, pnpm, pip, Poetry, Bundler, Maven, Go, Cargo, and Composer.",
+      "Categorizes vulnerabilities by severity, affected package, CVE, available fix, and production exposure.",
+      "Checks outdated packages and separates patch, minor, and major update recommendations.",
+      "Reviews dependency licenses and flags GPL, AGPL, unlicensed, unknown, and custom license concerns.",
+      "Provides a structured dependency audit report with recommended action priority."
+    ],
+    "limitations": [
+      "It depends on local package manager tools and registry data being available.",
+      "It does not replace legal review for license obligations.",
+      "It cannot prove exploitability without understanding application runtime usage.",
+      "Some suggested commands can modify dependencies if the user approves them."
+    ],
+    "use_cases": [
+      {
+        "title": "Pre-release dependency review",
+        "description": "Run a structured audit before shipping a release and prioritize fixes by severity and exposure.",
+        "target_user": "Release engineers"
+      },
+      {
+        "title": "Open source license screening",
+        "description": "Identify dependencies with GPL, AGPL, unknown, or custom licenses before adding them to a product.",
+        "target_user": "Engineering managers"
+      },
+      {
+        "title": "Maintenance backlog planning",
+        "description": "Group outdated packages by patch, minor, and major update effort for safer dependency maintenance.",
+        "target_user": "Application developers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a basic dependency audit",
+        "scenario": "Beginner audit for one repository.",
+        "prompt": "Audit this project for dependency vulnerabilities and outdated packages. Start with read-only checks and summarize the highest priority fixes."
+      },
+      {
+        "title": "Check license compliance",
+        "scenario": "Review license risk before release.",
+        "prompt": "Review dependency licenses in this project. Flag GPL, AGPL, unknown, unlicensed, and custom licenses, then suggest safe alternatives where possible."
+      },
+      {
+        "title": "Prioritize vulnerability remediation",
+        "scenario": "Convert audit output into an action plan.",
+        "prompt": "Analyze the dependency audit results and rank fixes by severity, exploitability, production exposure, and update risk."
+      },
+      {
+        "title": "Create a release readiness report",
+        "scenario": "Advanced multi-language project review.",
+        "prompt": "Detect all package managers in this repository, audit vulnerabilities and licenses, identify risky transitive dependencies, and produce a release readiness report."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Audit this Node.js project before release.",
+        "output": "A prioritized report listing critical and high vulnerabilities first, affected packages, safe upgrade paths, and commands that require approval."
+      },
+      {
+        "input": "Check whether our dependencies are safe for a proprietary SaaS product.",
+        "output": "A license summary that separates permissive licenses from GPL, AGPL, unknown, and custom licenses, with legal-review notes."
+      },
+      {
+        "input": "Tell me which dependency updates are safe this sprint.",
+        "output": "An update plan grouped into patch updates, minor updates, major updates, and packages that need migration research."
+      }
+    ],
+    "best_practices": [
+      "Run read-only audit commands before any update or fix command.",
+      "Review production dependencies and direct dependencies before lower-risk development-only findings.",
+      "Test dependency updates in staging and keep lock files committed."
+    ],
+    "anti_patterns": [
+      "Do not run force update commands without explicit user approval.",
+      "Do not treat license guidance as legal advice for commercial decisions.",
+      "Do not ignore transitive dependencies because they are not listed directly."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill automatically fix vulnerable packages?",
+        "answer": "No. It can recommend fix commands, but modifying dependencies should require explicit user approval."
+      },
+      {
+        "question": "Which package managers does it cover?",
+        "answer": "It covers common JavaScript, Python, Ruby, Java, Go, Rust, and PHP package managers."
+      },
+      {
+        "question": "Can it review licenses?",
+        "answer": "Yes. It identifies permissive, weak copyleft, strong copyleft, unknown, and unlicensed dependency risks."
+      },
+      {
+        "question": "Is it a replacement for Snyk or Dependabot?",
+        "answer": "No. It helps interpret audit results and plan remediation, but it relies on package tools and advisory data."
+      },
+      {
+        "question": "Can it prove a CVE affects my application?",
+        "answer": "Not by itself. It can help assess exposure, but runtime usage and application context still need review."
+      },
+      {
+        "question": "Can Claude Code use this skill?",
+        "answer": "Yes. The skill declares support for Claude, Codex, and Claude Code workflows."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "reference",
+      "type": "dir",
+      "path": "reference",
+      "children": [
+        {
+          "name": "common-vulnerabilities.md",
+          "type": "file",
+          "path": "reference/common-vulnerabilities.md",
+          "lines": 328
+        },
+        {
+          "name": "licenses.md",
+          "type": "file",
+          "path": "reference/licenses.md",
+          "lines": 267
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "check-licenses.sh",
+          "type": "file",
+          "path": "scripts/check-licenses.sh",
+          "lines": 190
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 314
+    }
+  ]
+}

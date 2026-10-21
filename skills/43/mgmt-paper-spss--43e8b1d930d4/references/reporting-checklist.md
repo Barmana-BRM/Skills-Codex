@@ -1,0 +1,34 @@
+# SPSS Reporting Checklist
+
+- State software version when required.
+- Keep syntax file with manuscript archive.
+- Document raw data source.
+- Document cleaning decisions.
+- Report missing values.
+- Report reliability for each multi-item scale.
+- Report factor-analysis decisions.
+- Report controls and fixed blocks.
+- Report N for every model.
+- Report standard errors or confidence intervals.
+- Report effect sizes for experiments.
+- Plot interactions.
+- Avoid causal wording for cross-sectional survey mediation.
+- Connect each test to one hypothesis.
+- Keep tables in journal style.
+- Save exported tables separately from SPSS output viewer.
+- Re-run syntax from a clean session before submission.
+- Check item reverse coding.
+- Check scale direction.
+- Check duplicate responses.
+- Check attention checks and exclusions.
+- Check multicollinearity.
+- Check residual assumptions when relevant.
+- Check separation for logistic regression.
+- Check whether clustered data require multilevel models.
+- Check whether repeated measures require mixed models.
+- Note any robustness analysis outside SPSS, such as Python/R/Stata.
+- Archive `.sav`, `.sps`, and exported `.xlsx`/`.csv` tables.
+- Confirm the manuscript does not overstate significance.
+- Confirm tables and text use the same coefficients.
+- Confirm appendix contains supplemental analyses.
+- Confirm all variable labels are intelligible to readers.

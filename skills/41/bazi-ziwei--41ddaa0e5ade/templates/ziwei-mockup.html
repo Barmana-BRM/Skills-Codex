@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>紫微斗数命盘 · 张三 1991-11-14</title>
+<style>
+  :root {
+    --paper: #f5f1e8;
+    --paper-deep: #ebe5d5;
+    --ink: #2b2825;
+    --ink-soft: #6b6660;
+    --ink-faint: #a8a298;
+    --vermillion: #c1432f;   /* 化禄 / 命宫 */
+    --azure: #2e6da4;        /* 化权 */
+    --jade: #4a7c4e;         /* 化科 */
+    --obsidian: #1a1a1a;     /* 化忌 */
+    --line: #8b8378;
+    --line-soft: #c4bdb0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(180,160,130,0.08), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(180,160,130,0.06), transparent 50%);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .pan-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 0 0 1px var(--paper),
+      0 0 0 8px var(--paper-deep),
+      0 0 0 9px var(--line-soft),
+      0 8px 32px rgba(0,0,0,0.08);
+    padding: 32px;
+  }
+  .pan-title {
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line-soft);
+    padding-bottom: 16px;
+  }
+  .pan-title h1 {
+    font-size: 28px;
+    margin: 0 0 8px;
+    letter-spacing: 8px;
+    font-weight: normal;
+  }
+  .pan-title .subtitle {
+    color: var(--ink-soft);
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+
+  /* 4×4 grid */
+  .pan-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, minmax(160px, 1fr));
+    gap: 0;
+    border: 1px solid var(--line);
+    background: var(--line-soft);
+  }
+  .palace {
+    background: var(--paper);
+    padding: 10px 10px 6px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    overflow: hidden;
+  }
+  .palace.ming {
+    box-shadow: inset 0 0 0 2px var(--vermillion);
+    background: linear-gradient(135deg, #f9f3e4 0%, var(--paper) 100%);
+  }
+  .palace.shen::after {
+    content: "身";
+    position: absolute;
+    top: 6px; right: 6px;
+    font-size: 14px;
+    color: var(--vermillion);
+    border: 1px solid var(--vermillion);
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 2px;
+    font-weight: bold;
+  }
+
+  /* 中宫 — 占 2x2 中心 */
+  .center {
+    grid-column: 2 / 4;
+    grid-row: 2 / 4;
+    background: var(--paper);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .center .name {
+    font-size: 24px;
+    letter-spacing: 12px;
+    margin-bottom: 4px;
+  }
+  .center .meta {
+    color: var(--ink-soft);
+    font-size: 12px;
+    line-height: 1.9;
+    letter-spacing: 1px;
+  }
+  .center .sizhu {
+    margin-top: 12px;
+    display: flex;
+    gap: 14px;
+    font-size: 14px;
+  }
+  .center .sizhu .pillar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 10px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line-soft);
+  }
+  .center .sizhu .pillar .gan {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .center .sizhu .pillar .zhi {
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+  .center .sizhu .pillar .label {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+
+  /* 宫位标题行 */
+  .palace .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px dashed var(--line-soft);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  .palace .gong-name {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .palace .palace-ganzhi {
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+  }
+  .palace .main-stars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-bottom: 4px;
+  }
+  .palace .main-stars .star {
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+  }
+  .palace .aux-stars {
+    color: var(--ink-soft);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .palace .small-stars {
+    color: var(--ink-faint);
+    font-size: 10px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  /* 化曜染色 */
+  .sihua-禄 { color: var(--vermillion); }
+  .sihua-权 { color: var(--azure); }
+  .sihua-科 { color: var(--jade); }
+  .sihua-忌 { color: var(--obsidian); text-decoration: underline; text-decoration-thickness: 2px; }
+  .sihua-tag {
+    font-size: 10px;
+    margin-left: 2px;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  /* 大限/小限/流年带 */
+  .palace .limits {
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px dashed var(--line-soft);
+    font-size: 10px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .palace .limits .daxian {
+    font-weight: bold;
+    color: var(--ink);
+  }
+  .palace.current-daxian .limits .daxian {
+    color: var(--vermillion);
+  }
+
+  /* 印章 */
+  .seal {
+    position: absolute;
+    bottom: 8px; right: 8px;
+    color: var(--vermillion);
+    border: 1.5px solid var(--vermillion);
+    padding: 2px 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    transform: rotate(-2deg);
+    opacity: 0.7;
+  }
+
+  .footer-note {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+  <div class="pan-container">
+    <div class="pan-title">
+      <h1>紫 微 斗 数 命 盘</h1>
+      <div class="subtitle">阴 男 · 金 四 局 · 命 主 破 军 · 身 主 天 相</div>
+    </div>
+
+    <div class="pan-grid">
+      <!-- ROW 1: 巳 午 未 申 -->
+      <!-- 巳 兄弟 -->
+      <div class="palace" data-zhi="巳">
+        <div class="header"><span class="gong-name">兄弟</span><span class="palace-ganzhi">癸巳</span></div>
+        <div class="main-stars">
+          <span class="star">廉贞<span class="sihua-tag">陷</span></span>
+          <span class="star">贪狼<span class="sihua-tag">陷</span></span>
+        </div>
+        <div class="aux-stars">
+          <span class="sihua-忌">文昌<span class="sihua-tag">忌</span></span>
+          ·天马
+        </div>
+        <div class="small-stars">八座·天福·截空</div>
+        <div class="limits">
+          <div class="daxian">大限 14-23</div>
+          <div>小限 5·17·29·41·53　流年 11·23·35·47·59</div>
+        </div>
+      </div>
+      <!-- 午 命宫 -->
+      <div class="palace ming" data-zhi="午">
+        <div class="header"><span class="gong-name">命宫</span><span class="palace-ganzhi">甲午</span></div>
+        <div class="main-stars">
+          <span class="star sihua-禄">巨门<span class="sihua-tag">禄</span></span>
+        </div>
+        <div class="aux-stars">天钺·地空</div>
+        <div class="small-stars">天刑·天厨·天月</div>
+        <div class="limits">
+          <div class="daxian">大限 4-13</div>
+          <div>小限 6·18·30·42·54　流年 12·24·36·48·60</div>
+        </div>
+        <div class="seal">命</div>
+      </div>
+      <!-- 未 父母 -->
+      <div class="palace" data-zhi="未">
+        <div class="header"><span class="gong-name">父母</span><span class="palace-ganzhi">乙未</span></div>
+        <div class="main-stars"><span class="star">天相</span></div>
+        <div class="aux-stars">—</div>
+        <div class="small-stars">封诰·华盖</div>
+        <div class="limits">
+          <div class="daxian">大限 114-123</div>
+          <div>小限 7·19·31·43·55　流年 1·13·25·37·49</div>
+        </div>
+      </div>
+      <!-- 申 福德 -->
+      <div class="palace" data-zhi="申">
+        <div class="header"><span class="gong-name">福德</span><span class="palace-ganzhi">丙申</span></div>
+        <div class="main-stars">
+          <span class="star">天同<span class="sihua-tag">旺</span></span>
+          <span class="star">天梁<span class="sihua-tag">陷</span></span>
+        </div>
+        <div class="aux-stars">陀罗</div>
+        <div class="small-stars">红鸾·天巫·天空·孤辰·阴煞·劫煞</div>
+        <div class="limits">
+          <div class="daxian">大限 104-113</div>
+          <div>小限 8·20·32·44·56　流年 2·14·26·38·50</div>
+        </div>
+      </div>
+
+      <!-- ROW 2: 辰 · 中宫(2×2) · 酉 -->
+      <!-- 辰 夫妻(身宫) -->
+      <div class="palace shen" data-zhi="辰">
+        <div class="header"><span class="gong-name">夫妻</span><span class="palace-ganzhi">壬辰</span></div>
+        <div class="main-stars">
+          <span class="star sihua-权">太阴<span class="sihua-tag">陷</span><span class="sihua-tag">↑权</span></span>
+        </div>
+        <div class="aux-stars">地劫</div>
+        <div class="small-stars">天贵·解神·副截·寡宿·天德</div>
+        <div class="limits">
+          <div class="daxian">大限 24-33</div>
+          <div>小限 4·16·28·40·52　流年 10·22·34·46·58</div>
+        </div>
+      </div>
+
+      <!-- 中宫 占 grid-column 2-4, row 2-4 -->
+      <div class="center">
+        <div class="name">命 主</div>
+        <div class="meta">
+          阳历 1991 年 11 月 14 日 09:30<br>
+          农历 辛未年 十月初九 巳时<br>
+          地经 116.38°　真太阳时 1991-11-14 09:31<br>
+          阴 男 · 金 四 局
+        </div>
+        <div class="sizhu">
+          <div class="pillar"><div class="label">年</div><div class="gan">辛</div><div class="zhi">未</div></div>
+          <div class="pillar"><div class="label">月</div><div class="gan">己</div><div class="zhi">亥</div></div>
+          <div class="pillar"><div class="label">日</div><div class="gan">戊</div><div class="zhi">子</div></div>
+          <div class="pillar"><div class="label">时</div><div class="gan">丁</div><div class="zhi">巳</div></div>
+        </div>
+        <div class="meta" style="margin-top:10px">
+          命主 · 破 军　　身主 · 天 相　　子年斗君 · 申
+        </div>
+      </div>
+
+      <!-- 酉 田宅 -->
+      <div class="palace" data-zhi="酉">
+        <div class="header"><span class="gong-name">田宅</span><span class="palace-ganzhi">丁酉</span></div>
+        <div class="main-stars">
+          <span class="star">武曲<span class="sihua-tag">利</span></span>
+          <span class="star">七杀<span class="sihua-tag">旺</span></span>
+        </div>
+        <div class="aux-stars">
+          <span class="sihua-科">文曲<span class="sihua-tag">科</span></span>·禄存
+        </div>
+        <div class="small-stars">三台·天官</div>
+        <div class="limits">
+          <div class="daxian">大限 94-103</div>
+          <div>小限 9·21·33·45·57　流年 3·15·27·39·51</div>
+        </div>
+      </div>
+
+      <!-- ROW 3: 卯 · (中宫续) · 戌 -->
+      <!-- 卯 子女 -->
+      <div class="palace" data-zhi="卯">
+        <div class="header"><span class="gong-name">子女</span><span class="palace-ganzhi">辛卯</span></div>
+        <div class="main-stars"><span class="star">天府<span class="sihua-tag">得</span></span></div>
+        <div class="aux-stars">铃星</div>
+        <div class="small-stars">凤阁·蜚廉·年解　[来因宫]</div>
+        <div class="limits">
+          <div class="daxian">大限 34-43</div>
+          <div>小限 3·15·27·39·51　流年 9·21·33·45·57</div>
+        </div>
+      </div>
+
+      <!-- 戌 官禄 -->
+      <div class="palace" data-zhi="戌">
+        <div class="header"><span class="gong-name">官禄</span><span class="palace-ganzhi">戊戌</span></div>
+        <div class="main-stars">
+          <span class="star sihua-权">太阳<span class="sihua-tag">不</span><span class="sihua-tag">权</span></span>
+        </div>
+        <div class="aux-stars">擎羊</div>
+        <div class="small-stars">天姚·副旬</div>
+        <div class="limits">
+          <div class="daxian">大限 84-93</div>
+          <div>小限 10·22·34·46·58　流年 4·16·28·40·52</div>
+        </div>
+      </div>
+
+      <!-- ROW 4: 寅 丑 子 亥 -->
+      <!-- 寅 财帛 -->
+      <div class="palace" data-zhi="寅">
+        <div class="header"><span class="gong-name">财帛</span><span class="palace-ganzhi">庚寅</span></div>
+        <div class="main-stars"><span class="star" style="color:var(--ink-faint)">—</span></div>
+        <div class="aux-stars">天魁·火星</div>
+        <div class="small-stars">天喜·龙德</div>
+        <div class="limits">
+          <div class="daxian">大限 44-53</div>
+          <div>小限 2·14·26·38·50　流年 8·20·32·44·56</div>
+        </div>
+      </div>
+      <!-- 丑 疾厄 -->
+      <div class="palace" data-zhi="丑">
+        <div class="header"><span class="gong-name">疾厄</span><span class="palace-ganzhi">辛丑</span></div>
+        <div class="main-stars">
+          <span class="star sihua-科">紫微<span class="sihua-tag">庙</span><span class="sihua-tag">↑科</span></span>
+          <span class="star">破军<span class="sihua-tag">旺</span></span>
+        </div>
+        <div class="aux-stars">左辅·右弼</div>
+        <div class="small-stars">天才·天使·天虚·破碎</div>
+        <div class="limits">
+          <div class="daxian">大限 54-63</div>
+          <div>小限 1·13·25·37·49　流年 7·19·31·43·55</div>
+        </div>
+      </div>
+      <!-- 子 迁移 -->
+      <div class="palace" data-zhi="子">
+        <div class="header"><span class="gong-name">迁移</span><span class="palace-ganzhi">庚子</span></div>
+        <div class="main-stars"><span class="star">天机<span class="sihua-tag">庙</span></span></div>
+        <div class="aux-stars">—</div>
+        <div class="small-stars">恩光·咸池·大耗·月德</div>
+        <div class="limits">
+          <div class="daxian">大限 64-73</div>
+          <div>小限 12·24·36·48·60　流年 6·18·30·42·54</div>
+        </div>
+      </div>
+      <!-- 亥 交友 -->
+      <div class="palace" data-zhi="亥">
+        <div class="header"><span class="gong-name">交友</span><span class="palace-ganzhi">己亥</span></div>
+        <div class="main-stars"><span class="star" style="color:var(--ink-faint)">—</span></div>
+        <div class="aux-stars">—</div>
+        <div class="small-stars">龙池·天寿·天伤·台辅·旬空·天哭</div>
+        <div class="limits">
+          <div class="daxian">大限 74-83</div>
+          <div>小限 11·23·35·47·59　流年 5·17·29·41·53</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      生 年 四 化 ｜ 巨 门 化 禄 · 太 阳 化 权 · 文 曲 化 科 · 文 昌 化 忌
+    </div>
+    <div class="footer-note" style="margin-top:8px;color:var(--ink-faint);font-size:10px">
+      本盘仅供文化研究与娱乐参考 · ZodiacAI Skill
+    </div>
+  </div>
+</body>
+</html>
