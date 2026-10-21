@@ -1,0 +1,198 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T00:57:08.826Z",
+    "slug": "7spade-azure-role-selector",
+    "source_url": "https://github.com/7Spade/ng-dragon/tree/main/.github/skills/azure-role-selector",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "1ca826476f1f03d332d947f91eb8d4d01d597207412c01f1d07643d34c4d779f",
+    "tree_hash": "60b62326730ecab7c33b8c201ab1107be171fd3c4e9ac7344254539bcca1be7e",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "azure-role-selector",
+    "description": "Helps users choose least-privilege Azure roles for identities and generate assignment guidance using Azure MCP tools.",
+    "summary": "Selects minimal Azure RBAC roles and produces assignment guidance for identities.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "7Spade",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "azure",
+      "rbac",
+      "least-privilege",
+      "iam",
+      "bicep"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": []
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Static analysis reported no suspicious patterns in the single prompt-only SKILL.md file. Manual review found no prompt injection or malicious intent. The skill uses Azure MCP tools to identify least-privilege RBAC roles and produce assignment guidance.",
+    "remediation": [],
+    "risk_factor_evidence": [],
+    "static_findings": [],
+    "finding_verdicts": [],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 6,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T00:57:08.826Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Select Least-Privilege Azure Roles",
+    "value_statement": "Azure role decisions can grant too much access when requirements are unclear. This skill maps desired permissions to minimal roles and assignment guidance.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Azure RBAC",
+      "Azure roles",
+      "least privilege",
+      "managed identity",
+      "role assignment",
+      "Bicep"
+    ],
+    "actual_capabilities": [
+      "Identifies minimal Azure role definitions that match stated permissions.",
+      "Uses Azure MCP documentation to compare built-in role options.",
+      "Suggests a custom role definition when no built-in role fits.",
+      "Generates Azure CLI assignment commands through Azure MCP tooling.",
+      "Provides a Bicep role assignment snippet using Azure MCP schema and best practices."
+    ],
+    "limitations": [
+      "Does not execute Azure commands or verify assignments in a tenant.",
+      "Depends on Azure MCP tool access and current Microsoft documentation.",
+      "Requires clear permission, identity, and scope details for precise recommendations.",
+      "Generated custom roles and assignments still need administrative review."
+    ],
+    "use_cases": [
+      {
+        "title": "Choose Managed Identity Access",
+        "description": "Select the least-privilege Azure role for an application identity that needs specific resource permissions.",
+        "target_user": "Cloud platform engineer"
+      },
+      {
+        "title": "Review Access Requests",
+        "description": "Compare requested permissions with built-in roles before approving an Azure RBAC change.",
+        "target_user": "Security reviewer"
+      },
+      {
+        "title": "Prepare Infrastructure Changes",
+        "description": "Generate role assignment guidance and Bicep snippets for repeatable deployment workflows.",
+        "target_user": "DevOps engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Find a Built-In Role",
+        "scenario": "Beginner request with clear actions and scope.",
+        "prompt": "I need to let [identity] perform [actions] on [scope]. Use azure-role-selector to recommend the least-privilege Azure role."
+      },
+      {
+        "title": "Compare Role Options",
+        "scenario": "Intermediate review of multiple candidate roles.",
+        "prompt": "Compare built-in Azure roles for [actions] on [resource type]. Explain the least-privilege choice and note permissions that exceed the need."
+      },
+      {
+        "title": "Generate Assignment Guidance",
+        "scenario": "Advanced request for implementation-ready guidance.",
+        "prompt": "For [identity type and name], [scope], and required permissions [list], recommend the minimal role and generate Azure CLI assignment guidance."
+      },
+      {
+        "title": "Design a Custom Role",
+        "scenario": "Advanced case where built-in roles do not fit.",
+        "prompt": "No built-in role appears to match [permissions]. Draft a custom role definition, assignment guidance, and Bicep snippet for [scope]."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A managed identity needs read-only access to blobs in one storage account.",
+        "output": "The response names the closest least-privilege built-in role, explains the match, and describes the narrow assignment scope."
+      },
+      {
+        "input": "A deployment pipeline needs permission to assign one role at a resource group scope.",
+        "output": "The response compares relevant role options, highlights excess permissions, and recommends the smallest practical assignment."
+      },
+      {
+        "input": "No built-in role matches a short list of required actions.",
+        "output": "The response outlines a custom role approach, provides assignment guidance, and notes required administrator review."
+      }
+    ],
+    "best_practices": [
+      "Provide the exact Azure resource scope, identity type, and required actions.",
+      "Ask for built-in role comparison before considering a custom role.",
+      "Review generated CLI and Bicep guidance with an Azure administrator before applying changes."
+    ],
+    "anti_patterns": [
+      "Requesting broad Owner or Contributor access without listing needed permissions.",
+      "Applying role assignments at subscription scope when resource scope is sufficient.",
+      "Treating generated commands as approved production change records."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill assign roles in Azure?",
+        "answer": "No. It generates guidance and commands, but a user or administrator must apply them."
+      },
+      {
+        "question": "Can it recommend custom roles?",
+        "answer": "Yes. It can suggest a custom role when no built-in role matches the required permissions."
+      },
+      {
+        "question": "What details should I provide?",
+        "answer": "Provide the identity, resource scope, required actions, and any compliance limits."
+      },
+      {
+        "question": "Does it support Bicep?",
+        "answer": "Yes. The skill requests Bicep schema and best practice guidance through Azure MCP tools."
+      },
+      {
+        "question": "Is it limited to least privilege?",
+        "answer": "The prompt directs the assistant to prefer the minimal role that satisfies the requested permissions."
+      },
+      {
+        "question": "Can it verify my tenant permissions?",
+        "answer": "No. It cannot inspect your tenant unless the connected Azure tools provide that context."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 6
+    }
+  ]
+}

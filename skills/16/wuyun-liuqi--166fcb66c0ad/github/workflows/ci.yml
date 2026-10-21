@@ -1,0 +1,174 @@
+# GitHub Actions CI for WuYun-LiuQi Skills
+# Runs the primary Python workflow, RAG validation, regression tests, and optional Node.js API smoke test.
+
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }} / Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: '3.10'
+            node-version: '18'
+          - python-version: '3.11'
+            node-version: '20'
+          - python-version: '3.12'
+            node-version: '22'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Editable package install (pip install -e .)
+        run: pip install -e ".[lunar]"
+
+      - name: Pip install smoke (import API after install)
+        run: python tests/smoke_pip_install.py
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Health check
+        run: python scripts/health_check.py
+
+      - name: Validate RAG knowledge base
+        run: python scripts/validate_knowledge_base.py
+
+      - name: Check generated RAG index
+        run: python scripts/generate_rag_index.py --check
+
+      - name: Skill structure check
+        run: python scripts/check_skill_structure.py
+
+      - name: Agent routing scenario check
+        run: python scripts/check_routing_scenarios.py
+
+      - name: Sync routing manifest check
+        run: python scripts/sync_routing.py --check
+
+      - name: Conformance check
+        run: python scripts/check_conformance.py
+
+      - name: Visual consistency check (宣纸水墨 ink_theme)
+        run: python scripts/check_visual_consistency.py
+
+      - name: Content tier orphan audit
+        run: python scripts/audit_orphans.py
+
+      - name: Verify expansion suite
+        run: python tests/verify_expansion.py
+
+      - name: Classic literature cross-check (61 cases)
+        run: python scripts/verify_cross_check.py
+
+      - name: Suwen (素问) independent literature cross-check
+        run: python tests/verify_against_suwen.py
+
+      - name: P11 congenital susceptibility activation (earth/fire 覆盖度回升)
+        run: python tests/verify_p11_congenital_activation.py
+
+      - name: Retrieval quality benchmark (34 queries)
+        run: |
+          python scripts/eval_retrieval_quality.py
+          python scripts/eval_retrieval_quality.py --check-golden
+
+      - name: Stable citation (yle:) accessibility self-check
+        run: python scripts/resolve_ref.py --selfcheck
+
+      - name: README numbers consistency check
+        run: python scripts/check_readme_numbers.py
+
+      - name: Full CLI regression suite
+        run: python tests/full_regression_test.py
+
+      - name: SKILL.md end-to-end scenario suite
+        run: python tests/skill_e2e_test.py
+
+      - name: Full scenario user-flow suite
+        run: python tests/full_scenario_test.py
+
+      - name: Dahan boundary fixture test
+        run: python tests/test_dahan_boundary.py
+
+      - name: Package API + RAG key/date + report bundle test
+        run: python tests/test_package_and_rag.py
+
+      - name: Answer-layer assertion test (P2-1)
+        run: python tests/test_answer_layer.py
+
+      - name: Py/JS critical-field consistency (full sexagenary sweep)
+        run: python scripts/compare_py_js_yunqi.py --sweep
+
+      - name: RAG exact key + date bundle smoke
+        run: |
+          python scripts/rag_search.py --key water_excess --json
+          python scripts/rag_search.py --date 2026-06-29 --json
+
+      - name: Lightweight semantic search smoke
+        run: python scripts/rag_semantic.py 心火偏旺 --limit 3
+
+      - name: Cases progressive-load routing smoke (P1-3)
+        run: |
+          python scripts/cases_routing.py --syndrome 湿温 --json
+          python scripts/cases_routing.py --syndrome 温疫 --json
+          python scripts/cases_routing.py --rag-key water_excess --json
+          python scripts/cases_routing.py --list-assets --json
+
+      - name: Node.js API smoke test
+        run: node scripts/calculate_yunqi_api.js 2026-06-29 --json
+
+      - name: Constitution assessment mock test
+        run: python scripts/constitution_assessment.py --demo --json
+
+      - name: Personal profile with constitution assessment mock test
+        run: python scripts/personal_yunqi_profile.py 2003-04-19 杭州 --constitution-demo --json
+
+      - name: Weather alignment mock test
+        run: python scripts/weather_alignment.py 2026-06-29 --city 杭州 --mock --json
+
+      - name: Weather and constitution combined mock test
+        run: python scripts/yunqi_weather_constitution.py 2026-06-29 --birth-date 2003-04-19 --city 杭州 --mock --json
+
+      - name: Advanced alignment unified mock test
+        run: python scripts/advanced_alignment.py --date 2026-06-29 --birth-date 2003-04-19 --city 杭州 --constitution-demo --mock --json > reports/test-results/advanced-ci.json
+
+      - name: Advanced Markdown report integration test
+        run: python scripts/yunqi_report.py 2026 --audience practitioner --advanced-json reports/test-results/advanced-ci.json
+
+      - name: Practitioner report quality gate
+        run: |
+          python scripts/yunqi_report.py 2026 --audience practitioner > reports/test-results/yunqi_report_2026_practitioner.md
+          python scripts/report_quality_gate.py --file reports/test-results/yunqi_report_2026_practitioner.md --audience practitioner --snapshot reports/snapshots/yunqi_report_2026_practitioner.md
+
+      - name: Advanced HTML report integration test
+        run: python scripts/generate_html_report.py 2026-06-29 reports/test-results/advanced-ci.html --with-advanced-alignment --birth-date 2003-04-19 --city 杭州 --constitution-demo --mock
+
+      - name: Full-feature skill smoke (all scenarios, 3 rounds)
+        run: pip install pyarrow && python tests/skill_full_feature_smoke.py --rounds 3

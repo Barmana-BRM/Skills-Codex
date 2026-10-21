@@ -1,0 +1,2236 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T08:52:33.240Z",
+    "slug": "agentspace-so-image-edit",
+    "source_url": "https://github.com/agentspace-so/runcomfy-agent-skills/tree/main/image-edit/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "17c1b6b5c8c8162928eb0be77d1fe274f868ae287acd15a8838e6a83272c0192",
+    "tree_hash": "43fb8f2a8e7e7e0dbde1ff070de103d01b361dcad54fa3d367f2c4f85b223428",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "image-edit",
+    "description": "Routes image-editing requests to four RunComfy models for batch edits, multilingual text replacement, precise local changes, and mask-based inpainting.",
+    "summary": "Choose a suitable RunComfy image model and generate a focused edit command.",
+    "icon": "📦",
+    "author": "agentspace-so",
+    "license": "MIT",
+    "tags": [
+      "image-editing",
+      "inpainting",
+      "background-replacement",
+      "batch-processing",
+      "runcomfy"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static alerts are false positives caused by Markdown backticks, placeholder URLs, and ellipses misread as path traversal. The skill intentionally installs and invokes a third-party CLI, then sends prompts and image references to RunComfy. Its single-quoted JSON templates can permit shell injection if an agent interpolates untrusted text without robust escaping.",
+    "remediation": [
+      {
+        "issue": "User text can be interpolated into single-quoted shell JSON.",
+        "suggestion": "Pass structured input through argv, stdin, or a generated JSON file. Never concatenate prompts or URLs into a shell command string.",
+        "severity": "high"
+      },
+      {
+        "issue": "The setup installs and authenticates a third-party global CLI.",
+        "suggestion": "Pin an exact CLI version and require explicit confirmation before installation, login, or the first remote edit command.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Prompts and image references are processed by RunComfy servers.",
+        "suggestion": "Require user consent, explain retention and billing terms, and warn against confidential assets or publicly exposed sensitive images.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 135
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 135,
+            "line_end": 142
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 142,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 146,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 155
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 155,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 164
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 164,
+            "line_end": 170
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 170,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 182
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 182,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 196
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 196,
+            "line_end": 197
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 198
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 198,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 201
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 201,
+            "line_end": 207
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 207,
+            "line_end": 217
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 174
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 258,
+            "line_end": 258
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 174
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 266,
+            "line_end": 266
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 266,
+            "line_end": 266
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "iterations on the wrong model. Calls `runcomfy run <vendor>/<model>/edit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 30,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 52,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 53,
+        "snippet": "1. **RunComfy CLI** — `npm i -g @runcomfy/cli`"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 54,
+        "snippet": "2. **RunComfy account** — `runcomfy login`."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 60,
+        "snippet": "3. **CI / containers** — set `RUNCOMFY_TOKEN=<token>`."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 66,
+        "snippet": "**Model**: `google/nano-banana-2/edit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 67,
+        "snippet": "| `prompt` | string | yes | — | Lead with preservation goals, end with the change. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 68,
+        "snippet": "| `image_urls` | array | yes | — | **1–20** publicly-fetchable HTTPS URLs. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 69,
+        "snippet": "| `number_of_images` | int | no | 1 | 1–4 outputs per call. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "| `aspect_ratio` | enum | no | `auto` | `auto` follows input; lock for batch consistency. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "| `resolution` | enum | no | `1K` | `0.5K` / `1K` / `2K` / `4K`. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "| `output_format` | enum | no | `png` | `png` / `jpeg` / `webp`. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 73,
+        "snippet": "| `seed` | int | no | — | Reproducibility. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 77,
+        "snippet": "| `enable_web_search` | bool | no | false | Web-grounded edits (extra latency). |"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 84,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 88,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 97,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 101,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 103,
+        "snippet": "- **Preservation first**: `\"Keep [identity / pose / brand / framing] unchanged.\"` Then state the cha"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "- **Batch consistency**: lock `aspect_ratio` and `resolution` across the batch."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 116,
+        "snippet": "**Model**: `openai/gpt-image-2/edit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 117,
+        "snippet": "| `prompt` | string | yes | — | Edit instruction; lead with preservation. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 118,
+        "snippet": "| `images` | string[] | yes | — | **Up to 10** HTTPS URLs. First is primary; rest are auxiliary. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "| `size` | enum | no | `auto` | `auto`, `1024_1024`, `1024_1536`, `1536_1024`. **Only these.** |"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 131,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 135,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 135,
+        "line_end": 142,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 146,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 146,
+        "line_end": 146,
+        "snippet": "- **Quote in-image text exactly.** Name the script for non-Latin: `\"Japanese kana\"`, `\"Cyrillic\"`, `"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 148,
+        "snippet": "- **Number multi-refs**: `\"subject from image 1, lighting from image 2\"`."
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "- **Directional layout language**: `\"move the headline from top-right to bottom-center\"`, `\"replace "
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 155,
+        "snippet": "- **`size: \"auto\"`** preserves input ratio — recommended unless the edit changes framing."
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 155,
+        "line_end": 161,
+        "snippet": "**Model**: `blackforestlabs/flux-1-kontext/pro/edit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 162,
+        "snippet": "| `prompt` | string | yes | One declarative edit instruction. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 163,
+        "snippet": "| `image` | string | yes | **Single** source image URL. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 164,
+        "snippet": "| `aspect_ratio` | enum | no | Pick from supported W:H values. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:164:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 170,
+        "snippet": "| `seed` | int | no | Reproducibility. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 177,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 182,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 182,
+        "line_end": 189,
+        "snippet": "- **Preservation first.** Lead with `\"Keep [unchanged elements]\"` then state the change."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 195,
+        "snippet": "**Model**: `tongyi-mai/z-image/turbo/inpainting`"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 196,
+        "snippet": "| `prompt` | string | yes | What to fill / replace; preservation constraints for the unmasked surrou"
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 196,
+        "line_end": 197,
+        "snippet": "| `image` | string | yes | Source image URL. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 197,
+        "line_end": 198,
+        "snippet": "| `mask_image` | string | yes | **Grayscale mask URL** (white = inpaint, black = preserve). |"
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 198,
+        "line_end": 199,
+        "snippet": "| `strength` | float | no | 0.3–0.6 retouching, 0.7–1.0 full replacement. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 200,
+        "snippet": "| `control_scale` | float | no | 0.6–0.9 typical. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 201,
+        "snippet": "| `aspect_ratio` | enum | no | W:H output ratio. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 201,
+        "line_end": 207,
+        "snippet": "| `seed` | int | no | Reproducibility. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 207,
+        "line_end": 217,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 217,
+        "line_end": 221,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 221,
+        "line_end": 230,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 230,
+        "line_end": 235,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 235,
+        "snippet": "- **Strength by intent**: `0.3–0.5` for retouching / cleanup, `0.6–0.7` for object replacement with "
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "- **Name what stays outside the mask** in the prompt: `\"preserve rooflines and sky gradient\"`, `\"mat"
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 237,
+        "line_end": 237,
+        "snippet": "- **Spatial labels still help** even though the mask defines the region: `\"the left shelf\"`, `\"upper"
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "- **Brand-specific overrides** — if the user named a specific model, route to the corresponding bran"
+      },
+      {
+        "id": "external_commands:SKILL.md:262:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 262,
+        "line_end": 262,
+        "snippet": "The skill picks one of Nano Banana Edit / GPT Image 2 Edit / Flux Kontext Pro / Z-Image Turbo Inpain"
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 266,
+        "snippet": "- **Token storage**: `runcomfy login` writes the API token to `~/.config/runcomfy/token.json` with m"
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 267,
+        "line_end": 269,
+        "snippet": "- **Input boundary**: the user prompt is passed as a JSON string to the CLI via `--input`. The CLI d"
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "- **Outbound endpoints**: only `model-api.runcomfy.net` (request submission) and `*.runcomfy.net` / "
+      },
+      {
+        "id": "network:SKILL.md:18:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "homepage: https://www.runcomfy.com"
+      },
+      {
+        "id": "network:SKILL.md:24:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "[runcomfy.com](https://www.runcomfy.com/?utm_source=skills.sh&utm_medium=skill&utm_campaign=image-ed"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "\"image_urls\": [\"https://.../portrait.jpg\"]"
+      },
+      {
+        "id": "network:SKILL.md:92:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 92,
+        "snippet": "\"image_urls\": [\"https://.../sku-1.jpg\", \"https://.../sku-2.jpg\", \"https://.../sku-3.jpg\"],"
+      },
+      {
+        "id": "network:SKILL.md:128:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "\"images\": [\"https://.../poster-en.jpg\"]"
+      },
+      {
+        "id": "network:SKILL.md:139:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "\"images\": [\"https://.../subject.jpg\", \"https://.../room.jpg\"]"
+      },
+      {
+        "id": "network:SKILL.md:174:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 174,
+        "snippet": "\"image\": \"https://.../portrait.jpg\""
+      },
+      {
+        "id": "network:SKILL.md:211:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 211,
+        "snippet": "\"image\": \"https://.../street.jpg\","
+      },
+      {
+        "id": "network:SKILL.md:212:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "\"mask_image\": \"https://.../cables-mask.png\","
+      },
+      {
+        "id": "network:SKILL.md:225:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 225,
+        "snippet": "\"image\": \"https://.../product.jpg\","
+      },
+      {
+        "id": "network:SKILL.md:226:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "\"mask_image\": \"https://.../bg-mask.png\","
+      },
+      {
+        "id": "network:SKILL.md:258:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 258,
+        "line_end": 258,
+        "snippet": "Full reference: [docs.runcomfy.com/cli/troubleshooting](https://docs.runcomfy.com/cli/troubleshootin"
+      },
+      {
+        "id": "filesystem:SKILL.md:81:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "\"image_urls\": [\"https://.../portrait.jpg\"]"
+      },
+      {
+        "id": "filesystem:SKILL.md:92:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 92,
+        "snippet": "\"image_urls\": [\"https://.../sku-1.jpg\", \"https://.../sku-2.jpg\", \"https://.../sku-3.jpg\"],"
+      },
+      {
+        "id": "filesystem:SKILL.md:128:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "\"images\": [\"https://.../poster-en.jpg\"]"
+      },
+      {
+        "id": "filesystem:SKILL.md:139:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "\"images\": [\"https://.../subject.jpg\", \"https://.../room.jpg\"]"
+      },
+      {
+        "id": "filesystem:SKILL.md:174:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 174,
+        "snippet": "\"image\": \"https://.../portrait.jpg\""
+      },
+      {
+        "id": "filesystem:SKILL.md:211:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 211,
+        "snippet": "\"image\": \"https://.../street.jpg\","
+      },
+      {
+        "id": "filesystem:SKILL.md:212:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "\"mask_image\": \"https://.../cables-mask.png\","
+      },
+      {
+        "id": "filesystem:SKILL.md:225:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 225,
+        "snippet": "\"image\": \"https://.../product.jpg\","
+      },
+      {
+        "id": "filesystem:SKILL.md:226:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "\"mask_image\": \"https://.../bg-mask.png\","
+      },
+      {
+        "id": "filesystem:SKILL.md:266:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 266,
+        "snippet": "- **Token storage**: `runcomfy login` writes the API token to `~/.config/runcomfy/token.json` with m"
+      },
+      {
+        "id": "filesystem:SKILL.md:266:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 266,
+        "line_end": 266,
+        "snippet": "- **Token storage**: `runcomfy login` writes the API token to `~/.config/runcomfy/token.json` with m"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The skill explicitly directs the agent to invoke the local RunComfy CLI. This is a real external-command capability, even though the model route is constrained.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The fenced example runs npx to install a community skill globally. Executing remotely obtained package content creates supply-chain and local modification risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This prerequisite installs @runcomfy/cli globally through npm. Global third-party package installation executes package code and changes the host environment.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "This prerequisite executes runcomfy login, which starts an external authentication flow and stores a credential. The action is expected but security-relevant.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy for a remote Nano Banana edit and writes downloaded output locally. It is an actual external command, not only inline formatting.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy for a remote batch edit using supplied image URLs. It performs external execution, network processing, and local output writes.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy for a GPT Image 2 edit and sends prompt and image data to a remote service. The external command is operational.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy with multiple image references for remote composition. It is a real external command with network and filesystem side effects.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:146:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:164:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy for a Flux Kontext edit and downloads the result. The command is fixed to the documented model but still executes externally.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy inpainting with user-supplied image and mask URLs. It performs remote processing and writes generated output locally.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:217:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This shell block invokes RunComfy for masked region replacement. It is a real external command that transmits input references and downloads output.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:230:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:262:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The text explicitly says the skill invokes runcomfy run, posts to a remote API, polls, and downloads results. This confirms intentional external-command execution.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:266:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The documented runcomfy login command is an external operation that writes an API token to the user configuration directory. The behavior is disclosed but security-relevant.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched backticks are Markdown formatting around identifiers, sample text, or fence delimiters. No Ruby backtick operator or executable Ruby code exists at this location."
+      },
+      {
+        "id": "network:SKILL.md:18:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a user-facing HTTPS metadata or documentation link to the declared RunComfy project. The Markdown text does not automatically issue a request or transmit data."
+      },
+      {
+        "id": "network:SKILL.md:24:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a user-facing HTTPS metadata or documentation link to the declared RunComfy project. The Markdown text does not automatically issue a request or transmit data."
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:92:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:128:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:139:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:174:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:211:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:212:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:225:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:226:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is an illustrative https://... placeholder without a real host. It documents the required URL shape but cannot direct traffic to a hardcoded endpoint."
+      },
+      {
+        "id": "network:SKILL.md:258:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a user-facing HTTPS metadata or documentation link to the declared RunComfy project. The Markdown text does not automatically issue a request or transmit data."
+      },
+      {
+        "id": "filesystem:SKILL.md:81:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:92:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:128:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:139:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:174:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:211:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:212:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:225:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:226:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The three dots occur inside an illustrative HTTPS URL, not a filesystem path or parent-directory segment. No local path traversal is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:266:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line documents the standard RunComfy token location and specifies owner-only mode 0600. It neither reads arbitrary hidden files nor weakens credential permissions."
+      },
+      {
+        "id": "filesystem:SKILL.md:266:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line documents the standard RunComfy token location and specifies owner-only mode 0600. It neither reads arbitrary hidden files nor weakens credential permissions."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Potential Shell Injection Through Prompt Interpolation",
+        "description": "The examples place JSON inside single-quoted shell arguments, while user prompt text enters that JSON. An unescaped apostrophe could terminate the quote and inject shell syntax before the CLI receives the value.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 267,
+            "line_end": 267
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The shell templates and user-input flow are explicit, but actual exploitability depends on how the agent constructs and escapes argv at runtime."
+      },
+      {
+        "title": "Third-Party Processing of Prompts and Image References",
+        "description": "The CLI sends prompts to the RunComfy Model API, and RunComfy servers fetch supplied image and mask URLs. Sensitive content therefore leaves the local environment.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 262,
+            "line_end": 269
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directly documents API submission, server-side URL fetching, polling, and output downloads."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Potential Shell Injection Through Prompt Interpolation",
+        "description": "The examples place JSON inside single-quoted shell arguments, while user prompt text enters that JSON. An unescaped apostrophe could terminate the quote and inject shell syntax before the CLI receives the value.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 267,
+            "line_end": 267
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "The shell templates and user-input flow are explicit, but actual exploitability depends on how the agent constructs and escapes argv at runtime."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "iterations on the wrong model. Calls `runcomfy run <vendor>/<model>/edit`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The skill explicitly directs the agent to invoke the local RunComfy CLI. This is a real external-command capability, even though the model route is constrained."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 30
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "The fenced example runs npx to install a community skill globally. Executing remotely obtained package content creates supply-chain and local modification risk."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "1. **RunComfy CLI** — `npm i -g @runcomfy/cli`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 53
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This prerequisite installs @runcomfy/cli globally through npm. Global third-party package installation executes package code and changes the host environment."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "2. **RunComfy account** — `runcomfy login`.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 54
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "This prerequisite executes runcomfy login, which starts an external authentication flow and stores a credential. The action is expected but security-relevant."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 84
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy for a remote Nano Banana edit and writes downloaded output locally. It is an actual external command, not only inline formatting."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 97
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy for a remote batch edit using supplied image URLs. It performs external execution, network processing, and local output writes."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 131
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy for a GPT Image 2 edit and sends prompt and image data to a remote service. The external command is operational."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 135,
+            "line_end": 142
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy with multiple image references for remote composition. It is a real external command with network and filesystem side effects."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 170,
+            "line_end": 177
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy for a Flux Kontext edit and downloads the result. The command is fixed to the documented model but still executes externally."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 207,
+            "line_end": 217
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy inpainting with user-supplied image and mask URLs. It performs remote processing and writes generated output locally."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 221,
+            "line_end": 230
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "This shell block invokes RunComfy for masked region replacement. It is a real external command that transmits input references and downloads output."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "The skill picks one of Nano Banana Edit / GPT Image 2 Edit / Flux Kontext Pro / Z-Image Turbo Inpain",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 262,
+            "line_end": 262
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The text explicitly says the skill invokes runcomfy run, posts to a remote API, polls, and downloads results. This confirms intentional external-command execution."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- **Token storage**: `runcomfy login` writes the API token to `~/.config/runcomfy/token.json` with m",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 266,
+            "line_end": 266
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.97,
+        "confidence_reasoning": "The documented runcomfy login command is an external operation that writes an API token to the user configuration directory. The behavior is disclosed but security-relevant."
+      },
+      {
+        "title": "Third-Party Processing of Prompts and Image References",
+        "description": "The CLI sends prompts to the RunComfy Model API, and RunComfy servers fetch supplied image and mask URLs. Sensitive content therefore leaves the local environment.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 262,
+            "line_end": 269
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directly documents API submission, server-side URL fetching, polling, and output downloads."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 271,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T08:52:33.240Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Edit Images with Intent-Matched AI Models",
+    "value_statement": "Choosing the wrong image model wastes time and reduces edit quality. This skill routes each request to a suitable RunComfy model with focused parameters.",
+    "seo_keywords": [
+      "AI image editing",
+      "RunComfy",
+      "image inpainting",
+      "background replacement",
+      "multilingual image text",
+      "batch image editing",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Flux Kontext"
+    ],
+    "actual_capabilities": [
+      "Routes single or batch edits to Nano Banana Edit, with up to 20 input images and four outputs.",
+      "Uses GPT Image 2 Edit for multilingual text replacement, layout changes, and compositions with up to 10 references.",
+      "Uses Flux Kontext Pro for one-image, one-instruction local edits with preservation guidance.",
+      "Uses Z-Image Turbo Inpaint for mask-based removal or replacement with strength and control settings.",
+      "Builds RunComfy CLI requests and downloads generated images to a selected output directory."
+    ],
+    "limitations": [
+      "Requires the RunComfy CLI, a RunComfy account, and a valid login or API token.",
+      "Input images and masks must use publicly accessible HTTPS URLs for the documented routes.",
+      "Selects one model route per call and does not blend multiple model pipelines.",
+      "Quality, input counts, output sizes, latency, and availability depend on the selected model."
+    ],
+    "use_cases": [
+      {
+        "title": "Localize Campaign Artwork",
+        "description": "Replace headlines in multiple scripts while preserving photography, branding, layout, and visual identity.",
+        "target_user": "Marketing designer"
+      },
+      {
+        "title": "Standardize Product Galleries",
+        "description": "Apply consistent backgrounds, dimensions, and presentation across a batch of product images.",
+        "target_user": "E-commerce operator"
+      },
+      {
+        "title": "Clean Masked Regions",
+        "description": "Remove distractions or replace selected regions while preserving nearby textures, edges, and lighting.",
+        "target_user": "Photo retoucher"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Make a Basic Edit",
+        "prompt": "Edit [image URL]. Keep [elements] unchanged and change [target] to [desired result]. Save the result as [format].",
+        "scenario": "Beginner request for one clear image change."
+      },
+      {
+        "title": "Edit a Consistent Batch",
+        "prompt": "Apply [single edit] to [image URLs]. Preserve [identity or branding], lock [aspect ratio] and [resolution], and create [count] outputs.",
+        "scenario": "Intermediate batch editing with consistent dimensions."
+      },
+      {
+        "title": "Compose References and Replace Text",
+        "prompt": "Use image 1 as primary and images 2-[n] as references. Replace [text] with [exact text] in [script], preserving [layout details].",
+        "scenario": "Advanced multilingual composition using several references."
+      },
+      {
+        "title": "Control a Masked Inpaint",
+        "prompt": "Inpaint [region] using [image URL] and [mask URL]. Preserve [surroundings], set strength [value], control scale [value], and seed [number].",
+        "scenario": "Advanced region replacement with reproducible controls."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A product team supplies 12 square SKU images and requests a consistent light gray studio background.",
+        "output": "Nano Banana Edit is selected. Twelve PNG images retain product identity, framing, and square dimensions with a consistent studio background."
+      },
+      {
+        "input": "A designer requests a Japanese headline on an English poster while preserving the photograph and brand mark.",
+        "output": "GPT Image 2 Edit is selected. The headline changes to Japanese while the source layout, photograph, and branding remain stable."
+      },
+      {
+        "input": "A retoucher provides a street photograph and mask covering overhead cables.",
+        "output": "Z-Image Turbo Inpaint is selected. The cables are removed while rooflines, sky color, and unmasked regions remain consistent."
+      }
+    ],
+    "best_practices": [
+      "State preservation requirements before the requested change.",
+      "Use one clear edit per pass and name precise locations.",
+      "Lock aspect ratio, resolution, and seed when consistency or repeatability matters."
+    ],
+    "anti_patterns": [
+      "Do not place secrets or confidential assets in publicly accessible image URLs.",
+      "Do not combine unrelated edits in one prompt.",
+      "Do not interpolate untrusted prompts directly into shell command strings."
+    ],
+    "faq": [
+      {
+        "question": "How does the skill choose a model?",
+        "answer": "It maps the requested edit type to one of four documented RunComfy model routes."
+      },
+      {
+        "question": "Is a RunComfy account required?",
+        "answer": "Yes. The CLI requires an authenticated account or a valid RUNCOMFY_TOKEN value."
+      },
+      {
+        "question": "Can it edit image batches?",
+        "answer": "Yes. Nano Banana Edit accepts up to 20 input images and can produce up to four outputs."
+      },
+      {
+        "question": "Can it replace non-Latin text?",
+        "answer": "Yes. The GPT Image 2 route targets multilingual text replacement and layout preservation."
+      },
+      {
+        "question": "When is a mask required?",
+        "answer": "Z-Image Turbo Inpaint requires a grayscale mask where white marks edits and black marks preserved areas."
+      },
+      {
+        "question": "Are images processed locally?",
+        "answer": "No. RunComfy servers process prompts and image references, while the CLI downloads completed outputs locally."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 271
+    }
+  ]
+}

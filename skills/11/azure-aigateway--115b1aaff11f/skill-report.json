@@ -1,0 +1,1988 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T17:49:03.206Z",
+    "slug": "microsoft-azure-aigateway",
+    "source_url": "https://github.com/microsoft/github-copilot-for-azure/tree/main/plugin/skills/azure-aigateway/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "115b1aaff11f6b6bea264863780f14a33225537c5f8451d7efa7ee1a30299fb8",
+    "tree_hash": "83fec53d6b5f3d274c723fc0e0998191e7599046b81aa4d36c60fd401322d251",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "azure-aigateway",
+    "description": "Configure Azure API Management as an AI gateway for models, MCP tools, and agents using secure authentication, governance policies, routing, and diagnostics.",
+    "summary": "Build and troubleshoot governed AI gateways with Azure API Management.",
+    "icon": "📦",
+    "version": "0.0.0-placeholder",
+    "author": "microsoft",
+    "license": "MIT",
+    "category": "devops",
+    "tags": [
+      "azure-api-management",
+      "azure-openai",
+      "ai-gateway",
+      "mcp",
+      "ai-governance"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access",
+      "network",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The audit reviewed 80 static findings; 79 are documentation-related false positives. One finding is confirmed because an example imports an OpenAPI specification from a mutable branch. Semantic review also found caller-controlled rate-limit keys and commands that expose subscription keys.",
+    "remediation": [
+      {
+        "issue": "Rate limits use an unverified request header as the caller identity.",
+        "suggestion": "Derive counters from authenticated subscriptions or validated token claims, and test that changing headers cannot reset limits.",
+        "severity": "high"
+      },
+      {
+        "issue": "Examples print active APIM subscription keys into agent-visible command output.",
+        "suggestion": "Prefer managed identity, retrieve unavoidable keys outside model context, and redact secrets from terminals, prompts, traces, and logs.",
+        "severity": "high"
+      },
+      {
+        "issue": "An API import reads an OpenAPI specification from a mutable GitHub branch.",
+        "suggestion": "Pin the specification to a reviewed commit and verify its digest before importing it into APIM.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "references/troubleshooting.md",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 67
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "references/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "references/sdk/azure-mgmt-apimanagement-py.md",
+            "line_start": 17,
+            "line_end": 17
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 126,
+            "line_end": 126
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 179,
+            "line_end": 179
+          },
+          {
+            "file": "references/patterns.md",
+            "line_start": 217,
+            "line_end": 217
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 204,
+            "line_end": 204
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 163,
+            "line_end": 163
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 232,
+            "line_end": 232
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/sdk/azure-mgmt-apimanagement-dotnet.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "references/sdk/azure-mgmt-apimanagement-dotnet.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "references/sdk/azure-mgmt-apimanagement-py.md",
+            "line_start": 11,
+            "line_end": 11
+          },
+          {
+            "file": "references/troubleshooting.md",
+            "line_start": 257,
+            "line_end": 257
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:references/auth-best-practices.md:16:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/auth-best-practices.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "| **Local development** | `DefaultAzureCredential` | Chains CLI, PowerShell, and VS Code credentials"
+      },
+      {
+        "id": "external_commands:references/auth-best-practices.md:81:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/auth-best-practices.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "3. **Azure PowerShell** — `Connect-AzAccount`"
+      },
+      {
+        "id": "external_commands:references/auth-best-practices.md:87:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/auth-best-practices.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "// Local development only — uses CLI/PowerShell/VS Code credentials"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:43:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "references/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:101:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "references/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "references/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "references/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:43:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "references/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:101:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "references/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "references/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "references/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:57:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "references/auth-best-practices.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "if os.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\") == \"Development\""
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:57:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "references/auth-best-practices.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "if os.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\") == \"Development\""
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:69:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "references/auth-best-practices.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "var credential = \"Development\".equals(System.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\"))"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "references/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "references/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:43:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:101:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:104:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:105:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "references/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "external_commands:references/patterns.md:36:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/patterns.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "PRINCIPAL_ID=$(az apim show --name <apim-name> --resource-group <rg> --query \"identity.principalId\" "
+      },
+      {
+        "id": "external_commands:references/patterns.md:42:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/patterns.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "AOAI_ID=$(az cognitiveservices account show --name <aoai-name> --resource-group <rg> --query id -o t"
+      },
+      {
+        "id": "network:references/patterns.md:58:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "--url \"https://<aoai-name>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:references/patterns.md:71:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "--specification-url \"https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification"
+      },
+      {
+        "id": "network:references/patterns.md:72:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "--service-url \"https://<aoai-name>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:references/patterns.md:83:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "<authentication-managed-identity resource=\"https://cognitiveservices.azure.com\" />"
+      },
+      {
+        "id": "network:references/patterns.md:101:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "--url \"https://<aoai-eastus>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:references/patterns.md:106:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "--url \"https://<aoai-westus>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:references/patterns.md:118:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "\"https://aoai-eastus.openai.azure.com\","
+      },
+      {
+        "id": "network:references/patterns.md:119:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "\"https://aoai-westus.openai.azure.com\""
+      },
+      {
+        "id": "network:references/patterns.md:126:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "<authentication-managed-identity resource=\"https://cognitiveservices.azure.com\" />"
+      },
+      {
+        "id": "network:references/patterns.md:136:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "\"https://aoai-eastus.openai.azure.com\","
+      },
+      {
+        "id": "network:references/patterns.md:137:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "\"https://aoai-westus.openai.azure.com\""
+      },
+      {
+        "id": "network:references/patterns.md:179:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 179,
+        "line_end": 179,
+        "snippet": "<authentication-managed-identity resource=\"https://cognitiveservices.azure.com\" />"
+      },
+      {
+        "id": "network:references/patterns.md:217:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/patterns.md",
+        "line_start": 217,
+        "line_end": 217,
+        "snippet": "<authentication-managed-identity resource=\"https://cognitiveservices.azure.com\" />"
+      },
+      {
+        "id": "blocker:references/patterns.md:42:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "AOAI_ID=$(az cognitiveservices account show --name <aoai-name> --resource-group <rg> --query id -o t"
+      },
+      {
+        "id": "blocker:references/patterns.md:56:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "--backend-id openai-backend \\"
+      },
+      {
+        "id": "blocker:references/patterns.md:68:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "--api-id azure-openai-api \\"
+      },
+      {
+        "id": "blocker:references/patterns.md:100:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "--backend-id openai-eastus --protocol http \\"
+      },
+      {
+        "id": "blocker:references/patterns.md:105:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/patterns.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "--backend-id openai-westus --protocol http \\"
+      },
+      {
+        "id": "network:references/policies.md:204:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/policies.md",
+        "line_start": 204,
+        "line_end": 204,
+        "snippet": "Protect MCP tools and API endpoints from excessive requests."
+      },
+      {
+        "id": "network:references/policies.md:96:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/policies.md",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "--url \"https://<aoai>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:references/policies.md:163:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/policies.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "--url \"https://<contentsafety>.cognitiveservices.azure.com\""
+      },
+      {
+        "id": "network:references/policies.md:232:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/policies.md",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "<authentication-managed-identity resource=\"https://cognitiveservices.azure.com\" />"
+      },
+      {
+        "id": "blocker:references/policies.md:95:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/policies.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "--backend-id embeddings-backend --protocol http \\"
+      },
+      {
+        "id": "blocker:references/policies.md:162:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/policies.md",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "--backend-id contentsafety-backend --protocol http \\"
+      },
+      {
+        "id": "blocker:references/policies.md:168:known-jailbreak-keywords",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Known jailbreak keywords",
+        "file": "references/policies.md",
+        "line_start": 168,
+        "line_end": 168,
+        "snippet": "### Jailbreak Detection"
+      },
+      {
+        "id": "blocker:references/policies.md:178:known-jailbreak-keywords",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Known jailbreak keywords",
+        "file": "references/policies.md",
+        "line_start": 178,
+        "line_end": 178,
+        "snippet": "<!-- Jailbreak detection is automatic when content safety is enabled -->"
+      },
+      {
+        "id": "blocker:references/sdk/azure-ai-contentsafety-ts.md:19:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/sdk/azure-ai-contentsafety-ts.md",
+        "line_start": 19,
+        "line_end": 20,
+        "snippet": "- REST client — `ContentSafetyClient` is a function, not a class"
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-dotnet.md:12:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/sdk/azure-mgmt-apimanagement-dotnet.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "> **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-"
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-dotnet.md:23:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/sdk/azure-mgmt-apimanagement-dotnet.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- Use DefaultAzureCredential for **local development only**. In production, use ManagedIdentityCrede"
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-py.md:11:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/sdk/azure-mgmt-apimanagement-py.md",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "> **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-"
+      },
+      {
+        "id": "env_access:references/sdk/azure-mgmt-apimanagement-py.md:17:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "references/sdk/azure-mgmt-apimanagement-py.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "client = ApiManagementClient(DefaultAzureCredential(), os.environ[\"AZURE_SUBSCRIPTION_ID\"])"
+      },
+      {
+        "id": "blocker:references/sdk/azure-mgmt-apimanagement-py.md:23:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/sdk/azure-mgmt-apimanagement-py.md",
+        "line_start": 23,
+        "line_end": 24,
+        "snippet": "- Use products to bundle APIs and manage access"
+      },
+      {
+        "id": "external_commands:references/troubleshooting.md:29:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/troubleshooting.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "AOAI_ID=$(az cognitiveservices account show --name <aoai> --resource-group <rg> --query id -o tsv)"
+      },
+      {
+        "id": "filesystem:references/troubleshooting.md:257:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "references/troubleshooting.md",
+        "line_start": 257,
+        "line_end": 257,
+        "snippet": "curl -s -o /dev/null -w \"%{http_code}\" \"${GATEWAY_URL}/openai/deployments/<deployment>/chat/completi"
+      },
+      {
+        "id": "blocker:references/troubleshooting.md:29:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/troubleshooting.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "AOAI_ID=$(az cognitiveservices account show --name <aoai> --resource-group <rg> --query id -o tsv)"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "| `azure-openai-token-limit` | Cost control | [Model Policies](references/policies.md#token-rate-lim"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "| `azure-openai-semantic-cache-lookup/store` | 60-80% cost savings | [Model Policies](references/pol"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "| `azure-openai-emit-token-metric` | Observability | [Model Policies](references/policies.md#token-m"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "| `llm-content-safety` | Safety & compliance | [Agent Policies](references/policies.md#content-safet"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "| `rate-limit-by-key` | MCP/tool protection | [Tool Policies](references/policies.md#request-rate-li"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 60,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 67,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 77,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 88,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 92,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 109,
+        "snippet": "Recommended policy order in `<inbound>`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 110,
+        "snippet": "| Token limit 429 | Increase `tokens-per-minute` or add load balancing |"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "GATEWAY_URL=$(az apim show --name <apim-name> --resource-group <rg> --query \"gatewayUrl\" -o tsv)"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 67,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:15:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "> **To deploy APIM**, use the **azure-prepare** skill. See [APIM deployment guide](https://learn.mic"
+      },
+      {
+        "id": "network:SKILL.md:83:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "--backend-id openai-backend --protocol http --url \"https://<aoai>.openai.azure.com/openai\""
+      },
+      {
+        "id": "network:SKILL.md:123:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "- [AI-Gateway Samples](https://github.com/Azure-Samples/AI-Gateway)"
+      },
+      {
+        "id": "network:SKILL.md:124:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "- [GenAI Gateway Docs](https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities)"
+      },
+      {
+        "id": "blocker:SKILL.md:53:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "--service-name <apim-name> --resource-group <rg> --subscription-id <sub-id>"
+      },
+      {
+        "id": "blocker:SKILL.md:83:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "--backend-id openai-backend --protocol http --url \"https://<aoai>.openai.azure.com/openai\""
+      },
+      {
+        "id": "blocker:SKILL.md:3:known-jailbreak-keywords",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Known jailbreak keywords",
+        "file": "SKILL.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "description: \"Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. "
+      },
+      {
+        "id": "blocker:SKILL.md:23:known-jailbreak-keywords",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Known jailbreak keywords",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "| **Agent Governance** | \"content safety\", \"jailbreak detection\", \"filter harmful content\" |"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:references/auth-best-practices.md:16:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This table describes credential sources used by DefaultAzureCredential. It does not invoke PowerShell or construct a command."
+      },
+      {
+        "id": "external_commands:references/auth-best-practices.md:81:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Connect-AzAccount is listed as a standard local authentication option. The text neither executes it automatically nor accepts untrusted command input."
+      },
+      {
+        "id": "external_commands:references/auth-best-practices.md:87:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a TypeScript comment explaining local credential discovery. It contains no PowerShell invocation."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:43:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example reads NODE_ENV only to select development authentication behavior. It does not read or transmit a secret."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:101:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The example checks NODE_ENV to distinguish local development from production. This is ordinary environment selection without secret access."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "AZURE_CLIENT_ID identifies a user-assigned managed identity and is not a credential secret. It is passed only to the Azure identity client."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The client ID selects a managed identity and carries no authentication secret. No disclosure or untrusted command construction occurs."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:43:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "process.env is used only for the non-sensitive NODE_ENV mode flag. The documentation does not enumerate or export the environment."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:101:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The environment object access is limited to NODE_ENV for credential selection. It does not expose environment contents."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The single environment value is a managed identity client ID, not a secret. The value remains within credential configuration."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This reads a non-secret client identifier for ManagedIdentityCredential. There is no environment enumeration or external disclosure."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:57:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The Python example reads AZURE_FUNCTIONS_ENVIRONMENT as a development-mode flag. It does not access credentials."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:57:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "os.getenv reads a documented runtime mode value to choose an authentication class. No sensitive value is handled."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:69:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "System.getenv reads only AZURE_FUNCTIONS_ENVIRONMENT to detect local development. The example does not expose secrets."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:104:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "AZURE_CLIENT_ID is a public identity identifier rather than an Azure client secret. The example uses it for managed identity selection."
+      },
+      {
+        "id": "env_access:references/auth-best-practices.md:105:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The documented variable contains a managed identity client ID. No token, password, certificate, or client secret is read."
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:43:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code reads process.env.NODE_ENV and does not open an environment file. The scanner confused environment access with filesystem access."
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:101:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "No .env file or other file is accessed. The line only compares the NODE_ENV process value."
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:104:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line reads a process environment value, not an environment file. The value is a non-secret managed identity client ID."
+      },
+      {
+        "id": "sensitive:references/auth-best-practices.md:105:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is process environment access within a documentation example. It performs no filesystem operation."
+      },
+      {
+        "id": "external_commands:references/patterns.md:36:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The shell captures a principal ID from a fixed Azure CLI query with explicit placeholders. No untrusted text is evaluated as code."
+      },
+      {
+        "id": "external_commands:references/patterns.md:42:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The command captures an Azure resource ID for the following scoped role assignment. Its structure is fixed and contains no injection mechanism."
+      },
+      {
+        "id": "network:references/patterns.md:58:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is the documented Azure OpenAI endpoint format with a resource-name placeholder. Network access is expected for configuring the requested backend."
+      },
+      {
+        "id": "network:references/patterns.md:71:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The command imports an OpenAPI specification directly from GitHub's mutable main branch. Upstream changes could alter the imported APIM API without local review.",
+        "severity": "low"
+      },
+      {
+        "id": "network:references/patterns.md:72:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL is a parameterized Azure OpenAI service endpoint required by APIM. It does not target an unrelated or suspicious host."
+      },
+      {
+        "id": "network:references/patterns.md:83:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Azure's documented managed-identity audience for Cognitive Services. It specifies token scope and does not disclose data."
+      },
+      {
+        "id": "network:references/patterns.md:101:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The placeholder illustrates an Azure OpenAI backend in one region. It is expected configuration, not an unauthorized network destination."
+      },
+      {
+        "id": "network:references/patterns.md:106:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The placeholder illustrates a second Azure OpenAI backend for load balancing. It contains no fixed third-party destination."
+      },
+      {
+        "id": "network:references/patterns.md:118:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This example backend is an Azure OpenAI hostname used to explain load balancing. No credential or user data is embedded."
+      },
+      {
+        "id": "network:references/patterns.md:119:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This second Azure OpenAI hostname is part of the documented backend pool. It is not evidence of exfiltration."
+      },
+      {
+        "id": "network:references/patterns.md:126:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The value is Azure's standard Cognitive Services token audience. It is authentication configuration, not a network probe."
+      },
+      {
+        "id": "network:references/patterns.md:136:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The retry example references an Azure OpenAI backend already configured by the user. The destination is expected and contains no secret."
+      },
+      {
+        "id": "network:references/patterns.md:137:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The second retry target is another documented Azure OpenAI backend. The example does not contact an unrelated service."
+      },
+      {
+        "id": "network:references/patterns.md:179:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This fixed value is the required Azure Cognitive Services managed-identity audience. It does not initiate arbitrary network access."
+      },
+      {
+        "id": "network:references/patterns.md:217:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The policy requests a token scoped to Azure Cognitive Services. This is standard backend authentication."
+      },
+      {
+        "id": "blocker:references/patterns.md:42:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command retrieves the ID of a user-named Azure resource to scope RBAC. It does not survey unrelated systems."
+      },
+      {
+        "id": "blocker:references/patterns.md:56:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "openai-backend is a literal APIM backend identifier in a create command. It performs no reconnaissance."
+      },
+      {
+        "id": "blocker:references/patterns.md:68:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "azure-openai-api is a new APIM API identifier supplied to an import command. The line does not discover system information."
+      },
+      {
+        "id": "blocker:references/patterns.md:100:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line names a backend being created for an expected regional endpoint. It contains no discovery operation."
+      },
+      {
+        "id": "blocker:references/patterns.md:105:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line names the second backend in a load-balancing example. It does not enumerate hosts, ports, or services."
+      },
+      {
+        "id": "network:references/policies.md:204:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line is prose describing rate limiting. It contains no Python library, HTTP call, or executable code."
+      },
+      {
+        "id": "network:references/policies.md:96:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL is a placeholder for the user's Azure OpenAI embeddings backend. It is necessary APIM configuration."
+      },
+      {
+        "id": "network:references/policies.md:163:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL is the expected Azure AI Content Safety resource endpoint with a placeholder. It is not an unknown destination."
+      },
+      {
+        "id": "network:references/policies.md:232:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The policy value is Azure's standard managed-identity resource audience. It does not contain user data or credentials."
+      },
+      {
+        "id": "blocker:references/policies.md:95:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "embeddings-backend is a literal identifier for a backend being created. The line performs no system enumeration."
+      },
+      {
+        "id": "blocker:references/policies.md:162:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "contentsafety-backend is an APIM resource name in a create command. It is not reconnaissance."
+      },
+      {
+        "id": "blocker:references/policies.md:168:known-jailbreak-keywords",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The heading introduces defensive prompt-injection detection guidance. It is not an instruction to bypass safeguards."
+      },
+      {
+        "id": "blocker:references/policies.md:178:known-jailbreak-keywords",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The XML comment explains that Azure Content Safety detects jailbreak attempts. It contains no injection payload or override instruction."
+      },
+      {
+        "id": "blocker:references/sdk/azure-ai-contentsafety-ts.md:19:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line documents that an SDK export is a function. It includes no network discovery behavior."
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-dotnet.md:12:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The parent-directory sequence is a Markdown link to another bundled reference. It is not applied to user input or filesystem access."
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-dotnet.md:23:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The detected sequence appears only in a relative Markdown documentation link. No file operation occurs."
+      },
+      {
+        "id": "filesystem:references/sdk/azure-mgmt-apimanagement-py.md:11:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The ../ segment navigates to a packaged Markdown reference. It is static documentation, not path traversal against a filesystem API."
+      },
+      {
+        "id": "env_access:references/sdk/azure-mgmt-apimanagement-py.md:17:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "AZURE_SUBSCRIPTION_ID is a non-secret resource identifier required by the management client. The example does not disclose credentials."
+      },
+      {
+        "id": "blocker:references/sdk/azure-mgmt-apimanagement-py.md:23:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is a best-practice sentence about APIM products. It contains no network scan or discovery code."
+      },
+      {
+        "id": "external_commands:references/troubleshooting.md:29:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The diagnostic captures one specified Azure resource ID for a scoped role query. It does not evaluate user input as shell code."
+      },
+      {
+        "id": "filesystem:references/troubleshooting.md:257:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "/dev/null intentionally discards a health-check response body so curl can print only the status code. It is standard local shell behavior."
+      },
+      {
+        "id": "blocker:references/troubleshooting.md:29:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command looks up the ID of an explicitly named Azure OpenAI resource for troubleshooting. It does not probe arbitrary infrastructure."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks are Markdown inline-code delimiters around an APIM policy name. No Ruby or shell execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Markdown backticks format semantic-cache policy names. They are not executable backticks."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The token-metric policy name is formatted as inline Markdown code. There is no command interpreter."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks only format the llm-content-safety policy name in a table. No code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The rate-limit policy name is enclosed in Markdown backticks. This is presentation syntax, not shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The detected characters open a fenced Bash example. They do not invoke Ruby or execute during skill loading."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This line closes a Markdown code fence. It has no runtime meaning."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is the opening delimiter for a documented Bash example. It is not a backtick command substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This line closes the Bash documentation block. It cannot execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line begins a Markdown Bash fence for an Azure configuration example. It is not Ruby execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks terminate a Markdown code block. No executable expression is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Inline backticks format the APIM inbound XML element name. They are documentation syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Inline backticks format a policy attribute in a troubleshooting table. There is no command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The shell captures the gateway URL from a fixed Azure CLI query for the next request. It contains no dynamic code evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The scanner matched a Markdown Bash fence, not a programming-language template literal. The line itself has no executable content."
+      },
+      {
+        "id": "network:SKILL.md:15:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This link points to Microsoft's official APIM deployment documentation. It is a user-facing reference, not an automated request."
+      },
+      {
+        "id": "network:SKILL.md:83:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The endpoint contains a placeholder for the user's Azure OpenAI resource. It is the intended backend destination."
+      },
+      {
+        "id": "network:SKILL.md:123:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to Microsoft's Azure Samples GitHub organization. It is not used for data transmission."
+      },
+      {
+        "id": "network:SKILL.md:124:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a link to official Microsoft Learn documentation. The skill does not automatically fetch or execute its contents."
+      },
+      {
+        "id": "blocker:SKILL.md:53:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The command requests keys for an explicitly supplied APIM subscription as part of the documented workflow. It does not enumerate unknown systems."
+      },
+      {
+        "id": "blocker:SKILL.md:83:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This command creates a named APIM backend at the user's Azure OpenAI endpoint. It performs no reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:3:known-jailbreak-keywords",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The metadata names jailbreak detection as a defensive AI gateway capability. It contains no attempt to override instructions."
+      },
+      {
+        "id": "blocker:SKILL.md:23:known-jailbreak-keywords",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The table lists defensive content-safety use cases, including detection of jailbreak attempts. It is not a prompt injection payload."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Caller-Controlled Rate-Limit Key",
+        "description": "Examples use the unverified X-Agent-Id request header as an APIM rate-limit counter key. Callers can rotate values to evade limits.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 164,
+            "line_end": 165
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 207,
+            "line_end": 211
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "Both examples directly trust a caller-supplied header without authentication or validation. Rotating that value creates a clear rate-limit bypass."
+      },
+      {
+        "title": "Subscription Keys Exposed to Agent Output",
+        "description": "Commands retrieve APIM subscription keys and a primary tracing key as terminal output. Agent sessions and logs could retain these active secrets.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 53
+          },
+          {
+            "file": "references/troubleshooting.md",
+            "line_start": 207,
+            "line_end": 215
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The commands explicitly request subscription key material, including primaryKey, and print it for subsequent use. This exposes credentials to the invoking agent context."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Caller-Controlled Rate-Limit Key",
+        "description": "Examples use the unverified X-Agent-Id request header as an APIM rate-limit counter key. Callers can rotate values to evade limits.",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 164,
+            "line_end": 165
+          },
+          {
+            "file": "references/policies.md",
+            "line_start": 207,
+            "line_end": 211
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "Both examples directly trust a caller-supplied header without authentication or validation. Rotating that value creates a clear rate-limit bypass."
+      },
+      {
+        "title": "Subscription Keys Exposed to Agent Output",
+        "description": "Commands retrieve APIM subscription keys and a primary tracing key as terminal output. Agent sessions and logs could retain these active secrets.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 53
+          },
+          {
+            "file": "references/troubleshooting.md",
+            "line_start": 207,
+            "line_end": 215
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The commands explicitly request subscription key material, including primaryKey, and print it for subsequent use. This exposes credentials to the invoking agent context."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "--specification-url \"https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification",
+        "locations": [
+          {
+            "file": "references/patterns.md",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The command imports an OpenAPI specification directly from GitHub's mutable main branch. Upstream changes could alter the imported APIM API without local review."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 10,
+    "total_lines": 1195,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T17:49:03.206Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Configure an Azure AI Gateway",
+    "value_statement": "AI teams need consistent controls for models, tools, and agents. This skill guides Azure API Management configuration for security, cost control, routing, and diagnostics.",
+    "seo_keywords": [
+      "Azure AI Gateway",
+      "Azure API Management",
+      "Azure OpenAI",
+      "AI governance",
+      "semantic caching",
+      "content safety",
+      "MCP rate limiting",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Configure APIM backends for Azure OpenAI and AI Foundry endpoints.",
+      "Apply token limits, semantic caching, token metrics, and content safety policies.",
+      "Set up managed identity authentication and Azure RBAC for backend access.",
+      "Configure backend pools, retries, streaming support, and multi-tenant controls.",
+      "Diagnose authentication, quota, cache, safety, backend, and health-check failures."
+    ],
+    "limitations": [
+      "Requires Azure CLI and existing Azure resources; it does not deploy APIM.",
+      "Examples use placeholders and must be reviewed before execution.",
+      "Some APIM AI policies and backend pools depend on service tier, region, or preview availability.",
+      "Streaming does not support semantic caching or token metrics in the documented patterns."
+    ],
+    "use_cases": [
+      {
+        "title": "Govern Shared Model Access",
+        "description": "Create centralized APIM controls for token budgets, caching, routing, and metrics across multiple AI applications.",
+        "target_user": "Platform engineers"
+      },
+      {
+        "title": "Protect Agent Tools",
+        "description": "Add authentication, content safety, and authenticated rate limits to APIs exposed as MCP tools.",
+        "target_user": "AI application developers"
+      },
+      {
+        "title": "Review Gateway Controls",
+        "description": "Evaluate managed identity, RBAC, tenant isolation, content filtering, and operational diagnostics before production rollout.",
+        "target_user": "Cloud security architects"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Inspect an Existing Gateway",
+        "prompt": "Inspect APIM instance <name> in resource group <group>. Summarize AI backends and missing prerequisites without changing resources.",
+        "scenario": "Beginner inventory and readiness review"
+      },
+      {
+        "title": "Add a Model Backend",
+        "prompt": "Prepare commands and policies to add Azure OpenAI resource <resource> to APIM <name>. Use managed identity and least-privilege RBAC.",
+        "scenario": "Standard backend configuration"
+      },
+      {
+        "title": "Apply Governance Controls",
+        "prompt": "Design an inbound APIM policy for <workload> with token limits, semantic caching, content safety, rate limiting, and token metrics. Explain policy order.",
+        "scenario": "Intermediate governance design"
+      },
+      {
+        "title": "Design a Resilient Multi-Tenant Gateway",
+        "prompt": "Design a multi-region, multi-tenant AI gateway for <requirements>. Include authenticated tenant keys, backend failover, cost controls, observability, and a verification plan.",
+        "scenario": "Advanced production architecture"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Configure cost controls for a shared Azure OpenAI gateway.",
+        "output": [
+          "Recommended controls: per-subscription token limits, semantic caching for non-streaming requests, and token metrics for chargeback.",
+          "Authentication: managed identity with Cognitive Services User scoped to each backend resource.",
+          "Validation: test quota responses, cache behavior, metric dimensions, and backend authorization before production."
+        ]
+      },
+      {
+        "input": "Troubleshoot repeated 401 responses from an Azure OpenAI backend.",
+        "output": "The review checks APIM managed identity status, scoped RBAC assignments, the Cognitive Services token audience, propagation delays, and backend identifiers."
+      }
+    ],
+    "best_practices": [
+      "Use managed identities and narrow Azure RBAC scopes for all production backends.",
+      "Validate resource names, subscriptions, regions, and policy availability before running commands.",
+      "Use authenticated identities for rate-limit keys and keep credentials out of prompts, logs, and command output."
+    ],
+    "anti_patterns": [
+      "Do not use DefaultAzureCredential in production Azure workloads.",
+      "Do not import mutable remote specifications without pinning and reviewing their contents.",
+      "Do not trust caller-supplied headers for tenant isolation or rate limiting."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill deploy Azure API Management?",
+        "answer": "No. It configures and troubleshoots an existing APIM instance and directs deployment tasks to the azure-prepare skill."
+      },
+      {
+        "question": "Which AI backends are covered?",
+        "answer": "The examples cover Azure OpenAI and Azure AI Foundry endpoints configured as APIM backends."
+      },
+      {
+        "question": "Does it support MCP tools?",
+        "answer": "Yes. It explains API import, MCP exposure, content safety, and rate limiting for tool endpoints."
+      },
+      {
+        "question": "Can these examples be used in production?",
+        "answer": "Review every placeholder, policy availability, RBAC scope, secret-handling step, and regional dependency before production use."
+      },
+      {
+        "question": "How does the skill authenticate to Azure services?",
+        "answer": "It recommends managed identity for production and DefaultAzureCredential only for local development."
+      },
+      {
+        "question": "Which assistant tools are supported?",
+        "answer": "The report declares compatibility with Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "sdk",
+          "type": "dir",
+          "path": "references/sdk",
+          "children": [
+            {
+              "name": "azure-ai-contentsafety-py.md",
+              "type": "file",
+              "path": "references/sdk/azure-ai-contentsafety-py.md",
+              "lines": 32
+            },
+            {
+              "name": "azure-ai-contentsafety-ts.md",
+              "type": "file",
+              "path": "references/sdk/azure-ai-contentsafety-ts.md",
+              "lines": 31
+            },
+            {
+              "name": "azure-mgmt-apimanagement-dotnet.md",
+              "type": "file",
+              "path": "references/sdk/azure-mgmt-apimanagement-dotnet.md",
+              "lines": 29
+            },
+            {
+              "name": "azure-mgmt-apimanagement-py.md",
+              "type": "file",
+              "path": "references/sdk/azure-mgmt-apimanagement-py.md",
+              "lines": 27
+            }
+          ]
+        },
+        {
+          "name": "auth-best-practices.md",
+          "type": "file",
+          "path": "references/auth-best-practices.md",
+          "lines": 129
+        },
+        {
+          "name": "patterns.md",
+          "type": "file",
+          "path": "references/patterns.md",
+          "lines": 227
+        },
+        {
+          "name": "policies.md",
+          "type": "file",
+          "path": "references/policies.md",
+          "lines": 312
+        },
+        {
+          "name": "troubleshooting.md",
+          "type": "file",
+          "path": "references/troubleshooting.md",
+          "lines": 271
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 130
+    },
+    {
+      "name": "version.json",
+      "type": "file",
+      "path": "version.json",
+      "lines": 7
+    }
+  ]
+}

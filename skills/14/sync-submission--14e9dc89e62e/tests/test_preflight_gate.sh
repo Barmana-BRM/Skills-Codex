@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+# Test scripts/preflight_gate.py — the A6 submission pre-flight orchestrator.
+# Builds synthetic, PII-free fixture projects in a temp dir and asserts the gate
+# halts on a deterministic blocker, passes a clean package, tolerates absent
+# inputs (skipped, not blocker), normalizes the inverted cover_letter exit code,
+# and honors --require / --skip. Stdlib-only; offline (no network).
+set -u
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT="$HERE/../scripts/preflight_gate.py"
+PASS=0
+FAIL=0
+ok()  { echo "  PASS: $1"; PASS=$((PASS+1)); }
+bad() { echo "  FAIL: $1"; FAIL=$((FAIL+1)); }
+
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+
+DIRTY="$WORK/dirty"
+CLEAN="$WORK/clean"
+mkdir -p "$DIRTY/manuscript" "$CLEAN/manuscript" "$CLEAN/submission/chest/manuscript"
+
+# dirty: an unresolved [@NEW:] placeholder + a TODO; bib does not define the marker
+cat > "$DIRTY/manuscript/manuscript.md" <<'EOF'
+# Introduction
+
+We follow prior work [@smith2020] and a competing-risk model [@NEW:competing-risk].
+
+## Methods
+
+Analysis used R. TODO: cite the package.
+
+## References
+EOF
+cat > "$DIRTY/refs.bib" <<'EOF'
+@article{smith2020, title={A real paper}, author={Smith, John}, journal={NEJM}, year={2020}, doi={10.1056/x}}
+EOF
+
+# clean: no markers, every cited key defined
+cat > "$CLEAN/manuscript/manuscript.md" <<'EOF'
+# Introduction
+
+We follow prior work [@smith2020] using a competing-risk model.
+
+## Methods
+
+Analysis used R version 4.3.
+
+## References
+EOF
+cat > "$CLEAN/refs.bib" <<'EOF'
+@article{smith2020, title={A real paper}, author={Smith, John}, journal={NEJM}, year={2020}, doi={10.1056/x}}
+EOF
+
+J() { python3 -c "import json,sys; d=json.load(open(sys.argv[1])); print(d[sys.argv[2]] if sys.argv[2] in d else json.dumps(d))" "$@"; }
+STATUS() { python3 -c "import json,sys; d=json.load(open(sys.argv[1])); c=[x for x in d['checks'] if x['id']==sys.argv[2]][0]; print(c['status'])" "$@"; }
+
+# 1. dirty halts with exit 1
+python3 "$SCRIPT" --project-root "$DIRTY" --quiet
+[ $? -eq 1 ] && ok "dirty package halts (exit 1)" || bad "dirty package should halt"
+
+# 2. report: halt true, placeholders blocker, absent inputs skipped (tolerance)
+RPT="$DIRTY/qc/preflight_gate_report.json"
+[ "$(J "$RPT" halt)" = "True" ] && ok "report halt=true" || bad "report halt should be true"
+[ "$(STATUS "$RPT" placeholders)" = "blocker" ] && ok "placeholders is a blocker" || bad "placeholders should block"
+[ "$(STATUS "$RPT" cover_letter_drift)" = "skipped" ] && ok "cover_letter_drift skipped (no cover letter)" || bad "cover_letter_drift should skip"
+[ "$(STATUS "$RPT" copy_divergence)" = "skipped" ] && ok "copy_divergence skipped (no copies)" || bad "copy_divergence should skip"
+[ "$(STATUS "$RPT" sync_drift)" = "skipped" ] && ok "sync_drift skipped (no journal)" || bad "sync_drift should skip"
+
+# 3. references is a P1 warn (offline unverified), never a blocker by itself
+[ "$(STATUS "$RPT" references)" = "warn" ] && ok "references offline -> warn (non-halting)" || bad "references should warn offline"
+
+# 4. clean package passes (exit 0)
+python3 "$SCRIPT" --project-root "$CLEAN" --quiet
+[ $? -eq 0 ] && ok "clean package passes (exit 0)" || bad "clean package should pass"
+[ "$(J "$CLEAN/qc/preflight_gate_report.json" submission_safe)" = "True" ] && ok "clean report submission_safe=true" || bad "clean should be submission_safe"
+python3 - "$CLEAN/qc/preflight_gate_report.json" <<'PY'
+import json, sys
+r = json.load(open(sys.argv[1]))
+assert r['readiness'] == 'not_assessed'
+assert r['submission_safe_scope'] == 'configured_checks_only'
+assert r['coverage']['status'] == 'incomplete'
+assert r['coverage']['skipped']
+assert r['coverage']['visual_review'] == 'not_assessed'
+PY
+[ $? -eq 0 ] && ok "no blockers does not hide skipped/visual checks" || bad "coverage must remain explicit"
+
+# 5. inverted cover-letter exit code normalized to warn (default), blocker under --require
+cat > "$CLEAN/submission/chest/cover_letter.md" <<'EOF'
+Dear Editor, the manuscript is approximately 8000 words with 99 references. Sincerely,
+EOF
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --quiet
+[ $? -eq 0 ] && ok "cover-letter drift warns (P1, non-halting by default)" || bad "cover drift should not halt by default"
+RC="$CLEAN/qc/preflight_gate_report.json"
+python3 -c "
+import json,sys
+d=json.load(open('$RC')); c=[x for x in d['checks'] if x['id']=='cover_letter_drift'][0]
+sys.exit(0 if c['exit_code']==2 and c['status']=='warn' else 1)
+" && ok "cover_letter inverted exit 2 normalized to warn" || bad "cover_letter exit normalization wrong"
+
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --require cover_letter_drift --quiet
+[ $? -eq 1 ] && ok "--require cover_letter_drift promotes to blocker (halt)" || bad "--require should halt on cover drift"
+
+# 6. --strict promotes all P1 to halting (cover drift now blocks)
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --strict --quiet
+[ $? -eq 1 ] && ok "--strict promotes P1 cover drift to halt" || bad "--strict should halt on cover drift"
+
+# 7. --skip removes a check
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --strict --skip cover_letter_drift --quiet
+[ $? -eq 0 ] && ok "--skip cover_letter_drift drops it (clean pass under --strict)" || bad "--skip should drop the check"
+
+# 8. --require on a check that cannot run -> gate error (exit 2)
+python3 "$SCRIPT" --project-root "$DIRTY" --require sync_drift --quiet
+[ $? -eq 2 ] && ok "--require sync_drift (no journal) -> gate error exit 2" || bad "required-but-unrunnable should exit 2"
+[ "$(J "$DIRTY/qc/preflight_gate_report.json" submission_safe)" = "False" ] && ok "required check error cannot be safe" || bad "gate error marked safe"
+
+# Canonical exists, but the submission is missing: child exit 2 is still an
+# error under --require, rather than silently becoming a skipped clean pass.
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --require sync_drift --quiet
+[ $? -eq 2 ] && ok "required child exit 2 cannot pass" || bad "required child skip should be an error"
+
+# 9. unknown check id -> exit 2
+python3 "$SCRIPT" --project-root "$CLEAN" --require nonsense --quiet 2>/dev/null
+[ $? -eq 2 ] && ok "unknown --require id -> exit 2" || bad "unknown id should exit 2"
+
+# 10. (F1) a sub-check that RAN and failed is an error, never "skipped".
+# NEGATIVE control first: canonical present, submission copy absent is a genuine skip.
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --skip cover_letter_drift --quiet
+[ "$(STATUS "$CLEAN/qc/preflight_gate_report.json" sync_drift)" = "skipped" ] \
+  && ok "sync_drift with no submission copy stays skipped" || bad "missing submission should skip"
+
+SYNC="$WORK/sync"
+mkdir -p "$SYNC/manuscript" "$SYNC/submission/chest/manuscript"
+printf 'canonical text N = 120 patients\n' > "$SYNC/manuscript/manuscript.md"
+printf 'STALE text N = 118 patients\n'    > "$SYNC/submission/chest/manuscript/manuscript.md"
+python3 "$SCRIPT" --project-root "$SYNC" --journal chest --skip references --quiet
+[ $? -eq 1 ] && ok "drifted submission copy halts (sync_drift blocker)" || bad "drifted copy should halt"
+# Same drifted copy plus malformed metadata: sync_submission.py exits 2 with an error.
+echo '[]' > "$SYNC/submission/chest/.journal_meta.json"
+python3 "$SCRIPT" --project-root "$SYNC" --journal chest --skip references --quiet
+[ $? -eq 2 ] && ok "sync_drift error -> gate exit 2" || bad "sync_drift error must not pass"
+[ "$(STATUS "$SYNC/qc/preflight_gate_report.json" sync_drift)" = "error" ] \
+  && ok "sync_drift error recorded as error (not skipped)" || bad "sync_drift error recorded as skipped"
+[ "$(J "$SYNC/qc/preflight_gate_report.json" submission_safe)" = "False" ] \
+  && ok "sync_drift error is not submission_safe" || bad "sync_drift error marked safe"
+
+# A cover letter the drift check cannot decode (cp1252) is an error under --strict, not a skip.
+printf 'Dear Editor, the caf\xe9 manuscript is approximately 8000 words. Sincerely,\n' \
+  > "$CLEAN/submission/chest/cover_letter.md"
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --strict --quiet
+[ $? -eq 2 ] && ok "undecodable cover letter -> --strict exit 2" || bad "undecodable cover letter passed --strict"
+[ "$(STATUS "$CLEAN/qc/preflight_gate_report.json" cover_letter_drift)" = "error" ] \
+  && ok "cover_letter_drift decode failure recorded as error" || bad "cover_letter_drift decode failure skipped"
+# NEGATIVE control: an absent cover letter remains a genuine skip.
+rm -f "$CLEAN/submission/chest/cover_letter.md"
+python3 "$SCRIPT" --project-root "$CLEAN" --journal chest --strict --quiet
+[ $? -eq 0 ] && ok "absent cover letter still a clean skip under --strict" || bad "absent cover letter should skip"
+[ "$(STATUS "$CLEAN/qc/preflight_gate_report.json" cover_letter_drift)" = "skipped" ] \
+  && ok "absent cover letter recorded as skipped" || bad "absent cover letter not skipped"
+
+echo ""
+echo "test_preflight_gate: $PASS passed, $FAIL failed"
+[ "$FAIL" -eq 0 ]

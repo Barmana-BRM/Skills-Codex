@@ -1,0 +1,2057 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T18:20:33.783Z",
+    "slug": "microsoft-azure-cost",
+    "source_url": "https://github.com/microsoft/azure-skills/tree/main/.github/plugins/azure-skills/skills/azure-cost/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "1bc522b995b8abd42b189cc3478031d52d9230ab41dde0e19a5db39832c85abc",
+    "tree_hash": "af0a3c4652dfe6d32e299703d9ab4033dbd107d5be596742fdc62af9aa32d289",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "azure-cost",
+    "description": "Queries Azure costs, forecasts future spending, investigates cost anomalies, and produces evidence-based optimization recommendations using Azure APIs, CLI tools, and official pricing.",
+    "summary": "Analyze Azure spending with cost queries, forecasts, anomaly investigation, and prioritized optimization recommendations.",
+    "icon": "📦",
+    "version": "1.2.2",
+    "author": "microsoft",
+    "license": "MIT",
+    "category": "data",
+    "tags": [
+      "azure",
+      "cost-management",
+      "finops",
+      "cloud-optimization",
+      "forecasting"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands",
+      "env_access",
+      "network"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Review confirmed one high-risk cleanup command that recursively removes a relative temp directory without proving the skill owns it. Two semantic issues remain: unqualified resource deletion advice and budget creation without an explicit approval checkpoint. The other 79 static findings are documentation false positives involving Markdown links, code fences, official URLs, and non-secret environment selectors.",
+    "remediation": [
+      {
+        "issue": "Cleanup recursively removes the shared relative temp directory.",
+        "suggestion": "Use a unique skill-owned directory and delete only files created during the current run after verifying the resolved path.",
+        "severity": "high"
+      },
+      {
+        "issue": "The report template describes discovered resources as immediately deletable.",
+        "suggestion": "Require dependency checks, utilization validation, a dry run, rollback guidance, and explicit approval before presenting or executing deletion commands.",
+        "severity": "high"
+      },
+      {
+        "issue": "The anomaly workflow can create an Azure budget without an approval checkpoint.",
+        "suggestion": "Present the proposed amount, scope, dates, thresholds, and recipients, then require explicit confirmation before executing the command.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "cost-forecast/examples.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 5,
+            "line_end": 5
+          },
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "cost-optimization/sdk/azure-resource-manager-redis-dotnet.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "cost-optimization/sdk/azure-resource-manager-redis-dotnet.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 5,
+            "line_end": 5
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 127,
+            "line_end": 127
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 160,
+            "line_end": 160
+          },
+          {
+            "file": "cost-query/examples.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "cost-query/workflow.md",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 81,
+            "line_end": 82
+          },
+          {
+            "file": "cost-forecast/workflow.md",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "cost-optimization/azure-quick-review.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 47,
+            "line_end": 49
+          },
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 186,
+            "line_end": 187
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 188,
+            "line_end": 189
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 190,
+            "line_end": 192
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 180,
+            "line_end": 180
+          },
+          {
+            "file": "cost-query/workflow.md",
+            "line_start": 79,
+            "line_end": 80
+          },
+          {
+            "file": "cost-query/workflow.md",
+            "line_start": 111,
+            "line_end": 112
+          },
+          {
+            "file": "cost-query/workflow.md",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "cost-query/workflow.md",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 101,
+            "line_end": 101
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "cost-optimization/auth-best-practices.md",
+            "line_start": 105,
+            "line_end": 105
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "cost-optimization/azure-aks-anomalies.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "cost-optimization/workflow.md",
+            "line_start": 158,
+            "line_end": 158
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:cost-forecast/error-handling.md:7:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "| 400 | Bad Request | Invalid request body, missing `dataset`, past-only dates, invalid field depend"
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:10:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "| 404 | Not Found | Invalid scope URL — subscription, resource group, or billing account not found |"
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:20:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "| `InvalidForecastRequestBody` | Request body has invalid JSON structure | Check JSON syntax — verif"
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:22:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "| `DontContainsValidTimeRangeWhileContainsPeriod` | `timePeriod` is present but `from` or `to` is in"
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:23:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "| `DontContainsValidTimeRangeWhileMonthlyAndIncludeCost` | Monthly granularity with `includeActualCo"
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:31:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/error-handling.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "| \"Forecast is unavailable for the specified time period\" | Valid response with null/empty rows | No"
+      },
+      {
+        "id": "filesystem:cost-forecast/examples.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-forecast/examples.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Common forecast patterns with request bodies. Use the [SKILL.md workflow](../SKILL.md) to construct "
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:11:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/guardrails.md",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "| Both dates must be valid | When `timePeriod` is present, both `from` and `to` must be valid parsea"
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/guardrails.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "| Monthly + includeActualCost | Monthly granularity with `includeActualCost=true` requires an explic"
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:68:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/guardrails.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "> ⚠️ **Warning:** This is **not an error** — it is a valid response indicating the forecast model ca"
+      },
+      {
+        "id": "blocker:cost-forecast/request-body-schema.md:111:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/request-body-schema.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "| `to` date | Must be in the future | Can be any valid past/present date |"
+      },
+      {
+        "id": "external_commands:cost-forecast/workflow.md:81:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 81,
+        "line_end": 82,
+        "snippet": "--url \"/subscriptions/<subscription-id>/providers/Microsoft.CostManagement/forecast?api-version=2023"
+      },
+      {
+        "id": "external_commands:cost-forecast/workflow.md:77:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:5:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "> ⚠️ **Warning:** If the user wants **historical** cost data, use the [Cost Query Workflow](../cost-"
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:21:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "Use the same scope patterns from the Scope Reference table in the main [SKILL.md](../SKILL.md#scope-"
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:44:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "> ⚠️ **Warning:** Grouping is **NOT supported** for forecast. Suggest using the [Cost Query Workflow"
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:93:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "> 💡 **Tip:** \"Forecast is unavailable for the specified time period\" is not an error — it means the"
+      },
+      {
+        "id": "blocker:cost-forecast/workflow.md:115:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-forecast/workflow.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "| 400 | Invalid dependency | Set `includeActualCost: true` when using `includeFreshPartialCost`. |"
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:16:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "| **Local development** | `DefaultAzureCredential` | Chains CLI, PowerShell, and VS Code credentials"
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:81:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "3. **Azure PowerShell** — `Connect-AzAccount`"
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:87:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "// Local development only — uses CLI/PowerShell/VS Code credentials"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:43:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:101:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:environment-variable-access-dot-notation",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable access (dot notation)",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:43:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:101:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:environment-variable-object",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Environment variable object",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:57:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "if os.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\") == \"Development\""
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:57:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "if os.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\") == \"Development\""
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:69:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "var credential = \"Development\".equals(System.getenv(\"AZURE_FUNCTIONS_ENVIRONMENT\"))"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:43:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "const credential = process.env.NODE_ENV === \"development\""
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:101:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "if (process.env.NODE_ENV === \"development\") {"
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:104:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "return process.env.AZURE_CLIENT_ID"
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:105:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "cost-optimization/auth-best-practices.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "? new ManagedIdentityCredential(process.env.AZURE_CLIENT_ID)  // user-assigned"
+      },
+      {
+        "id": "network:cost-optimization/azure-aks-anomalies.md:13:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "cost-optimization/azure-aks-anomalies.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "--url \"https://management.azure.com/subscriptions/<subscription-id>/resourceGroups/<resource-group>/"
+      },
+      {
+        "id": "blocker:cost-optimization/azure-aks-anomalies.md:7:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-optimization/azure-aks-anomalies.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "Ask the user: \"When did you notice the spike? (e.g., 'last Tuesday', 'between 2 AM and 4 AM yesterda"
+      },
+      {
+        "id": "external_commands:cost-optimization/azure-quick-review.md:25:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/azure-quick-review.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:cost-optimization/report-template.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-optimization/report-template.md",
+        "line_start": 47,
+        "line_end": 49,
+        "snippet": "- Cost Query Results: `output/cost-query-result<timestamp>.json`"
+      },
+      {
+        "id": "external_commands:cost-optimization/report-template.md:67:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/report-template.md",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "network:cost-optimization/report-template.md:56:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "cost-optimization/report-template.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "https://portal.azure.com/#@<TENANT_ID>/resource/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESO"
+      },
+      {
+        "id": "filesystem:cost-optimization/sdk/azure-resource-manager-redis-dotnet.md:13:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-optimization/sdk/azure-resource-manager-redis-dotnet.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "> **Auth:** `DefaultAzureCredential` is for local development. See [auth-best-practices.md](../auth-"
+      },
+      {
+        "id": "filesystem:cost-optimization/sdk/azure-resource-manager-redis-dotnet.md:24:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-optimization/sdk/azure-resource-manager-redis-dotnet.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "- Use DefaultAzureCredential for **local development only**. In production, use ManagedIdentityCrede"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:186:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 186,
+        "line_end": 187,
+        "snippet": "--resource \"<RESOURCE_ID>\" `"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:188:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 188,
+        "line_end": 189,
+        "snippet": "--interval PT1H `"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:190:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 190,
+        "line_end": 192,
+        "snippet": "--start-time $startTime `"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:20:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:120:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 120,
+        "line_end": 120,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:180:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 180,
+        "line_end": 180,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "network:cost-optimization/workflow.md:158:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "**Execute and save results to `output/cost-query-result<timestamp>.json`.** Always include the `--he"
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:5:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "> **Important:** Always present the total bill and cost breakdown (from the [Cost Query Workflow](.."
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:127:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "Get actual cost data from Azure Cost Management API (last 30 days). Use the [Cost Query Workflow](.."
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:160:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-optimization/workflow.md",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "> 💡 **Tip:** Also run a cost-by-service query (grouping by `ServiceName`) to present the total bill"
+      },
+      {
+        "id": "blocker:cost-query/dimensions-by-scope.md:64:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/dimensions-by-scope.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "Available dimensions vary by agreement type. Only dimensions listed for your agreement type are vali"
+      },
+      {
+        "id": "blocker:cost-query/dimensions-by-scope.md:180:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/dimensions-by-scope.md",
+        "line_start": 180,
+        "line_end": 180,
+        "snippet": "| `AgreementType` | The agreement type (`EA`, `MCA`, `MOSP`). | Determines valid dimension set. |"
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/error-handling.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "| 400 | `BadRequest` | Invalid request body, unsupported dimension, date range exceeds limits, malfo"
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:21:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/error-handling.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "| \"Dimension Z is not valid for scope\" | The requested dimension is not available for the current sc"
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:23:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/error-handling.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "| Date range exceeds granularity limit | `Daily` range > 31 days or `Monthly`/`None` range > 12 mont"
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:26:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/error-handling.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "| Invalid filter structure | `and`/`or` has fewer than 2 child expressions, or `not` has more than 1"
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:28:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/error-handling.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "| `BillingSubscriptionNotFound` | The subscription ID in the scope URL is invalid or not associated "
+      },
+      {
+        "id": "filesystem:cost-query/examples.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-query/examples.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Common query patterns with request bodies. Use the [SKILL.md workflow](../SKILL.md) to construct and"
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:3:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/guardrails.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Detailed validation rules and guardrails for the Cost Management Query API. The system applies these"
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:95:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/guardrails.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "Dimensions must be valid for the intersection of the agreement type **and** scope type."
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:105:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/guardrails.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "| Dimension not valid for agreement type | `BillingSubscriptionNotFound` or dimension validation err"
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:106:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/guardrails.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "| Dimension not valid for scope type | `BadRequest` with invalid dimension message. |"
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-query/workflow.md",
+        "line_start": 79,
+        "line_end": 80,
+        "snippet": "--url \"<scope>/providers/Microsoft.CostManagement/query?api-version=2023-11-01\" `"
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "cost-query/workflow.md",
+        "line_start": 111,
+        "line_end": 112,
+        "snippet": "--url \"/subscriptions/<subscription-id>/providers/Microsoft.CostManagement/query?api-version=2023-11"
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:73:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-query/workflow.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:109:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "cost-query/workflow.md",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "filesystem:cost-query/workflow.md:7:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "cost-query/workflow.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "Identify the Azure scope for the cost query from the Scope Reference table in the main [SKILL.md](.."
+      },
+      {
+        "id": "blocker:cost-query/workflow.md:134:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "cost-query/workflow.md",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "| 400 | Invalid request body | Check schema, date ranges, and dimension compatibility. |"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "| **Query API** | `POST {scope}/providers/Microsoft.CostManagement/query?api-version=2023-11-01` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "| **Forecast API** | `POST {scope}/providers/Microsoft.CostManagement/forecast?api-version=2023-11-0"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "- Subscription: `/subscriptions/<id>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "- Resource Group: `/subscriptions/<id>/resourceGroups/<name>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "- Management Group: `/providers/Microsoft.Management/managementGroups/<id>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "- Billing Account: `/providers/Microsoft.Billing/billingAccounts/<id>`"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:cost-forecast/error-handling.md:7:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a forecast API error table describing an invalid request. It performs no system discovery."
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:10:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This row explains an Azure 404 response for an invalid scope. It does not enumerate local or remote systems."
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:20:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The text documents malformed forecast JSON and syntax validation. It contains no reconnaissance instruction."
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:22:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row documents a forecast date-range validation error. It does not inspect system configuration."
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:23:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The content explains a forecast request dependency involving monthly granularity. It is ordinary API validation guidance."
+      },
+      {
+        "id": "blocker:cost-forecast/error-handling.md:31:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an interpretation of an empty forecast response. It does not probe the host or network."
+      },
+      {
+        "id": "filesystem:cost-forecast/examples.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sequence occurs only in a relative Markdown link to ../SKILL.md. No filesystem path is accepted or traversed at runtime."
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:11:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This guardrail validates both forecast dates. It does not gather system information."
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This row documents a dependency between forecast options. It has no reconnaissance behavior."
+      },
+      {
+        "id": "blocker:cost-forecast/guardrails.md:68:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The warning explains that unavailable forecast data is a valid response. It does not discover system details."
+      },
+      {
+        "id": "blocker:cost-forecast/request-body-schema.md:111:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a request-schema comparison for valid dates. It contains no system inspection."
+      },
+      {
+        "id": "external_commands:cost-forecast/workflow.md:81:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backtick is a PowerShell line-continuation character in a documented az rest command. It is not Ruby command substitution."
+      },
+      {
+        "id": "external_commands:cost-forecast/workflow.md:77:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a Markdown language label for a documented read-only forecast request. Arguments are fixed templates without command interpolation."
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:5:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sequence belongs to a relative Markdown link between bundled workflow documents. It is not used for file access."
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:21:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The parent segment appears in a static Markdown link to the bundled SKILL.md file. No runtime traversal occurs."
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:44:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is a documentation link to the neighboring cost-query workflow. It cannot traverse a user-selected path."
+      },
+      {
+        "id": "filesystem:cost-forecast/workflow.md:93:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The detected sequence is confined to a relative Markdown link. It is not executable filesystem logic."
+      },
+      {
+        "id": "blocker:cost-forecast/workflow.md:115:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This error table explains a forecast option dependency. It performs no reconnaissance."
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:16:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row names PowerShell as one credential source in DefaultAzureCredential. It does not invoke PowerShell."
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:81:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Connect-AzAccount is a standard interactive Azure authentication option for local development. No untrusted command or argument is constructed."
+      },
+      {
+        "id": "external_commands:cost-optimization/auth-best-practices.md:87:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This comment describes credential sources used by an Azure SDK example. It does not execute PowerShell."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:43:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The example reads NODE_ENV only to choose a credential class. It does not access or transmit a secret."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:101:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The documented condition reads NODE_ENV to distinguish local development. This is a non-sensitive environment selector."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "AZURE_CLIENT_ID identifies a managed identity and is not a credential secret. The value is passed only to the Azure identity SDK."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:environment-variable-access-dot-notation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The sample passes AZURE_CLIENT_ID to ManagedIdentityCredential. It neither reads secret material nor sends data to an unrelated service."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:43:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "process.env is used only to read the non-sensitive NODE_ENV mode in a documentation example. There is no environment enumeration."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:101:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code checks one named environment selector rather than reading the environment object broadly. No value is disclosed."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The sample accesses one named managed-identity client identifier. It does not enumerate environment variables or expose credentials."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:environment-variable-object",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The environment object is used for a single AZURE_CLIENT_ID lookup in an SDK example. No secret collection occurs."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:57:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "os.getenv reads AZURE_FUNCTIONS_ENVIRONMENT to detect local development. The sample does not access credentials."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:57:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The getenv call retrieves only a documented runtime-mode variable. It is not used for secret discovery or exfiltration."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:69:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The Java example reads AZURE_FUNCTIONS_ENVIRONMENT solely to choose local or managed identity authentication. No sensitive value is exposed."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:104:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "AZURE_CLIENT_ID is a public identity identifier, not a client secret. The sample uses it only to select a managed identity."
+      },
+      {
+        "id": "env_access:cost-optimization/auth-best-practices.md:105:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code passes a non-secret client identifier to ManagedIdentityCredential. It does not retrieve AZURE_CLIENT_SECRET or other credential material."
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:43:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The code reads process.env.NODE_ENV and never opens an environment file. The environment-file detector matched unrelated syntax."
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:101:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is an in-memory NODE_ENV check in a TypeScript example. No .env file or secret store is accessed."
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:104:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line reads a named process environment value, not an environment file. No file path is present."
+      },
+      {
+        "id": "sensitive:cost-optimization/auth-best-practices.md:105:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line passes AZURE_CLIENT_ID from process memory to an Azure SDK constructor. It does not open or parse a file."
+      },
+      {
+        "id": "network:cost-optimization/azure-aks-anomalies.md:13:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is the official management.azure.com endpoint for the documented Cost Management API. It does not target an unrelated recipient."
+      },
+      {
+        "id": "blocker:cost-optimization/azure-aks-anomalies.md:7:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The instruction asks the user when a reported cost spike occurred. It does not inspect the system."
+      },
+      {
+        "id": "external_commands:cost-optimization/azure-quick-review.md:25:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a Markdown code-fence label for a documented read-only azqr scan. Its scope arguments are explicit placeholders."
+      },
+      {
+        "id": "external_commands:cost-optimization/report-template.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks delimit an inline output filename in a Markdown report template. They do not execute a shell command."
+      },
+      {
+        "id": "external_commands:cost-optimization/report-template.md:67:powershell-invocation",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The PowerShell block recursively force-deletes the relative temp directory. It does not verify that the directory belongs to this skill.",
+        "severity": "high"
+      },
+      {
+        "id": "network:cost-optimization/report-template.md:56:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an official Azure Portal URL template containing placeholders. It is report navigation, not data exfiltration."
+      },
+      {
+        "id": "filesystem:cost-optimization/sdk/azure-resource-manager-redis-dotnet.md:13:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The parent segment is part of a relative Markdown link to bundled authentication guidance. No runtime file lookup is performed."
+      },
+      {
+        "id": "filesystem:cost-optimization/sdk/azure-resource-manager-redis-dotnet.md:24:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sequence occurs in a documentation link, not in path construction or filesystem access."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:186:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backtick continues a PowerShell az monitor metrics command onto the next line. It is not shell command substitution."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:188:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is another PowerShell line-continuation marker in the same read-only metrics query. No Ruby execution is present."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:190:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The character continues a fixed Azure Monitor command. It does not evaluate embedded input as a command."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:20:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The fenced block contains standard version, account, and extension checks. These are legitimate prerequisite checks without dynamic command construction."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:120:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The documented commands show the current account and list resources within an explicit Azure scope. They do not mutate resources."
+      },
+      {
+        "id": "external_commands:cost-optimization/workflow.md:180:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The block performs a read-only Azure Monitor metrics query for rightsizing analysis. Placeholders are quoted and no shell evaluation is used."
+      },
+      {
+        "id": "network:cost-optimization/workflow.md:158:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line is prose about saving a Cost Management result and contains no Python HTTP library call. The detector matched no network code."
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:5:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The parent segment occurs in a relative Markdown link to the bundled query workflow. It is not a runtime path."
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:127:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is a static cross-reference to the neighboring query workflow. No filesystem traversal is attempted."
+      },
+      {
+        "id": "filesystem:cost-optimization/workflow.md:160:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sequence appears only in a relative link to a bundled examples file. It cannot access user-controlled paths."
+      },
+      {
+        "id": "blocker:cost-query/dimensions-by-scope.md:64:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This sentence explains that Azure dimensions vary by billing agreement. It does not discover system characteristics."
+      },
+      {
+        "id": "blocker:cost-query/dimensions-by-scope.md:180:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row defines the AgreementType cost dimension. It is API reference material, not reconnaissance."
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The content lists causes for an Azure BadRequest response. It does not inspect a system."
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:21:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This troubleshooting row explains an invalid query dimension. It contains no discovery command."
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:23:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line documents Azure date-range limits. It does not gather host, account, or network details."
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:26:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is request filter validation guidance. It has no reconnaissance behavior."
+      },
+      {
+        "id": "blocker:cost-query/error-handling.md:28:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row explains a subscription-scope API error. It does not enumerate subscriptions or probe access."
+      },
+      {
+        "id": "filesystem:cost-query/examples.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sequence is in a relative Markdown link to ../SKILL.md. It is not consumed by filesystem code."
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:3:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The phrase describes Azure Cost Management validation rules. It does not instruct the agent to inspect its environment."
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:95:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This API guardrail requires a dimension valid for the agreement and scope. It is not system reconnaissance."
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:105:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row maps an invalid agreement dimension to expected Azure errors. It performs no discovery."
+      },
+      {
+        "id": "blocker:cost-query/guardrails.md:106:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row documents the error for a dimension invalid at the selected scope. It contains no reconnaissance action."
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backtick is PowerShell line continuation in a fixed az rest query. It is not Ruby or shell command substitution."
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The detected character continues a documented PowerShell command. No string is evaluated as executable code."
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:73:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This fenced example creates a local request file and performs a read-only cost query. It uses fixed arguments and quoted placeholders."
+      },
+      {
+        "id": "external_commands:cost-query/workflow.md:109:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The PowerShell example calls the official Cost Management query endpoint. It is read-only and does not construct commands from untrusted text."
+      },
+      {
+        "id": "filesystem:cost-query/workflow.md:7:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The parent segment is part of a static link to the bundled SKILL.md reference. It does not access an arbitrary file."
+      },
+      {
+        "id": "blocker:cost-query/workflow.md:134:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The row provides remediation for an invalid Azure request body. It does not perform system reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Backticks format a Cost Management API route as inline Markdown. No command execution syntax is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This is inline Markdown formatting around the forecast API route. It cannot execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "Backticks format a subscription scope example. The line contains no command interpreter or substitution."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The matched text is an inline resource-group scope template. It is documentation, not executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks delimit a management-group route in Markdown. No command is run."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line is a formatted billing-account scope example. It contains no executable backtick expression."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unqualified Resource Deletion Recommendation",
+        "description": "The report template labels azqr-identified resources as immediately deletable. This can encourage destructive changes without dependency validation or explicit approval.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 23,
+            "line_end": 24
+          }
+        ],
+        "confidence": 0.95,
+        "confidence_reasoning": "The template explicitly places azqr results under resources that can be deleted immediately. No validation or approval condition appears in that section."
+      },
+      {
+        "title": "Azure Budget Creation Without Approval Checkpoint",
+        "description": "The anomaly workflow supplies a budget creation command with notification recipients but no explicit confirmation step. An investigation can therefore modify subscription state.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "cost-optimization/azure-aks-anomalies.md",
+            "line_start": 65,
+            "line_end": 77
+          }
+        ],
+        "confidence": 0.92,
+        "confidence_reasoning": "The cited section directly provides az consumption budget create after diagnostic steps. It does not require confirmation before the state-changing command."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "PowerShell invocation",
+        "description": "```powershell",
+        "locations": [
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 67,
+            "line_end": 67
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The PowerShell block recursively force-deletes the relative temp directory. It does not verify that the directory belongs to this skill."
+      },
+      {
+        "title": "Unqualified Resource Deletion Recommendation",
+        "description": "The report template labels azqr-identified resources as immediately deletable. This can encourage destructive changes without dependency validation or explicit approval.",
+        "locations": [
+          {
+            "file": "cost-optimization/report-template.md",
+            "line_start": 23,
+            "line_end": 24
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.95,
+        "confidence_reasoning": "The template explicitly places azqr results under resources that can be deleted immediately. No validation or approval condition appears in that section."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Azure Budget Creation Without Approval Checkpoint",
+        "description": "The anomaly workflow supplies a budget creation command with notification recipients but no explicit confirmation step. An investigation can therefore modify subscription state.",
+        "locations": [
+          {
+            "file": "cost-optimization/azure-aks-anomalies.md",
+            "line_start": 65,
+            "line_end": 77
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.92,
+        "confidence_reasoning": "The cited section directly provides az consumption budget create after diagnostic steps. It does not require confirmation before the state-changing command."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 23,
+    "total_lines": 2431,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T18:20:33.783Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Analyze and Optimize Azure Costs",
+    "value_statement": "Azure spending can be difficult to explain and control. This skill queries costs, forecasts spending, and produces evidence-based optimization recommendations.",
+    "seo_keywords": [
+      "Azure cost management",
+      "Azure cost optimization",
+      "Azure spending forecast",
+      "FinOps",
+      "cloud cost analysis",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AKS cost analysis"
+    ],
+    "actual_capabilities": [
+      "Queries actual or amortized Azure costs for supported subscription, resource group, management group, and billing scopes.",
+      "Groups historical costs by supported dimensions such as service, resource group, tags, or resource identifier.",
+      "Forecasts future Azure spending from eligible historical data and distinguishes actual values from forecast values.",
+      "Investigates optimization opportunities using Azure Quick Review, Resource Graph, Monitor metrics, and official pricing pages.",
+      "Produces prioritized reports with cost baselines, estimated savings, evidence labels, portal links, and implementation guidance."
+    ],
+    "limitations": [
+      "Requires authenticated Azure access and reader permissions for cost, resource, and monitoring data.",
+      "Forecasts require sufficient history and do not support grouping by service or resource.",
+      "Dimension availability, date ranges, row limits, and rate limits vary by Azure scope and agreement.",
+      "Generated savings estimates require human validation before resource changes, purchases, deletions, or tier adjustments."
+    ],
+    "use_cases": [
+      {
+        "title": "Explain Monthly Azure Spend",
+        "description": "Break down actual charges by service, resource group, or tag and identify the largest cost drivers.",
+        "target_user": "FinOps analyst"
+      },
+      {
+        "title": "Prioritize Cloud Savings",
+        "description": "Combine cost data, utilization metrics, orphaned-resource checks, and validated pricing into a ranked optimization report.",
+        "target_user": "Cloud platform engineer"
+      },
+      {
+        "title": "Investigate AKS Cost Spikes",
+        "description": "Correlate cluster costs with node counts, scaling events, and resource consumption during a reported anomaly window.",
+        "target_user": "Kubernetes operator"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Review Current Spend",
+        "prompt": "Show month-to-date Azure cost for subscription <subscription-id>, grouped by service. Use actual cost data and state the currency.",
+        "scenario": "Beginner cost overview"
+      },
+      {
+        "title": "Forecast Subscription Cost",
+        "prompt": "Forecast Azure spending for subscription <subscription-id> through <date>. Include actual costs, forecast totals, assumptions, and any unavailable-data warning.",
+        "scenario": "Planning a future budget"
+      },
+      {
+        "title": "Find Optimization Opportunities",
+        "prompt": "Analyze the last 30 days for subscription <subscription-id>. Identify orphaned resources and rightsizing opportunities, validate pricing, and estimate monthly savings.",
+        "scenario": "Evidence-based subscription optimization"
+      },
+      {
+        "title": "Investigate an AKS Anomaly",
+        "prompt": "Investigate the AKS cost spike for cluster <cluster-name> from <start> to <end>. Correlate costs, node metrics, scaling events, and top consumers. Do not modify resources. Propose budget alert settings separately and wait for approval.",
+        "scenario": "Advanced cluster cost investigation"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Show this month by service for subscription Production.",
+        "output": [
+          "Month-to-date total: 12,480 USD.",
+          "Virtual Machines: 6,110 USD, 49 percent.",
+          "Azure Kubernetes Service: 3,020 USD, 24 percent.",
+          "Storage: 1,840 USD, 15 percent.",
+          "Remaining services: 1,510 USD, 12 percent."
+        ]
+      },
+      {
+        "input": "Forecast spending through the end of next month.",
+        "output": "Projected total: 24,700 USD. Actual charges cover completed dates, while forecast values cover future dates. The estimate uses available Azure history."
+      },
+      {
+        "input": "Find the largest safe savings opportunities.",
+        "output": [
+          "Priority 1: Validate three unattached disks costing about 240 USD monthly before deletion.",
+          "Priority 2: Review two low-utilization virtual machines with an estimated 310 USD monthly rightsizing opportunity.",
+          "Priority 3: Confirm storage lifecycle requirements before applying a proposed 90-day policy."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Query actual costs before estimating savings, and label actual data, metrics, validated pricing, and estimates clearly.",
+      "Use the narrowest Azure scope and least-privilege reader roles needed for the analysis.",
+      "Require explicit approval, dry-run validation, and rollback guidance before any resource or budget change."
+    ],
+    "anti_patterns": [
+      "Do not estimate costs from list prices when actual billing data is available.",
+      "Do not treat orphaned-resource scans as proof that deletion is safe.",
+      "Do not execute cleanup or Azure mutation commands without validating paths, scope, impact, and user approval."
+    ],
+    "faq": [
+      {
+        "question": "Which Azure scopes are supported?",
+        "answer": "The skill documents subscription, resource group, management group, and billing account scopes. API capabilities and dimensions vary by scope."
+      },
+      {
+        "question": "Which permissions are required?",
+        "answer": "Typical analysis needs Cost Management Reader, Monitoring Reader, and Reader roles on the target scope. Some operations may require additional permissions."
+      },
+      {
+        "question": "Can it forecast costs by service?",
+        "answer": "No. Azure forecast grouping is not supported. Use grouped historical queries beside the overall forecast."
+      },
+      {
+        "question": "Does it change or delete Azure resources?",
+        "answer": "Most workflows are read-only, but some references include budget, AKS, and implementation commands. Review every change and require explicit approval."
+      },
+      {
+        "question": "How are savings estimates calculated?",
+        "answer": "The workflow combines actual costs, utilization metrics, Azure recommendations, and official pricing. Estimates still require human validation."
+      },
+      {
+        "question": "Where are reports and query results stored?",
+        "answer": "The workflow uses local output and temp directories with timestamped reports. Protect billing data and verify cleanup paths before removal."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "cost-forecast",
+      "type": "dir",
+      "path": "cost-forecast",
+      "children": [
+        {
+          "name": "error-handling.md",
+          "type": "file",
+          "path": "cost-forecast/error-handling.md",
+          "lines": 49
+        },
+        {
+          "name": "examples.md",
+          "type": "file",
+          "path": "cost-forecast/examples.md",
+          "lines": 126
+        },
+        {
+          "name": "guardrails.md",
+          "type": "file",
+          "path": "cost-forecast/guardrails.md",
+          "lines": 98
+        },
+        {
+          "name": "request-body-schema.md",
+          "type": "file",
+          "path": "cost-forecast/request-body-schema.md",
+          "lines": 112
+        },
+        {
+          "name": "workflow.md",
+          "type": "file",
+          "path": "cost-forecast/workflow.md",
+          "lines": 124
+        }
+      ]
+    },
+    {
+      "name": "cost-optimization",
+      "type": "dir",
+      "path": "cost-optimization",
+      "children": [
+        {
+          "name": "sdk",
+          "type": "dir",
+          "path": "cost-optimization/sdk",
+          "children": [
+            {
+              "name": "azure-resource-manager-redis-dotnet.md",
+              "type": "file",
+              "path": "cost-optimization/sdk/azure-resource-manager-redis-dotnet.md",
+              "lines": 32
+            }
+          ]
+        },
+        {
+          "name": "services",
+          "type": "dir",
+          "path": "cost-optimization/services",
+          "children": [
+            {
+              "name": "redis",
+              "type": "dir",
+              "path": "cost-optimization/services/redis",
+              "children": [
+                {
+                  "name": "azure-cache-for-redis.md",
+                  "type": "file",
+                  "path": "cost-optimization/services/redis/azure-cache-for-redis.md",
+                  "lines": 50
+                }
+              ]
+            },
+            {
+              "name": "storage",
+              "type": "dir",
+              "path": "cost-optimization/services/storage",
+              "children": [
+                {
+                  "name": "azure-storage.md",
+                  "type": "file",
+                  "path": "cost-optimization/services/storage/azure-storage.md",
+                  "lines": 188
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "auth-best-practices.md",
+          "type": "file",
+          "path": "cost-optimization/auth-best-practices.md",
+          "lines": 129
+        },
+        {
+          "name": "azure-aks-anomalies.md",
+          "type": "file",
+          "path": "cost-optimization/azure-aks-anomalies.md",
+          "lines": 79
+        },
+        {
+          "name": "azure-aks-cost-addon.md",
+          "type": "file",
+          "path": "cost-optimization/azure-aks-cost-addon.md",
+          "lines": 49
+        },
+        {
+          "name": "azure-quick-review.md",
+          "type": "file",
+          "path": "cost-optimization/azure-quick-review.md",
+          "lines": 54
+        },
+        {
+          "name": "azure-resource-graph.md",
+          "type": "file",
+          "path": "cost-optimization/azure-resource-graph.md",
+          "lines": 103
+        },
+        {
+          "name": "report-template.md",
+          "type": "file",
+          "path": "cost-optimization/report-template.md",
+          "lines": 70
+        },
+        {
+          "name": "workflow.md",
+          "type": "file",
+          "path": "cost-optimization/workflow.md",
+          "lines": 199
+        }
+      ]
+    },
+    {
+      "name": "cost-query",
+      "type": "dir",
+      "path": "cost-query",
+      "children": [
+        {
+          "name": "dimensions-by-scope.md",
+          "type": "file",
+          "path": "cost-query/dimensions-by-scope.md",
+          "lines": 183
+        },
+        {
+          "name": "error-handling.md",
+          "type": "file",
+          "path": "cost-query/error-handling.md",
+          "lines": 68
+        },
+        {
+          "name": "examples.md",
+          "type": "file",
+          "path": "cost-query/examples.md",
+          "lines": 128
+        },
+        {
+          "name": "guardrails.md",
+          "type": "file",
+          "path": "cost-query/guardrails.md",
+          "lines": 182
+        },
+        {
+          "name": "request-body-schema.md",
+          "type": "file",
+          "path": "cost-query/request-body-schema.md",
+          "lines": 171
+        },
+        {
+          "name": "workflow.md",
+          "type": "file",
+          "path": "cost-query/workflow.md",
+          "lines": 142
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "tools-and-best-practices.md",
+          "type": "file",
+          "path": "references/tools-and-best-practices.md",
+          "lines": 49
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 46
+    }
+  ]
+}

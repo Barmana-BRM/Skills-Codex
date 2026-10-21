@@ -1,0 +1,957 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T12:29:54.189Z",
+    "slug": "chachamaru127-review",
+    "source_url": "https://github.com/Chachamaru127/claude-code-harness/tree/main/skills/review",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "44c8e51632fce706b56b8bb325e820d3009616728224363c9350972d86f17405",
+    "tree_hash": "a00f8f5110477c49a5fdea522aac64876eeee857beb84402b9458c8ca99365bc",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "review",
+    "description": "Reviews code changes for quality, security, performance, accessibility, and consistency using focused review guides.",
+    "summary": "Focused code review guidance for quality, security, performance, accessibility, and changed files.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Chachamaru127",
+    "license": "MIT",
+    "tags": [
+      "code-review",
+      "security",
+      "performance",
+      "accessibility",
+      "quality"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "env_access",
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "I found no prompt injection or obfuscated payload in the referenced files. Most static findings are false positives from markdown code fences, Japanese text, or security checklist examples; the confirmed issue is a parent-directory documentation link in SKILL.md.",
+    "remediation": [
+      {
+        "issue": "Parent-directory documentation link",
+        "suggestion": "Replace ../../docs/LSP_INTEGRATION.md with an in-skill document, or remove the link so agents stay inside the packaged skill boundary.",
+        "severity": "high"
+      },
+      {
+        "issue": "Broad Bash capability in review guides",
+        "suggestion": "State that command examples are optional, repository-scoped, and require user approval before modifying files with fix or write commands.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "review-changes/doc.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "review-quality/doc.md",
+            "line_start": 108,
+            "line_end": 109
+          },
+          {
+            "file": "review-quality/doc.md",
+            "line_start": 109,
+            "line_end": 110
+          },
+          {
+            "file": "review-quality/doc.md",
+            "line_start": 110,
+            "line_end": 111
+          },
+          {
+            "file": "review-quality/doc.md",
+            "line_start": 111,
+            "line_end": 114
+          },
+          {
+            "file": "review-quality/doc.md",
+            "line_start": 114,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 134
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 134,
+            "line_end": 147
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 155
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 155,
+            "line_end": 176
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 176,
+            "line_end": 186
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 186,
+            "line_end": 190
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 190,
+            "line_end": 201
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 201,
+            "line_end": 209
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 226
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 203
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "env_access:review-changes/doc.md:81:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "review-changes/doc.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "grep -rn \"sk-\\|api_key\\|password\\|secret\" --include=\"*.ts\" --include=\"*.tsx\" | grep -v \".env\""
+      },
+      {
+        "id": "sensitive:review-changes/doc.md:81:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "review-changes/doc.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "grep -rn \"sk-\\|api_key\\|password\\|secret\" --include=\"*.ts\" --include=\"*.tsx\" | grep -v \".env\""
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "review-quality/doc.md",
+        "line_start": 108,
+        "line_end": 109,
+        "snippet": "- `processUserData` 関数を以下に分割:"
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "review-quality/doc.md",
+        "line_start": 109,
+        "line_end": 110,
+        "snippet": "- `validateUserInput()`"
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "review-quality/doc.md",
+        "line_start": 110,
+        "line_end": 111,
+        "snippet": "- `formatUserData()`"
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "review-quality/doc.md",
+        "line_start": 111,
+        "line_end": 114,
+        "snippet": "- `saveUser()`"
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:114:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "review-quality/doc.md",
+        "line_start": 114,
+        "line_end": 117,
+        "snippet": "- `import { unused } from './utils'` を削除"
+      },
+      {
+        "id": "sensitive:review-security/doc.md:70:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "review-security/doc.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "| .env ファイルのコミット | git に含まれる機密ファイル |"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 64,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 99,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 110,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 116,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 121,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 125,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 134,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 147,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 155,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 155,
+        "line_end": 176,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 176,
+        "line_end": 186,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 186,
+        "line_end": 190,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 190,
+        "line_end": 201,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 201,
+        "line_end": 209,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 209,
+        "line_end": 226,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "filesystem:SKILL.md:203:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 203,
+        "snippet": "詳細: [docs/LSP_INTEGRATION.md](../../docs/LSP_INTEGRATION.md)"
+      },
+      {
+        "id": "obfuscation:review-accessibility/doc.md:1:heuristic-high-file-entropy-6-11-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.11 bits) - possible binary/encrypted content",
+        "file": "review-accessibility/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: review-accessibility/doc.md"
+      },
+      {
+        "id": "obfuscation:review-changes/doc.md:1:heuristic-high-file-entropy-6-50-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.50 bits) - possible binary/encrypted content",
+        "file": "review-changes/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: review-changes/doc.md"
+      },
+      {
+        "id": "obfuscation:review-performance/doc.md:3:heuristic-very-high-entropy-string-5-63-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.63 bits) - likely encoded/encrypted payload",
+        "file": "review-performance/doc.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "コードのパフォーマンス問題をチェックするスキル。パフォーマンスレビューが要求された場合、レスポンスが遅いと報告された場合、または大量のデータ処理を行うコードの変..."
+      },
+      {
+        "id": "obfuscation:review-performance/doc.md:1:heuristic-high-file-entropy-6-25-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.25 bits) - possible binary/encrypted content",
+        "file": "review-performance/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: review-performance/doc.md"
+      },
+      {
+        "id": "obfuscation:review-quality/doc.md:3:heuristic-very-high-entropy-string-5-80-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.80 bits) - likely encoded/encrypted payload",
+        "file": "review-quality/doc.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "コード品質（可読性、保守性、ベストプラクティス）をチェックするスキル。コードレビューが要求された場合、リファクタリング後、または複雑なロジックの実装後に使用しま..."
+      },
+      {
+        "id": "obfuscation:review-quality/doc.md:1:heuristic-high-file-entropy-6-27-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.27 bits) - possible binary/encrypted content",
+        "file": "review-quality/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: review-quality/doc.md"
+      },
+      {
+        "id": "obfuscation:review-security/doc.md:3:heuristic-very-high-entropy-string-5-69-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.69 bits) - likely encoded/encrypted payload",
+        "file": "review-security/doc.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "コードのセキュリティ脆弱性をチェックするスキル。セキュリティレビューが要求された場合、本番デプロイ前、または機密情報を扱うコードの変更時に使用します。"
+      },
+      {
+        "id": "obfuscation:review-security/doc.md:1:heuristic-high-file-entropy-6-31-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.31 bits) - possible binary/encrypted content",
+        "file": "review-security/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: review-security/doc.md"
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-61-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.61 bits) - possible binary/encrypted content",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: SKILL.md"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "env_access:review-changes/doc.md:81:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Line 81 is a grep example for finding hardcoded secrets during review, not a secret value or environment variable read. It scopes to TypeScript files and excludes .env matches."
+      },
+      {
+        "id": "sensitive:review-changes/doc.md:81:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The command on line 81 explicitly excludes .env results and is used as a review checklist example. It does not instruct reading environment files."
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text is markdown inline code for function names or an import example. It is not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text is markdown inline code for function names or an import example. It is not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text is markdown inline code for function names or an import example. It is not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text is markdown inline code for function names or an import example. It is not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "external_commands:review-quality/doc.md:114:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The flagged text is markdown inline code for function names or an import example. It is not Ruby backtick execution or a shell command."
+      },
+      {
+        "id": "sensitive:review-security/doc.md:70:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Line 70 names committed .env files as a security smell in a checklist. It is descriptive review guidance, not filesystem access to environment files."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged lines are markdown code fences or plain review-output examples in SKILL.md. They do not execute commands or interpolate user-controlled shell input."
+      },
+      {
+        "id": "filesystem:SKILL.md:203:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "SKILL.md line 203 links to ../../docs/LSP_INTEGRATION.md, which crosses the skill directory boundary. A marketplace skill should not direct agents to load parent-directory files outside its package.",
+        "severity": "high"
+      },
+      {
+        "id": "obfuscation:review-accessibility/doc.md:1:heuristic-high-file-entropy-6-11-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      },
+      {
+        "id": "obfuscation:review-changes/doc.md:1:heuristic-high-file-entropy-6-50-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      },
+      {
+        "id": "obfuscation:review-performance/doc.md:3:heuristic-very-high-entropy-string-5-63-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The flagged high-entropy line is a long Japanese description in markdown front matter. I found no encoded payload, binary blob, or hidden executable content."
+      },
+      {
+        "id": "obfuscation:review-performance/doc.md:1:heuristic-high-file-entropy-6-25-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      },
+      {
+        "id": "obfuscation:review-quality/doc.md:3:heuristic-very-high-entropy-string-5-80-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The flagged high-entropy line is a long Japanese description in markdown front matter. I found no encoded payload, binary blob, or hidden executable content."
+      },
+      {
+        "id": "obfuscation:review-quality/doc.md:1:heuristic-high-file-entropy-6-27-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      },
+      {
+        "id": "obfuscation:review-security/doc.md:3:heuristic-very-high-entropy-string-5-69-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The flagged high-entropy line is a long Japanese description in markdown front matter. I found no encoded payload, binary blob, or hidden executable content."
+      },
+      {
+        "id": "obfuscation:review-security/doc.md:1:heuristic-high-file-entropy-6-31-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-61-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is normal Japanese markdown documentation with tables and examples. The entropy heuristic appears triggered by multilingual text, not obfuscation."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Path traversal sequence",
+        "description": "詳細: [docs/LSP_INTEGRATION.md](../../docs/LSP_INTEGRATION.md)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 203
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.72,
+        "confidence_reasoning": "SKILL.md line 203 links to ../../docs/LSP_INTEGRATION.md, which crosses the skill directory boundary. A marketplace skill should not direct agents to load parent-directory files outside its package."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 977,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T12:29:54.189Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Review Code Across Quality, Security, Performance",
+    "value_statement": "Code reviews often miss security, accessibility, and performance issues when scope is broad. This skill routes review work to focused checklists and produces prioritized findings.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code review skill",
+      "AI code review",
+      "security code review",
+      "performance review",
+      "accessibility audit",
+      "pull request review",
+      "quality checklist"
+    ],
+    "actual_capabilities": [
+      "Routes review requests to quality, security, performance, accessibility, or change-review guidance.",
+      "Provides structured checklists for OWASP-style, TypeScript, React, and accessibility concerns.",
+      "Suggests command-line checks such as git diff, TypeScript, ESLint, and Prettier.",
+      "Supports parallel subagent review when several files need multiple review perspectives.",
+      "Formats findings with severity, file references, recommendations, and score-style summaries."
+    ],
+    "limitations": [
+      "Guidance depends on available project files and tool permissions.",
+      "Command examples may require project-specific package scripts or installed dependencies.",
+      "It cannot guarantee complete vulnerability discovery without human validation.",
+      "Some guidance is written in Japanese and may require translation for other teams."
+    ],
+    "use_cases": [
+      {
+        "title": "Pre-merge pull request review",
+        "description": "Review changed files for security, quality, performance, accessibility, and consistency before merging.",
+        "target_user": "Software engineer"
+      },
+      {
+        "title": "Release readiness check",
+        "description": "Focus review attention on risky areas such as authentication, APIs, database access, and user interface changes.",
+        "target_user": "Tech lead"
+      },
+      {
+        "title": "Self-review before handoff",
+        "description": "Run a structured checklist to identify missing tests, unsafe patterns, and cleanup tasks before sharing work.",
+        "target_user": "Independent developer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Review my changes",
+        "scenario": "Beginner review of recent local edits.",
+        "prompt": "Review my current changes for quality, security, performance, accessibility, and missing tests. Prioritize findings that should block a merge."
+      },
+      {
+        "title": "Check a pull request",
+        "scenario": "Focused review for a pull request or branch diff.",
+        "prompt": "Review this branch diff against the target branch. Group findings by severity, cite files and lines, and include concrete fixes."
+      },
+      {
+        "title": "Audit risky areas",
+        "scenario": "Intermediate review of sensitive application paths.",
+        "prompt": "Review the authentication, API, database, and user input changes. Focus on injection, authorization, secret exposure, and unsafe error handling."
+      },
+      {
+        "title": "Run multi-perspective review",
+        "scenario": "Advanced review across several changed files.",
+        "prompt": "Run separate quality, security, performance, and accessibility reviews for these changes. Merge the results into one prioritized review report."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review a five-file pull request that changes an API route and a React form.",
+        "output": [
+          "High: Authorization is missing on the updated API route. Add a permission check before returning user data.",
+          "Medium: The form shows validation errors using color only. Add text and accessible state for screen readers.",
+          "Low: One helper function has unclear naming. Rename it to describe the returned value."
+        ]
+      },
+      {
+        "input": "Check a refactor before commit.",
+        "output": "The review reports a B score, one missing test update, no security blocker, and two cleanup suggestions."
+      },
+      {
+        "input": "Review a performance-sensitive list page.",
+        "output": "The report flags non-virtualized rendering, repeated filtering during render, and a missing pagination strategy."
+      }
+    ],
+    "best_practices": [
+      "Provide the branch diff, changed file list, and relevant project conventions before review.",
+      "Ask for a specific review focus when security, performance, or accessibility matters most.",
+      "Treat command examples as review aids and confirm write operations before applying fixes."
+    ],
+    "anti_patterns": [
+      "Do not ask for a generic review when only one risk area matters.",
+      "Do not accept severity labels without checking the cited file and line.",
+      "Do not run fix commands blindly in repositories with unrelated local changes."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill edit code automatically?",
+        "answer": "No. It provides review guidance and may suggest commands. Any file changes should require explicit user approval."
+      },
+      {
+        "question": "Can it review security issues?",
+        "answer": "Yes. It includes checks for injection, authentication, authorization, secrets, unsafe logging, and configuration mistakes."
+      },
+      {
+        "question": "Can it work with Claude, Codex, and Claude Code?",
+        "answer": "Yes. The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "What languages does it target?",
+        "answer": "The examples focus on TypeScript, React, and web applications, but the review checklists are broadly useful."
+      },
+      {
+        "question": "Does it replace human code review?",
+        "answer": "No. It helps find issues and structure feedback, but humans must validate context and business impact."
+      },
+      {
+        "question": "Why are some instructions in Japanese?",
+        "answer": "The source skill is written mainly in Japanese. Teams may translate prompts or outputs for broader use."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "review-accessibility",
+      "type": "dir",
+      "path": "review-accessibility",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "review-accessibility/doc.md",
+          "lines": 147
+        }
+      ]
+    },
+    {
+      "name": "review-changes",
+      "type": "dir",
+      "path": "review-changes",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "review-changes/doc.md",
+          "lines": 216
+        }
+      ]
+    },
+    {
+      "name": "review-performance",
+      "type": "dir",
+      "path": "review-performance",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "review-performance/doc.md",
+          "lines": 128
+        }
+      ]
+    },
+    {
+      "name": "review-quality",
+      "type": "dir",
+      "path": "review-quality",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "review-quality/doc.md",
+          "lines": 134
+        }
+      ]
+    },
+    {
+      "name": "review-security",
+      "type": "dir",
+      "path": "review-security",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "review-security/doc.md",
+          "lines": 125
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 227
+    }
+  ]
+}

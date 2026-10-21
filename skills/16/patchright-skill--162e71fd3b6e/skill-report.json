@@ -1,0 +1,1874 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:01:26.273Z",
+    "slug": "smallnest-patchright-skill",
+    "source_url": "https://github.com/smallnest/patchright-skill/tree/main/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "ce4f32160333d3a554e5523fa8f1c8d4167373577f8cf69a0a853eac9404fd37",
+    "tree_hash": "2a726a55fa3b7000447252352a973830cd39f276d363fbe4d03bb2c4cb432e49",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "patchright-skill",
+    "description": "Use Patchright to drive Chrome for local web app testing, screenshots, form input, and UI debugging. It supports persistent sessions and private network targets for authorized development workflows.",
+    "summary": "Automates Chrome browser testing and visual checks with Patchright.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "smallnest",
+    "license": "See LICENSE.txt",
+    "tags": [
+      "browser-automation",
+      "frontend-testing",
+      "patchright",
+      "screenshots",
+      "qa"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are scanner noise from markdown fences, localhost examples, prior audit prose, and local debug output paths. Semantic review found real high-risk design issues: anti-bot bypass capability, an unauthenticated local browser control server, unrestricted screenshot output paths, and bundled self-attesting audit claims. The skill should require remediation and policy review before marketplace publication.",
+    "remediation": [
+      {
+        "issue": "Anti-bot bypass is presented as a core capability.",
+        "suggestion": "Remove bypass-oriented marketing, avoid protected-site examples, and limit documentation to authorized local or internal testing.",
+        "severity": "high"
+      },
+      {
+        "issue": "The local browser command server accepts unauthenticated commands.",
+        "suggestion": "Require a random session token, prefer a permission-restricted Unix socket, and reject commands without authentication.",
+        "severity": "high"
+      },
+      {
+        "issue": "The evaluate tool executes caller-provided JavaScript in the active page.",
+        "suggestion": "Disable evaluate by default or require explicit user confirmation with a clear host and script summary.",
+        "severity": "high"
+      },
+      {
+        "issue": "Screenshot paths are not restricted to a safe output directory.",
+        "suggestion": "Resolve screenshot paths under a dedicated output folder and reject absolute paths or parent-directory traversal.",
+        "severity": "medium"
+      },
+      {
+        "issue": "A generated audit result file claims the skill is safe to publish.",
+        "suggestion": "Remove evaluation_result.json and other self-attesting review artifacts from the packaged skill.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "evaluation_result.json",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 115
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 115,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 157
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 157,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 175
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 175,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 209
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 212
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "evaluation_result.json",
+            "line_start": 132,
+            "line_end": 132
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 205,
+            "line_end": 205
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 211,
+            "line_end": 211
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 144,
+            "line_end": 144
+          },
+          {
+            "file": "reference.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "reference.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 267,
+            "line_end": 267
+          },
+          {
+            "file": "scripts/google_search.py",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "scripts/README.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 159,
+            "line_end": 159
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 177,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 145,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "evaluation_result.json",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "evaluation_result.json",
+            "line_start": 126,
+            "line_end": 126
+          },
+          {
+            "file": "reference.md",
+            "line_start": 159,
+            "line_end": 159
+          },
+          {
+            "file": "scripts/google_debug.py",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "scripts/google_search.py",
+            "line_start": 144,
+            "line_end": 144
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 219,
+            "line_end": 219
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 140,
+            "line_end": 140
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 140,
+            "line_end": 140
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:evaluation_result.json:102:python-subprocess-call",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.call",
+        "file": "evaluation_result.json",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "\"reasoning\": \"All occurrences are markdown code blocks showing bash command examples. These use trip"
+      },
+      {
+        "id": "network:evaluation_result.json:132:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "evaluation_result.json",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "\"reasoning\": \"Hardcoded URLs include 'https://www.google.com/search?q=' for search automation (legit"
+      },
+      {
+        "id": "network:evaluation_result.json:205:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "evaluation_result.json",
+        "line_start": 205,
+        "line_end": 205,
+        "snippet": "{\"title\": \"Basic Screenshot\", \"scenario\": \"Capture local page\", \"prompt\": \"Take a screenshot of http"
+      },
+      {
+        "id": "network:evaluation_result.json:211:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "evaluation_result.json",
+        "line_start": 211,
+        "line_end": 211,
+        "snippet": "{\"input\": \"Take a screenshot of http://localhost:3000/login\", \"output\": [\"Screenshot saved to /path/"
+      },
+      {
+        "id": "network:evaluation_result.json:212:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "evaluation_result.json",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "{\"input\": \"Click the submit button and type into the password field\", \"output\": [\"Clicked selector: "
+      },
+      {
+        "id": "network:evaluation_result.json:144:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "evaluation_result.json",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "\"reasoning\": \"Lines 159 and 177 bind to 127.0.0.1 (localhost) which is a security feature - the serv"
+      },
+      {
+        "id": "filesystem:evaluation_result.json:96:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "evaluation_result.json",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "\"reasoning\": \"Line 219 contains 'print(\\\"Usage: python server.py call ...\\\")' which is help text out"
+      },
+      {
+        "id": "filesystem:evaluation_result.json:84:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "evaluation_result.json",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "\"reasoning\": \"SKILL.md lines 52,74,140 show documentation examples with path '~/.claude/skills/patch"
+      },
+      {
+        "id": "filesystem:evaluation_result.json:84:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "evaluation_result.json",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "\"reasoning\": \"SKILL.md lines 52,74,140 show documentation examples with path '~/.claude/skills/patch"
+      },
+      {
+        "id": "filesystem:evaluation_result.json:120:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "evaluation_result.json",
+        "line_start": 120,
+        "line_end": 120,
+        "snippet": "\"reasoning\": \"Line 57 in google_debug.py shows '/tmp/google_debug.png' as a debug screenshot path. W"
+      },
+      {
+        "id": "filesystem:evaluation_result.json:126:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "evaluation_result.json",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "\"reasoning\": \"Line 144 shows 'with open(output_path, 'w', encoding='utf-8') as f:' which saves searc"
+      },
+      {
+        "id": "sensitive:evaluation_result.json:150:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "evaluation_result.json",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "\"reasoning\": \".gitignore line 26 shows 'Thumbs.db' which is a Windows thumbnail cache file, not a SQ"
+      },
+      {
+        "id": "sensitive:evaluation_result.json:156:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "evaluation_result.json",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "\"reasoning\": \"Same as above - Thumbs.db is a Windows system file, not a skill-related database.\""
+      },
+      {
+        "id": "blocker:evaluation_result.json:18:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "evaluation_result.json",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "\"summary\": \"Legitimate browser automation skill using Patchright. All static findings are false posi"
+      },
+      {
+        "id": "blocker:evaluation_result.json:75:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "evaluation_result.json",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "\"finding\": \"[HIGH] blocker: Screen capture upload at SKILL.md:21\","
+      },
+      {
+        "id": "blocker:evaluation_result.json:78:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "evaluation_result.json",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "\"reasoning\": \"SKILL.md line 21 shows 'take screenshot' as a trigger phrase. The actual screenshot fu"
+      },
+      {
+        "id": "blocker:evaluation_result.json:205:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "evaluation_result.json",
+        "line_start": 205,
+        "line_end": 205,
+        "snippet": "{\"title\": \"Basic Screenshot\", \"scenario\": \"Capture local page\", \"prompt\": \"Take a screenshot of http"
+      },
+      {
+        "id": "blocker:evaluation_result.json:230:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "evaluation_result.json",
+        "line_start": 230,
+        "line_end": 230,
+        "snippet": "{\"question\": \"How do I take a full page screenshot?\", \"answer\": \"Use: screenshot with full_page=true"
+      },
+      {
+        "id": "blocker:evaluation_result.json:221:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "evaluation_result.json",
+        "line_start": 221,
+        "line_end": 221,
+        "snippet": "\"Avoid using headless mode for visual debugging - it hides rendering issues\","
+      },
+      {
+        "id": "blocker:evaluation_result.json:223:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "evaluation_result.json",
+        "line_start": 223,
+        "line_end": 223,
+        "snippet": "\"Avoid hardcoding absolute file paths - use relative paths for portability\""
+      },
+      {
+        "id": "network:reference.md:57:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "reference.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "search_url = f\"https://www.google.com/search?q={quote('2026年Go语言展望')}\""
+      },
+      {
+        "id": "network:reference.md:89:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "reference.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "python scripts/server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"https://www.google.com/search?q"
+      },
+      {
+        "id": "filesystem:reference.md:159:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "reference.md",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "python scripts/server.py call '{\"tool\": \"screenshot\", \"args\": {\"path\": \"/tmp/debug.png\"}}'"
+      },
+      {
+        "id": "network:scripts/executor.py:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/executor.py",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "python executor.py --call '{\"tool\": \"screenshot\", \"args\": {\"url\": \"http://localhost:3000\"}}'"
+      },
+      {
+        "id": "network:scripts/executor.py:267:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/executor.py",
+        "line_start": 267,
+        "line_end": 267,
+        "snippet": "print(\"  python executor.py --call '{\\\"tool\\\": \\\"navigate\\\", \\\"args\\\": {\\\"url\\\": \\\"http://localhost:"
+      },
+      {
+        "id": "blocker:scripts/executor.py:290:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/executor.py",
+        "line_start": 290,
+        "line_end": 290,
+        "snippet": "print(json.dumps({\"status\": \"error\", \"message\": f\"Invalid JSON: {e}\"}))"
+      },
+      {
+        "id": "filesystem:scripts/google_debug.py:57:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "scripts/google_debug.py",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "\"args\": {\"path\": \"/tmp/google_debug.png\"}"
+      },
+      {
+        "id": "network:scripts/google_search.py:43:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/google_search.py",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "search_url = f\"https://www.google.com/search?q={encoded_query}\""
+      },
+      {
+        "id": "filesystem:scripts/google_search.py:144:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/google_search.py",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "network:scripts/README.md:49:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/README.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "python server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"https://www.google.com\"}}'"
+      },
+      {
+        "id": "network:scripts/server.py:159:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "scripts/server.py",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "self.server = await asyncio.start_server(self.handle_client, '127.0.0.1', PORT)"
+      },
+      {
+        "id": "network:scripts/server.py:177:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "scripts/server.py",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "sock.connect(('127.0.0.1', PORT))"
+      },
+      {
+        "id": "filesystem:scripts/server.py:219:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/server.py",
+        "line_start": 219,
+        "line_end": 219,
+        "snippet": "print(\"Usage: python server.py call '{\\\"tool\\\": \\\"navigate\\\", \\\"args\\\": {\\\"url\\\": \\\"...\\\"}}'\")"
+      },
+      {
+        "id": "blocker:scripts/server.py:198:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/server.py",
+        "line_start": 198,
+        "line_end": 198,
+        "snippet": "pid = int(PID_FILE.read_text())"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 58,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 67,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 73,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 85,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 89,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 98,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 102,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 111,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 115,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 118,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 139,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 157,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 161,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 171,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 175,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 175,
+        "line_end": 195,
+        "snippet": "```css"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 209,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 209,
+        "line_end": 212,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- localhost (http://localhost:*, http://127.0.0.1:*)"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "python scripts/server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"http://localhost:3000\"}}'"
+      },
+      {
+        "id": "network:SKILL.md:145:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 145,
+        "line_end": 145,
+        "snippet": "python scripts/server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"http://localhost:3000/login\"}}'"
+      },
+      {
+        "id": "network:SKILL.md:163:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "python scripts/server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"http://localhost:3000\"}}'"
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-ip-address",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Hardcoded IP address",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "- localhost (http://localhost:*, http://127.0.0.1:*)"
+      },
+      {
+        "id": "filesystem:SKILL.md:52:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "filesystem:SKILL.md:140:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 140,
+        "line_end": 140,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "filesystem:SKILL.md:52:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "filesystem:SKILL.md:140:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 140,
+        "line_end": 140,
+        "snippet": "cd ~/.claude/skills/patchright-skill"
+      },
+      {
+        "id": "blocker:SKILL.md:21:screen-capture-upload",
+        "category": "blocker",
+        "severity": "high",
+        "pattern": "Screen capture upload",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- \"take screenshot\", \"capture screen\""
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:evaluation_result.json:102:python-subprocess-call",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This hit is text inside a bundled prior audit result, not executable Python code. No subprocess.call invocation exists at runtime in that file."
+      },
+      {
+        "id": "network:evaluation_result.json:132:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This hit is prior audit reasoning text about Google search automation, not active code. The actual network behavior is evaluated in the source files instead."
+      },
+      {
+        "id": "network:evaluation_result.json:205:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is marketplace example text for taking a localhost screenshot, not a hidden network call. The URL targets localhost and is not exfiltration."
+      },
+      {
+        "id": "network:evaluation_result.json:211:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is output example text containing a localhost login URL. It does not initiate network traffic by itself."
+      },
+      {
+        "id": "network:evaluation_result.json:212:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is output example text referencing a localhost dashboard URL. It is not executable network code."
+      },
+      {
+        "id": "network:evaluation_result.json:144:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This hit is prior audit reasoning about 127.0.0.1 loopback binding. A loopback-only address is a local containment measure, not a remote endpoint."
+      },
+      {
+        "id": "filesystem:evaluation_result.json:96:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The path traversal pattern appears inside prior audit reasoning text. It is not a filesystem operation in executable code."
+      },
+      {
+        "id": "filesystem:evaluation_result.json:84:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This hit is prior audit reasoning about the documented ~/.claude skill install path. It is not code reading or writing hidden files."
+      },
+      {
+        "id": "filesystem:evaluation_result.json:84:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This hit is prior audit reasoning about the documented ~/.claude skill install path. It is not executable hidden file access."
+      },
+      {
+        "id": "filesystem:evaluation_result.json:120:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This hit is prior audit reasoning about a debug screenshot path. It is not itself a runtime file operation."
+      },
+      {
+        "id": "filesystem:evaluation_result.json:126:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This hit is prior audit reasoning describing a normal result-save operation. It is not executable code in evaluation_result.json."
+      },
+      {
+        "id": "sensitive:evaluation_result.json:150:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The referenced text explains that Thumbs.db is a Windows thumbnail cache name, not a SQLite database. No database access is present in this file."
+      },
+      {
+        "id": "sensitive:evaluation_result.json:156:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The referenced text repeats that Thumbs.db is not a skill database. This is prior audit prose, not sensitive data handling."
+      },
+      {
+        "id": "blocker:evaluation_result.json:18:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The line is a prior audit summary, not code that captures or uploads screenshots. Separate semantic findings cover the bundled self-attesting audit content."
+      },
+      {
+        "id": "blocker:evaluation_result.json:75:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line is a prior audit entry naming a screenshot finding. It does not implement screenshot capture or upload."
+      },
+      {
+        "id": "blocker:evaluation_result.json:78:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line is prior audit reasoning about screenshot behavior. It is not an upload path or network transfer."
+      },
+      {
+        "id": "blocker:evaluation_result.json:205:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a prompt template for a local screenshot workflow. It describes local capture, and no upload destination is shown."
+      },
+      {
+        "id": "blocker:evaluation_result.json:230:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is FAQ text about full-page screenshots. It does not describe uploading images to a remote service."
+      },
+      {
+        "id": "blocker:evaluation_result.json:221:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This is best-practice text about headless mode for visual debugging. It is not system enumeration."
+      },
+      {
+        "id": "blocker:evaluation_result.json:223:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This is best-practice text about avoiding absolute paths. It is not reconnaissance logic."
+      },
+      {
+        "id": "network:reference.md:57:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "reason": "The documentation constructs a Google search URL from a user query, which sends query text to an external Google service. This is intentional behavior but still creates a privacy-relevant network dependency.",
+        "severity": "low"
+      },
+      {
+        "id": "network:reference.md:89:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "The reference workflow instructs users to navigate to Google search results through the automation server. It is documented external network behavior, not a hidden endpoint.",
+        "severity": "low"
+      },
+      {
+        "id": "filesystem:reference.md:159:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The reference shows /tmp/debug.png as a local screenshot debugging example. It is a documented local output path, not stealthy persistence or data theft."
+      },
+      {
+        "id": "network:scripts/executor.py:9:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This URL is in the module usage docstring and points to localhost. It is an example, not a hardcoded remote call."
+      },
+      {
+        "id": "network:scripts/executor.py:267:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This URL appears in a help message showing localhost navigation. It does not create a hidden external connection."
+      },
+      {
+        "id": "blocker:scripts/executor.py:290:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This line reports invalid JSON parse errors. It does not inspect the host system or enumerate resources."
+      },
+      {
+        "id": "filesystem:scripts/google_debug.py:57:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The debug utility saves a screenshot to /tmp/google_debug.png for troubleshooting. The fixed temporary output is transparent and local."
+      },
+      {
+        "id": "network:scripts/google_search.py:43:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.93,
+        "reason": "The script builds https://www.google.com/search?q= from user input and navigates there, disclosing search terms to Google. The behavior is expected for this utility but is real external network activity.",
+        "severity": "low"
+      },
+      {
+        "id": "filesystem:scripts/google_search.py:144:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This write saves extracted search results to a JSON file chosen by the script under /tmp. It is normal output generation, not credential or hidden file access."
+      },
+      {
+        "id": "network:scripts/README.md:49:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "The README demonstrates navigating the local server to https://www.google.com. This is only documentation, but it encourages external browsing through the skill.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/server.py:159:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The server binds to 127.0.0.1, limiting access to the local host. This reduces remote exposure rather than creating it."
+      },
+      {
+        "id": "network:scripts/server.py:177:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The client connects to the local loopback address to reach the helper server. This is expected local IPC behavior."
+      },
+      {
+        "id": "filesystem:scripts/server.py:219:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The sequence appears in a usage string showing an ellipsis placeholder. It is not path traversal or filesystem access."
+      },
+      {
+        "id": "blocker:scripts/server.py:198:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The server reads its own PID file to check whether the local helper is already running. This is daemon bookkeeping, not system reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:115:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hit is a markdown fenced code block marker in SKILL.md, not Ruby shell backtick execution. The surrounding text is documentation for running local helper commands."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The line lists localhost and loopback URL trigger patterns for local development testing. It is documentation, not a hidden network destination."
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The line is a documented localhost navigation example. It does not direct traffic to an external host."
+      },
+      {
+        "id": "network:SKILL.md:145:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The line is a documented localhost login-page example for testing. It is not remote data exfiltration."
+      },
+      {
+        "id": "network:SKILL.md:163:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The line is a documented localhost app example. It does not embed an external endpoint."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-ip-address",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line documents loopback and private IP ranges as intended testing targets. These are local or private network examples, not public command endpoints."
+      },
+      {
+        "id": "filesystem:SKILL.md:52:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line changes into the standard ~/.claude skill installation directory in a documentation example. It is not hidden persistence or secret file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line changes into the standard ~/.claude skill installation directory in a usage example. It is not hidden persistence or secret file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:140:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line changes into the standard ~/.claude skill installation directory before a login test example. It is not hidden persistence or secret file access."
+      },
+      {
+        "id": "filesystem:SKILL.md:52:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line references the standard skill installation path in documentation. It does not read or write hidden user files."
+      },
+      {
+        "id": "filesystem:SKILL.md:74:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line references the standard skill installation path in documentation. It does not read or write hidden user files."
+      },
+      {
+        "id": "filesystem:SKILL.md:140:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line references the standard skill installation path in documentation. It does not read or write hidden user files."
+      },
+      {
+        "id": "blocker:SKILL.md:21:screen-capture-upload",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line is a trigger phrase for user-requested screenshots. The implementation saves screenshots locally or returns them to the caller, with no remote upload endpoint shown."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "evaluation_result.json contains self-attesting audit claims, including safe_to_publish true and a summary saying all static findings are false positives. This can bias automated review and should not be shipped inside the skill.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "evaluation_result.json",
+            "line_start": 15,
+            "line_end": 18
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The file contains explicit safety and publication claims inside the package under review. It is not phrased as a direct system override, so confidence is high but not maximal."
+      },
+      {
+        "title": "Anti-Bot Detection Bypass Capability",
+        "description": "The skill advertises bot detection bypass for protected sites, and the scripts launch Chrome with automation-detection controls disabled. This can enable abuse of sites outside authorized testing workflows.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 201
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 31,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 42,
+            "line_end": 50
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The documentation explicitly says bot detection bypass is supported, and both browser launch paths disable AutomationControlled. The risk is clear even though local testing can be legitimate."
+      },
+      {
+        "title": "Unauthenticated Local Browser Control Server",
+        "description": "scripts/server.py binds a local command server that accepts JSON commands without authentication and includes an evaluate handler for caller-provided JavaScript. Any local process that reaches the port can drive the active browser session and inspect page content.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/server.py",
+            "line_start": 104,
+            "line_end": 124
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 135,
+            "line_end": 146
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 157,
+            "line_end": 159
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "The server binds to loopback and dispatches commands directly from decoded client JSON. There is no authentication, authorization, origin check, or command allowlist beyond tool names."
+      },
+      {
+        "title": "Unrestricted Screenshot Output Paths",
+        "description": "The screenshot helpers accept caller-controlled output paths and write image files without constraining them to a safe directory. This can overwrite files accessible to the skill process and can place sensitive page captures in unexpected locations.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/server.py",
+            "line_start": 70,
+            "line_end": 75
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 79,
+            "line_end": 94
+          }
+        ],
+        "confidence": 0.88,
+        "confidence_reasoning": "Both screenshot implementations pass user-controlled paths to the browser screenshot API. The server only converts the path to an absolute path and does not reject absolute or parent-directory paths."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "evaluation_result.json contains self-attesting audit claims, including safe_to_publish true and a summary saying all static findings are false positives. This can bias automated review and should not be shipped inside the skill.",
+        "locations": [
+          {
+            "file": "evaluation_result.json",
+            "line_start": 15,
+            "line_end": 18
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "The file contains explicit safety and publication claims inside the package under review. It is not phrased as a direct system override, so confidence is high but not maximal."
+      },
+      {
+        "title": "Anti-Bot Detection Bypass Capability",
+        "description": "The skill advertises bot detection bypass for protected sites, and the scripts launch Chrome with automation-detection controls disabled. This can enable abuse of sites outside authorized testing workflows.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 201
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 31,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 42,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The documentation explicitly says bot detection bypass is supported, and both browser launch paths disable AutomationControlled. The risk is clear even though local testing can be legitimate."
+      },
+      {
+        "title": "Unauthenticated Local Browser Control Server",
+        "description": "scripts/server.py binds a local command server that accepts JSON commands without authentication and includes an evaluate handler for caller-provided JavaScript. Any local process that reaches the port can drive the active browser session and inspect page content.",
+        "locations": [
+          {
+            "file": "scripts/server.py",
+            "line_start": 104,
+            "line_end": 124
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 135,
+            "line_end": 146
+          },
+          {
+            "file": "scripts/server.py",
+            "line_start": 157,
+            "line_end": 159
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The server binds to loopback and dispatches commands directly from decoded client JSON. There is no authentication, authorization, origin check, or command allowlist beyond tool names."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Unrestricted Screenshot Output Paths",
+        "description": "The screenshot helpers accept caller-controlled output paths and write image files without constraining them to a safe directory. This can overwrite files accessible to the skill process and can place sensitive page captures in unexpected locations.",
+        "locations": [
+          {
+            "file": "scripts/server.py",
+            "line_start": 70,
+            "line_end": 75
+          },
+          {
+            "file": "scripts/executor.py",
+            "line_start": 79,
+            "line_end": 94
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "Both screenshot implementations pass user-controlled paths to the browser screenshot API. The server only converts the path to an absolute path and does not reject absolute or parent-directory paths."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "search_url = f\"https://www.google.com/search?q={quote('2026年Go语言展望')}\"",
+        "locations": [
+          {
+            "file": "reference.md",
+            "line_start": 57,
+            "line_end": 57
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.8,
+        "confidence_reasoning": "The documentation constructs a Google search URL from a user query, which sends query text to an external Google service. This is intentional behavior but still creates a privacy-relevant network dependency."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "python scripts/server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"https://www.google.com/search?q",
+        "locations": [
+          {
+            "file": "reference.md",
+            "line_start": 89,
+            "line_end": 89
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.78,
+        "confidence_reasoning": "The reference workflow instructs users to navigate to Google search results through the automation server. It is documented external network behavior, not a hidden endpoint."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "search_url = f\"https://www.google.com/search?q={encoded_query}\"",
+        "locations": [
+          {
+            "file": "scripts/google_search.py",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.93,
+        "confidence_reasoning": "The script builds https://www.google.com/search?q= from user input and navigates there, disclosing search terms to Google. The behavior is expected for this utility but is real external network activity."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "python server.py call '{\"tool\": \"navigate\", \"args\": {\"url\": \"https://www.google.com\"}}'",
+        "locations": [
+          {
+            "file": "scripts/README.md",
+            "line_start": 49,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.76,
+        "confidence_reasoning": "The README demonstrates navigating the local server to https://www.google.com. This is only documentation, but it encourages external browsing through the skill."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 11,
+    "total_lines": 1618,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:01:26.273Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Automate Browser Testing with Patchright",
+    "value_statement": "Local web apps need visual checks after every change. This skill drives Patchright browser sessions for screenshots, navigation, form input, and UI verification.",
+    "seo_keywords": [
+      "Patchright",
+      "browser automation",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Playwright",
+      "frontend testing",
+      "localhost testing",
+      "QA automation",
+      "E2E testing"
+    ],
+    "actual_capabilities": [
+      "Launch Chrome through Patchright for browser automation tasks.",
+      "Navigate to localhost, loopback, private network, and external URLs.",
+      "Capture viewport or full-page screenshots to local files.",
+      "Click elements, fill fields, wait for selectors, and read page text.",
+      "Keep a browser session alive through a local helper server.",
+      "Run browser-context JavaScript through the server evaluate tool."
+    ],
+    "limitations": [
+      "Requires Python dependencies and Google Chrome on the host machine.",
+      "The helper server must be started before persistent workflows work.",
+      "Browser automation can expose page content visible in the session.",
+      "Use on third-party sites requires clear authorization and policy review."
+    ],
+    "use_cases": [
+      {
+        "target_user": "Frontend developer",
+        "title": "Check a local UI change",
+        "description": "Open a development server, inspect the rendered page, and capture screenshots after code edits."
+      },
+      {
+        "target_user": "QA engineer",
+        "title": "Validate a user flow",
+        "description": "Run a repeatable browser flow that fills forms, clicks controls, waits for content, and records page state."
+      },
+      {
+        "target_user": "Release engineer",
+        "title": "Verify a preview build",
+        "description": "Exercise a private preview URL and collect visual evidence before approving a deployment."
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Capture a Local Page",
+        "scenario": "Beginner screenshot check",
+        "prompt": "Open my local app on port 3000, capture the home page, and tell me the page title and screenshot path."
+      },
+      {
+        "title": "Test a Login Flow",
+        "scenario": "Form interaction",
+        "prompt": "Navigate to the local login page, enter test credentials, submit the form, and capture the result page."
+      },
+      {
+        "title": "Debug Dynamic Content",
+        "scenario": "Selector and wait workflow",
+        "prompt": "Open the app, wait for the dashboard content, read the visible status text, and capture a full-page screenshot."
+      },
+      {
+        "title": "Run a Multi-Step Review",
+        "scenario": "Advanced persistent session",
+        "prompt": "Start a persistent browser session, walk through the main navigation, record each page title, and save screenshots for every step."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Capture the local home page.",
+        "output": [
+          "Opened the local home page successfully.",
+          "Captured a screenshot in the working directory.",
+          "Reported the current URL and page title."
+        ]
+      },
+      {
+        "input": "Fill the test login form and submit it.",
+        "output": [
+          "Entered the requested test values into the visible fields.",
+          "Submitted the form and waited for navigation.",
+          "Captured the resulting page for review."
+        ]
+      },
+      {
+        "input": "Check whether the dashboard finished loading.",
+        "output": [
+          "Waited for the dashboard selector.",
+          "Read the visible status message.",
+          "Saved a full-page screenshot for comparison."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Use test accounts and non-sensitive data during browser automation.",
+      "Stop the helper server when the workflow is complete.",
+      "Keep screenshots in a dedicated review folder with clear names."
+    ],
+    "anti_patterns": [
+      "Do not use the skill to bypass access controls on sites you do not own.",
+      "Do not leave the local browser server running after a task ends.",
+      "Do not store screenshots of sensitive user data in shared folders."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill automate?",
+        "answer": "It automates Chrome browser actions such as navigation, screenshots, clicks, typing, waits, and page text checks."
+      },
+      {
+        "question": "Does it work with Claude and Codex?",
+        "answer": "Yes. The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Why does it use a helper server?",
+        "answer": "The server keeps one browser session alive across multiple commands, which helps multi-step UI workflows."
+      },
+      {
+        "question": "Can it browse external websites?",
+        "answer": "Yes, but external browsing should be limited to authorized testing and clear user intent."
+      },
+      {
+        "question": "Where are screenshots saved?",
+        "answer": "Screenshots are saved as local files at the path requested by the workflow."
+      },
+      {
+        "question": "What should users avoid?",
+        "answer": "Avoid real credentials, sensitive production data, unauthorized third-party automation, and leaving the server running."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "executor.py",
+          "type": "file",
+          "path": "scripts/executor.py",
+          "lines": 300
+        },
+        {
+          "name": "google_debug.py",
+          "type": "file",
+          "path": "scripts/google_debug.py",
+          "lines": 64
+        },
+        {
+          "name": "google_extract_results.py",
+          "type": "file",
+          "path": "scripts/google_extract_results.py",
+          "lines": 77
+        },
+        {
+          "name": "google_search.py",
+          "type": "file",
+          "path": "scripts/google_search.py",
+          "lines": 175
+        },
+        {
+          "name": "README.md",
+          "type": "file",
+          "path": "scripts/README.md",
+          "lines": 96
+        },
+        {
+          "name": "server.py",
+          "type": "file",
+          "path": "scripts/server.py",
+          "lines": 232
+        }
+      ]
+    },
+    {
+      "name": "evaluation_result.json",
+      "type": "file",
+      "path": "evaluation_result.json",
+      "lines": 235
+    },
+    {
+      "name": "LICENSE.txt",
+      "type": "file",
+      "path": "LICENSE.txt",
+      "lines": 23
+    },
+    {
+      "name": "reference.md",
+      "type": "file",
+      "path": "reference.md",
+      "lines": 189
+    },
+    {
+      "name": "requirements.txt",
+      "type": "file",
+      "path": "requirements.txt",
+      "lines": 2
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 225
+    }
+  ]
+}

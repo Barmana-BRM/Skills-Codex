@@ -1,0 +1,65 @@
+name: Validate Skill
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Validate metadata and source files
+        run: |
+          grep -q '^name: lanshu-create-ai-presenter-video$' SKILL.md
+          grep -q 'lanshu-create-ai-presenter-video' agents/openai.yaml
+          python3 -m py_compile scripts/*.py
+          for script in scripts/*.py; do python3 "$script" --help >/dev/null; done
+          bash -n scripts/finalize_delivery.sh
+          bash -n tests/smoke.sh
+          bash -n tests/explainer_smoke.sh
+          python3 -m json.tool assets/job.template.json >/dev/null
+
+      - name: Validate the explainer engine
+        run: |
+          find explainer -name '*.py' -print0 | xargs -0 python3 -m py_compile
+          find explainer -name '*.sh' -print0 | xargs -0 -n1 bash -n
+          find explainer \( -name '*.js' -o -name '*.mjs' \) -print0 | xargs -0 -n1 node --check
+          for story in explainer/stories/*/story.json; do python3 -m json.tool "$story" >/dev/null; done
+
+      - name: Check repository portability
+        run: |
+          if grep -R -n '/Users/' README.md README.zh-CN.md SKILL.md agents assets references scripts tests explainer; then
+            echo 'Machine-specific home path found.' >&2
+            exit 1
+          fi
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Run end-to-end smoke test
+        run: bash tests/smoke.sh
+
+      - name: Run styled explainer smoke test
+        run: bash tests/explainer_smoke.sh

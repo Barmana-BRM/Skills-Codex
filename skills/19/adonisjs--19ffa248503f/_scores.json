@@ -1,0 +1,48 @@
+{
+  "version": "1.2.0",
+  "skillHash": "sha256:19ffa248503f603ae5f443085168b52dcb10ecaef203a4e6851ec785cf3dcb38",
+  "scoredAt": "2026-10-13T11:12:29.320Z",
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "quality": {
+    "score": 100,
+    "dimensions": {
+      "clarity": "PASS",
+      "completeness": "PASS",
+      "conciseness": "PASS",
+      "actionability": "PASS",
+      "crossPlatform": "PASS",
+      "examples": "PASS"
+    },
+    "issues": []
+  },
+  "security": {
+    "verdict": "SAFE",
+    "issues": []
+  },
+  "impact": {
+    "multiplier": 1.88,
+    "baselineAvg": 41,
+    "treatmentAvg": 77,
+    "scenarios": [
+      {
+        "name": "hypermedia-posts-crud-setup",
+        "baseline": 12,
+        "treatment": 90,
+        "rationale": "Response A meets nearly every rubric item: hypermedia kit, `make:model post -m`, an auth-middleware group with public index/show resource, the `#generated/controllers` barrel, `@belongsTo`, and `request.validateUsing` with VineJS. Response B uses the removed `--kit=web`, hand-writes routes with lazy imports and no resource split, and only partly meets the model and validator items."
+      },
+      {
+        "name": "api-kit-token-auth-products",
+        "baseline": 55,
+        "treatment": 62,
+        "rationale": "Both use --kit=api and Authorization: Bearer with auth middleware and .paginate(page, 20), but only B uses a transformer with serialize (and the kit's built-in auth); A returns raw models via products.serialize() and omits the transformer, though A explicitly shows User.accessTokens.create(...).release() while B relies on the kit's login and never shows the token issuance code or the User model composition."
+      },
+      {
+        "name": "v7-migrations-schema-and-prod-deploy",
+        "baseline": 55,
+        "treatment": 78,
+        "rationale": "B covers nearly all rubric points (new migration, schema.ts regenerated and not hand-edited, model only for hooks/methods, build/cd build/npm ci --omit=dev/node bin/server.js, --force, NODE_ENV=production, .env not copied with APP_KEY), while A misses the schema.ts regeneration point, adds an unneeded model column declaration, treats NODE_ENV only loosely, and is framed around AdonisJS 6 with extra complexity."
+      }
+    ]
+  }
+}

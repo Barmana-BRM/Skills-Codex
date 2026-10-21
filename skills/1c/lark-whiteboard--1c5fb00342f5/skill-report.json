@@ -1,0 +1,2425 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T09:19:52.312Z",
+    "slug": "larksuite-lark-whiteboard",
+    "source_url": "https://github.com/larksuite/cli/tree/main/skills/lark-whiteboard/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "6b88dfd615ba91c0a1a527b76c6a9b76a10e63b5e2e588fda1fc833e712173d6",
+    "tree_hash": "dc127601a04956ce06d6922eba3ad30ab8ba8031c70189d7748da627e705f997",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "lark-whiteboard",
+    "description": "Query, export, and update Lark or Feishu whiteboards. The skill supports preview images, SVG export, raw node export, and diagram updates from Mermaid, PlantUML, SVG, or OpenAPI node data.",
+    "summary": "Manage Lark whiteboard exports, diagram rendering, and controlled updates from AI workflows.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "larksuite",
+    "license": "MIT",
+    "tags": [
+      "lark",
+      "whiteboard",
+      "diagrams",
+      "mermaid",
+      "automation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "scripts",
+      "filesystem",
+      "external_commands",
+      "network"
+    ],
+    "category": "office"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from markdown links, Mermaid examples, diagram terminology, and normal UTF-8 documentation. Confirmed risk is limited to npm and CLI execution plus an overwrite-capable remote whiteboard update workflow; no prompt injection or hidden payload evidence was found.",
+    "remediation": [
+      {
+        "issue": "The skill runs @larksuite/whiteboard-cli through npx.",
+        "suggestion": "Pin an exact package version, document package provenance, and require user confirmation before first execution.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Whiteboard update workflows can overwrite existing content.",
+        "suggestion": "Show the target whiteboard token and require explicit confirmation before using overwrite.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Diagram generator examples write local artifact files.",
+        "suggestion": "Write only inside a dedicated output directory and reject paths outside that directory.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "elements/layout.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "routes/dsl.md",
+            "line_start": 23,
+            "line_end": 23
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "elements/schema.md",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "references/lark-whiteboard-query.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/lark-whiteboard-query.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "references/lark-whiteboard-query.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "routes/dsl.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "routes/mermaid.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "scenes/bar-chart.md",
+            "line_start": 186,
+            "line_end": 186
+          },
+          {
+            "file": "scenes/fishbone.md",
+            "line_start": 185,
+            "line_end": 185
+          },
+          {
+            "file": "scenes/fishbone.md",
+            "line_start": 185,
+            "line_end": 185
+          },
+          {
+            "file": "scenes/flywheel.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "scenes/flywheel.md",
+            "line_start": 187,
+            "line_end": 187
+          },
+          {
+            "file": "scenes/funnel.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "scenes/funnel.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "scenes/line-chart.md",
+            "line_start": 213,
+            "line_end": 213
+          },
+          {
+            "file": "scenes/photo-showcase.md",
+            "line_start": 7,
+            "line_end": 7
+          },
+          {
+            "file": "scenes/pyramid.md",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "scenes/pyramid.md",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "scenes/treemap.md",
+            "line_start": 215,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 47
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 36,
+            "line_end": 38
+          },
+          {
+            "file": "routes/dsl.md",
+            "line_start": 16,
+            "line_end": 38
+          },
+          {
+            "file": "scenes/fishbone.md",
+            "line_start": 172,
+            "line_end": 186
+          },
+          {
+            "file": "scenes/flywheel.md",
+            "line_start": 123,
+            "line_end": 132
+          },
+          {
+            "file": "scenes/flywheel.md",
+            "line_start": 132,
+            "line_end": 134
+          },
+          {
+            "file": "scenes/flywheel.md",
+            "line_start": 134,
+            "line_end": 188
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 40
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scenes/mermaid.md",
+            "line_start": 60,
+            "line_end": 60
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "scripts:elements/layout.md:25:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "elements/layout.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "**读代码画架构图**:扫目录结构(按层分 → Flex;按功能模块分 → 看依赖方向)→ grep import(单向→Flex;网状→ Dagre 或 Flex + Dagre)→ 拿不准 → 默"
+      },
+      {
+        "id": "blocker:elements/layout.md:81:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/layout.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "| grid | 架构图、对比表、卡片墙、看板 | vertical frame 嵌套 horizontal frame                     |"
+      },
+      {
+        "id": "blocker:elements/layout.md:86:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/layout.md",
+        "line_start": 86,
+        "line_end": 86,
+        "snippet": "大多数图表用 grid 或 flow 模式。只有节点坐标本身有强语义(如地图)时才用 free。"
+      },
+      {
+        "id": "blocker:elements/layout.md:99:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/layout.md",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "| `layout: 'dagre'`                | 类似 Mermaid / DOT 的有向图布局                    | 宽高只支持 `fit-content"
+      },
+      {
+        "id": "blocker:elements/layout.md:342:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/layout.md",
+        "line_start": 342,
+        "line_end": 342,
+        "snippet": "`coords.json` 包含每个带 id 节点的精确坐标(absX, absY, width, height)。"
+      },
+      {
+        "id": "filesystem:elements/schema.md:141:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "elements/schema.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "> - 详细上传流程见 [`elements/image.md`](../elements/image.md)"
+      },
+      {
+        "id": "blocker:elements/schema.md:101:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/schema.md",
+        "line_start": 101,
+        "line_end": 101,
+        "snippet": "topWidth?: number;             // 仅对 triangle / trapezoid 有效,梯形顶边宽度或三角形顶角截断宽度"
+      },
+      {
+        "id": "blocker:elements/schema.md:187:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/schema.md",
+        "line_start": 187,
+        "line_end": 187,
+        "snippet": "from: string | { x: number; y: number };   // 节点 id 或坐标"
+      },
+      {
+        "id": "blocker:elements/schema.md:294:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "elements/schema.md",
+        "line_start": 294,
+        "line_end": 294,
+        "snippet": "- 图标可放在 frame 子元素中参与 flex 布局,连线可通过 id 连接到图标"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "> **前置条件:** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:19:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "- `svg`:导出画板为标准 SVG 矢量图。可用于 SVG 编辑后回写画板(见 [`routes/svg-edit.md`](../routes/svg-edit.md))。注意:导出为纯视觉快照"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:21:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- `raw`:飞书 OpenAPI 原生画板节点格式。这一 json 格式不适合直接编辑复杂布局或内容,建议仅限于需要修改简单的文本内容/颜色等细节时使用。需要进行更复杂的设计/修改时,建议参考 ["
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:5:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "查询画板内容,支持导出为预览图片、SVG 矢量图、提取 PlantUML/Mermaid 代码,或获取飞书 OpenAPI 原生画板节点格式。"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "| `--output_as`        | 是  | 输出格式:`image`(预览图片)、`svg`(SVG 矢量图)、`code`(PlantUML/Mermaid 代码)、`raw`(Op"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:20:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-query.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- `code`:PlantUML/Mermaid 代码。仅限画板内有且仅有一个 PlantUML/Mermaid 图时,才可导出代码,否则会在返回值中告知不存在/有多个节点。"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "> **前置条件:** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:30:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "而当需要绘制架构图,组织架构图,泳道图,对比图,鱼骨图,柱状图,折线图,树状图,漏斗图,金字塔图,循环/飞轮图,里程碑或其他较为复杂的图表时,推荐参考 [§ 渲染 & 写入画板](../SKILL.m"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:74:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "whiteboard-cli 工具的具体用法请参考 [§ 渲染 & 写入画板](../SKILL.md#渲染--写入画板)"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:88:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "whiteboard-cli 工具的具体用法请参考 [§ 渲染 & 写入画板](../SKILL.md#渲染--写入画板)"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:105:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "适用于从零创建(直接写入 SVG)和编辑现有画板(编辑工作流详见 [`../routes/svg-edit.md`](../routes/svg-edit.md))。"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "- `mermaid`:Mermaid 代码"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:52:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "### 示例 2:使用 Mermaid 代码更新画板(从文件读取)"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:55:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "# 编写 Mermaid 代码"
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:67:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "--input_format mermaid \\"
+      },
+      {
+        "id": "external_commands:references/lark-whiteboard-workflow.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 36,
+        "line_end": 38,
+        "snippet": "│       → [`../routes/svg-edit.md`](../routes/svg-edit.md)(视觉高保真还原,大部分场景适用)"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:36:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "│       → [`../routes/svg-edit.md`](../routes/svg-edit.md)(视觉高保真还原,大部分场景适用)"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:52:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "| 思维导图、时序图、类图、饼图、甘特图 | 任何身份                                | [`../routes/mermaid.md`](../routes/merm"
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:53:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "| 其他图表               | `Claude` / `Gemini` / `GPT` / `GLM` | [`../routes/svg.md`](../routes/svg.md) "
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:54:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "| 其他图表               | `Doubao` / `Seed` / `Other`         | [`../routes/dsl.md`](../routes/dsl.md) "
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-workflow.md:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "diagram.mmd           ← Mermaid 源码(Mermaid 路径)"
+      },
+      {
+        "id": "scripts:routes/dsl.md:23:dynamic-require-with-variable",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic require with variable",
+        "file": "routes/dsl.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "2. 将脚本保存为 diagram.gen.cjs(必须 .cjs 后缀,脚本用 require() 写,.js 在 ESM 项目下会崩),执行 node diagram.gen.cjs 产出 dia"
+      },
+      {
+        "id": "external_commands:routes/dsl.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "routes/dsl.md",
+        "line_start": 16,
+        "line_end": 38,
+        "snippet": "- 推荐使用图标让图表更直观,运行 `npx -y @larksuite/whiteboard-cli@^0.2.12 --icons` 查看可用图标"
+      },
+      {
+        "id": "filesystem:routes/dsl.md:36:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "routes/dsl.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "→ 完整 dry-run / 确认流程见 SKILL.md [§ 写入画板](../SKILL.md#写入画板)"
+      },
+      {
+        "id": "blocker:routes/dsl.md:31:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "routes/dsl.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "- 2 轮后仍有严重问题 → 考虑走 Mermaid 路径兜底"
+      },
+      {
+        "id": "filesystem:routes/mermaid.md:25:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "routes/mermaid.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "→ 完整 dry-run / 确认流程见 SKILL.md [§ 写入画板](../SKILL.md#写入画板)"
+      },
+      {
+        "id": "blocker:routes/mermaid.md:1:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "routes/mermaid.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "# Mermaid 路径"
+      },
+      {
+        "id": "blocker:routes/mermaid.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "routes/mermaid.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "- 读 scenes/mermaid.md — Mermaid 语法和使用方式"
+      },
+      {
+        "id": "blocker:routes/mermaid.md:11:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "routes/mermaid.md",
+        "line_start": 11,
+        "line_end": 12,
+        "snippet": "Step 2: 生成 Mermaid"
+      },
+      {
+        "id": "blocker:routes/mermaid.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "routes/mermaid.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "- 只输出纯 Mermaid 语法文本"
+      },
+      {
+        "id": "filesystem:scenes/bar-chart.md:186:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/bar-chart.md",
+        "line_start": 186,
+        "line_end": 186,
+        "snippet": "const { writeFileSync } = require('fs');"
+      },
+      {
+        "id": "external_commands:scenes/fishbone.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scenes/fishbone.md",
+        "line_start": 172,
+        "line_end": 186,
+        "snippet": "const rId = `${cat.id}-r${rIndex}`;"
+      },
+      {
+        "id": "filesystem:scenes/fishbone.md:185:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "scenes/fishbone.md",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify({ version: 2, nodes }, null, 2));"
+      },
+      {
+        "id": "filesystem:scenes/fishbone.md:185:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/fishbone.md",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify({ version: 2, nodes }, null, 2));"
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scenes/flywheel.md",
+        "line_start": 123,
+        "line_end": 132,
+        "snippet": "let svg = `<svg viewBox=\"0 0 ${rOut * 2} ${rOut * 2}\" xmlns=\"http://www.w3.org/2000/svg\">`;"
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scenes/flywheel.md",
+        "line_start": 132,
+        "line_end": 134,
+        "snippet": "svg += `<polyline points=\"${x1},${y1} ${x2},${y2} ${x3},${y3}\" stroke=\"#FFFFFF\" stroke-width=\"20\" fi"
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scenes/flywheel.md",
+        "line_start": 134,
+        "line_end": 188,
+        "snippet": "svg += `</svg>`;"
+      },
+      {
+        "id": "filesystem:scenes/flywheel.md:57:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/flywheel.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "const { writeFileSync } = require('fs');"
+      },
+      {
+        "id": "filesystem:scenes/flywheel.md:187:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/flywheel.md",
+        "line_start": 187,
+        "line_end": 187,
+        "snippet": "writeFileSync('diagram.json', JSON.stringify({ version: 2, nodes }, null, 2));"
+      },
+      {
+        "id": "blocker:scenes/flywheel.md:127:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/flywheel.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "const radMid = ((a + da) * Math.PI) / 180;"
+      },
+      {
+        "id": "filesystem:scenes/funnel.md:93:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "scenes/funnel.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify(output, null, 2));"
+      },
+      {
+        "id": "filesystem:scenes/funnel.md:93:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/funnel.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify(output, null, 2));"
+      },
+      {
+        "id": "filesystem:scenes/line-chart.md:213:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/line-chart.md",
+        "line_start": 213,
+        "line_end": 213,
+        "snippet": "const { writeFileSync } = require('fs');"
+      },
+      {
+        "id": "network:scenes/mermaid.md:60:fetch-api-call",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Fetch API call",
+        "file": "scenes/mermaid.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "+fetch()"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:1:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "# Mermaid 图表路径"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:5:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 5,
+        "line_end": 5,
+        "snippet": "| | DSL 路径 | Mermaid 路径 |"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:7:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "| 中间格式 | JSON(WBDocument) | Mermaid 文本(.mmd 文件) |"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "| 视觉定制 | 完全可控(颜色、字号、圆角等) | 有限(Mermaid 语法) |"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:16:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "- 用户直接粘贴了 Mermaid 语法文本"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:21:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 21,
+        "line_end": 22,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:34:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 34,
+        "line_end": 35,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:52:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 52,
+        "line_end": 53,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:67:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 67,
+        "line_end": 68,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:78:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "> **流程图不推荐使用 Mermaid 路径!**"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:79:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "> 带复杂分支、复合节点、高保真卡片样式的流程图应优先走 **DSL 路径**(参见 `scenes/flowchart.md`)。只有用户明确给出 Mermaid 代码,或场景本身就是极简文字流程时"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:83:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 83,
+        "line_end": 84,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:109:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 109,
+        "line_end": 110,
+        "snippet": "```mermaid"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:127:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "- 输出纯 Mermaid 文本,不是 JSON,不要混用 DSL"
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:130:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "- Mermaid 的流程图样式较基础,也无法在节点内部嵌套复杂排版;复杂流程优先走 DSL(见 `scenes/flowchart.md`),极简文字流程或用户显式给 Mermaid 代码时再使用 "
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:115:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scenes/mermaid.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "Success --> [*]"
+      },
+      {
+        "id": "filesystem:scenes/photo-showcase.md:7:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scenes/photo-showcase.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "> **前置条件**:进入本场景前,必须已完成 [`elements/image.md`](../elements/image.md) 的 Step 0(图片准备),拿到所有 media token。"
+      },
+      {
+        "id": "filesystem:scenes/pyramid.md:85:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "scenes/pyramid.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify(output, null, 2));"
+      },
+      {
+        "id": "filesystem:scenes/pyramid.md:85:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/pyramid.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "fs.writeFileSync('diagram.json', JSON.stringify(output, null, 2));"
+      },
+      {
+        "id": "filesystem:scenes/treemap.md:215:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "scenes/treemap.md",
+        "line_start": 215,
+        "line_end": 215,
+        "snippet": "const { writeFileSync } = require('fs');"
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "> - 运行 `lark-cli --version`,确认可用,无需询问用户。"
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "> - 运行 `npx -y @larksuite/whiteboard-cli@^0.2.12 -v`,确认可用,无需询问用户。"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md),其中包含认证、权限处理*"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "**身份**:画板操作默认使用 `--as user`。仅当需要以应用身份上传时使用 `--as bot`。"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "| 查看画板内容 / 导出图片 / 导出 SVG 矢量图 | [`+query --output_as image/svg`](references/lark-whiteboard-query.md)"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "| 获取画板的 Mermaid/PlantUML 代码               | [`+query --output_as code`](references/lark-whiteboard-q"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "| 检查画板是否由代码绘制                             | [`+query --output_as code`](references/lark-whiteboard-q"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "| 仅微调节点文字/颜色                         | `+query --output_as raw` → 手动改 JSON → `+update --input_format"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "| 用户**已提供** Mermaid/PlantUML/SVG 代码,或明确指定用该格式 | 自己生成/使用代码 → [`+update --input_format mermaid/plantum"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "| [`+query`](references/lark-whiteboard-query.md) | 查询画板,导出为预览图片、SVG 矢量图、代码或原始节点结构。 |"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "| [`+update`](references/lark-whiteboard-update.md) | 更新画板,支持 PlantUML、Mermaid、SVG 或 OpenAPI 原生格式 |"
+      },
+      {
+        "id": "filesystem:SKILL.md:17:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md),其中包含认证、权限处理*"
+      },
+      {
+        "id": "filesystem:SKILL.md:45:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "- 文档内容编辑 → lark-doc [lark-doc](../lark-doc/SKILL.md)"
+      },
+      {
+        "id": "filesystem:SKILL.md:46:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "- 在文档中创建画板 → [lark-doc-whiteboard.md](../lark-doc/references/lark-doc-whiteboard.md)"
+      },
+      {
+        "id": "filesystem:SKILL.md:47:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "- 表格 / Base 操作 → [lark-sheets](../lark-sheets/SKILL.md) / [lark-base](../lark-base/SKILL.md)"
+      },
+      {
+        "id": "obfuscation:elements/connectors.md:1:heuristic-high-file-entropy-6-82-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.82 bits) - possible binary/encrypted content",
+        "file": "elements/connectors.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: elements/connectors.md"
+      },
+      {
+        "id": "obfuscation:elements/content.md:1:heuristic-high-file-entropy-6-16-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.16 bits) - possible binary/encrypted content",
+        "file": "elements/content.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: elements/content.md"
+      },
+      {
+        "id": "obfuscation:elements/image.md:1:heuristic-high-file-entropy-6-66-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.66 bits) - possible binary/encrypted content",
+        "file": "elements/image.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: elements/image.md"
+      },
+      {
+        "id": "obfuscation:elements/schema.md:1:heuristic-high-file-entropy-6-20-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.20 bits) - possible binary/encrypted content",
+        "file": "elements/schema.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: elements/schema.md"
+      },
+      {
+        "id": "obfuscation:elements/style.md:1:heuristic-high-file-entropy-6-34-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.34 bits) - possible binary/encrypted content",
+        "file": "elements/style.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: elements/style.md"
+      },
+      {
+        "id": "obfuscation:references/lark-whiteboard-update.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.12 bits) - possible binary/encrypted content",
+        "file": "references/lark-whiteboard-update.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-whiteboard-update.md"
+      },
+      {
+        "id": "obfuscation:references/lark-whiteboard-workflow.md:1:heuristic-high-file-entropy-6-41-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.41 bits) - possible binary/encrypted content",
+        "file": "references/lark-whiteboard-workflow.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-whiteboard-workflow.md"
+      },
+      {
+        "id": "obfuscation:routes/svg-edit.md:1:heuristic-high-file-entropy-6-88-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.88 bits) - possible binary/encrypted content",
+        "file": "routes/svg-edit.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: routes/svg-edit.md"
+      },
+      {
+        "id": "obfuscation:routes/svg.md:1:heuristic-high-file-entropy-7-03-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (7.03 bits) - possible binary/encrypted content",
+        "file": "routes/svg.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: routes/svg.md"
+      },
+      {
+        "id": "obfuscation:scenes/fishbone.md:1:heuristic-high-file-entropy-6-20-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.20 bits) - possible binary/encrypted content",
+        "file": "scenes/fishbone.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: scenes/fishbone.md"
+      },
+      {
+        "id": "obfuscation:scenes/flowchart.md:41:heuristic-very-high-entropy-string-5-77-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.77 bits) - likely encoded/encrypted payload",
+        "file": "scenes/flowchart.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": " 时，成为外层 Dagre 的复合子图。其内部子节点直接参与外层拓扑运算，连线可穿越子图边界。适合划分网络区域、功能层级、命名空间等边界容器。推荐搭配 "
+      },
+      {
+        "id": "obfuscation:scenes/flywheel.md:1:heuristic-high-file-entropy-6-30-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.30 bits) - possible binary/encrypted content",
+        "file": "scenes/flywheel.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: scenes/flywheel.md"
+      },
+      {
+        "id": "obfuscation:scenes/funnel.md:1:heuristic-high-file-entropy-6-54-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.54 bits) - possible binary/encrypted content",
+        "file": "scenes/funnel.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: scenes/funnel.md"
+      },
+      {
+        "id": "obfuscation:scenes/mermaid.md:1:heuristic-high-file-entropy-6-44-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.44 bits) - possible binary/encrypted content",
+        "file": "scenes/mermaid.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: scenes/mermaid.md"
+      },
+      {
+        "id": "obfuscation:scenes/pyramid.md:1:heuristic-high-file-entropy-6-60-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.60 bits) - possible binary/encrypted content",
+        "file": "scenes/pyramid.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: scenes/pyramid.md"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "scripts:elements/layout.md:25:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The word import appears in prose recommending grep import while reading code architecture. There is no dynamic import() expression or executable JavaScript here."
+      },
+      {
+        "id": "blocker:elements/layout.md:81:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:elements/layout.md:86:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:elements/layout.md:99:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:elements/layout.md:342:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:elements/schema.md:141:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:elements/schema.md:101:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:elements/schema.md:187:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:elements/schema.md:294:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:19:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-query.md:21:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:5:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-query.md:20:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:30:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:74:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:88:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-update.md:105:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:52:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:55:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-update.md:67:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "external_commands:references/lark-whiteboard-workflow.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The flagged text is a markdown link inside an ASCII workflow diagram. It does not execute a shell command."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:36:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:52:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:53:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:references/lark-whiteboard-workflow.md:54:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:references/lark-whiteboard-workflow.md:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "scripts:routes/dsl.md:23:dynamic-require-with-variable",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line describes using CommonJS require() in a generated .cjs script, not a dynamic require with a variable module name. The external execution risk is covered by the separate routes/dsl command finding."
+      },
+      {
+        "id": "external_commands:routes/dsl.md:16:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "This workflow instructs the agent to run @larksuite/whiteboard-cli and pipe generated output into lark-cli for a whiteboard update. The commands are task-relevant but still execute local tools and can modify remote Lark content.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:routes/dsl.md:36:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:routes/dsl.md:31:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:routes/mermaid.md:25:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "blocker:routes/mermaid.md:1:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:routes/mermaid.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:routes/mermaid.md:11:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:routes/mermaid.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:scenes/bar-chart.md:186:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "external_commands:scenes/fishbone.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are JavaScript template literals used to build IDs or SVG strings in a diagram generator. They are not shell command substitution."
+      },
+      {
+        "id": "filesystem:scenes/fishbone.md:185:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/fishbone.md:185:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are JavaScript template literals used to build IDs or SVG strings in a diagram generator. They are not shell command substitution."
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are JavaScript template literals used to build IDs or SVG strings in a diagram generator. They are not shell command substitution."
+      },
+      {
+        "id": "external_commands:scenes/flywheel.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are JavaScript template literals used to build IDs or SVG strings in a diagram generator. They are not shell command substitution."
+      },
+      {
+        "id": "filesystem:scenes/flywheel.md:57:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/flywheel.md:187:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "blocker:scenes/flywheel.md:127:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:scenes/funnel.md:93:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/funnel.md:93:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/line-chart.md:213:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "network:scenes/mermaid.md:60:fetch-api-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The token +fetch() is part of a Mermaid class diagram example. It is not a JavaScript Fetch API call and performs no network request."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:1:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:5:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:7:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:16:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:21:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:34:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:52:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:67:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:78:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:79:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:83:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:109:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:127:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:130:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "blocker:scenes/mermaid.md:115:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The text is diagram terminology or Mermaid syntax in documentation, not host, network, or system reconnaissance. No command or data collection behavior is present."
+      },
+      {
+        "id": "filesystem:scenes/photo-showcase.md:7:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:scenes/pyramid.md:85:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/pyramid.md:85:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "filesystem:scenes/treemap.md:215:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The file operation is a hardcoded diagram artifact write such as diagram.json in an example generator. There is no user-controlled path, traversal, or secret file access."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a hardcoded lark-cli --version availability check. It does not include user input, shell metacharacters, or a data-modifying operation."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "This line tells the agent to run npx with @larksuite/whiteboard-cli, which downloads and executes an npm package. The package name is fixed, but npm execution creates supply-chain and local code execution risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged text is an inline shortcut, markdown link, or CLI option reference in a routing table. It is not a shell backtick execution construct."
+      },
+      {
+        "id": "filesystem:SKILL.md:17:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:SKILL.md:45:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:SKILL.md:46:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "filesystem:SKILL.md:47:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The ../ sequence appears inside markdown links to neighboring skill documentation. It is not consumed as a runtime file path and does not enable arbitrary filesystem access."
+      },
+      {
+        "id": "obfuscation:elements/connectors.md:1:heuristic-high-file-entropy-6-82-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:elements/content.md:1:heuristic-high-file-entropy-6-16-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:elements/image.md:1:heuristic-high-file-entropy-6-66-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:elements/schema.md:1:heuristic-high-file-entropy-6-20-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:elements/style.md:1:heuristic-high-file-entropy-6-34-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:references/lark-whiteboard-update.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:references/lark-whiteboard-workflow.md:1:heuristic-high-file-entropy-6-41-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:routes/svg-edit.md:1:heuristic-high-file-entropy-6-88-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:routes/svg.md:1:heuristic-high-file-entropy-7-03-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:scenes/fishbone.md:1:heuristic-high-file-entropy-6-20-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:scenes/flowchart.md:41:heuristic-very-high-entropy-string-5-77-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged high-entropy text is normal Chinese prose describing Dagre cluster layout. No encoded payload, binary data, or hidden executable content is present."
+      },
+      {
+        "id": "obfuscation:scenes/flywheel.md:1:heuristic-high-file-entropy-6-30-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:scenes/funnel.md:1:heuristic-high-file-entropy-6-54-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:scenes/mermaid.md:1:heuristic-high-file-entropy-6-44-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      },
+      {
+        "id": "obfuscation:scenes/pyramid.md:1:heuristic-high-file-entropy-6-60-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Reviewed context shows UTF-8 markdown or JavaScript tutorial content, not encrypted or binary payloads. The entropy signal is caused by dense Chinese text, tables, and diagram examples."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Remote Whiteboard Overwrite Workflow",
+        "description": "The update workflows use overwrite-capable Lark whiteboard commands. If the agent targets the wrong token or skips user confirmation, existing board content can be replaced.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 83,
+            "line_end": 90
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The referenced files explicitly document --overwrite and a write workflow that pipes generated content into lark-cli. This is intended functionality, but it creates a clear data integrity risk without target confirmation."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- 推荐使用图标让图表更直观,运行 `npx -y @larksuite/whiteboard-cli@^0.2.12 --icons` 查看可用图标",
+        "locations": [
+          {
+            "file": "routes/dsl.md",
+            "line_start": 16,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "This workflow instructs the agent to run @larksuite/whiteboard-cli and pipe generated output into lark-cli for a whiteboard update. The commands are task-relevant but still execute local tools and can modify remote Lark content."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "> - 运行 `npx -y @larksuite/whiteboard-cli@^0.2.12 -v`,确认可用,无需询问用户。",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "This line tells the agent to run npx with @larksuite/whiteboard-cli, which downloads and executes an npm package. The package name is fixed, but npm execution creates supply-chain and local code execution risk."
+      },
+      {
+        "title": "Remote Whiteboard Overwrite Workflow",
+        "description": "The update workflows use overwrite-capable Lark whiteboard commands. If the agent targets the wrong token or skips user confirmation, existing board content can be replaced.",
+        "locations": [
+          {
+            "file": "references/lark-whiteboard-update.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "references/lark-whiteboard-workflow.md",
+            "line_start": 83,
+            "line_end": 90
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The referenced files explicitly document --overwrite and a write workflow that pipes generated content into lark-cli. This is intended functionality, but it creates a clear data integrity risk without target confirmation."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 30,
+    "total_lines": 4912,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T09:19:52.312Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Edit Lark Whiteboards with AI",
+    "value_statement": "Teams need a reliable way to inspect and update Lark whiteboards without rebuilding diagrams manually. This skill guides Claude, Codex, and Claude Code through query, render, and update workflows.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Lark whiteboard",
+      "Feishu whiteboard",
+      "whiteboard automation",
+      "Mermaid diagrams",
+      "PlantUML diagrams",
+      "SVG whiteboard",
+      "lark-cli"
+    ],
+    "actual_capabilities": [
+      "Query a Lark whiteboard and export preview images, SVG, code, or raw OpenAPI nodes.",
+      "Update a whiteboard from Mermaid, PlantUML, SVG, or raw node input.",
+      "Route diagram creation through Mermaid, SVG, or DSL workflows by diagram type.",
+      "Generate local preview artifacts and render checks with @larksuite/whiteboard-cli.",
+      "Guide image upload preparation for whiteboard media tokens.",
+      "Provide scene guidance for architecture, org charts, funnels, pyramids, flywheels, and charts."
+    ],
+    "limitations": [
+      "Requires authenticated lark-cli access and whiteboard permissions.",
+      "Cannot edit Lark document text, Sheets, or Base data.",
+      "SVG round trips can lose semantic whiteboard structure.",
+      "Complex layouts may require local file generation and preview rendering."
+    ],
+    "use_cases": [
+      {
+        "title": "Review Existing Boards",
+        "description": "Export a whiteboard as an image or SVG so reviewers can inspect current content.",
+        "target_user": "Product manager"
+      },
+      {
+        "title": "Create Architecture Diagrams",
+        "description": "Turn system details into a structured architecture diagram and write it to a Lark whiteboard.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Build Business Charts",
+        "description": "Create funnels, pyramids, flywheels, or bar charts with preview rendering before publication.",
+        "target_user": "Operations analyst"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Export a Preview",
+        "scenario": "Beginner whiteboard review",
+        "prompt": "Use lark-whiteboard to export whiteboard <token> as a preview image. Save it to ./diagrams/review/preview.png."
+      },
+      {
+        "title": "Update with Mermaid",
+        "scenario": "Simple diagram update",
+        "prompt": "Update whiteboard <token> with this Mermaid diagram. Render a preview first, then write it as the user after confirmation."
+      },
+      {
+        "title": "Redesign an Existing Board",
+        "scenario": "Intermediate visual editing",
+        "prompt": "Query whiteboard <token>, inspect the preview, explain any SVG loss risk, then update the board with the requested visual changes."
+      },
+      {
+        "title": "Create a Complex Diagram",
+        "scenario": "Advanced workflow selection",
+        "prompt": "Create a detailed architecture diagram for this system. Choose the correct route, render a PNG preview, fix issues, and update whiteboard <token>."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Export a whiteboard for design review.",
+        "output": "A preview image is saved, and the response includes the whiteboard token, output path, and any access errors."
+      },
+      {
+        "input": "Create a Mermaid sequence diagram in an existing board.",
+        "output": "The board is updated from Mermaid source, with a rendered preview checked before writing."
+      },
+      {
+        "input": "Edit an SVG-exported board.",
+        "output": "The response warns about semantic loss, confirms overwrite intent, and reports the completed update."
+      }
+    ],
+    "best_practices": [
+      "Confirm the whiteboard token and permission level before any update.",
+      "Use preview rendering before writing complex diagrams.",
+      "Keep generated artifacts in a dedicated dated directory."
+    ],
+    "anti_patterns": [
+      "Do not use overwrite until the user confirms the target board.",
+      "Do not hand edit raw OpenAPI nodes for complex layouts.",
+      "Do not treat SVG export as a lossless backup."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill manage?",
+        "answer": "It manages Lark whiteboard queries, exports, diagram rendering, and update workflows."
+      },
+      {
+        "question": "Does it create new Lark documents?",
+        "answer": "No. Document creation and document text editing belong to the related Lark document skill."
+      },
+      {
+        "question": "Which diagram formats are supported?",
+        "answer": "It supports Mermaid, PlantUML, SVG, and raw OpenAPI whiteboard node data."
+      },
+      {
+        "question": "Can it preserve all structure after SVG editing?",
+        "answer": "No. SVG export is a visual snapshot and can lose whiteboard semantics."
+      },
+      {
+        "question": "Does it need Lark authentication?",
+        "answer": "Yes. It needs configured lark-cli authentication and permissions for the target whiteboard."
+      },
+      {
+        "question": "Can it overwrite existing board content?",
+        "answer": "Yes. Update workflows can overwrite content, so users should confirm the target board first."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "elements",
+      "type": "dir",
+      "path": "elements",
+      "children": [
+        {
+          "name": "connectors.md",
+          "type": "file",
+          "path": "elements/connectors.md",
+          "lines": 103
+        },
+        {
+          "name": "content.md",
+          "type": "file",
+          "path": "elements/content.md",
+          "lines": 41
+        },
+        {
+          "name": "image.md",
+          "type": "file",
+          "path": "elements/image.md",
+          "lines": 81
+        },
+        {
+          "name": "layout.md",
+          "type": "file",
+          "path": "elements/layout.md",
+          "lines": 375
+        },
+        {
+          "name": "schema.md",
+          "type": "file",
+          "path": "elements/schema.md",
+          "lines": 358
+        },
+        {
+          "name": "style.md",
+          "type": "file",
+          "path": "elements/style.md",
+          "lines": 319
+        },
+        {
+          "name": "typography.md",
+          "type": "file",
+          "path": "elements/typography.md",
+          "lines": 74
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "lark-whiteboard-query.md",
+          "type": "file",
+          "path": "references/lark-whiteboard-query.md",
+          "lines": 61
+        },
+        {
+          "name": "lark-whiteboard-update.md",
+          "type": "file",
+          "path": "references/lark-whiteboard-update.md",
+          "lines": 123
+        },
+        {
+          "name": "lark-whiteboard-workflow.md",
+          "type": "file",
+          "path": "references/lark-whiteboard-workflow.md",
+          "lines": 95
+        }
+      ]
+    },
+    {
+      "name": "routes",
+      "type": "dir",
+      "path": "routes",
+      "children": [
+        {
+          "name": "dsl.md",
+          "type": "file",
+          "path": "routes/dsl.md",
+          "lines": 108
+        },
+        {
+          "name": "mermaid.md",
+          "type": "file",
+          "path": "routes/mermaid.md",
+          "lines": 28
+        },
+        {
+          "name": "svg-edit.md",
+          "type": "file",
+          "path": "routes/svg-edit.md",
+          "lines": 86
+        },
+        {
+          "name": "svg.md",
+          "type": "file",
+          "path": "routes/svg.md",
+          "lines": 55
+        }
+      ]
+    },
+    {
+      "name": "scenes",
+      "type": "dir",
+      "path": "scenes",
+      "children": [
+        {
+          "name": "architecture.md",
+          "type": "file",
+          "path": "scenes/architecture.md",
+          "lines": 434
+        },
+        {
+          "name": "bar-chart.md",
+          "type": "file",
+          "path": "scenes/bar-chart.md",
+          "lines": 188
+        },
+        {
+          "name": "comparison.md",
+          "type": "file",
+          "path": "scenes/comparison.md",
+          "lines": 136
+        },
+        {
+          "name": "fishbone.md",
+          "type": "file",
+          "path": "scenes/fishbone.md",
+          "lines": 239
+        },
+        {
+          "name": "flowchart.md",
+          "type": "file",
+          "path": "scenes/flowchart.md",
+          "lines": 186
+        },
+        {
+          "name": "flywheel.md",
+          "type": "file",
+          "path": "scenes/flywheel.md",
+          "lines": 196
+        },
+        {
+          "name": "funnel.md",
+          "type": "file",
+          "path": "scenes/funnel.md",
+          "lines": 102
+        },
+        {
+          "name": "line-chart.md",
+          "type": "file",
+          "path": "scenes/line-chart.md",
+          "lines": 215
+        },
+        {
+          "name": "mermaid.md",
+          "type": "file",
+          "path": "scenes/mermaid.md",
+          "lines": 131
+        },
+        {
+          "name": "milestone.md",
+          "type": "file",
+          "path": "scenes/milestone.md",
+          "lines": 140
+        },
+        {
+          "name": "organization.md",
+          "type": "file",
+          "path": "scenes/organization.md",
+          "lines": 174
+        },
+        {
+          "name": "photo-showcase.md",
+          "type": "file",
+          "path": "scenes/photo-showcase.md",
+          "lines": 127
+        },
+        {
+          "name": "pyramid.md",
+          "type": "file",
+          "path": "scenes/pyramid.md",
+          "lines": 100
+        },
+        {
+          "name": "swimlane.md",
+          "type": "file",
+          "path": "scenes/swimlane.md",
+          "lines": 372
+        },
+        {
+          "name": "treemap.md",
+          "type": "file",
+          "path": "scenes/treemap.md",
+          "lines": 217
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 48
+    }
+  ]
+}

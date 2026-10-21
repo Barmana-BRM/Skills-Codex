@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-shopee-account-management",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-shopee-account-account-health",
+      "title": "Shopee 账户健康",
+      "description": "Shopee 账户健康。用于读取健康与违规记录，按时限和业务影响排序并准备证据补正。输入需明确账户、国家、健康指标、问题类型与时间窗；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "account-health",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "不靠公开店铺数据推断账户健康；处理提交不等于处罚解除",
+      "legacy_path": "sealeap-athena-shopee-account-account-health",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-account-health/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-account-health/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-account-health/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-auth",
+      "title": "Shopee 账户授权检查",
+      "description": "Shopee 账户授权检查。用于先读取既有连接的非敏感状态；需要新授权时通过官方流程绑定明确账户，再回读身份。输入需明确账户别名、地区、所需权限与目标动作；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "auth",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "不得靠市场数据推断已授权；多账户歧义需澄清；不输出或索取明文令牌",
+      "legacy_path": "sealeap-athena-shopee-account-auth",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-auth/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-auth/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-auth/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-merchant",
+      "title": "Shopee 商户资料",
+      "description": "Shopee 商户资料。用于读取商户资料与获准店铺映射，核对权限和对象后准备目标变更。输入需明确商户、地区、组织和关联店铺范围；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "merchant",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "商户级权限不自动等于各店权限；不跨实体混用凭证",
+      "legacy_path": "sealeap-athena-shopee-account-merchant",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-merchant/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-merchant/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-merchant/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-public",
+      "title": "Shopee 平台公共参数",
+      "description": "Shopee 平台公共参数。用于读取当前公开时间、地区、语言或基础枚举，记录版本和使用范围。输入需明确平台地区、参数类别、语言与业务用途；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "public",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "公共接口不等于账户认证；不能用未知枚举硬提交业务请求",
+      "legacy_path": "sealeap-athena-shopee-account-public",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-public/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-public/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-public/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-push",
+      "title": "Shopee 事件订阅管理",
+      "description": "Shopee 事件订阅管理。用于核对当前订阅与事件 schema，准备授权配置，检查签名、重放和去重处理。输入需明确账户、国家、事件类型、回调端点和订阅范围；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "push",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "不将真实事件发送到未授权端点；订阅创建需回读和验证接收",
+      "legacy_path": "sealeap-athena-shopee-account-push",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-push/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-push/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-push/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-shopee-account-shop",
+      "title": "Shopee 店铺资料",
+      "description": "Shopee 店铺资料。用于读取当前店铺资料并校对身份，生成资料变更预览，按授权更新回读。输入需明确账户、国家、店铺标识、资料字段与动作；边界见执行手册。",
+      "category": "Shopee",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "shop",
+          "validation": "connection_required",
+          "platform": "Shopee"
+        }
+      ],
+      "limitation": "公开店铺名称不能替代内部身份；敏感联系方式最小展示",
+      "legacy_path": "sealeap-athena-shopee-account-shop",
+      "entrypoint": "sealeap-athena-shopee-account-management",
+      "guide_path": "references/capabilities/shopee-account-shop/workflow.md",
+      "playbook_path": "references/capabilities/shopee-account-shop/playbook.md",
+      "tool_routing_path": "references/capabilities/shopee-account-shop/tool-routing.md"
+    }
+  ]
+}

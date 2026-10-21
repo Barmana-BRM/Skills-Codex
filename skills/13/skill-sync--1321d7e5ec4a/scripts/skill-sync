@@ -1,0 +1,264 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Configuration
+REPO_URL="https://github.com/jdrhyne/agent-skills.git"
+REPO_DIR="${AGENT_SKILLS_REPO:-$HOME/.agent-skills-repo}"
+LOCAL_SKILLS_DIR="${CLAWD_SKILLS_DIR:-$HOME/clawd/skills}"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+info() { echo -e "${BLUE}ℹ${NC} $*"; }
+success() { echo -e "${GREEN}✓${NC} $*"; }
+warn() { echo -e "${YELLOW}⚠${NC} $*"; }
+error() { echo -e "${RED}✗${NC} $*" >&2; }
+
+# Ensure repo is cloned and up to date
+ensure_repo() {
+    if [[ ! -d "$REPO_DIR/.git" ]]; then
+        info "Cloning skill repository..."
+        git clone "$REPO_URL" "$REPO_DIR"
+        success "Repository cloned to $REPO_DIR"
+    fi
+}
+
+pull_repo() {
+    ensure_repo
+    info "Pulling latest changes..."
+    git -C "$REPO_DIR" pull --ff-only origin main 2>/dev/null || git -C "$REPO_DIR" pull origin main
+    success "Repository updated"
+}
+
+# List available skills
+cmd_list() {
+    ensure_repo
+    pull_repo
+    
+    echo ""
+    echo "Available skills:"
+    echo "─────────────────"
+    
+    for skill_dir in "$REPO_DIR/skills"/*/; do
+        if [[ -d "$skill_dir" ]]; then
+            skill_name=$(basename "$skill_dir")
+            # Try to extract description from SKILL.md frontmatter
+            if [[ -f "$skill_dir/SKILL.md" ]]; then
+                desc=$(grep -A1 "^description:" "$skill_dir/SKILL.md" 2>/dev/null | head -1 | sed 's/^description: *//' | cut -c1-60)
+                if [[ -n "$desc" ]]; then
+                    printf "  ${GREEN}%-20s${NC} %s\n" "$skill_name" "$desc"
+                else
+                    printf "  ${GREEN}%-20s${NC}\n" "$skill_name"
+                fi
+            else
+                printf "  ${GREEN}%-20s${NC} (no SKILL.md)\n" "$skill_name"
+            fi
+        fi
+    done
+    echo ""
+}
+
+# Install a skill
+cmd_install() {
+    local skill_name="${1:-}"
+    local install_all=false
+    
+    if [[ "$skill_name" == "--all" ]]; then
+        install_all=true
+    elif [[ -z "$skill_name" ]]; then
+        error "Usage: skill-sync install <skill-name> | --all"
+        exit 1
+    fi
+    
+    pull_repo
+    
+    if $install_all; then
+        info "Installing all skills..."
+        for skill_dir in "$REPO_DIR/skills"/*/; do
+            if [[ -d "$skill_dir" ]]; then
+                skill=$(basename "$skill_dir")
+                # Skip skill-sync itself to avoid weird recursion
+                if [[ "$skill" == "skill-sync" ]]; then
+                    continue
+                fi
+                install_single_skill "$skill"
+            fi
+        done
+        success "All skills installed!"
+    else
+        install_single_skill "$skill_name"
+    fi
+}
+
+install_single_skill() {
+    local skill_name="$1"
+    local src="$REPO_DIR/skills/$skill_name"
+    local dest="$LOCAL_SKILLS_DIR/$skill_name"
+    
+    if [[ ! -d "$src" ]]; then
+        error "Skill '$skill_name' not found in repository"
+        exit 1
+    fi
+    
+    # Create local skills dir if needed
+    mkdir -p "$LOCAL_SKILLS_DIR"
+    
+    # Remove existing and copy fresh
+    if [[ -d "$dest" ]]; then
+        rm -rf "$dest"
+        info "Updating $skill_name..."
+    else
+        info "Installing $skill_name..."
+    fi
+    
+    cp -r "$src" "$dest"
+    
+    # Make scripts executable
+    if [[ -d "$dest/scripts" ]]; then
+        chmod +x "$dest/scripts"/* 2>/dev/null || true
+    fi
+    
+    success "Installed $skill_name → $dest"
+}
+
+# Push a local skill to repo
+cmd_push() {
+    local skill_name="${1:-}"
+    
+    if [[ -z "$skill_name" ]]; then
+        error "Usage: skill-sync push <skill-name>"
+        exit 1
+    fi
+    
+    local src="$LOCAL_SKILLS_DIR/$skill_name"
+    local dest="$REPO_DIR/skills/$skill_name"
+    
+    if [[ ! -d "$src" ]]; then
+        error "Local skill '$skill_name' not found at $src"
+        exit 1
+    fi
+    
+    if [[ ! -f "$src/SKILL.md" ]]; then
+        error "Skill must have a SKILL.md file"
+        exit 1
+    fi
+    
+    pull_repo
+    
+    # Determine action (add vs update)
+    local action="Add"
+    if [[ -d "$REPO_DIR/skills/$skill_name" ]]; then
+        action="Update"
+    fi
+    
+    # Create feature branch
+    local branch_name="skill/${skill_name}"
+    local timestamp=$(date +%Y%m%d-%H%M%S)
+    
+    cd "$REPO_DIR"
+    
+    # Check if branch already exists, add timestamp if so
+    if git show-ref --verify --quiet "refs/heads/$branch_name" 2>/dev/null || \
+       git ls-remote --heads origin "$branch_name" 2>/dev/null | grep -q .; then
+        branch_name="skill/${skill_name}-${timestamp}"
+    fi
+    
+    info "Creating branch $branch_name..."
+    git checkout -b "$branch_name"
+    
+    # Copy skill to repo
+    info "Copying $skill_name to repository..."
+    rm -rf "$dest"
+    cp -r "$src" "$dest"
+    
+    # Commit
+    git add "skills/$skill_name"
+    
+    if git diff --cached --quiet; then
+        warn "No changes to push for $skill_name"
+        git checkout main
+        git branch -D "$branch_name"
+        exit 0
+    fi
+    
+    git commit --no-gpg-sign -m "$action $skill_name skill"
+    
+    info "Pushing branch to remote..."
+    git push -u origin "$branch_name" 2>&1
+    
+    # Create PR using gh CLI
+    info "Creating pull request..."
+    local pr_url
+    local action_lower=$(echo "$action" | tr '[:upper:]' '[:lower:]')
+    local skill_desc=$(grep -A1 "^description:" "$dest/SKILL.md" 2>/dev/null | tail -1 | sed 's/^description: *//' || echo "No description found")
+    local pr_body="This PR ${action_lower}s the \`$skill_name\` skill.
+
+## Skill Description
+${skill_desc}
+
+---
+*Created via \`skill-sync push\`*"
+
+    pr_url=$(gh pr create \
+        --repo jdrhyne/agent-skills \
+        --title "$action $skill_name skill" \
+        --body "$pr_body" \
+        --head "$branch_name" \
+        --base main 2>&1) || {
+            error "Failed to create PR. You can create it manually at:"
+            echo "  https://github.com/jdrhyne/agent-skills/compare/$branch_name"
+            git checkout main
+            exit 1
+        }
+    
+    # Switch back to main
+    git checkout main
+    
+    success "Created PR: $pr_url"
+}
+
+# Just update the repo
+cmd_update() {
+    pull_repo
+    success "Local repo cache updated"
+}
+
+# Show help
+cmd_help() {
+    cat <<EOF
+skill-sync - Manage OpenClaw skills from shared repository
+
+Usage: skill-sync <command> [args]
+
+Commands:
+  list              List available skills in the repository
+  install <name>    Install a skill from repo to local
+  install --all     Install all skills from repo
+  push <name>       Push a local skill as a PR (creates branch + PR)
+  update            Update local repo cache
+  help              Show this help
+
+Configuration:
+  AGENT_SKILLS_REPO     Repo clone location (default: ~/.agent-skills-repo)
+  CLAWD_SKILLS_DIR      Local skills dir (default: ~/clawd/skills)
+
+EOF
+}
+
+# Main
+case "${1:-help}" in
+    list)    cmd_list ;;
+    install) shift; cmd_install "$@" ;;
+    push)    shift; cmd_push "$@" ;;
+    update)  cmd_update ;;
+    help|--help|-h) cmd_help ;;
+    *)
+        error "Unknown command: $1"
+        cmd_help
+        exit 1
+        ;;
+esac

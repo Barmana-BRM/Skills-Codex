@@ -1,0 +1,138 @@
+name: Audit Repo
+description: Collect repository health signals and optionally compare them with a JSON baseline.
+inputs:
+  path:
+    description: Repository path to scan.
+    default: .
+  output-dir:
+    description: Output directory; blank creates a unique directory under RUNNER_TEMP.
+    default: ""
+  baseline:
+    description: Optional path to an earlier audit-repo JSON snapshot; required by either policy gate.
+    default: ""
+  baseline-sha256:
+    description: Optional expected 64-hex SHA-256 of the baseline's exact bytes; requires baseline and an independently trusted digest source.
+    default: ""
+  scan-mode:
+    description: filesystem, git-visible, or tracked.
+    default: tracked
+  scope-id:
+    description: Optional 1-200 character project-qualified logical scope ID without control characters.
+    default: ""
+  include-paths:
+    description: LF- or CRLF-separated non-empty root-relative POSIX include globs without parent traversal.
+    default: ""
+  exclude-paths:
+    description: LF- or CRLF-separated non-empty root-relative POSIX exclude globs without parent traversal.
+    default: ""
+  exclude-dirs:
+    description: LF- or CRLF-separated non-empty single directory names without path separators, dot segments, or control characters.
+    default: ""
+  max-files:
+    description: Positive integer maximum selected files before the scan is marked truncated.
+    default: "50000"
+  large-file-mib:
+    description: Finite positive large-file threshold in MiB.
+    default: "5"
+  fail-on-attention:
+    description: Return a failing status when comparison attention items exist; accepts exactly true or false, and true requires baseline.
+    default: "false"
+  require-comparable:
+    description: Return a failing status when the baseline is not directly comparable; accepts exactly true or false, and true requires baseline.
+    default: "false"
+outputs:
+  snapshot:
+    description: Absolute path to the generated JSON snapshot.
+    value: ${{ steps.audit.outputs.snapshot }}
+  report:
+    description: Absolute path to the generated Markdown report.
+    value: ${{ steps.audit.outputs.report }}
+  comparison:
+    description: Absolute path to comparison.json, or empty when no baseline was supplied.
+    value: ${{ steps.audit.outputs.comparison }}
+  sarif:
+    description: Absolute path to comparison.sarif, or empty when no baseline was supplied.
+    value: ${{ steps.audit.outputs.sarif }}
+  attention-count:
+    description: Number of comparison attention items, or 0 when no baseline was supplied.
+    value: ${{ steps.audit.outputs.attention-count }}
+  comparable:
+    description: Whether the baseline comparison is directly comparable, or empty when no baseline was supplied.
+    value: ${{ steps.audit.outputs.comparable }}
+  tool-version:
+    description: Collector version recorded in the generated snapshot.
+    value: ${{ steps.audit.outputs.tool-version }}
+  scan-semantics-version:
+    description: Scan-semantics version recorded in the generated snapshot.
+    value: ${{ steps.audit.outputs.scan-semantics-version }}
+runs:
+  using: composite
+  steps:
+    - id: audit
+      shell: bash
+      env:
+        AUDIT_PATH: ${{ inputs.path }}
+        AUDIT_OUTPUT_DIR: ${{ inputs.output-dir }}
+        AUDIT_BASELINE: ${{ inputs.baseline }}
+        AUDIT_BASELINE_SHA256: ${{ inputs.baseline-sha256 }}
+        AUDIT_SCAN_MODE: ${{ inputs.scan-mode }}
+        AUDIT_SCOPE_ID: ${{ inputs.scope-id }}
+        AUDIT_INCLUDE_PATHS: ${{ inputs.include-paths }}
+        AUDIT_EXCLUDE_PATHS: ${{ inputs.exclude-paths }}
+        AUDIT_EXCLUDE_DIRS: ${{ inputs.exclude-dirs }}
+        AUDIT_MAX_FILES: ${{ inputs.max-files }}
+        AUDIT_LARGE_FILE_MIB: ${{ inputs.large-file-mib }}
+        AUDIT_FAIL_ON_ATTENTION: ${{ inputs.fail-on-attention }}
+        AUDIT_REQUIRE_COMPARABLE: ${{ inputs.require-comparable }}
+      run: |
+        validate_boolean() {
+          local name="$1"
+          local value="$2"
+          case "$value" in
+            true|false) return 0 ;;
+            *)
+              echo "::error title=Invalid input::$name must be exactly true or false"
+              return 2
+              ;;
+          esac
+        }
+        validate_boolean "fail-on-attention" "$AUDIT_FAIL_ON_ATTENTION" || exit 2
+        validate_boolean "require-comparable" "$AUDIT_REQUIRE_COMPARABLE" || exit 2
+        if [[ -z "$AUDIT_BASELINE" ]] && \
+            { [[ "$AUDIT_FAIL_ON_ATTENTION" == "true" ]] || [[ "$AUDIT_REQUIRE_COMPARABLE" == "true" ]]; }; then
+          echo "::error title=Missing baseline::A comparison gate requires a non-empty baseline"
+          exit 2
+        fi
+        if [[ -n "$AUDIT_BASELINE_SHA256" && -z "$AUDIT_BASELINE" ]]; then
+          echo "::error title=Missing baseline::baseline-sha256 requires a non-empty baseline"
+          exit 2
+        fi
+        if [[ -n "$AUDIT_BASELINE_SHA256" && ! "$AUDIT_BASELINE_SHA256" =~ ^[0-9A-Fa-f]{64}$ ]]; then
+          echo "::error title=Invalid input::baseline-sha256 must be exactly 64 hexadecimal characters"
+          exit 2
+        fi
+        args=("--scan-mode=$AUDIT_SCAN_MODE" "--max-files=$AUDIT_MAX_FILES" "--large-file-mib=$AUDIT_LARGE_FILE_MIB" "--github-output=$GITHUB_OUTPUT")
+        if [[ -n "$AUDIT_OUTPUT_DIR" ]]; then
+          args+=("--output-dir=$AUDIT_OUTPUT_DIR")
+        else
+          args+=("--temporary-output-parent=$RUNNER_TEMP")
+        fi
+        if [[ -n "$AUDIT_SCOPE_ID" ]]; then args+=("--scope-id=$AUDIT_SCOPE_ID"); fi
+        if [[ -n "$AUDIT_BASELINE" ]]; then args+=("--baseline=$AUDIT_BASELINE"); fi
+        if [[ -n "$AUDIT_BASELINE_SHA256" ]]; then args+=("--baseline-sha256=$AUDIT_BASELINE_SHA256"); fi
+        if [[ "$AUDIT_FAIL_ON_ATTENTION" == "true" ]]; then args+=(--fail-on-attention); fi
+        if [[ "$AUDIT_REQUIRE_COMPARABLE" == "true" ]]; then args+=(--require-comparable); fi
+        while IFS= read -r value; do
+          value="${value%$'\r'}"
+          [[ -z "$value" ]] || args+=("--include-path=$value")
+        done <<< "$AUDIT_INCLUDE_PATHS"
+        while IFS= read -r value; do
+          value="${value%$'\r'}"
+          [[ -z "$value" ]] || args+=("--exclude-path=$value")
+        done <<< "$AUDIT_EXCLUDE_PATHS"
+        while IFS= read -r value; do
+          value="${value%$'\r'}"
+          [[ -z "$value" ]] || args+=("--exclude-dir=$value")
+        done <<< "$AUDIT_EXCLUDE_DIRS"
+        args+=(-- "$AUDIT_PATH")
+        python -I "$GITHUB_ACTION_PATH/scripts/check_repo.py" "${args[@]}"

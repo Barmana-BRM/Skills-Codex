@@ -1,0 +1,480 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T17:17:34.243Z",
+    "slug": "davila7-scholar-evaluation",
+    "source_url": "https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/scientific/scholar-evaluation",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "809636834b3d649bf2fe1420b609755fc10c1aee2f823c50524ec1cea5e41947",
+    "tree_hash": "82a4d9813fc59a5fc3a7f72a7a2fb1d7adc06363c02dd6a3991ed3a9c2bc1270",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "Scholar Evaluation",
+    "description": "Evaluate academic papers, research proposals, literature reviews, and scholarly writing with a structured ScholarEval rubric.",
+    "summary": "Structured ScholarEval rubrics for assessing research quality, rigor, writing, and publication readiness.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "davila7",
+    "license": "MIT",
+    "tags": [
+      "academic-review",
+      "research-evaluation",
+      "rubrics",
+      "peer-review",
+      "scholarly-writing"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem"
+    ],
+    "category": "research"
+  },
+  "security_audit": {
+    "risk_level": "low",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static alerts are false positives caused by rubric language, benign print statements, and a line-number mismatch. One medium filesystem concern remains because the score helper writes a report to a caller-supplied path without guardrails. Manual review found no prompt injection, network code, credential handling, or data exfiltration intent.",
+    "remediation": [
+      {
+        "issue": "Unrestricted report output path in the score helper.",
+        "suggestion": "Resolve output paths under the working directory, ask before overwriting files, or require an explicit force option.",
+        "severity": "medium"
+      },
+      {
+        "issue": "SKILL.md lacks valid frontmatter for automated metadata parsing.",
+        "suggestion": "Add valid YAML frontmatter with the skill name and description so scanners can parse the file reliably.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/calculate_scores.py",
+            "line_start": 291,
+            "line_end": 291
+          },
+          {
+            "file": "scripts/calculate_scores.py",
+            "line_start": 236,
+            "line_end": 236
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/evaluation_framework.md:663:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/evaluation_framework.md",
+        "line_start": 663,
+        "line_end": 663,
+        "snippet": "This framework is a guide, not a rigid checklist. Professional judgment should always be applied in "
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:215:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/evaluation_framework.md",
+        "line_start": 215,
+        "line_end": 216,
+        "snippet": "- Sampling strategy ensures representativeness"
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:432:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/evaluation_framework.md",
+        "line_start": 432,
+        "line_end": 433,
+        "snippet": "- Grammar and mechanics are flawless"
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:438:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/evaluation_framework.md",
+        "line_start": 438,
+        "line_end": 439,
+        "snippet": "- Writing is clear with minor awkwardness"
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:488:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/evaluation_framework.md",
+        "line_start": 488,
+        "line_end": 489,
+        "snippet": "- **Passive voice overuse**: Reduces clarity and directness"
+      },
+      {
+        "id": "filesystem:scripts/calculate_scores.py:291:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 291,
+        "line_end": 291,
+        "snippet": "print(\"\\nCalculating overall assessment...\\n\")"
+      },
+      {
+        "id": "filesystem:scripts/calculate_scores.py:236:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "with open(output_file, 'w') as f:"
+      },
+      {
+        "id": "sensitive:scripts/calculate_scores.py:126:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "max_name_len = max(len(name) for name in scores.keys())"
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:63:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "print(f\"Error: Invalid JSON in {filepath}\")"
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:89:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "print(f\"Error: Invalid JSON in {filepath}\")"
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:280:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/calculate_scores.py",
+        "line_start": 280,
+        "line_end": 280,
+        "snippet": "print(\"  Invalid input. Please enter a number between 1 and 5\")"
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "category": "metadata",
+        "severity": "low",
+        "pattern": "Unscanned file (invalid_frontmatter) — manual review required",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[unscanned: invalid_frontmatter]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/evaluation_framework.md:663:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The cited line says professional judgment should be applied when using the evaluation framework. It does not inspect the host system or request system information."
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:215:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a rubric statement about sampling strategy and representativeness. It contains no network discovery, probing, or connectivity behavior."
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:432:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line evaluates grammar and mechanics in scholarly writing. It is academic review guidance, not a network reconnaissance instruction."
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:438:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited text describes clear writing with minor awkwardness. There is no network access, scanning, or remote host enumeration."
+      },
+      {
+        "id": "blocker:references/evaluation_framework.md:488:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The phrase is a writing-quality warning about passive voice. It does not describe passive network reconnaissance or traffic monitoring."
+      },
+      {
+        "id": "filesystem:scripts/calculate_scores.py:291:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 291 only prints a status message before calculating the assessment. No path construction, traversal sequence, or filesystem access appears at that location."
+      },
+      {
+        "id": "filesystem:scripts/calculate_scores.py:236:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "The script writes a generated report to output_file, which can come from a command-line argument or interactive filename. This is expected functionality, but an unrestricted path can overwrite files accessible to the process."
+      },
+      {
+        "id": "sensitive:scripts/calculate_scores.py:126:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line computes the maximum length of score dimension names for chart formatting. It does not reference certificate files, private keys, or secrets."
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:63:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line prints an invalid JSON error for a user-supplied score file. It does not collect system details or perform reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:89:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line prints an invalid JSON error for a user-supplied weights file. It is normal CLI error handling, not host reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/calculate_scores.py:280:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line prompts the user to enter a score between 1 and 5. It does not query system state or enumerate the environment."
+      },
+      {
+        "id": "metadata:SKILL.md:1:unscanned-file-invalid-frontmatter-manual-review",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Manual review of SKILL.md found ordinary skill guidance and no prompt injection, security override, or hidden command pattern. The missing frontmatter affects metadata parsing, not runtime security."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Python file write/append",
+        "description": "with open(output_file, 'w') as f:",
+        "locations": [
+          {
+            "file": "scripts/calculate_scores.py",
+            "line_start": 236,
+            "line_end": 236
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The script writes a generated report to output_file, which can come from a command-line argument or interactive filename. This is expected functionality, but an unrestricted path can overwrite files accessible to the process."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Unscanned file (invalid_frontmatter) — manual review required",
+        "description": "[unscanned: invalid_frontmatter]",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "metadata",
+        "source_severity": "low",
+        "confidence": 1,
+        "confidence_reasoning": "Force-confirmed metadata/low static finding; AI false-positive verdict rejected."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 1043,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T17:17:34.243Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Evaluate Scholarly Work with Structured Rubrics",
+    "value_statement": "Scholarly review can be inconsistent when criteria are unclear. This skill applies structured ScholarEval dimensions to produce balanced scores, evidence, and revision priorities.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "ScholarEval",
+      "research evaluation",
+      "academic peer review",
+      "literature review assessment",
+      "research proposal feedback",
+      "publication readiness",
+      "scholarly writing rubric"
+    ],
+    "actual_capabilities": [
+      "Evaluates research work across problem formulation, literature review, methods, data, analysis, results, writing, and citations.",
+      "Provides qualitative strengths, weaknesses, critical issues, and prioritized recommendations for revision.",
+      "Supports optional 1 to 5 scoring for each applicable evaluation dimension.",
+      "Calculates weighted aggregate scores from dimension ratings with the included Python helper.",
+      "Adapts evaluation expectations for drafts, proposals, journal articles, conference papers, and student work."
+    ],
+    "limitations": [
+      "It does not replace domain expert peer review for specialized technical claims.",
+      "Scores depend on the evaluator supplying accurate evidence from the scholarly work.",
+      "Some dimensions may not apply to theoretical papers or early research ideas.",
+      "The referenced schematic generation workflow depends on a separate skill or script not included here."
+    ],
+    "use_cases": [
+      {
+        "title": "Review a Manuscript Before Submission",
+        "description": "Assess a paper against research quality dimensions and identify high-impact revisions before journal or conference submission.",
+        "target_user": "Researchers and graduate students"
+      },
+      {
+        "title": "Evaluate a Research Proposal",
+        "description": "Check question clarity, feasibility, methodology, contribution, and risks before funding review or thesis committee feedback.",
+        "target_user": "Principal investigators and proposal writers"
+      },
+      {
+        "title": "Grade Scholarly Writing Consistently",
+        "description": "Use a repeatable rubric to give structured feedback on literature reviews, thesis chapters, or seminar papers.",
+        "target_user": "Instructors and academic mentors"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Quick Paper Review",
+        "scenario": "Beginner review of a single manuscript.",
+        "prompt": "Evaluate this scholarly paper using the ScholarEval dimensions. Focus on strengths, weaknesses, and three priority revisions."
+      },
+      {
+        "title": "Dimension Scorecard",
+        "scenario": "Intermediate review with numeric ratings.",
+        "prompt": "Score each applicable ScholarEval dimension from 1 to 5. Explain each score with evidence from the paper and list missing information."
+      },
+      {
+        "title": "Publication Readiness Check",
+        "scenario": "Advanced review for a target venue.",
+        "prompt": "Assess this manuscript for publication readiness for the target venue. Compare rigor, contribution, writing, and citations against expected standards."
+      },
+      {
+        "title": "Revision Strategy Review",
+        "scenario": "Advanced planning after feedback.",
+        "prompt": "Re-evaluate the revised draft against prior feedback. Identify remaining weaknesses, score changes, and the next highest-impact revisions."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A draft empirical research paper with methods, results, and references.",
+        "output": "A structured evaluation report with dimension scores, evidence-based strengths, critical weaknesses, and prioritized revision recommendations."
+      },
+      {
+        "input": "A grant proposal with research aims and a planned methodology.",
+        "output": "A feasibility and contribution assessment covering research questions, design quality, risks, and reviewer-facing improvement priorities."
+      },
+      {
+        "input": "A literature review chapter for a thesis.",
+        "output": "Feedback on coverage, synthesis quality, gap identification, citation balance, organization, and writing clarity."
+      }
+    ],
+    "best_practices": [
+      "Define the work type, stage, and target venue before scoring.",
+      "Support every score with specific evidence from the manuscript.",
+      "Prioritize recommendations by scholarly impact and revision effort."
+    ],
+    "anti_patterns": [
+      "Do not score dimensions that are not applicable without explaining why.",
+      "Do not treat the aggregate score as a substitute for expert judgment.",
+      "Do not give vague feedback that lacks examples or revision actions."
+    ],
+    "faq": [
+      {
+        "question": "What types of scholarly work can it evaluate?",
+        "answer": "It can evaluate research papers, proposals, literature reviews, thesis chapters, conference abstracts, and similar academic drafts."
+      },
+      {
+        "question": "Does it provide numeric scores?",
+        "answer": "Yes. It supports optional 1 to 5 scores for each applicable ScholarEval dimension."
+      },
+      {
+        "question": "Can it calculate an overall score?",
+        "answer": "Yes. The included Python helper can calculate weighted aggregate scores from a dimension score file."
+      },
+      {
+        "question": "Does it replace peer review?",
+        "answer": "No. It provides structured feedback, but specialized claims still need expert review."
+      },
+      {
+        "question": "Can it adapt to different disciplines?",
+        "answer": "Yes. It asks evaluators to account for discipline norms, work stage, and venue expectations."
+      },
+      {
+        "question": "Which AI tools are supported?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "evaluation_framework.md",
+          "type": "file",
+          "path": "references/evaluation_framework.md",
+          "lines": 664
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "calculate_scores.py",
+          "type": "file",
+          "path": "scripts/calculate_scores.py",
+          "lines": 379
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 290
+    }
+  ]
+}

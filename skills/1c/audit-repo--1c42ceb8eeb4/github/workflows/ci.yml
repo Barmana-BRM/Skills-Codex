@@ -1,0 +1,1227 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - "3.10"
+          - "3.14"
+        include:
+          - os: ubuntu-latest
+            python-version: "3.11"
+          - os: ubuntu-latest
+            python-version: "3.12"
+          - os: ubuntu-latest
+            python-version: "3.13"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run unit tests
+        run: python -B -m unittest discover -s scripts -p "test_*.py"
+      - name: Exercise Markdown output
+        run: python scripts/collect_repo_signals.py . --format markdown
+      - name: Exercise JSON output
+        run: python scripts/collect_repo_signals.py . --scan-mode tracked --scope-id ci-repository --format json --output "${{ runner.temp }}/repo-signals.json"
+      - name: Exercise snapshot comparison
+        run: python scripts/compare_repo_signals.py "${{ runner.temp }}/repo-signals.json" "${{ runner.temp }}/repo-signals.json" --format markdown --fail-on-attention --require-comparable
+      - name: Exercise SARIF output
+        run: python scripts/compare_repo_signals.py "${{ runner.temp }}/repo-signals.json" "${{ runner.temp }}/repo-signals.json" --format sarif --output "${{ runner.temp }}/repo-signals.sarif"
+      - name: Exercise one-command audit
+        run: python scripts/check_repo.py . --scan-mode tracked --scope-id ci-repository --output-dir "${{ runner.temp }}/audit-run"
+      - name: Exercise local GitHub Action defaults
+        id: local_action
+        uses: ./
+        with:
+          scan-mode: tracked
+      - name: Verify local Action default scope
+        shell: bash
+        env:
+          ACTION_SNAPSHOT: ${{ steps.local_action.outputs.snapshot }}
+          RUNNER_TEMP_PATH: ${{ runner.temp }}
+          WORKSPACE_PATH: ${{ github.workspace }}
+        run: python -c "import json, os, pathlib; snapshot=pathlib.Path(os.environ['ACTION_SNAPSHOT']).resolve(); assert json.load(snapshot.open(encoding='utf-8'))['scope_id'] is None; assert snapshot.is_relative_to(pathlib.Path(os.environ['RUNNER_TEMP_PATH']).resolve()); assert not snapshot.is_relative_to(pathlib.Path(os.environ['WORKSPACE_PATH']).resolve())"
+      - name: Exercise local GitHub Action explicit scope
+        id: local_action_scoped
+        uses: ./
+        with:
+          scan-mode: tracked
+          scope-id: ${{ github.repository }}:ci-scope
+          output-dir: ${{ runner.temp }}/action-run-scoped
+      - name: Verify local Action explicit scope
+        shell: bash
+        env:
+          ACTION_SNAPSHOT: ${{ steps.local_action_scoped.outputs.snapshot }}
+          EXPECTED_SCOPE: ${{ github.repository }}:ci-scope
+        run: python -c "import json, os; assert json.load(open(os.environ['ACTION_SNAPSHOT'], encoding='utf-8'))['scope_id'] == os.environ['EXPECTED_SCOPE']"
+
+  action-policy-e2e:
+    name: Composite Action policy E2E / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - "3.10"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create repository fixture with spaces
+        shell: bash
+        env:
+          FIXTURE_DIR: ${{ runner.temp }}/audit repo action fixture
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          fixture = Path(os.environ["FIXTURE_DIR"])
+          fixture.mkdir()
+          fixture.joinpath("README.md").write_text("# Action policy fixture\n", encoding="utf-8")
+          PY
+
+      - name: Create baseline through the local Action
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo baseline output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Compute fixture baseline SHA-256 for E2E
+        id: baseline_digest
+        shell: bash
+        env:
+          BASELINE_PATH: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+        run: |
+          python -I - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+
+          digest = hashlib.sha256(Path(os.environ["BASELINE_PATH"]).read_bytes()).hexdigest()
+          assert digest != "0" * 64
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8", newline="\n") as stream:
+              stream.write(f"sha256={digest}\n")
+          PY
+
+      - name: Exercise both policy gates on a comparable baseline
+        id: policy_success
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo success output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: ${{ steps.baseline_digest.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+          fail-on-attention: "true"
+          require-comparable: "true"
+
+      - name: Verify all successful Action outputs and artifacts
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo success output
+          ACTION_SNAPSHOT: ${{ steps.policy_success.outputs.snapshot }}
+          ACTION_REPORT: ${{ steps.policy_success.outputs.report }}
+          ACTION_COMPARISON: ${{ steps.policy_success.outputs.comparison }}
+          ACTION_SARIF: ${{ steps.policy_success.outputs.sarif }}
+          ACTION_ATTENTION_COUNT: ${{ steps.policy_success.outputs['attention-count'] }}
+          ACTION_COMPARABLE: ${{ steps.policy_success.outputs.comparable }}
+          ACTION_TOOL_VERSION: ${{ steps.policy_success.outputs['tool-version'] }}
+          ACTION_SCAN_SEMANTICS_VERSION: ${{ steps.policy_success.outputs['scan-semantics-version'] }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          output_dir = Path(os.environ["OUTPUT_DIR"]).resolve()
+          outputs = {
+              "snapshot": os.environ["ACTION_SNAPSHOT"],
+              "report": os.environ["ACTION_REPORT"],
+              "comparison": os.environ["ACTION_COMPARISON"],
+              "sarif": os.environ["ACTION_SARIF"],
+              "attention-count": os.environ["ACTION_ATTENTION_COUNT"],
+              "comparable": os.environ["ACTION_COMPARABLE"],
+              "tool-version": os.environ["ACTION_TOOL_VERSION"],
+              "scan-semantics-version": os.environ["ACTION_SCAN_SEMANTICS_VERSION"],
+          }
+          assert len(outputs) == 8
+          assert all(value != "" for value in outputs.values()), outputs
+
+          filenames = {"snapshot.json", "report.md", "comparison.json", "comparison.sarif"}
+          assert {path.name for path in output_dir.iterdir()} == filenames
+          for output_name, filename in {
+              "snapshot": "snapshot.json",
+              "report": "report.md",
+              "comparison": "comparison.json",
+              "sarif": "comparison.sarif",
+          }.items():
+              assert Path(outputs[output_name]).resolve() == output_dir / filename
+
+          snapshot = json.loads((output_dir / "snapshot.json").read_text(encoding="utf-8"))
+          comparison = json.loads((output_dir / "comparison.json").read_text(encoding="utf-8"))
+          sarif = json.loads((output_dir / "comparison.sarif").read_text(encoding="utf-8"))
+          assert outputs["attention-count"] == "0"
+          assert outputs["comparable"] == "true"
+          assert outputs["tool-version"] == str(snapshot["tool_version"])
+          assert outputs["scan-semantics-version"] == str(snapshot["scan_semantics_version"])
+          assert comparison["summary"]["attention_count"] == 0
+          assert comparison["summary"]["comparable"] is True
+          assert sarif["version"] == "2.1.0"
+          assert sarif["runs"][0]["results"] == []
+          PY
+
+      - name: Exercise leading-hyphen Action input values
+        id: leading_hyphen_inputs
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo leading hyphen output
+          scan-mode: filesystem
+          scope-id: --scope:action-e2e
+          include-paths: |
+            *
+            --include-probe/**
+          exclude-paths: |
+            --exclude-probe/**
+          exclude-dirs: |
+            --cache
+
+      - name: Verify leading-hyphen inputs reach the collector unchanged
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo leading hyphen output
+          ACTION_SNAPSHOT: ${{ steps.leading_hyphen_inputs.outputs.snapshot }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          output_dir = Path(os.environ["OUTPUT_DIR"]).resolve()
+          snapshot_path = Path(os.environ["ACTION_SNAPSHOT"]).resolve()
+          assert snapshot_path == output_dir / "snapshot.json"
+          snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+          assert snapshot["scope_id"] == "--scope:action-e2e"
+          assert snapshot["include_path_patterns"] == ["*", "--include-probe/**"]
+          assert snapshot["exclude_path_patterns"] == ["--exclude-probe/**"]
+          assert snapshot["excluded_directory_names"] == ["--cache"]
+          assert snapshot["file_count"] == 1
+          PY
+
+      - name: Prove GitHub expressions preserve real CRLF input separators
+        shell: bash
+        env:
+          CRLF_INCLUDE_PATHS: ${{ fromJSON('"*\r\nREADME.md"') }}
+          CRLF_EXCLUDE_PATHS: ${{ fromJSON('"excluded/**\r\ntemp/**"') }}
+          CRLF_EXCLUDE_DIRS: ${{ fromJSON('"cache-extra\r\nfixtures-large"') }}
+        run: |
+          python -I - <<'PY'
+          import os
+
+          assert os.environ["CRLF_INCLUDE_PATHS"].encode() == b"*\r\nREADME.md"
+          assert os.environ["CRLF_EXCLUDE_PATHS"].encode() == b"excluded/**\r\ntemp/**"
+          assert os.environ["CRLF_EXCLUDE_DIRS"].encode() == b"cache-extra\r\nfixtures-large"
+          PY
+
+      - name: Exercise CRLF-separated Action input values
+        id: crlf_inputs
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo crlf input output
+          scan-mode: filesystem
+          include-paths: ${{ fromJSON('"*\r\nREADME.md"') }}
+          exclude-paths: ${{ fromJSON('"excluded/**\r\ntemp/**"') }}
+          exclude-dirs: ${{ fromJSON('"cache-extra\r\nfixtures-large"') }}
+
+      - name: Verify CRLF inputs are normalized before shared validation
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo crlf input output
+          ACTION_SNAPSHOT: ${{ steps.crlf_inputs.outputs.snapshot }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          output_dir = Path(os.environ["OUTPUT_DIR"]).resolve()
+          snapshot_path = Path(os.environ["ACTION_SNAPSHOT"]).resolve()
+          assert snapshot_path == output_dir / "snapshot.json"
+          snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+          assert snapshot["include_path_patterns"] == ["*", "README.md"]
+          assert snapshot["exclude_path_patterns"] == ["excluded/**", "temp/**"]
+          assert snapshot["excluded_directory_names"] == ["cache-extra", "fixtures-large"]
+          assert all(
+              "\r" not in value
+              for field in (
+                  "include_path_patterns", "exclude_path_patterns", "excluded_directory_names",
+              )
+              for value in snapshot[field]
+          )
+          assert snapshot["file_count"] == 1
+          PY
+
+      - name: Expected failure - an embedded CR remains invalid
+        id: embedded_cr_input
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo embedded cr output
+          scan-mode: filesystem
+          include-paths: ${{ fromJSON('"safe\rinside/**"') }}
+
+      - name: Verify embedded CR rejection has no Action side effect
+        shell: bash
+        env:
+          EMBEDDED_CR_OUTCOME: ${{ steps.embedded_cr_input.outcome }}
+          EMBEDDED_CR_OUTPUTS: ${{ toJSON(steps.embedded_cr_input.outputs) }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo embedded cr output
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          assert os.environ["EMBEDDED_CR_OUTCOME"] == "failure"
+          public_outputs = {
+              "snapshot", "report", "comparison", "sarif", "attention-count", "comparable",
+              "tool-version", "scan-semantics-version",
+          }
+          outputs = json.loads(os.environ["EMBEDDED_CR_OUTPUTS"])
+          assert isinstance(outputs, dict), outputs
+          assert set(outputs).issubset(public_outputs), outputs
+          assert all(outputs.get(name) in ("", None) for name in public_outputs), outputs
+          assert not Path(os.environ["OUTPUT_DIR"]).exists()
+          PY
+
+      - name: Add a sensitive-looking file after the baseline
+        shell: bash
+        env:
+          FIXTURE_DIR: ${{ runner.temp }}/audit repo action fixture
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          Path(os.environ["FIXTURE_DIR"], ".env").write_text("EXAMPLE_ONLY=not-a-secret\n", encoding="utf-8")
+          PY
+
+      - name: Expected failure - fail-on-attention detects the new .env
+        id: attention_gate
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo attention output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: ${{ steps.baseline_digest.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+          fail-on-attention: "true"
+          require-comparable: "true"
+
+      - name: Verify attention failure retains reports and a SARIF warning
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.attention_gate.outcome }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo attention output
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          assert os.environ["STEP_OUTCOME"] == "failure"
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          expected = {"snapshot.json", "report.md", "comparison.json", "comparison.sarif"}
+          assert {path.name for path in output_dir.iterdir()} == expected
+          comparison = json.loads((output_dir / "comparison.json").read_text(encoding="utf-8"))
+          report = (output_dir / "report.md").read_text(encoding="utf-8")
+          sarif = json.loads((output_dir / "comparison.sarif").read_text(encoding="utf-8"))
+          assert comparison["summary"]["comparable"] is True
+          assert comparison["summary"]["attention_count"] > 0
+          assert any(item["code"] == "sensitive-filename-added" for item in comparison["attention"])
+          assert "Sensitive-looking filename added" in report
+          assert any(
+              result["level"] == "warning"
+              and result.get("properties", {}).get("kind") == "attention"
+              for result in sarif["runs"][0]["results"]
+          )
+          print("::warning title=Expected audit-repo policy failure::.env produced an attention signal; retained reports were verified")
+          PY
+
+      - name: Expected failure - require-comparable rejects a changed scope
+        id: comparable_gate
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo incomparable output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: ${{ steps.baseline_digest.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:different-action-policy-scope
+          require-comparable: "true"
+
+      - name: Verify comparability failure retains its limitation note
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.comparable_gate.outcome }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo incomparable output
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          assert os.environ["STEP_OUTCOME"] == "failure"
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          expected = {"snapshot.json", "report.md", "comparison.json", "comparison.sarif"}
+          assert {path.name for path in output_dir.iterdir()} == expected
+          comparison = json.loads((output_dir / "comparison.json").read_text(encoding="utf-8"))
+          report = (output_dir / "report.md").read_text(encoding="utf-8")
+          sarif = json.loads((output_dir / "comparison.sarif").read_text(encoding="utf-8"))
+          assert comparison["summary"]["comparable"] is False
+          assert any("scope IDs differ" in limitation for limitation in comparison["limitations"])
+          assert "scope IDs differ" in report
+          assert any(
+              result["ruleId"] == "comparison-limitation"
+              and result["level"] == "note"
+              and result.get("properties", {}).get("kind") == "limitation"
+              for result in sarif["runs"][0]["results"]
+          )
+          PY
+
+      - name: Seed outputs that a missing-baseline gate must preserve
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo missing baseline output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          output_dir.mkdir()
+          output_dir.joinpath("sentinel.txt").write_text("preserve sentinel\n", encoding="utf-8")
+          for name in ("snapshot.json", "report.md", "comparison.json", "comparison.sarif"):
+              output_dir.joinpath(name).write_text(f"preserve stale {name}\n", encoding="utf-8")
+          PY
+
+      - name: Expected failure - policy gates require a baseline
+        id: missing_baseline_gate
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo missing baseline output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+          fail-on-attention: "true"
+          require-comparable: "true"
+
+      - name: Verify missing-baseline rejection changed no existing output
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.missing_baseline_gate.outcome }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo missing baseline output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          assert os.environ["STEP_OUTCOME"] == "failure"
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          assert output_dir.joinpath("sentinel.txt").read_text(encoding="utf-8") == "preserve sentinel\n"
+          for name in ("snapshot.json", "report.md", "comparison.json", "comparison.sarif"):
+              assert output_dir.joinpath(name).read_text(encoding="utf-8") == f"preserve stale {name}\n"
+          PY
+
+      - name: Seed baseline digest rejection outputs
+        shell: bash
+        env:
+          MISSING_DIR: ${{ runner.temp }}/audit repo digest missing baseline output
+          MALFORMED_DIR: ${{ runner.temp }}/audit repo malformed digest output
+          MISMATCH_DIR: ${{ runner.temp }}/audit repo digest mismatch output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          for environment_name, label in (
+              ("MISSING_DIR", "missing"),
+              ("MALFORMED_DIR", "malformed"),
+              ("MISMATCH_DIR", "mismatch"),
+          ):
+              output_dir = Path(os.environ[environment_name])
+              output_dir.mkdir()
+              output_dir.joinpath("sentinel.txt").write_text(f"preserve {label} sentinel\n", encoding="utf-8")
+              for name in ("snapshot.json", "report.md", "comparison.json", "comparison.sarif"):
+                  output_dir.joinpath(name).write_text(f"preserve {label} {name}\n", encoding="utf-8")
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          default_parent.joinpath("digest-before.json").write_text(
+              json.dumps(sorted(path.name for path in default_parent.glob("audit-repo-*"))),
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Expected failure - baseline digest requires a baseline
+        id: digest_without_baseline
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo digest missing baseline output
+          baseline-sha256: ${{ steps.baseline_digest.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Expected failure - baseline digest format is strict
+        id: malformed_digest
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo malformed digest output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: sha256:${{ steps.baseline_digest.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Expected failure - baseline digest must match exact bytes
+        id: digest_mismatch
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo digest mismatch output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Expected failure - wrong digest allocates no default output
+        id: digest_mismatch_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          baseline-sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Verify baseline digest rejections preserve every output
+        shell: bash
+        env:
+          MISSING_OUTCOME: ${{ steps.digest_without_baseline.outcome }}
+          MALFORMED_OUTCOME: ${{ steps.malformed_digest.outcome }}
+          MISMATCH_OUTCOME: ${{ steps.digest_mismatch.outcome }}
+          DEFAULT_MISMATCH_OUTCOME: ${{ steps.digest_mismatch_default.outcome }}
+          MISSING_OUTPUTS: ${{ toJSON(steps.digest_without_baseline.outputs) }}
+          MALFORMED_OUTPUTS: ${{ toJSON(steps.malformed_digest.outputs) }}
+          MISMATCH_OUTPUTS: ${{ toJSON(steps.digest_mismatch.outputs) }}
+          DEFAULT_MISMATCH_OUTPUTS: ${{ toJSON(steps.digest_mismatch_default.outputs) }}
+          MISSING_DIR: ${{ runner.temp }}/audit repo digest missing baseline output
+          MALFORMED_DIR: ${{ runner.temp }}/audit repo malformed digest output
+          MISMATCH_DIR: ${{ runner.temp }}/audit repo digest mismatch output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          for outcome_name in (
+              "MISSING_OUTCOME", "MALFORMED_OUTCOME", "MISMATCH_OUTCOME", "DEFAULT_MISMATCH_OUTCOME",
+          ):
+              assert os.environ[outcome_name] == "failure", (outcome_name, os.environ[outcome_name])
+          public_outputs = {
+              "snapshot", "report", "comparison", "sarif", "attention-count", "comparable",
+              "tool-version", "scan-semantics-version",
+          }
+          for outputs_name in (
+              "MISSING_OUTPUTS", "MALFORMED_OUTPUTS", "MISMATCH_OUTPUTS", "DEFAULT_MISMATCH_OUTPUTS",
+          ):
+              outputs = json.loads(os.environ[outputs_name])
+              assert isinstance(outputs, dict), (outputs_name, outputs)
+              assert set(outputs).issubset(public_outputs), (outputs_name, outputs)
+              assert all(value in ("", None) for value in outputs.values()), (outputs_name, outputs)
+          for environment_name, label in (
+              ("MISSING_DIR", "missing"),
+              ("MALFORMED_DIR", "malformed"),
+              ("MISMATCH_DIR", "mismatch"),
+          ):
+              output_dir = Path(os.environ[environment_name])
+              assert output_dir.joinpath("sentinel.txt").read_text(encoding="utf-8") == f"preserve {label} sentinel\n"
+              for name in ("snapshot.json", "report.md", "comparison.json", "comparison.sarif"):
+                  assert output_dir.joinpath(name).read_text(encoding="utf-8") == f"preserve {label} {name}\n"
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = json.loads(
+              default_parent.joinpath("digest-before.json").read_text(encoding="utf-8")
+          )
+          after = sorted(path.name for path in default_parent.glob("audit-repo-*"))
+          assert after == before, (before, after)
+          PY
+
+      - name: Build an exact-digest baseline with a duplicate top-level root key
+        id: duplicate_root_seed
+        shell: bash
+        env:
+          BASELINE_PATH: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          DUPLICATE_BASELINE: ${{ runner.temp }}/audit repo duplicate root baseline.json
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo duplicate root output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          baseline_path = Path(os.environ["BASELINE_PATH"])
+          baseline_text = baseline_path.read_text(encoding="utf-8")
+          baseline = json.loads(baseline_text)
+          opening_brace = baseline_text.index("{")
+          duplicate_root_member = (
+              json.dumps("root") + ": "
+              + json.dumps(baseline["root"], ensure_ascii=True) + ","
+          )
+          ambiguous_text = (
+              baseline_text[:opening_brace + 1]
+              + "\n  " + duplicate_root_member
+              + baseline_text[opening_brace + 1:]
+          )
+          ambiguous_bytes = ambiguous_text.encode("utf-8")
+          top_level_pairs = json.loads(ambiguous_bytes, object_pairs_hook=list)
+          assert [name for name, _ in top_level_pairs].count("root") == 2
+          duplicate_baseline = Path(os.environ["DUPLICATE_BASELINE"])
+          duplicate_baseline.write_bytes(ambiguous_bytes)
+
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          output_dir.mkdir()
+          output_dir.joinpath("keep").mkdir()
+          for index, name in enumerate((
+              "snapshot.json", "report.md", "comparison.json",
+              "comparison.sarif", "keep/sentinel.bin",
+          ), start=1):
+              output_dir.joinpath(name).write_bytes(
+                  bytes((0, index, 255)) + f"preserve duplicate root {name}\r\n".encode()
+              )
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = {
+              "explicit": tree_state(output_dir),
+              "default_entries": sorted(
+                  path.name for path in default_parent.glob("audit-repo-*")
+              ),
+          }
+          default_parent.joinpath("duplicate-key-before.json").write_text(
+              json.dumps(before, sort_keys=True), encoding="utf-8",
+          )
+          digest = hashlib.sha256(ambiguous_bytes).hexdigest()
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8", newline="\n") as stream:
+              stream.write(f"sha256={digest}\n")
+          PY
+
+      - name: Expected failure - duplicate root key with matching digest preserves explicit output
+        id: duplicate_root_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo duplicate root output
+          baseline: ${{ runner.temp }}/audit repo duplicate root baseline.json
+          baseline-sha256: ${{ steps.duplicate_root_seed.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Expected failure - duplicate root key with matching digest allocates no default output
+        id: duplicate_root_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          baseline: ${{ runner.temp }}/audit repo duplicate root baseline.json
+          baseline-sha256: ${{ steps.duplicate_root_seed.outputs.sha256 }}
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Verify duplicate-key rejection preserves every Action output
+        shell: bash
+        env:
+          DUPLICATE_EXPLICIT_OUTCOME: ${{ steps.duplicate_root_explicit.outcome }}
+          DUPLICATE_DEFAULT_OUTCOME: ${{ steps.duplicate_root_default.outcome }}
+          DUPLICATE_EXPLICIT_OUTPUTS: ${{ toJSON(steps.duplicate_root_explicit.outputs) }}
+          DUPLICATE_DEFAULT_OUTPUTS: ${{ toJSON(steps.duplicate_root_default.outputs) }}
+          EXPECTED_SHA256: ${{ steps.duplicate_root_seed.outputs.sha256 }}
+          DUPLICATE_BASELINE: ${{ runner.temp }}/audit repo duplicate root baseline.json
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo duplicate root output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          for outcome_name in ("DUPLICATE_EXPLICIT_OUTCOME", "DUPLICATE_DEFAULT_OUTCOME"):
+              assert os.environ[outcome_name] == "failure", (outcome_name, os.environ[outcome_name])
+          public_outputs = {
+              "snapshot", "report", "comparison", "sarif", "attention-count", "comparable",
+              "tool-version", "scan-semantics-version",
+          }
+          for outputs_name in ("DUPLICATE_EXPLICIT_OUTPUTS", "DUPLICATE_DEFAULT_OUTPUTS"):
+              outputs = json.loads(os.environ[outputs_name])
+              assert isinstance(outputs, dict), (outputs_name, outputs)
+              assert set(outputs).issubset(public_outputs), (outputs_name, outputs)
+              assert all(outputs.get(name) in ("", None) for name in public_outputs), (outputs_name, outputs)
+
+          ambiguous_bytes = Path(os.environ["DUPLICATE_BASELINE"]).read_bytes()
+          assert hashlib.sha256(ambiguous_bytes).hexdigest() == os.environ["EXPECTED_SHA256"]
+          ambiguous_text = ambiguous_bytes.decode("utf-8")
+          top_level_pairs = json.loads(ambiguous_text, object_pairs_hook=list)
+          assert [name for name, _ in top_level_pairs].count("root") == 2
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = json.loads(
+              default_parent.joinpath("duplicate-key-before.json").read_text(encoding="utf-8")
+          )
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          assert tree_state(output_dir) == before["explicit"]
+          after = sorted(path.name for path in default_parent.glob("audit-repo-*"))
+          assert after == before["default_entries"], (before["default_entries"], after)
+          PY
+
+      - name: Seed a sparse oversized external baseline and preserved output tree
+        id: oversized_baseline_seed
+        shell: bash
+        env:
+          OVERSIZED_BASELINE: ${{ runner.temp }}/audit repo oversized external baseline.json
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo oversized baseline output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          oversized_baseline = Path(os.environ["OVERSIZED_BASELINE"])
+          with oversized_baseline.open("wb") as stream:
+              stream.truncate(64 * 1024 * 1024 + 1)
+          assert oversized_baseline.stat().st_size == 64 * 1024 * 1024 + 1
+
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          output_dir.mkdir()
+          output_dir.joinpath("keep").mkdir()
+          for index, name in enumerate((
+              "snapshot.json", "report.md", "comparison.json",
+              "comparison.sarif", "keep/sentinel.bin",
+          ), start=1):
+              output_dir.joinpath(name).write_bytes(
+                  bytes((0, index, 255)) + f"preserve oversized baseline {name}\r\n".encode()
+              )
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = {
+              "explicit": tree_state(output_dir),
+              "default_entries": sorted(
+                  path.name for path in default_parent.glob("audit-repo-*")
+              ),
+          }
+          default_parent.joinpath("oversized-baseline-before.json").write_text(
+              json.dumps(before, sort_keys=True), encoding="utf-8",
+          )
+          PY
+
+      - name: Expected failure - oversized baseline preserves explicit output
+        id: oversized_baseline_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo oversized baseline output
+          baseline: ${{ runner.temp }}/audit repo oversized external baseline.json
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Expected failure - oversized baseline allocates no default output
+        id: oversized_baseline_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          baseline: ${{ runner.temp }}/audit repo oversized external baseline.json
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Verify oversized-baseline rejection preserves every Action output
+        shell: bash
+        env:
+          OVERSIZED_EXPLICIT_OUTCOME: ${{ steps.oversized_baseline_explicit.outcome }}
+          OVERSIZED_DEFAULT_OUTCOME: ${{ steps.oversized_baseline_default.outcome }}
+          OVERSIZED_EXPLICIT_OUTPUTS: ${{ toJSON(steps.oversized_baseline_explicit.outputs) }}
+          OVERSIZED_DEFAULT_OUTPUTS: ${{ toJSON(steps.oversized_baseline_default.outputs) }}
+          OVERSIZED_BASELINE: ${{ runner.temp }}/audit repo oversized external baseline.json
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo oversized baseline output
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          for outcome_name in ("OVERSIZED_EXPLICIT_OUTCOME", "OVERSIZED_DEFAULT_OUTCOME"):
+              assert os.environ[outcome_name] == "failure", (outcome_name, os.environ[outcome_name])
+          public_outputs = {
+              "snapshot", "report", "comparison", "sarif", "attention-count", "comparable",
+              "tool-version", "scan-semantics-version",
+          }
+          for outputs_name in ("OVERSIZED_EXPLICIT_OUTPUTS", "OVERSIZED_DEFAULT_OUTPUTS"):
+              outputs = json.loads(os.environ[outputs_name])
+              assert isinstance(outputs, dict), (outputs_name, outputs)
+              assert set(outputs).issubset(public_outputs), (outputs_name, outputs)
+              assert all(outputs.get(name) in ("", None) for name in public_outputs), (outputs_name, outputs)
+
+          oversized_baseline = Path(os.environ["OVERSIZED_BASELINE"])
+          assert oversized_baseline.stat().st_size == 64 * 1024 * 1024 + 1
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = json.loads(
+              default_parent.joinpath("oversized-baseline-before.json").read_text(encoding="utf-8")
+          )
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          assert tree_state(output_dir) == before["explicit"]
+          after = sorted(path.name for path in default_parent.glob("audit-repo-*"))
+          assert after == before["default_entries"], (before["default_entries"], after)
+          PY
+
+      - name: Seed invalid collection-input rejection outputs
+        id: invalid_collection_seed
+        shell: bash
+        env:
+          MAX_FILES_DIR: ${{ runner.temp }}/audit repo invalid max files output
+          LARGE_FILE_DIR: ${{ runner.temp }}/audit repo invalid large file output
+          INCLUDE_DIR: ${{ runner.temp }}/audit repo invalid include output
+          EXCLUDE_DIR: ${{ runner.temp }}/audit repo invalid exclude output
+          EXCLUDE_DIRS_DIR: ${{ runner.temp }}/audit repo invalid exclude dirs output
+          SCOPE_DIR: ${{ runner.temp }}/audit repo invalid scope output
+          NON_GIT_DIR: ${{ runner.temp }}/audit repo non git tracked output
+          MISSING_ROOT: ${{ runner.temp }}/audit repo missing root
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          explicit_directories = (
+              "MAX_FILES_DIR", "LARGE_FILE_DIR", "INCLUDE_DIR",
+              "EXCLUDE_DIR", "EXCLUDE_DIRS_DIR", "SCOPE_DIR", "NON_GIT_DIR",
+          )
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          before = {"explicit": {}}
+          for directory_index, environment_name in enumerate(explicit_directories, start=1):
+              output_dir = Path(os.environ[environment_name])
+              output_dir.mkdir()
+              output_dir.joinpath("keep").mkdir()
+              names = (
+                  "sentinel.bin", "snapshot.json", "report.md",
+                  "comparison.json", "comparison.sarif", "keep/nested.bin",
+              )
+              for file_index, name in enumerate(names, start=1):
+                  payload = bytes((0, directory_index, file_index, 255)) + f"preserve:{environment_name}:{name}\r\n".encode()
+                  output_dir.joinpath(name).write_bytes(payload)
+              before["explicit"][environment_name] = tree_state(output_dir)
+
+          missing_root = Path(os.environ["MISSING_ROOT"])
+          assert not missing_root.exists(), missing_root
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before["default_entries"] = sorted(
+              path.name for path in default_parent.glob("audit-repo-*")
+          )
+          default_parent.joinpath("invalid-collection-before.json").write_text(
+              json.dumps(before, sort_keys=True), encoding="utf-8",
+          )
+          invalid_scope = "s" * 201
+          assert len(invalid_scope) == 201
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8", newline="\n") as stream:
+              stream.write(f"invalid_scope={invalid_scope}\n")
+          PY
+
+      - name: Expected failure - max-files must be positive
+        id: invalid_max_files_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid max files output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          max-files: "0"
+
+      - name: Expected failure - large-file-mib must be finite
+        id: invalid_large_file_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid large file output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          large-file-mib: "nan"
+
+      - name: Expected failure - include paths reject parent traversal
+        id: invalid_include_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid include output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          include-paths: |
+            README.md
+            ../escape/**
+
+      - name: Expected failure - exclude paths reject parent traversal
+        id: invalid_exclude_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid exclude output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          exclude-paths: |
+            ignored/**
+            ../escape/**
+
+      - name: Expected failure - excluded directory names reject nested paths
+        id: invalid_exclude_dirs_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid exclude dirs output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          exclude-dirs: |
+            generated
+            nested/name
+
+      - name: Expected failure - scope ID length is bounded
+        id: invalid_scope_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid scope output
+          scan-mode: filesystem
+          scope-id: ${{ steps.invalid_collection_seed.outputs.invalid_scope }}
+
+      - name: Expected failure - tracked mode requires a Git worktree
+        id: non_git_tracked_explicit
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo non git tracked output
+          scan-mode: tracked
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+
+      - name: Expected failure - invalid max-files allocates no default output
+        id: invalid_max_files_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          max-files: "0"
+
+      - name: Expected failure - invalid excluded directory allocates no default output
+        id: invalid_exclude_dirs_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+          exclude-dirs: |
+            nested/name
+
+      - name: Expected failure - missing root allocates no default output
+        id: missing_root_default
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo missing root
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:invalid-input-e2e
+
+      - name: Verify invalid collection inputs preserve all Action state
+        shell: bash
+        env:
+          MAX_FILES_OUTCOME: ${{ steps.invalid_max_files_explicit.outcome }}
+          LARGE_FILE_OUTCOME: ${{ steps.invalid_large_file_explicit.outcome }}
+          INCLUDE_OUTCOME: ${{ steps.invalid_include_explicit.outcome }}
+          EXCLUDE_OUTCOME: ${{ steps.invalid_exclude_explicit.outcome }}
+          EXCLUDE_DIRS_OUTCOME: ${{ steps.invalid_exclude_dirs_explicit.outcome }}
+          SCOPE_OUTCOME: ${{ steps.invalid_scope_explicit.outcome }}
+          NON_GIT_OUTCOME: ${{ steps.non_git_tracked_explicit.outcome }}
+          DEFAULT_MAX_OUTCOME: ${{ steps.invalid_max_files_default.outcome }}
+          DEFAULT_EXCLUDE_DIRS_OUTCOME: ${{ steps.invalid_exclude_dirs_default.outcome }}
+          MISSING_ROOT_OUTCOME: ${{ steps.missing_root_default.outcome }}
+          MAX_FILES_OUTPUTS: ${{ toJSON(steps.invalid_max_files_explicit.outputs) }}
+          LARGE_FILE_OUTPUTS: ${{ toJSON(steps.invalid_large_file_explicit.outputs) }}
+          INCLUDE_OUTPUTS: ${{ toJSON(steps.invalid_include_explicit.outputs) }}
+          EXCLUDE_OUTPUTS: ${{ toJSON(steps.invalid_exclude_explicit.outputs) }}
+          EXCLUDE_DIRS_OUTPUTS: ${{ toJSON(steps.invalid_exclude_dirs_explicit.outputs) }}
+          SCOPE_OUTPUTS: ${{ toJSON(steps.invalid_scope_explicit.outputs) }}
+          NON_GIT_OUTPUTS: ${{ toJSON(steps.non_git_tracked_explicit.outputs) }}
+          DEFAULT_MAX_OUTPUTS: ${{ toJSON(steps.invalid_max_files_default.outputs) }}
+          DEFAULT_EXCLUDE_DIRS_OUTPUTS: ${{ toJSON(steps.invalid_exclude_dirs_default.outputs) }}
+          MISSING_ROOT_OUTPUTS: ${{ toJSON(steps.missing_root_default.outputs) }}
+          MAX_FILES_DIR: ${{ runner.temp }}/audit repo invalid max files output
+          LARGE_FILE_DIR: ${{ runner.temp }}/audit repo invalid large file output
+          INCLUDE_DIR: ${{ runner.temp }}/audit repo invalid include output
+          EXCLUDE_DIR: ${{ runner.temp }}/audit repo invalid exclude output
+          EXCLUDE_DIRS_DIR: ${{ runner.temp }}/audit repo invalid exclude dirs output
+          SCOPE_DIR: ${{ runner.temp }}/audit repo invalid scope output
+          NON_GIT_DIR: ${{ runner.temp }}/audit repo non git tracked output
+          MISSING_ROOT: ${{ runner.temp }}/audit repo missing root
+          DEFAULT_PARENT: ${{ runner.temp }}
+        run: |
+          python -I - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          outcome_names = (
+              "MAX_FILES_OUTCOME", "LARGE_FILE_OUTCOME", "INCLUDE_OUTCOME",
+              "EXCLUDE_OUTCOME", "EXCLUDE_DIRS_OUTCOME", "SCOPE_OUTCOME", "NON_GIT_OUTCOME",
+              "DEFAULT_MAX_OUTCOME", "DEFAULT_EXCLUDE_DIRS_OUTCOME", "MISSING_ROOT_OUTCOME",
+          )
+          for outcome_name in outcome_names:
+              assert os.environ[outcome_name] == "failure", (outcome_name, os.environ[outcome_name])
+
+          public_outputs = {
+              "snapshot", "report", "comparison", "sarif", "attention-count", "comparable",
+              "tool-version", "scan-semantics-version",
+          }
+          output_names = (
+              "MAX_FILES_OUTPUTS", "LARGE_FILE_OUTPUTS", "INCLUDE_OUTPUTS",
+              "EXCLUDE_OUTPUTS", "EXCLUDE_DIRS_OUTPUTS", "SCOPE_OUTPUTS", "NON_GIT_OUTPUTS",
+              "DEFAULT_MAX_OUTPUTS", "DEFAULT_EXCLUDE_DIRS_OUTPUTS", "MISSING_ROOT_OUTPUTS",
+          )
+          for outputs_name in output_names:
+              outputs = json.loads(os.environ[outputs_name])
+              assert isinstance(outputs, dict), (outputs_name, outputs)
+              assert set(outputs).issubset(public_outputs), (outputs_name, outputs)
+              assert all(outputs.get(name) in ("", None) for name in public_outputs), (outputs_name, outputs)
+
+          def tree_state(root):
+              state = {}
+              for path in sorted(root.rglob("*"), key=lambda item: item.as_posix()):
+                  relative = path.relative_to(root).as_posix()
+                  if path.is_dir():
+                      state[relative] = {"kind": "directory"}
+                  else:
+                      state[relative] = {"kind": "file", "bytes": path.read_bytes().hex()}
+              return state
+
+          default_parent = Path(os.environ["DEFAULT_PARENT"])
+          before = json.loads(
+              default_parent.joinpath("invalid-collection-before.json").read_text(encoding="utf-8")
+          )
+          explicit_directories = (
+              "MAX_FILES_DIR", "LARGE_FILE_DIR", "INCLUDE_DIR",
+              "EXCLUDE_DIR", "EXCLUDE_DIRS_DIR", "SCOPE_DIR", "NON_GIT_DIR",
+          )
+          for environment_name in explicit_directories:
+              output_dir = Path(os.environ[environment_name])
+              actual = tree_state(output_dir)
+              expected = before["explicit"][environment_name]
+              assert actual == expected, (environment_name, expected, actual)
+
+          after = sorted(path.name for path in default_parent.glob("audit-repo-*"))
+          assert after == before["default_entries"], (before["default_entries"], after)
+          missing_root = Path(os.environ["MISSING_ROOT"])
+          assert not missing_root.exists(), missing_root
+          PY
+
+      - name: Seed invalid-boolean sentinel
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo invalid boolean output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          output_dir.mkdir()
+          output_dir.joinpath("sentinel.txt").write_text("preserve invalid boolean sentinel\n", encoding="utf-8")
+          PY
+
+      - name: Expected failure - boolean inputs are strict
+        id: invalid_boolean
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo invalid boolean output
+          baseline: ${{ runner.temp }}/audit repo baseline output/snapshot.json
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+          fail-on-attention: "TRUE"
+
+      - name: Verify invalid boolean writes no managed output
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.invalid_boolean.outcome }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo invalid boolean output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          assert os.environ["STEP_OUTCOME"] == "failure"
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          assert output_dir.joinpath("sentinel.txt").read_text(encoding="utf-8") == "preserve invalid boolean sentinel\n"
+          assert not any(
+              output_dir.joinpath(name).exists()
+              for name in ("snapshot.json", "report.md", "comparison.json", "comparison.sarif")
+          )
+          PY
+
+      - name: Create a managed-output directory collision
+        shell: bash
+        env:
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo collision output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          child = Path(os.environ["OUTPUT_DIR"], "comparison.json", "keep.txt")
+          child.parent.mkdir(parents=True)
+          child.write_text("preserve collision child\n", encoding="utf-8")
+          for name in ("snapshot.json", "report.md", "comparison.sarif"):
+              Path(os.environ["OUTPUT_DIR"], name).write_text(f"preserve collision {name}\n", encoding="utf-8")
+          PY
+
+      - name: Expected failure - managed output cannot be a directory
+        id: managed_output_collision
+        continue-on-error: true
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/audit repo action fixture
+          output-dir: ${{ runner.temp }}/audit repo collision output
+          scan-mode: filesystem
+          scope-id: ${{ github.repository }}:action-policy-e2e
+
+      - name: Verify managed-output collision preserves its child
+        shell: bash
+        env:
+          STEP_OUTCOME: ${{ steps.managed_output_collision.outcome }}
+          OUTPUT_DIR: ${{ runner.temp }}/audit repo collision output
+        run: |
+          python -I - <<'PY'
+          import os
+          from pathlib import Path
+
+          assert os.environ["STEP_OUTCOME"] == "failure"
+          output_dir = Path(os.environ["OUTPUT_DIR"])
+          child = output_dir / "comparison.json" / "keep.txt"
+          assert child.read_text(encoding="utf-8") == "preserve collision child\n"
+          for name in ("snapshot.json", "report.md", "comparison.sarif"):
+              assert output_dir.joinpath(name).read_text(encoding="utf-8") == f"preserve collision {name}\n"
+          PY

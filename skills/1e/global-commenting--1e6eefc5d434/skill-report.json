@@ -1,0 +1,257 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T14:19:27.590Z",
+    "slug": "eis-its-global-commenting",
+    "source_url": "https://github.com/EIS-ITS/vss-cli/tree/main/.claude/skills/global-commenting",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "a42bb434f29550a3950b5c24b9cd46b2e239252fcd63ce683106c8fe54be9704",
+    "tree_hash": "edf485782b327f8b6af6688f928ab7cf82df887ddc9bc64373ce81a9ce550d72",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "global-commenting",
+    "description": "Guides AI coding assistants to write clear, durable code comments and docstrings that explain non-obvious intent without restating simple code.",
+    "summary": "Add concise, durable comments that explain why code exists and how complex logic works.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "EIS-ITS",
+    "license": "MIT",
+    "tags": [
+      "code-comments",
+      "documentation",
+      "docstrings",
+      "code-review",
+      "maintainability"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The static filesystem finding is confirmed because SKILL.md references a parent-directory standards file outside the skill folder. No evidence of prompt injection or other semantic abuse was found in the scanned file, but the external reference makes the effective instructions unaudited.",
+    "remediation": [
+      {
+        "issue": "Parent-directory reference to unaudited instructions",
+        "suggestion": "Move the commenting standard into the skill package or inline the required guidance in SKILL.md, then link only to files inside the skill directory.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:SKILL.md:29:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "[global commenting](../../../agent-os/standards/global/commenting.md)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:SKILL.md:29:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "SKILL.md line 29 points to ../../../agent-os/standards/global/commenting.md, which escapes the skill directory and asks the assistant to load unaudited content. This broadens filesystem scope and can bypass marketplace review of the actual instructions.",
+        "severity": "high"
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Path traversal sequence",
+        "description": "[global commenting](../../../agent-os/standards/global/commenting.md)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "SKILL.md line 29 points to ../../../agent-os/standards/global/commenting.md, which escapes the skill directory and asks the assistant to load unaudited content. This broadens filesystem scope and can bypass marketplace review of the actual instructions."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 30,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T14:19:27.590Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Write Clear Code Comments",
+    "value_statement": "Poor comments become stale and hide important design intent. This skill helps Claude, Codex, and Claude Code write concise comments that explain non-obvious logic.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code comments",
+      "docstrings",
+      "self-documenting code",
+      "commenting standards",
+      "code documentation",
+      "maintainability",
+      "code review"
+    ],
+    "actual_capabilities": [
+      "Guides when to add comments versus improving code names or structure.",
+      "Encourages comments that explain intent, tradeoffs, and complex logic.",
+      "Supports docstrings, function documentation, API notes, and class interface comments.",
+      "Helps review and remove outdated, temporary, or change-history comments.",
+      "Applies commenting guidance across programming languages and source files."
+    ],
+    "limitations": [
+      "Does not include language-specific style guides or generated examples.",
+      "Depends on the assistant seeing the relevant code context.",
+      "Does not validate comment accuracy against runtime behavior.",
+      "References an external parent-directory standards file that may not be packaged with the skill."
+    ],
+    "use_cases": [
+      {
+        "title": "Document Complex Logic",
+        "description": "Add concise comments for algorithms, business rules, and non-obvious tradeoffs.",
+        "target_user": "Application developers"
+      },
+      {
+        "title": "Refine Existing Comments",
+        "description": "Review comments during maintenance and replace stale notes with durable explanations.",
+        "target_user": "Software maintainers"
+      },
+      {
+        "title": "Review Pull Requests",
+        "description": "Check whether added comments explain intent without duplicating readable code.",
+        "target_user": "Code reviewers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Decide If Comments Are Needed",
+        "scenario": "Beginner review before adding comments to a file.",
+        "prompt": "Review this file and identify where comments would add durable context. Prefer better names or structure when a comment is unnecessary."
+      },
+      {
+        "title": "Improve Existing Comments",
+        "scenario": "Intermediate cleanup of stale or noisy comments.",
+        "prompt": "Review the existing comments in this change. Rewrite comments that are stale, temporary, or focused on recent edits."
+      },
+      {
+        "title": "Document Business Logic",
+        "scenario": "Advanced documentation for rules, algorithms, or tradeoffs.",
+        "prompt": "Add comments for the non-obvious business rules in this module. Explain intent, constraints, and tradeoffs without restating each line."
+      },
+      {
+        "title": "Set Commenting Standard",
+        "scenario": "Advanced audit across a component or service.",
+        "prompt": "Audit this component for comment quality across functions, classes, and APIs. Propose a concise commenting approach for future changes."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A function has a comment that says it was changed during a recent migration.",
+        "output": "Replace it with a stable explanation of the invariant the migration introduced."
+      },
+      {
+        "input": "A complex permission check combines user role, account state, and feature flags.",
+        "output": [
+          "Add a short comment explaining the access rule.",
+          "Do not describe each condition if the names are already clear."
+        ]
+      },
+      {
+        "input": "A reviewer asks whether every helper needs a docstring.",
+        "output": "Only add docstrings where callers need contract, side effect, or boundary information."
+      }
+    ],
+    "best_practices": [
+      "Use comments to explain intent, constraints, and tradeoffs that code cannot show clearly.",
+      "Improve names, structure, and tests before adding comments that restate obvious behavior.",
+      "Keep comments durable by avoiding dates, ticket history, and temporary implementation notes."
+    ],
+    "anti_patterns": [
+      "Adding comments that narrate each line of straightforward code.",
+      "Leaving comments that describe old behavior, recent fixes, or temporary workarounds.",
+      "Using comments to compensate for unclear names or avoidable complexity."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help with?",
+        "answer": "It helps assistants write concise comments and docstrings that explain durable intent."
+      },
+      {
+        "question": "Does it write comments for every function?",
+        "answer": "No. It favors clear code and adds comments only when they provide useful context."
+      },
+      {
+        "question": "Can it improve existing comments?",
+        "answer": "Yes. It can identify stale, temporary, or obvious comments and suggest clearer replacements."
+      },
+      {
+        "question": "Does it support docstrings?",
+        "answer": "Yes. It applies to docstrings, function documentation, APIs, classes, and source comments."
+      },
+      {
+        "question": "Can it replace a team style guide?",
+        "answer": "No. It provides general commenting guidance and should follow local project standards."
+      },
+      {
+        "question": "Which assistants can use it?",
+        "answer": "The report marks it compatible with Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 30
+    }
+  ]
+}

@@ -1,0 +1,1380 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T12:34:29.611Z",
+    "slug": "wshobson-gitops-workflow",
+    "source_url": "https://github.com/wshobson/agents/tree/main/plugins/kubernetes-operations/skills/gitops-workflow",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "b7840a8714e96ef1c37f09194993e62bd9a1af61be633e0e83113b72532fd410",
+    "tree_hash": "7551458baf4e181d4ef2c526b457dfc24646bc7ed2eab6aaa26fe6b162b25a3b",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "gitops-workflow",
+    "description": "Guide AI coding agents through GitOps workflows for Kubernetes using ArgoCD, Flux, declarative manifests, sync policies, progressive delivery, and secret management.",
+    "summary": "Set up GitOps workflows for Kubernetes with ArgoCD, Flux, sync policies, and deployment patterns.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "wshobson",
+    "license": "MIT",
+    "tags": [
+      "gitops",
+      "kubernetes",
+      "argocd",
+      "flux",
+      "continuous-delivery"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "external_commands"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are Markdown examples, YAML manifests, or expected public URLs. The main risk is the Flux installer that pipes network-fetched shell code into sudo. Some kubectl, argocd, flux, and kubeseal examples can change clusters or expose secrets.",
+    "remediation": [
+      {
+        "issue": "Remote installer is piped directly into sudo bash.",
+        "suggestion": "Replace the curl-to-sudo pattern with package-manager installation, checksum verification, or a pinned downloadable binary workflow.",
+        "severity": "high"
+      },
+      {
+        "issue": "Cluster-changing commands are shown without safety gates.",
+        "suggestion": "Add guidance to review context, namespace, target cluster, and production impact before running kubectl, flux, or argocd sync commands.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Secret-handling examples rely on local secret files.",
+        "suggestion": "Add explicit cleanup and storage guidance for unsealed secret files, and prefer external secret managers for production workflows.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "references/argocd-setup.md",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 141
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 112,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 129,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 144
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 144,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 148,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 168
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 168,
+            "line_end": 180
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 180,
+            "line_end": 183
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 183,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 197
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 216
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 216,
+            "line_end": 222
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 222,
+            "line_end": 228
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 244
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 244,
+            "line_end": 248
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 248,
+            "line_end": 253
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 253,
+            "line_end": 271
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 274
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 274,
+            "line_end": 277
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 277,
+            "line_end": 280
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 280,
+            "line_end": 284
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 284,
+            "line_end": 285
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 120
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:references/argocd-setup.md:8:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/insta"
+      },
+      {
+        "id": "network:references/argocd-setup.md:13:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/ha/in"
+      },
+      {
+        "id": "network:references/argocd-setup.md:18:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "helm repo add argo https://argoproj.github.io/argo-helm"
+      },
+      {
+        "id": "network:references/argocd-setup.md:72:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "argocd repo add https://github.com/org/repo --username user --password token"
+      },
+      {
+        "id": "network:references/argocd-setup.md:78:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "--repo https://github.com/org/repo \\"
+      },
+      {
+        "id": "network:references/argocd-setup.md:80:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "--dest-server https://kubernetes.default.svc \\"
+      },
+      {
+        "id": "network:references/argocd-setup.md:94:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/argocd-setup.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "url: https://argocd.example.com"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 43,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 45,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 49,
+        "snippet": "**Reference:** See `references/argocd-setup.md` for detailed setup"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 65,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 69,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 91,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 95,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 112,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 118,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 129,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 129,
+        "line_end": 133,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 144,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 144,
+        "line_end": 148,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 148,
+        "line_end": 161,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 168,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 180,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:180:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 180,
+        "line_end": 183,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 183,
+        "line_end": 189,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 191,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 197,
+        "snippet": "**Reference:** See `references/sync-policies.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 197,
+        "line_end": 212,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 216,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 216,
+        "line_end": 222,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 222,
+        "line_end": 228,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 228,
+        "line_end": 244,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:244:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 244,
+        "line_end": 248,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:248:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 248,
+        "line_end": 253,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:253:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 253,
+        "line_end": 271,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:271:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 271,
+        "line_end": 274,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 277,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:277:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 277,
+        "line_end": 280,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 280,
+        "line_end": 284,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 284,
+        "line_end": 285,
+        "snippet": "- `k8s-manifest-generator` - For creating manifests"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:sudo-privilege-escalation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "sudo privilege escalation",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 120,
+        "snippet": "curl -s https://fluxcd.io/install.sh | sudo bash"
+      },
+      {
+        "id": "network:SKILL.md:39:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/insta"
+      },
+      {
+        "id": "network:SKILL.md:79:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "repoURL: https://github.com/org/gitops-repo"
+      },
+      {
+        "id": "network:SKILL.md:83:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "server: https://kubernetes.default.svc"
+      },
+      {
+        "id": "network:SKILL.md:104:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 104,
+        "snippet": "repoURL: https://github.com/org/gitops-repo"
+      },
+      {
+        "id": "network:SKILL.md:108:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "server: https://kubernetes.default.svc"
+      },
+      {
+        "id": "network:SKILL.md:120:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 120,
+        "snippet": "curl -s https://fluxcd.io/install.sh | sudo bash"
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "url: https://github.com/org/my-app"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:references/argocd-setup.md:8:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL points to a standard public project installation source in a documentation example. It is a network dependency if a user runs it, but it is not hidden or unrelated behavior."
+      },
+      {
+        "id": "network:references/argocd-setup.md:13:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL points to a standard public project installation source in a documentation example. It is a network dependency if a user runs it, but it is not hidden or unrelated behavior."
+      },
+      {
+        "id": "network:references/argocd-setup.md:18:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is the documented Helm repository URL for Argo charts. It is a normal installation reference, not covert network behavior or data transfer."
+      },
+      {
+        "id": "network:references/argocd-setup.md:72:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This is a placeholder GitHub repository used in an ArgoCD CLI example. The command also shows credential parameters, but the URL itself is not malicious or exfiltrating data."
+      },
+      {
+        "id": "network:references/argocd-setup.md:78:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL is part of a documentation example or placeholder for standard GitOps configuration. It does not exfiltrate data or create an unauthorized network request by itself."
+      },
+      {
+        "id": "network:references/argocd-setup.md:80:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The Kubernetes in-cluster API URL is a normal ArgoCD destination value in an example manifest. It is not an external callback or covert network target."
+      },
+      {
+        "id": "network:references/argocd-setup.md:94:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The argocd.example.com URL is a placeholder service address for SSO configuration. It does not indicate malicious networking."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "This fenced bash block instructs users to run kubectl commands that create a namespace, apply a remote manifest, and read an initial admin secret. It is legitimate GitOps guidance, but it can change a cluster and expose credentials if copied without review."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The match is an inline Markdown reference to another documentation file, not executable shell syntax. It does not invoke a command or evaluate user-controlled input."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This marks a repository tree example inside a Markdown code fence. It is static documentation and cannot execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "high",
+        "reason": "This fenced bash block includes a remote installer piped to sudo bash and Flux bootstrap commands that modify infrastructure. Although documented for Flux setup, it asks users or agents to execute privileged network-sourced shell code."
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:180:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The match is an inline Markdown reference to another documentation file, not executable shell syntax. It does not invoke a command or evaluate user-controlled input."
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:216:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:222:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The static pattern matched a fenced YAML example in Markdown rather than executable code. It describes Kubernetes or GitOps configuration and does not run commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:244:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:248:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.67,
+        "severity": "medium",
+        "reason": "This fenced bash block demonstrates kubeseal shell redirection that reads and writes Kubernetes secret files. It is normal GitOps guidance, but mishandling the input secret file can expose sensitive material."
+      },
+      {
+        "id": "external_commands:SKILL.md:253:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:271:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "severity": "medium",
+        "reason": "This fenced bash block includes argocd app sync with prune, which can alter or delete cluster resources not present in Git. It is legitimate troubleshooting guidance but has real operational impact."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:277:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.69,
+        "severity": "medium",
+        "reason": "This fenced bash block includes argocd app sync with force, which can override drift and change live resources. It is valid troubleshooting guidance but risky on production clusters."
+      },
+      {
+        "id": "external_commands:SKILL.md:280:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The static pattern matched Markdown backtick fences or inline code in documentation, not executable Ruby or shell backtick evaluation. The content is instructional text, so there is no direct command execution path in the skill file."
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is an inline Markdown reference to a related skill name, not command substitution or executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:sudo-privilege-escalation",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "severity": "high",
+        "reason": "The line explicitly pipes a remote installer from fluxcd.io into sudo bash. Running network-fetched shell code with elevated privileges is a real supply-chain and privilege-escalation risk."
+      },
+      {
+        "id": "network:SKILL.md:39:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL points to a standard public project installation source in a documentation example. It is a network dependency if a user runs it, but it is not hidden or unrelated behavior."
+      },
+      {
+        "id": "network:SKILL.md:79:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL is part of a documentation example or placeholder for standard GitOps configuration. It does not exfiltrate data or create an unauthorized network request by itself."
+      },
+      {
+        "id": "network:SKILL.md:83:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The Kubernetes in-cluster service URL is a standard ArgoCD destination in an example manifest. It is not an unexpected external network target."
+      },
+      {
+        "id": "network:SKILL.md:104:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL is part of a documentation example or placeholder for standard GitOps configuration. It does not exfiltrate data or create an unauthorized network request by itself."
+      },
+      {
+        "id": "network:SKILL.md:108:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The Kubernetes in-cluster service URL is a standard ArgoCD destination in an example manifest. It is not an unexpected external network target."
+      },
+      {
+        "id": "network:SKILL.md:120:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.93,
+        "severity": "medium",
+        "reason": "The URL is used in a curl pipeline that immediately executes remote content with sudo. The network target is not hidden, but this pattern carries supply-chain risk if copied directly."
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL is part of a documentation example or placeholder for standard GitOps configuration. It does not exfiltrate data or create an unauthorized network request by itself."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 129
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "This fenced bash block includes a remote installer piped to sudo bash and Flux bootstrap commands that modify infrastructure. Although documented for Flux setup, it asks users or agents to execute privileged network-sourced shell code."
+      },
+      {
+        "title": "sudo privilege escalation",
+        "description": "curl -s https://fluxcd.io/install.sh | sudo bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 120
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The line explicitly pipes a remote installer from fluxcd.io into sudo bash. Running network-fetched shell code with elevated privileges is a real supply-chain and privilege-escalation risk."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "This fenced bash block instructs users to run kubectl commands that create a namespace, apply a remote manifest, and read an initial admin secret. It is legitimate GitOps guidance, but it can change a cluster and expose credentials if copied without review."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 248,
+            "line_end": 253
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.67,
+        "confidence_reasoning": "This fenced bash block demonstrates kubeseal shell redirection that reads and writes Kubernetes secret files. It is normal GitOps guidance, but mishandling the input secret file can expose sensitive material."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 274
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "This fenced bash block includes argocd app sync with prune, which can alter or delete cluster resources not present in Git. It is legitimate troubleshooting guidance but has real operational impact."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 277,
+            "line_end": 280
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.69,
+        "confidence_reasoning": "This fenced bash block includes argocd app sync with force, which can override drift and change live resources. It is valid troubleshooting guidance but risky on production clusters."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -s https://fluxcd.io/install.sh | sudo bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 120
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.93,
+        "confidence_reasoning": "The URL is used in a curl pipeline that immediately executes remote content with sudo. The network target is not hidden, but this pattern carries supply-chain risk if copied directly."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 553,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T12:34:29.611Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Implement Kubernetes GitOps Workflows",
+    "value_statement": "Kubernetes delivery is hard to keep consistent across teams and clusters. This skill helps Claude, Codex, and Claude Code design GitOps workflows with ArgoCD, Flux, sync policies, and safe deployment patterns.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "GitOps workflow",
+      "ArgoCD setup",
+      "Flux CD",
+      "Kubernetes deployment",
+      "continuous delivery",
+      "declarative infrastructure",
+      "progressive delivery"
+    ],
+    "actual_capabilities": [
+      "Explains OpenGitOps principles for declarative, versioned, pulled, and reconciled systems.",
+      "Shows ArgoCD installation, application manifests, and app-of-apps repository structure.",
+      "Shows Flux bootstrap, GitRepository resources, and Kustomization resources.",
+      "Provides sync policy examples for automated prune, self-heal, retry, wait, and timeout behavior.",
+      "Documents progressive delivery examples with canary and blue-green rollout settings.",
+      "Covers GitOps secret approaches using External Secrets Operator and Sealed Secrets."
+    ],
+    "limitations": [
+      "It provides guidance and examples, not a complete production platform design.",
+      "It does not validate live cluster permissions, network access, or repository credentials.",
+      "Some commands can change Kubernetes clusters if copied and run directly.",
+      "Security controls such as SSO, RBAC, and secret management still need environment-specific review."
+    ],
+    "use_cases": [
+      {
+        "title": "Plan a New GitOps Rollout",
+        "description": "Create a repository layout and deployment flow for a Kubernetes application managed from Git.",
+        "target_user": "Platform engineer"
+      },
+      {
+        "title": "Standardize ArgoCD or Flux Setup",
+        "description": "Compare setup steps and resource definitions before adopting ArgoCD or Flux for continuous delivery.",
+        "target_user": "DevOps lead"
+      },
+      {
+        "title": "Improve Deployment Safety",
+        "description": "Add sync policies, progressive delivery, approval gates, and secret management patterns to existing workflows.",
+        "target_user": "Site reliability engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Explain GitOps Basics",
+        "scenario": "Beginner planning a first GitOps workflow.",
+        "prompt": "Use the gitops-workflow skill to explain the main GitOps principles for my Kubernetes team. Include how Git, ArgoCD, and Flux fit together."
+      },
+      {
+        "title": "Design Repository Structure",
+        "scenario": "Team needs a practical layout for applications and infrastructure.",
+        "prompt": "Use the gitops-workflow skill to propose a GitOps repository structure for staging and production. Include app folders, infrastructure folders, and ArgoCD application placement."
+      },
+      {
+        "title": "Compare ArgoCD and Flux",
+        "scenario": "Platform team is choosing a GitOps controller.",
+        "prompt": "Use the gitops-workflow skill to compare ArgoCD and Flux for our Kubernetes deployment workflow. Focus on setup, sync behavior, secret handling, and operational risks."
+      },
+      {
+        "title": "Review Production Workflow",
+        "scenario": "Advanced review before production rollout.",
+        "prompt": "Use the gitops-workflow skill to review our production GitOps design. Check sync policies, pruning behavior, rollback flow, progressive delivery, RBAC, SSO, and secret management."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Help me set up ArgoCD for a production namespace.",
+        "output": "A step-by-step plan covering namespace creation, ArgoCD installation, repository layout, application manifest fields, automated sync settings, and safety checks before production use."
+      },
+      {
+        "input": "We need Flux to deploy one app from GitHub.",
+        "output": "A Flux workflow that covers bootstrap planning, GitRepository configuration, Kustomization settings, reconciliation intervals, and review points for credentials and branch selection."
+      },
+      {
+        "input": "Our GitOps sync keeps failing after manual changes.",
+        "output": "A troubleshooting checklist for sync status, diffs, prune behavior, self-heal settings, forced sync risks, and alerts for recurring drift."
+      }
+    ],
+    "best_practices": [
+      "Review cluster context, namespace, and repository target before running any generated command.",
+      "Use staging, approval gates, and progressive delivery before enabling automated production sync.",
+      "Keep plaintext secrets out of Git and document the approved secret management path."
+    ],
+    "anti_patterns": [
+      "Do not run remote installer pipelines with elevated privileges without verification.",
+      "Do not enable automated prune in production before teams understand deletion impact.",
+      "Do not store Kubernetes secrets or long-lived repository tokens directly in Git."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help with?",
+        "answer": "It helps plan and document GitOps workflows for Kubernetes using ArgoCD, Flux, declarative manifests, and sync policies."
+      },
+      {
+        "question": "Can it choose between ArgoCD and Flux?",
+        "answer": "It can compare setup and operating patterns, but the final choice should include your team model and compliance needs."
+      },
+      {
+        "question": "Does it run Kubernetes commands automatically?",
+        "answer": "No. It provides examples and guidance. Users should review commands before running them against any cluster."
+      },
+      {
+        "question": "Does it cover production security?",
+        "answer": "It includes SSO, RBAC, audit logging, and secret management topics, but production controls need local review."
+      },
+      {
+        "question": "Can it help with progressive delivery?",
+        "answer": "Yes. It includes canary and blue-green rollout examples and guidance for safer deployment promotion."
+      },
+      {
+        "question": "Which AI tools can use it?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "argocd-setup.md",
+          "type": "file",
+          "path": "references/argocd-setup.md",
+          "lines": 135
+        },
+        {
+          "name": "sync-policies.md",
+          "type": "file",
+          "path": "references/sync-policies.md",
+          "lines": 132
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 286
+    }
+  ]
+}

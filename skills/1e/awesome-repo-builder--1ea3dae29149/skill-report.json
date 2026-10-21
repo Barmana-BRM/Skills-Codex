@@ -1,0 +1,1093 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-08T17:16:31.495Z",
+    "slug": "zjsxply-awesome-repo-builder",
+    "source_url": "https://github.com/zjsxply/skills/tree/main/awesome-repo-builder/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "92a7921190d71d4406539e4e9a69ea75c5582e9532645144bb7a65971971b640",
+    "tree_hash": "53657e464f3659016ab0faa6307a6d094c8530704847c4486c2f1739cc5a12cd",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "awesome-repo-builder",
+    "description": "Create a topic-specific GitHub awesome-list repository scaffold with a README, contribution guide, AI-agent instructions, URL checker, license, and templates.",
+    "summary": "Generate a focused awesome-list repository scaffold from a topic, taxonomy, and seed resources.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "zjsxply",
+    "license": "MIT",
+    "tags": [
+      "awesome-list",
+      "repository-scaffold",
+      "documentation",
+      "readme",
+      "url-checking"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "documentation"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from Markdown backticks, documentation examples, and generated text templates. The confirmed issue is the generated URL verifier, which intentionally makes outbound HTTP(S) requests to README links and can contact arbitrary hosts supplied by users.",
+    "remediation": [
+      {
+        "issue": "Generated URL verification performs outbound HTTP(S) requests.",
+        "suggestion": "Require explicit user approval before running verify_urls.py and document that README links may contact arbitrary hosts.",
+        "severity": "low"
+      },
+      {
+        "issue": "The URL verifier does not restrict private or local network targets.",
+        "suggestion": "Consider blocking localhost, private IP ranges, and non-HTTP schemes before opening any extracted URL.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Generated README badges load third-party images when rendered.",
+        "suggestion": "Make external badges optional or document the third-party image loads for privacy-sensitive repositories.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 138,
+            "line_end": 314
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 314,
+            "line_end": 315
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 315,
+            "line_end": 324
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 324,
+            "line_end": 343
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 343,
+            "line_end": 348
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 348,
+            "line_end": 363
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 363,
+            "line_end": 371
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 371,
+            "line_end": 435
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 435,
+            "line_end": 436
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 436,
+            "line_end": 437
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 107
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 198,
+            "line_end": 198
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 210,
+            "line_end": 210
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 228,
+            "line_end": 228
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 229,
+            "line_end": 229
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 232,
+            "line_end": 232
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 234,
+            "line_end": 234
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 235,
+            "line_end": 235
+          },
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 236,
+            "line_end": 236
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 57
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/awesome-repo-structure.md:55:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/awesome-repo-structure.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "## Avoid Adding Unrequested Scope"
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:138:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 138,
+        "line_end": 314,
+        "snippet": "value = re.sub(r\"`\", \"\", value)"
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:314:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 314,
+        "line_end": 315,
+        "snippet": "\"2. Add your resource to the appropriate section in `README.md`.\","
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:315:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 315,
+        "line_end": 324,
+        "snippet": "\"3. Format: `- [Title](URL) - 1-2 sentence note explaining why it is worth including.`\","
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:324:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 324,
+        "line_end": 343,
+        "snippet": "\"If this repository includes `templates/`, add only templates that are reusable and relevant to the "
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:343:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 343,
+        "line_end": 348,
+        "snippet": "A curated awesome list for {topic}. The primary artifact is `README.md`."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:348:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 348,
+        "line_end": 363,
+        "snippet": "- Each resource entry follows the format: `- [Title](URL) - 1-2 sentence note explaining why it is w"
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:363:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 363,
+        "line_end": 371,
+        "snippet": "Files in `templates/` are reusable starting points. Preserve comments when editing templates."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:371:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 371,
+        "line_end": 435,
+        "snippet": "- [ ] `README.md` renders correctly as Markdown"
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:435:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 435,
+        "line_end": 436,
+        "snippet": "- [ ] **M1: <name>** - <done state> | verify: `<command or check>`"
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:436:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 436,
+        "line_end": 437,
+        "snippet": "- [ ] **M2: <name>** - <done state> | verify: `<command or check>`"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:39:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:56:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "request = urllib.request.Request("
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:62:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "with urllib.request.urlopen(request, timeout=timeout) as response:"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:24:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:198:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 198,
+        "line_end": 198,
+        "snippet": "lines.append(\"- [Add resource](https://example.com) - Add a short note explaining why this resource "
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:210:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "lines.append(\"- [Add resource](https://example.com) - Add a short note explaining why this resource "
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:228:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 228,
+        "line_end": 228,
+        "snippet": "'<a href=\"https://awesome.re\"><img src=\"https://awesome.re/badge.svg\" alt=\"Awesome\"></a>',"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:229:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 229,
+        "line_end": 229,
+        "snippet": "'<a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-CC0-lightgrey.svg\" alt=\"License: C"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:232:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "repo_path = repo_url.rstrip(\"/\").removeprefix(\"https://github.com/\")"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:234:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 234,
+        "line_end": 234,
+        "snippet": "f'<a href=\"{repo_url}/stargazers\"><img src=\"https://img.shields.io/github/stars/{repo_path}?style=so"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:235:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 235,
+        "line_end": 235,
+        "snippet": "f'<a href=\"{repo_url}/network/members\"><img src=\"https://img.shields.io/github/forks/{repo_path}?sty"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:236:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "f'<a href=\"{repo_url}/commits/main\"><img src=\"https://img.shields.io/github/last-commit/{repo_path}\""
+      },
+      {
+        "id": "sensitive:scripts/create_awesome_repo.py:379:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 379,
+        "line_end": 379,
+        "snippet": ".env"
+      },
+      {
+        "id": "blocker:scripts/create_awesome_repo.py:411:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scripts/create_awesome_repo.py",
+        "line_start": 411,
+        "line_end": 412,
+        "snippet": "- [ ] Required checks pass"
+      },
+      {
+        "id": "external_commands:SKILL.md:8:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "Build a new awesome-list repository with a polished `README.md`, concise contribution rules, AI-agen"
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "3. Create a JSON spec with `title`, `slug`, `topic`, `tagline`, `description`, `taxonomy`, `criteria"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "4. Run `scripts/create_awesome_repo.py` with the spec and output directory."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 35,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 43,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 75,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 79,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 80,
+        "snippet": "- `taxonomy[].entries` may be empty; the script will create a placeholder."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 81,
+        "snippet": "- `taxonomy[].subsections` is supported for nested sections."
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 88,
+        "snippet": "- `initial_entries` is also supported as a mapping from section name to entries when entries are col"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 101,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 107,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:57:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "\"url\": \"https://arxiv.org/abs/2302.04018\","
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/awesome-repo-structure.md:55:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The referenced line is a documentation heading about avoiding unrequested project scope. It does not instruct host inspection, system discovery, or reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:138:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This code removes literal backtick characters while building Markdown anchors. It does not evaluate shell syntax or execute a command."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:314:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are inside a generated Markdown instruction that names README.md. There is no shell invocation or dynamic command construction."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:315:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is a generated Markdown format example for list entries. Backticks are used as prose formatting, not as executable shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:324:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line mentions a templates directory in generated documentation. It does not execute code or pass text to a shell."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:343:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is generated AGENTS.md prose that names README.md as the primary artifact. The backticks are Markdown formatting only."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:348:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is a generated Markdown example for resource entry formatting. It contains no command execution primitive."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:363:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is generated documentation about files in templates/. It uses Markdown code spans and does not invoke a shell."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:371:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is a generated checklist item about Markdown rendering. Backticks around README.md are not executable."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:435:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a Markdown planning template with a placeholder for a verification command. It is not executed by the scaffold script."
+      },
+      {
+        "id": "external_commands:scripts/create_awesome_repo.py:436:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is another Markdown planning placeholder for users to fill in later. The scaffold script only writes it as text."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:39:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "The generated verify_urls.py imports urllib.request so it can make outbound HTTP(S) requests. This is intended URL-checking behavior, but it is real network capability.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:56:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The generated verifier constructs HTTP requests for URLs extracted from README.md. A user-controlled README can cause requests to arbitrary hosts, so this is a real low-severity network risk.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:62:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The generated verifier calls urlopen on extracted URLs and therefore performs outbound network access. This can contact arbitrary README links, including private hosts if supplied by the user.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:24:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The URL is part of the CC0 license text written to LICENSE. It is not fetched by the skill or sent any data."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:198:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The example.com link is a placeholder entry in generated README content. The scaffold creation itself does not contact that URL."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:210:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The example.com link is a placeholder entry for empty subsections. It is written as documentation and is not an automatic request."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:228:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This hardcoded URL is a public badge image embedded in generated Markdown. It is not used for exfiltration or invoked during scaffold creation."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:229:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This hardcoded URL is a license badge image in generated Markdown. It does not transmit local files or secrets from the skill."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:232:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line strips a GitHub URL prefix from a user-provided repository URL for badge formatting. It performs no network request."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:234:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This creates a GitHub stars badge URL for README display. It is static Markdown output and not an execution or exfiltration path."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:235:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This creates a GitHub forks badge URL for README display. It is not fetched by the script during generation."
+      },
+      {
+        "id": "network:scripts/create_awesome_repo.py:236:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This creates a last-commit badge URL for README display. It does not read local data or contact the network while scaffolding."
+      },
+      {
+        "id": "sensitive:scripts/create_awesome_repo.py:379:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The .env string appears in generated .gitignore content to prevent committing environment files. The script does not read, parse, or upload .env."
+      },
+      {
+        "id": "blocker:scripts/create_awesome_repo.py:411:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is a generic checklist item saying required checks should pass. It does not describe network scanning or reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:8:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line describes generated files using Markdown code spans. It does not contain shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line lists JSON field names in Markdown code spans. It is specification guidance, not executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line names the bundled Python script in Markdown. It documents intended local scaffold generation and does not use shell backticks or dynamic interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the opening fence of a documented bash example. A fenced example is not shell backtick execution by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the closing fence of the documented command example. The detected backticks are Markdown syntax only."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the opening fence for a JSON example. It is documentation, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the closing fence for the JSON example. It has no executable behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line names taxonomy entries using Markdown code spans. It does not execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line documents a supported JSON field using Markdown code spans. No shell execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line documents initial_entries format with Markdown code spans. It is not executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the opening fence for a generated file tree example. It is documentation only."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is the closing fence for the file tree example. It contains no command invocation."
+      },
+      {
+        "id": "network:SKILL.md:57:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The arXiv URL appears as a sample resource in the documented JSON spec. The skill does not contact it unless a user later chooses to verify URLs."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [
+      {
+        "title": "Python HTTP libraries",
+        "description": "import urllib.request",
+        "locations": [
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 39,
+            "line_end": 39
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.78,
+        "confidence_reasoning": "The generated verify_urls.py imports urllib.request so it can make outbound HTTP(S) requests. This is intended URL-checking behavior, but it is real network capability."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "request = urllib.request.Request(",
+        "locations": [
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 56,
+            "line_end": 56
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.84,
+        "confidence_reasoning": "The generated verifier constructs HTTP requests for URLs extracted from README.md. A user-controlled README can cause requests to arbitrary hosts, so this is a real low-severity network risk."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(request, timeout=timeout) as response:",
+        "locations": [
+          {
+            "file": "scripts/create_awesome_repo.py",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The generated verifier calls urlopen on extracted URLs and therefore performs outbound network access. This can contact arbitrary README links, including private hosts if supplied by the user."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 704,
+    "audit_model": "codex",
+    "audited_at": "2026-07-08T17:16:31.495Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build Awesome Repository Scaffolds",
+    "value_statement": "Creating a polished awesome list takes careful structure, contribution rules, and verification steps. This skill generates a focused repository scaffold from a topic and seed resources.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "awesome list builder",
+      "GitHub repository scaffold",
+      "README generator",
+      "resource catalog template",
+      "AI agent instructions",
+      "URL verification script",
+      "developer documentation"
+    ],
+    "actual_capabilities": [
+      "Creates README.md with a title block, badges, contents, categorized sections, and contribution links.",
+      "Generates CONTRIBUTING.md with inclusion criteria, exclusions, and simple contribution steps.",
+      "Writes AGENTS.md with repository-specific instructions for AI agents.",
+      "Includes verify_urls.py to check HTTP and HTTPS links in README.md.",
+      "Adds license, .gitignore, and reusable planning and review templates.",
+      "Supports nested taxonomy sections and initial resource entries from a JSON spec."
+    ],
+    "limitations": [
+      "It needs a topic, output path, and enough taxonomy detail to produce useful sections.",
+      "It does not fully research or rank every resource in a topic by itself.",
+      "The generated URL checker makes outbound requests when users run it.",
+      "It creates a scaffold and may need manual edits before publication."
+    ],
+    "use_cases": [
+      {
+        "title": "Launch a Topic Resource Catalog",
+        "description": "Create a first version of an awesome list with sections, seed entries, and contribution guidance.",
+        "target_user": "Open source maintainer"
+      },
+      {
+        "title": "Standardize Research Collections",
+        "description": "Turn a research area into a structured repository with criteria and reusable templates.",
+        "target_user": "Research lead"
+      },
+      {
+        "title": "Prepare Team Knowledge Repositories",
+        "description": "Generate a documentation-first repository for internal tools, references, and review checklists.",
+        "target_user": "Engineering manager"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a Basic Awesome List",
+        "scenario": "Beginner setup with a clear topic and default structure.",
+        "prompt": "Create an awesome-list repository for [topic]. Propose a simple taxonomy, add placeholder entries, and generate the scaffold in [output path]."
+      },
+      {
+        "title": "Use My Seed Resources",
+        "scenario": "Build from known links and notes.",
+        "prompt": "Build an awesome-list scaffold for [topic] using these seed resources: [resources]. Group them into useful sections and include concise notes."
+      },
+      {
+        "title": "Apply Strict Inclusion Rules",
+        "scenario": "Create a curated list with explicit scope controls.",
+        "prompt": "Generate an awesome repository for [topic] with these inclusion criteria: [criteria]. Exclude [exclusions] and explain any assumptions before writing files."
+      },
+      {
+        "title": "Design an Advanced Repository Structure",
+        "scenario": "Advanced setup with nested taxonomy and templates.",
+        "prompt": "Create a publication-ready awesome repo for [topic] with nested sections, related lists, reusable templates, AI-agent instructions, and URL verification guidance."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A request for an awesome list about AI coding harnesses with several seed links.",
+        "output": "A new repository folder containing README, contribution rules, AI-agent guidance, URL verification, license, and reusable templates."
+      },
+      {
+        "input": "A research team needs a curated repository for future event prediction resources.",
+        "output": "A structured awesome-list scaffold with topic sections, entry notes, criteria, exclusions, and related-list space."
+      },
+      {
+        "input": "A maintainer wants placeholders for a new topic but has no initial entries yet.",
+        "output": "A focused scaffold with proposed taxonomy, example placeholders, contribution instructions, and verification checklist templates."
+      }
+    ],
+    "best_practices": [
+      "Provide a clear topic, target audience, and scope boundaries before generation.",
+      "Review generated inclusion criteria before accepting outside contributions.",
+      "Run URL verification only after checking that links are safe to contact."
+    ],
+    "anti_patterns": [
+      "Do not use it to create broad catalogs without clear inclusion criteria.",
+      "Do not publish the scaffold without reviewing placeholders and generated wording.",
+      "Do not run URL verification on untrusted links without user approval."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill generate?",
+        "answer": "It generates an awesome-list repository scaffold with README, contribution rules, AI-agent instructions, URL checking, license, and templates."
+      },
+      {
+        "question": "Does it research all resources automatically?",
+        "answer": "No. It can use seed resources and suggested taxonomy, but users should review and expand the curated list."
+      },
+      {
+        "question": "Can it create nested sections?",
+        "answer": "Yes. The scaffold script supports taxonomy sections and nested subsections in the input specification."
+      },
+      {
+        "question": "Does it make network requests?",
+        "answer": "The scaffold generator does not fetch links, but the generated verify_urls.py script makes outbound requests when run."
+      },
+      {
+        "question": "Which tools can use this skill?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Is the output ready to publish?",
+        "answer": "It is a strong starting scaffold. Review placeholders, seed entries, criteria, and external links before publishing."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "awesome-repo-structure.md",
+          "type": "file",
+          "path": "references/awesome-repo-structure.md",
+          "lines": 58
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "create_awesome_repo.py",
+          "type": "file",
+          "path": "scripts/create_awesome_repo.py",
+          "lines": 538
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 108
+    }
+  ]
+}

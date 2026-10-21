@@ -1,0 +1,98 @@
+# Dashboard Redesign Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Keep the original oh-my-skills three-pane dashboard while adding pagination and improving typography for 300+ local skills.
+
+**Architecture:** Keep the existing Python API unchanged and implement pagination client-side in the static web app. Preserve the original sidebar/list/editor layout, add page-size and pagination controls in `app.js` and `index.html`, then update `styles.css` to use a more readable UI font while retaining monospace accents for code and ASCII markers.
+
+**Tech Stack:** Python standard-library HTTP server, vanilla HTML/CSS/JavaScript, existing pytest suite, local browser verification.
+
+---
+
+### Task 1: Reshape Dashboard Markup
+
+**Files:**
+- Modify: `skill_ledger/web/index.html`
+
+- [x] **Step 1: Replace the left-heavy inventory layout with top summary and filters**
+
+Update the main workspace structure so the list pane owns summary, filters, list, and pagination, while the detail pane stays on the right.
+
+- [x] **Step 2: Add controls needed by JavaScript**
+
+Add elements with stable IDs for summary metrics, source chips, duplicate/editable toggles, sort select, page-size buttons, pagination range, and page buttons.
+
+- [x] **Step 3: Keep existing editor and new-skill dialog IDs stable**
+
+Do not rename `skillEditor`, `saveButton`, `archiveButton`, `newDialog`, or creation form inputs because existing API actions depend on those selectors.
+
+### Task 2: Implement Pagination And Derived Status
+
+**Files:**
+- Modify: `skill_ledger/web/app.js`
+
+- [x] **Step 1: Add list state**
+
+Add `pageSize`, `currentPage`, `showDuplicatesOnly`, `showEditableOnly`, and `sortKey` to the existing state object.
+
+- [x] **Step 2: Add helper functions**
+
+Implement helpers for duplicate detection, editability detection, page clamping, visible range calculation, source labels, and filtered/sorted skill retrieval.
+
+- [x] **Step 3: Render only the current page**
+
+Change `renderList()` to render a paginated slice instead of all filtered skills.
+
+- [x] **Step 4: Add pagination controls**
+
+Render previous/next buttons, compact page numbers, and `Showing X-Y of Z` text. Reset to page 1 whenever filters/search/page size change.
+
+### Task 3: Fix Korean Strings And CTA Text
+
+**Files:**
+- Modify: `skill_ledger/web/index.html`
+- Modify: `skill_ledger/web/app.js`
+
+- [x] **Step 1: Replace mojibake literals**
+
+Replace garbled Korean strings with readable Korean labels.
+
+- [x] **Step 2: Normalize CTA fallback**
+
+Keep `제작자 구독하기` as the localized CTA label and render channel links as a dropdown plus optional side/footer links only if useful.
+
+### Task 4: Redesign Styling
+
+**Files:**
+- Modify: `skill_ledger/web/styles.css`
+
+- [x] **Step 1: Preserve theme tokens**
+
+Keep cream/ink colors, monospace stack, ASCII markers, 1px hairlines, and 4px interactive radius.
+
+- [x] **Step 2: Add console-style inventory styling**
+
+Style summary metrics, filter chips, compact table/list rows, status badges, pagination footer, and selected-row state.
+
+- [x] **Step 3: Improve responsive behavior**
+
+On narrower screens, stack controls and convert rows into compact card-like rows without horizontal overflow.
+
+### Task 5: Verify Behavior
+
+**Files:**
+- Test existing pytest suite
+- Manually verify local GUI
+
+- [x] **Step 1: Run automated tests**
+
+Run `python -m pytest`.
+
+- [x] **Step 2: Verify API and server**
+
+Run the GUI server and verify `/api/state` returns the full skill count.
+
+- [x] **Step 3: Manual UI check**
+
+Check search, source chips, duplicate filter, editable filter, page-size switching, pagination, selecting a skill, theme toggle, language toggle, and mobile width.

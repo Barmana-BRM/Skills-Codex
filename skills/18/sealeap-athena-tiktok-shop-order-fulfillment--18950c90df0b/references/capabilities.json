@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-tiktok-shop-order-fulfillment",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-tiktok-shop-orders",
+      "title": "TikTok Shop 订单核对",
+      "description": "TikTok Shop 订单核对。用于读取订单头与行项目，按订单 ID 对齐支付、费用、取消和履约状态。输入需明确账户、地区、订单 ID 或期间、订单状态；边界见执行手册。",
+      "category": "TikTok Shop",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "orders",
+          "validation": "connection_required",
+          "platform": "TikTok Shop"
+        }
+      ],
+      "limitation": "订单金额与结算收入不同；分页完整性和时区须核对；只显示必要买家信息",
+      "legacy_path": "sealeap-athena-tiktok-shop-orders",
+      "entrypoint": "sealeap-athena-tiktok-shop-order-fulfillment",
+      "guide_path": "references/capabilities/tiktok-shop-orders/workflow.md",
+      "playbook_path": "references/capabilities/tiktok-shop-orders/playbook.md",
+      "tool_routing_path": "references/capabilities/tiktok-shop-orders/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-tiktok-shop-fulfillment",
+      "title": "TikTok Shop 订单发货",
+      "description": "TikTok Shop 订单发货。用于读取待发货订单并核对地址/包裹数量；按授权提交发货并回读每件状态。输入需明确账户、地区、订单行、包裹、承运商、运单和仓库；边界见执行手册。",
+      "category": "TikTok Shop",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "fulfillment",
+          "validation": "connection_required",
+          "platform": "TikTok Shop"
+        }
+      ],
+      "limitation": "不可伪造运单；标签生成不等于发货；超时先查状态防重",
+      "legacy_path": "sealeap-athena-tiktok-shop-fulfillment",
+      "entrypoint": "sealeap-athena-tiktok-shop-order-fulfillment",
+      "guide_path": "references/capabilities/tiktok-shop-fulfillment/workflow.md",
+      "playbook_path": "references/capabilities/tiktok-shop-fulfillment/playbook.md",
+      "tool_routing_path": "references/capabilities/tiktok-shop-fulfillment/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-tiktok-shop-logistics",
+      "title": "TikTok Shop 物流配置与轨迹",
+      "description": "TikTok Shop 物流配置与轨迹。用于核对可用物流渠道、费用与限制，读取轨迹并处理授权的配置或单据动作。输入需明确账户、国家、订单或物流渠道、仓库和包裹；边界见执行手册。",
+      "category": "TikTok Shop",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "logistics",
+          "validation": "connection_required",
+          "platform": "TikTok Shop"
+        }
+      ],
+      "limitation": "估计到达不当实际签收；物流设置改变可能影响现有订单",
+      "legacy_path": "sealeap-athena-tiktok-shop-logistics",
+      "entrypoint": "sealeap-athena-tiktok-shop-order-fulfillment",
+      "guide_path": "references/capabilities/tiktok-shop-logistics/workflow.md",
+      "playbook_path": "references/capabilities/tiktok-shop-logistics/playbook.md",
+      "tool_routing_path": "references/capabilities/tiktok-shop-logistics/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-tiktok-shop-returns-refunds",
+      "title": "TikTok Shop 退货退款",
+      "description": "TikTok Shop 退货退款。用于读取售后请求与订单行，核对金额上限、退货与退款状态，准备或执行授权处理。输入需明确账户、地区、售后单、金额、原因、期限和证据；边界见执行手册。",
+      "category": "TikTok Shop",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "returns-refunds",
+          "validation": "connection_required",
+          "platform": "TikTok Shop"
+        }
+      ],
+      "limitation": "退货申请、收货、退款与到账不同；不可因 API 超时重复退款",
+      "legacy_path": "sealeap-athena-tiktok-shop-returns-refunds",
+      "entrypoint": "sealeap-athena-tiktok-shop-order-fulfillment",
+      "guide_path": "references/capabilities/tiktok-shop-returns-refunds/workflow.md",
+      "playbook_path": "references/capabilities/tiktok-shop-returns-refunds/playbook.md",
+      "tool_routing_path": "references/capabilities/tiktok-shop-returns-refunds/tool-routing.md"
+    }
+  ]
+}

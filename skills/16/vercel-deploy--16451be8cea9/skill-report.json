@@ -1,0 +1,1414 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-07T07:12:24.539Z",
+    "slug": "supercent-io-vercel-deploy",
+    "source_url": "https://github.com/supercent-io/skills-template/tree/main/.agent-skills/vercel-deploy/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "47a49b50fba60ec131a3ea33c6ce75cae94d99dbe0c4eeab64923de275fb581a",
+    "tree_hash": "49599418fbc3dce2d3f1ed44f132d8da208786a3dd5b869d8bbe2f9d346ff966",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "vercel-deploy",
+    "description": "Deploy local web projects to Vercel preview deployments by packaging a directory or existing tarball, detecting supported frameworks, and returning preview and claim URLs.",
+    "summary": "Package a web project, deploy it to Vercel, and return preview and claim links.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "supercent-io",
+    "license": "MIT",
+    "tags": [
+      "vercel",
+      "deployment",
+      "preview-deployments",
+      "hosting",
+      "devops"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The skill intentionally executes a bash deployment script that packages project files and posts them to a hardcoded external endpoint. Most markdown, sample URL, and parsing findings are false positives, but the upload flow can expose secrets because only node_modules and .git are excluded. No prompt injection evidence was found in the reviewed skill files.",
+    "remediation": [
+      {
+        "issue": "Broad project archive upload",
+        "suggestion": "Exclude common secret files such as .env, .npmrc, key files, and local configuration, and show a confirmation summary before upload.",
+        "severity": "high"
+      },
+      {
+        "issue": "Hardcoded deployment service endpoint",
+        "suggestion": "Document the endpoint operator, data handling expectations, and retention policy, or let users choose a trusted Vercel deployment target.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Shell-based deployment flow",
+        "suggestion": "Document the commands the script runs and require explicit user approval before packaging files and making the network request.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Source directory mutation for static HTML",
+        "suggestion": "Copy files into a temporary staging directory before renaming any HTML file for deployment.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 186,
+            "line_end": 186
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 189,
+            "line_end": 189
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 194,
+            "line_end": 194
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 195,
+            "line_end": 195
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 199,
+            "line_end": 199
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 200,
+            "line_end": 200
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 222,
+            "line_end": 222
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 226,
+            "line_end": 226
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 232,
+            "line_end": 232
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 233,
+            "line_end": 233
+          },
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 138
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 138,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 177
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 92
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.toon",
+            "line_start": 20,
+            "line_end": 20
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 174,
+            "line_end": 174
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:scripts/deploy.sh:20:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "local content=$(cat \"$pkg_json\")"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:162:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "TEMP_DIR=$(mktemp -d)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:186:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 186,
+        "line_end": 186,
+        "snippet": "PROJECT_PATH=$(cd \"$INPUT_PATH\" && pwd)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:189:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 189,
+        "line_end": 189,
+        "snippet": "FRAMEWORK=$(detect_framework \"$PROJECT_PATH/package.json\")"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:194:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "HTML_FILES=$(find \"$PROJECT_PATH\" -maxdepth 1 -name \"*.html\" -type f)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:195:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 195,
+        "line_end": 195,
+        "snippet": "HTML_COUNT=$(echo \"$HTML_FILES\" | grep -c . || echo 0)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:199:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 199,
+        "line_end": 199,
+        "snippet": "HTML_FILE=$(echo \"$HTML_FILES\" | head -1)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:200:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "BASENAME=$(basename \"$HTML_FILE\")"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:222:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 222,
+        "line_end": 222,
+        "snippet": "RESPONSE=$(curl -s -X POST \"$DEPLOY_ENDPOINT\" -F \"file=@$TARBALL\" -F \"framework=$FRAMEWORK\")"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:226:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "ERROR_MSG=$(echo \"$RESPONSE\" | grep -o '\"error\":\"[^\"]*\"' | cut -d'\"' -f4)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:232:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "PREVIEW_URL=$(echo \"$RESPONSE\" | grep -o '\"previewUrl\":\"[^\"]*\"' | cut -d'\"' -f4)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:233:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/deploy.sh",
+        "line_start": 233,
+        "line_end": 233,
+        "snippet": "CLAIM_URL=$(echo \"$RESPONSE\" | grep -o '\"claimUrl\":\"[^\"]*\"' | cut -d'\"' -f4)"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/deploy.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:scripts/deploy.sh:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/deploy.sh",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "DEPLOY_ENDPOINT=\"https://claude-skills-deploy.vercel.com/api/deploy\""
+      },
+      {
+        "id": "filesystem:scripts/deploy.sh:162:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/deploy.sh",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "TEMP_DIR=$(mktemp -d)"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "1. Packages your project into a tarball (excludes `node_modules` and `.git`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "2. Auto-detects framework from `package.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 50,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 53,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "- `path` - Directory to deploy, or a `.tgz` file (defaults to current directory)"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 65,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 77,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 86,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 90,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 97,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 101,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 102,
+        "snippet": "For projects without a `package.json`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "- If there's a single `.html` file not named `index.html`, it gets renamed automatically"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 109,
+        "snippet": "- This ensures the page is served at the root URL (`/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 117,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 125,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 131,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 136,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 138,
+        "snippet": "1. Check that `package.json` exists"
+      },
+      {
+        "id": "external_commands:SKILL.md:138:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 138,
+        "line_end": 177,
+        "snippet": "3. Manually set the `framework` parameter"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "`#deployment` `#vercel` `#preview` `#production` `#hosting` `#serverless` `#infrastructure`"
+      },
+      {
+        "id": "network:SKILL.md:84:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "Preview URL: https://skill-deploy-abc123.vercel.app"
+      },
+      {
+        "id": "network:SKILL.md:85:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "Claim URL:   https://vercel.com/claim-deployment?code=..."
+      },
+      {
+        "id": "network:SKILL.md:92:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 92,
+        "snippet": "\"previewUrl\": \"https://skill-deploy-abc123.vercel.app\","
+      },
+      {
+        "id": "network:SKILL.md:93:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "\"claimUrl\": \"https://vercel.com/claim-deployment?code=...\","
+      },
+      {
+        "id": "network:SKILL.md:112:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "Preview URL: https://skill-deploy-abc123.vercel.app"
+      },
+      {
+        "id": "network:SKILL.md:113:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 113,
+        "snippet": "Claim URL:   https://vercel.com/claim-deployment?code=..."
+      },
+      {
+        "id": "network:SKILL.md:128:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "1. Go to https://claude.ai/settings/capabilities"
+      },
+      {
+        "id": "network:SKILL.md:162:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "- [Vercel Documentation](https://vercel.com/docs)"
+      },
+      {
+        "id": "network:SKILL.md:163:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "- [Vercel CLI](https://vercel.com/docs/cli)"
+      },
+      {
+        "id": "filesystem:SKILL.md:174:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 174,
+        "snippet": "- [deployment-automation](../deployment-automation/SKILL.md): CI/CD and Docker/K8s deployments"
+      },
+      {
+        "id": "blocker:SKILL.md:40:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "- **Other Frontend**: Astro, Solid Start, Angular, Ember, Preact, Docusaurus"
+      },
+      {
+        "id": "network:SKILL.toon:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.toon",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "\"Deploy current directory\",\"bash /mnt/skills/user/vercel-deploy/scripts/deploy.sh\",\"✓ Deployment suc"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:scripts/deploy.sh:20:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This reads a quoted package.json path into a local variable for dependency detection. It does not construct or execute a command from untrusted file content."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:162:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "mktemp -d is a standard safe temporary directory pattern. The path is stored for packaging and cleanup, not for command injection."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:186:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The user path is quoted before cd and pwd are used to normalize it. This is filesystem navigation, not dynamic shell execution."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:189:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "This calls a local framework detection function with a quoted package.json path. It does not execute user-supplied package data as shell code."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:194:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "find is called with a quoted project path and fixed predicates to list root HTML files. No attacker-controlled command string is evaluated."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:195:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The pipeline counts lines from the previously generated file list. It parses data and does not use that data as executable shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:199:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "head selects one path from the generated HTML file list. The result is quoted before later use and is not evaluated as code."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:200:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "basename is used on a quoted file path to compare a filename. This is normal path handling, not a command injection vector."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:222:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The script runs curl and posts the project tarball to a hardcoded external deployment endpoint. This is intended behavior but creates real data exposure risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:226:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "This parses an error field from the deployment service response. It does not execute response content as a command."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:232:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "This extracts a preview URL from the service response using grep and cut. The extracted value is printed, not executed."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:233:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "This extracts a claim URL from the service response using grep and cut. The extracted value is printed, not evaluated."
+      },
+      {
+        "id": "external_commands:scripts/deploy.sh:1:unix-shell-invocation",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "The skill requires executing a community-provided bash script that performs filesystem operations and network upload. That shell execution is a real operational risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:scripts/deploy.sh:9:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "reason": "The script hardcodes an external deployment API endpoint that receives uploaded project archives. Users cannot inspect or choose the destination at runtime.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/deploy.sh:162:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The temporary directory is created with mktemp -d and removed by an exit trap. This is a safe packaging workspace pattern."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks are markdown formatting for node_modules and .git. They are not Ruby backticks and do not execute shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks only format package.json in documentation. No command is being executed by this markdown text."
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "This markdown block instructs the agent to run the deployment shell script. The static trigger is markdown syntax, but the documented shell execution is real.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This finding points at a closing markdown fence and argument prose. It does not contain an executable shell instruction itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks format argument names and file extensions in documentation. They are not executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "This markdown example block shows bash commands that run the deployment script. The commands are intentional but still represent external command execution.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This location is markdown fence and output-format prose around examples. It does not add a hidden executable instruction beyond documented usage."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The fenced block is sample console output, not a command for the agent to execute. The backticks are markdown formatting."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is a markdown fence boundary before a JSON output example. It is documentation syntax, not shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The fenced block is labeled json and contains an output example. It is not Ruby or shell command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This location closes a JSON example and references package.json in prose. It contains no command execution instruction."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks format package.json as a filename. This is safe markdown documentation."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks format .html and index.html filenames in prose. This is not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The backticks format the root URL slash in markdown. They are not executable syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This fenced block is sample success output and user-facing text. It is not a shell command block."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This area is troubleshooting prose after a sample output block. No executable shell command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The fenced block contains troubleshooting text and a settings URL. It does not instruct execution of a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This finding covers a markdown fence boundary and framework detection prose. It has no shell execution content."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks format package.json as a filename in troubleshooting text. They do not execute anything."
+      },
+      {
+        "id": "external_commands:SKILL.md:138:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This location covers prose, references, and inline formatting. It does not contain executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks format hashtag tags in markdown. They are not Ruby backticks or shell execution."
+      },
+      {
+        "id": "network:SKILL.md:84:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a sample preview URL in documented console output. It is not used by code to make a network request."
+      },
+      {
+        "id": "network:SKILL.md:85:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is an example claim URL shown to users. It is documentation output, not an active outbound connection."
+      },
+      {
+        "id": "network:SKILL.md:92:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This URL appears inside a JSON output example. It is not executed or contacted by the skill documentation."
+      },
+      {
+        "id": "network:SKILL.md:93:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This claim URL is example output for users. It is not code that performs network access."
+      },
+      {
+        "id": "network:SKILL.md:112:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a sample preview URL in a presentation template. It is not a configured endpoint."
+      },
+      {
+        "id": "network:SKILL.md:113:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a sample claim URL in user-facing output. It does not create network behavior."
+      },
+      {
+        "id": "network:SKILL.md:128:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This URL points users to Claude settings for network allowlisting. It is documentation, not an automatic request."
+      },
+      {
+        "id": "network:SKILL.md:162:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This is a reference link to Vercel documentation. It does not cause the skill to contact that URL."
+      },
+      {
+        "id": "network:SKILL.md:163:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This is a reference link to Vercel CLI documentation. It is not an active network endpoint in the skill."
+      },
+      {
+        "id": "filesystem:SKILL.md:174:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The .. sequence appears in a relative markdown link to a related skill document. It is not used for filesystem access."
+      },
+      {
+        "id": "blocker:SKILL.md:40:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line lists supported frontend frameworks such as Astro and Angular. It contains no system reconnaissance instruction."
+      },
+      {
+        "id": "network:SKILL.toon:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The URL appears in a compact example of successful output. It is documentation, not executable network code."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Broad Project Upload May Include Secrets",
+        "description": "The script creates a project archive that excludes node_modules and .git, then uploads it to an external deployment endpoint. Files such as .env, private keys, or local configuration can be included unless users remove them first.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 208,
+            "line_end": 222
+          }
+        ],
+        "confidence": 0.87,
+        "confidence_reasoning": "The tar command excludes only node_modules and .git before curl posts the archive. This directly supports the risk of sensitive project files being uploaded."
+      },
+      {
+        "title": "Project File Modified During Static HTML Deployment",
+        "description": "For a static project with one non-index HTML file, the script renames that file inside the user project before deployment. Deployment tooling should stage changes outside the source directory to avoid unintended file changes.",
+        "severity": "low",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 197,
+            "line_end": 203
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The code checks for one HTML file and runs mv against the project path. This is clear source mutation, although the security impact is limited."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Broad Project Upload May Include Secrets",
+        "description": "The script creates a project archive that excludes node_modules and .git, then uploads it to an external deployment endpoint. Files such as .env, private keys, or local configuration can be included unless users remove them first.",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 208,
+            "line_end": 222
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.87,
+        "confidence_reasoning": "The tar command excludes only node_modules and .git before curl posts the archive. This directly supports the risk of sensitive project files being uploaded."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "RESPONSE=$(curl -s -X POST \"$DEPLOY_ENDPOINT\" -F \"file=@$TARBALL\" -F \"framework=$FRAMEWORK\")",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 222,
+            "line_end": 222
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The script runs curl and posts the project tarball to a hardcoded external deployment endpoint. This is intended behavior but creates real data exposure risk."
+      },
+      {
+        "title": "Unix shell invocation",
+        "description": "#!/bin/bash",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The skill requires executing a community-provided bash script that performs filesystem operations and network upload. That shell execution is a real operational risk."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "DEPLOY_ENDPOINT=\"https://claude-skills-deploy.vercel.com/api/deploy\"",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.92,
+        "confidence_reasoning": "The script hardcodes an external deployment API endpoint that receives uploaded project archives. Users cannot inspect or choose the destination at runtime."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "This markdown block instructs the agent to run the deployment shell script. The static trigger is markdown syntax, but the documented shell execution is real."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 65
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "This markdown example block shows bash commands that run the deployment script. The commands are intentional but still represent external command execution."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Project File Modified During Static HTML Deployment",
+        "description": "For a static project with one non-index HTML file, the script renames that file inside the user project before deployment. Deployment tooling should stage changes outside the source directory to avoid unintended file changes.",
+        "locations": [
+          {
+            "file": "scripts/deploy.sh",
+            "line_start": 197,
+            "line_end": 203
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "The code checks for one HTML file and runs mv against the project path. This is clear source mutation, although the security impact is limited."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 451,
+    "audit_model": "codex",
+    "audited_at": "2026-07-07T07:12:24.539Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Deploy Web Projects to Vercel",
+    "value_statement": "Publishing a local web project for review often requires packaging, hosting, and sharing links. This skill packages a project, sends it to a Vercel deployment endpoint, and returns preview and claim links.",
+    "seo_keywords": [
+      "Claude Vercel deploy",
+      "Codex Vercel deployment",
+      "Claude Code deployment skill",
+      "Vercel preview deployment",
+      "AI deployment automation",
+      "web app hosting",
+      "claimable Vercel deploy",
+      "serverless hosting",
+      "preview URL",
+      "production deployment"
+    ],
+    "actual_capabilities": [
+      "Packages a project directory into a tarball while excluding node_modules and .git.",
+      "Accepts an existing .tgz archive for deployment.",
+      "Detects many JavaScript frameworks by reading package.json dependencies.",
+      "Uploads the archive to a claimable Vercel deployment endpoint.",
+      "Returns preview and claim URLs when deployment succeeds.",
+      "Renames one root HTML file to index.html for simple static projects."
+    ],
+    "limitations": [
+      "Requires network access to the configured deployment endpoint.",
+      "Uploads project contents to an external service, so secrets must be removed first.",
+      "Framework detection uses dependency names and does not validate build success.",
+      "Does not configure existing Vercel teams, domains, or environment variables."
+    ],
+    "use_cases": [
+      {
+        "title": "Share a Frontend Preview",
+        "description": "Deploy a local React, Vue, Svelte, or static site and send the preview URL for review.",
+        "target_user": "Frontend developer"
+      },
+      {
+        "title": "Publish a Demo Quickly",
+        "description": "Create a claimable deployment for a prototype without setting up a full Vercel account flow first.",
+        "target_user": "Founder or product builder"
+      },
+      {
+        "title": "Validate a Branch Build",
+        "description": "Package a project branch and produce a live URL that reviewers can test before release.",
+        "target_user": "QA engineer or code reviewer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Deploy Current Project",
+        "scenario": "Beginner deployment from the current working directory.",
+        "prompt": "Deploy the current project to Vercel and give me the preview and claim links."
+      },
+      {
+        "title": "Deploy a Specific Folder",
+        "scenario": "Use when the app is not in the current directory.",
+        "prompt": "Deploy the project in the folder I specify, then report the detected framework and resulting links."
+      },
+      {
+        "title": "Deploy an Existing Archive",
+        "scenario": "Use when a deployment tarball is already prepared.",
+        "prompt": "Deploy this existing .tgz archive to Vercel and return the preview URL and claim URL."
+      },
+      {
+        "title": "Review Then Deploy",
+        "scenario": "Advanced flow for safer deployment of sensitive projects.",
+        "prompt": "Inspect the project for likely secret files, explain any deployment risks, then deploy only after I confirm."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Deploy this Next.js project for preview.",
+        "output": "Deployment completed. Preview URL: https://skill-deploy-abc123.vercel.app. Claim URL: https://vercel.com/claim-deployment?code=abc123."
+      },
+      {
+        "input": "Deploy my static HTML page and give me a share link.",
+        "output": "The static site was prepared and deployed. Use the preview link to view it, and use the claim link to transfer it."
+      },
+      {
+        "input": "The deployment failed because network access is blocked.",
+        "output": "Deployment could not reach the Vercel endpoint. Add the required Vercel domains to allowed network access, then retry."
+      }
+    ],
+    "best_practices": [
+      "Review the deployment directory for secrets before uploading.",
+      "Confirm the exact project path before running deployment.",
+      "Share both the preview URL and the claim URL after deployment."
+    ],
+    "anti_patterns": [
+      "Do not deploy directories that contain .env files, private keys, or private documents.",
+      "Do not use this skill when custom Vercel team settings are required.",
+      "Do not treat the preview URL as proof that production ownership is configured."
+    ],
+    "faq": [
+      {
+        "question": "Does this require a Vercel login?",
+        "answer": "No. It creates a claimable deployment and returns a link to transfer ownership."
+      },
+      {
+        "question": "What project types can it deploy?",
+        "answer": "It supports many JavaScript frameworks, backend frameworks, build tools, and simple static HTML projects."
+      },
+      {
+        "question": "Does it upload my source files?",
+        "answer": "Yes. It packages the selected directory or archive and uploads it to the deployment endpoint."
+      },
+      {
+        "question": "Are secrets excluded automatically?",
+        "answer": "Only node_modules and .git are excluded by the script. Remove secret files before use."
+      },
+      {
+        "question": "Can it deploy an existing archive?",
+        "answer": "Yes. It accepts a .tgz file and uploads that archive directly."
+      },
+      {
+        "question": "What does the claim URL do?",
+        "answer": "The claim URL lets a user transfer the deployment to a Vercel account."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "deploy.sh",
+          "type": "file",
+          "path": "scripts/deploy.sh",
+          "lines": 250
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 178
+    },
+    {
+      "name": "SKILL.toon",
+      "type": "file",
+      "path": "SKILL.toon",
+      "lines": 23
+    }
+  ]
+}

@@ -1,0 +1,730 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-07T07:02:14.357Z",
+    "slug": "wshobson-gitlab-ci-patterns",
+    "source_url": "https://github.com/wshobson/agents/tree/main/plugins/cicd-automation/skills/gitlab-ci-patterns",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "c2edbe2f95b2c166fb468d120a2119f4b60fbdd8264293069ce66d9c52011f5c",
+    "tree_hash": "3d46987402580dcaa92e0aff7ef6dfaa8646bee575ea3b1bd83d24bc3c6ae3f1",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "gitlab-ci-patterns",
+    "description": "Create GitLab CI/CD pipelines with staged builds, Docker publishing, Kubernetes deployments, Terraform workflows, caching, child pipelines, and security scanning examples.",
+    "summary": "Guides GitLab CI/CD pipeline design for build, test, deploy, infrastructure, caching, and security scanning workflows.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "wshobson",
+    "license": "MIT",
+    "tags": [
+      "gitlab-ci",
+      "ci-cd",
+      "devops",
+      "kubernetes",
+      "terraform"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Static command and URL findings are false positives from markdown examples, inline code formatting, and reserved example.com placeholders. I found no prompt-injection or exfiltration intent, but two CI guidance issues need attention: disabled Kubernetes TLS verification and non-blocking high severity image scanning.",
+    "remediation": [
+      {
+        "issue": "Kubernetes deployment example disables TLS verification.",
+        "suggestion": "Remove --insecure-skip-tls-verify=true and show CA certificate configuration through protected CI variables.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Container vulnerability scan allows failures for high and critical findings.",
+        "suggestion": "Make the scan blocking on protected branches, or document advisory-only behavior clearly.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 131
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 131,
+            "line_end": 135
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 135,
+            "line_end": 179
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 179,
+            "line_end": 183
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 183,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 227
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 227,
+            "line_end": 231
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 247
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 247,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 251,
+            "line_end": 252
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 252,
+            "line_end": 269
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 269,
+            "line_end": 270
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 270,
+            "line_end": 271
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 115,
+            "line_end": 115
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 127
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 74,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 78,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 94,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 98,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 131,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 131,
+        "line_end": 135,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 135,
+        "line_end": 179,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 179,
+        "line_end": 183,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 183,
+        "line_end": 195,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 199,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 227,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 227,
+        "line_end": 231,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 247,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 247,
+        "line_end": 251,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 251,
+        "line_end": 252,
+        "snippet": "- `assets/gitlab-ci.yml.template` - Complete pipeline template"
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 252,
+        "line_end": 269,
+        "snippet": "- `references/pipeline-stages.md` - Stage organization patterns"
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 269,
+        "line_end": 270,
+        "snippet": "- `github-actions-templates` - For GitHub Actions"
+      },
+      {
+        "id": "external_commands:SKILL.md:270:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 270,
+        "line_end": 271,
+        "snippet": "- `deployment-pipeline-design` - For architecture"
+      },
+      {
+        "id": "network:SKILL.md:73:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "url: https://app.example.com"
+      },
+      {
+        "id": "network:SKILL.md:115:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "url: https://staging.example.com"
+      },
+      {
+        "id": "network:SKILL.md:127:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "url: https://app.example.com"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:24:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:131:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is a markdown YAML example block, not Ruby backtick execution or executable skill code. It documents GitLab CI configuration for intentional user adoption."
+      },
+      {
+        "id": "external_commands:SKILL.md:247:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line is only a markdown code fence delimiter. It does not execute commands or alter the agent runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks mark file or related skill names in documentation. They are inline markdown formatting, not shell evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks mark file or related skill names in documentation. They are inline markdown formatting, not shell evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks mark file or related skill names in documentation. They are inline markdown formatting, not shell evaluation."
+      },
+      {
+        "id": "external_commands:SKILL.md:270:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks mark file or related skill names in documentation. They are inline markdown formatting, not shell evaluation."
+      },
+      {
+        "id": "network:SKILL.md:73:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL uses example.com, a reserved documentation domain, inside a GitLab environment example. It is not a network request from the skill."
+      },
+      {
+        "id": "network:SKILL.md:115:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL uses example.com, a reserved documentation domain, inside a GitLab environment example. It is not a network request from the skill."
+      },
+      {
+        "id": "network:SKILL.md:127:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The URL uses example.com, a reserved documentation domain, inside a GitLab environment example. It is not a network request from the skill."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Kubernetes TLS Verification Disabled",
+        "description": "The deployment template uses --insecure-skip-tls-verify=true when configuring kubectl. This disables API server certificate validation and can permit traffic interception.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 102
+          }
+        ],
+        "confidence": 0.88,
+        "confidence_reasoning": "The insecure flag appears directly in the deployment template. Legitimate self-signed testing is possible, but marketplace guidance should prefer trusted CA configuration."
+      },
+      {
+        "title": "Security Scan Failures Are Allowed",
+        "description": "The Trivy job scans for high and critical image findings but allows the job to fail. This can let vulnerable images pass CI without enforcement.",
+        "severity": "low",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 194
+          }
+        ],
+        "confidence": 0.78,
+        "confidence_reasoning": "The scanner command targets HIGH and CRITICAL severities and the job sets allow_failure. Some teams may use advisory scans, so confidence is high but not absolute."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Kubernetes TLS Verification Disabled",
+        "description": "The deployment template uses --insecure-skip-tls-verify=true when configuring kubectl. This disables API server certificate validation and can permit traffic interception.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 102
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The insecure flag appears directly in the deployment template. Legitimate self-signed testing is possible, but marketplace guidance should prefer trusted CA configuration."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Security Scan Failures Are Allowed",
+        "description": "The Trivy job scans for high and critical image findings but allows the job to fail. This can let vulnerable images pass CI without enforcement.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 194
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "low",
+        "confidence": 0.78,
+        "confidence_reasoning": "The scanner command targets HIGH and CRITICAL severities and the job sets allow_failure. Some teams may use advisory scans, so confidence is high but not absolute."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 272,
+    "audit_model": "codex",
+    "audited_at": "2026-07-07T07:02:14.357Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build GitLab CI/CD Pipelines",
+    "value_statement": "GitLab pipeline design can become inconsistent across build, test, release, and infrastructure jobs. This skill provides practical CI/CD patterns for staged automation, caching, Docker publishing, deployments, Terraform, and security scanning.",
+    "seo_keywords": [
+      "GitLab CI",
+      "GitLab CI/CD",
+      "CI/CD pipeline",
+      "DevOps automation",
+      "Kubernetes deployment",
+      "Terraform pipeline",
+      "Docker registry",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Provides baseline GitLab CI stages for build, test, and deploy workflows.",
+      "Shows Docker image build and push jobs using GitLab registry variables.",
+      "Demonstrates staging and production Kubernetes deployments with manual production approval.",
+      "Includes Terraform validate, plan, and manual apply pipeline patterns.",
+      "Covers GitLab security templates, Trivy scanning, caching strategies, and dynamic child pipelines."
+    ],
+    "limitations": [
+      "Examples need project-specific images, paths, variables, namespaces, and protected branch rules.",
+      "The package only includes SKILL.md; referenced asset and reference files are not present.",
+      "It does not validate generated YAML against a live GitLab instance.",
+      "It does not provision runners, cloud credentials, Kubernetes clusters, or Terraform backends."
+    ],
+    "use_cases": [
+      {
+        "title": "Launch application CI",
+        "description": "Create build, test, cache, coverage, and artifact jobs for a GitLab-hosted application.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Standardize deployments",
+        "description": "Design staging and production deployment stages with GitLab environments and manual production approval.",
+        "target_user": "DevOps engineer"
+      },
+      {
+        "title": "Extend platform automation",
+        "description": "Add Terraform, container scanning, dependency scanning, and child pipelines to an existing delivery workflow.",
+        "target_user": "Platform engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a starter pipeline",
+        "scenario": "Beginner setup",
+        "prompt": "Create a GitLab CI pipeline for a Node.js app with build, test, cache, coverage, and artifacts."
+      },
+      {
+        "title": "Add Docker publishing",
+        "scenario": "Intermediate container workflow",
+        "prompt": "Extend my GitLab CI pipeline to build a Docker image, tag it by commit, and push it to the GitLab registry."
+      },
+      {
+        "title": "Design environment deployment",
+        "scenario": "Advanced deployment workflow",
+        "prompt": "Design staging and production GitLab deployment jobs for Kubernetes with protected variables, manual production approval, and rollback checks."
+      },
+      {
+        "title": "Plan a platform pipeline",
+        "scenario": "Advanced platform automation",
+        "prompt": "Create a full GitLab CI pattern with Terraform validation, manual infrastructure apply, security scanning, caching, and dynamic child pipelines."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Node.js service with linting, tests, coverage, and production release.",
+        "output": "A staged pipeline plan covering dependency installation, build artifacts, coverage reporting, cache keys, and a manual production deployment."
+      },
+      {
+        "input": "Containerized app that deploys to staging and production Kubernetes namespaces.",
+        "output": "A deployment workflow with registry publishing, environment-specific jobs, protected variables, rollout checks, and production approval."
+      },
+      {
+        "input": "Platform repository that manages Terraform and security checks.",
+        "output": "A CI structure with validation, planning, manual apply, scanning stages, cache guidance, and child pipeline placement."
+      }
+    ],
+    "best_practices": [
+      "Replace placeholder URLs, namespaces, image names, and variables before committing generated pipelines.",
+      "Store secrets in GitLab CI/CD variables and use protected variables for production credentials.",
+      "Run generated YAML through GitLab CI Lint and test it on a non-production branch first."
+    ],
+    "anti_patterns": [
+      "Copying example deployment targets directly into production repositories.",
+      "Using latest image tags for production jobs without pinning versions.",
+      "Running Terraform apply automatically without a manual approval gate."
+    ],
+    "faq": [
+      {
+        "question": "Can this skill create a complete .gitlab-ci.yml file?",
+        "answer": "Yes. It can draft a complete pipeline, but you should adapt names, variables, secrets, and environments."
+      },
+      {
+        "question": "Does it support Docker-in-Docker?",
+        "answer": "Yes. It includes Docker build and registry push patterns using GitLab registry variables."
+      },
+      {
+        "question": "Can it help with Kubernetes deployments?",
+        "answer": "Yes. It shows deployment jobs, environment metadata, rollout checks, and manual production gates."
+      },
+      {
+        "question": "Does it manage secrets?",
+        "answer": "No. It expects secrets to be stored in GitLab CI/CD variables or another approved secret store."
+      },
+      {
+        "question": "Can it validate my pipeline?",
+        "answer": "It can review likely structure and risks, but GitLab CI Lint should validate syntax."
+      },
+      {
+        "question": "Is it safe for production deployment design?",
+        "answer": "Use it as a starting point. Remove insecure flags, pin images, and test changes on protected branches."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 272
+    }
+  ]
+}

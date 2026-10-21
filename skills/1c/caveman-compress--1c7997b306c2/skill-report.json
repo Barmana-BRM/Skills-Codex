@@ -1,0 +1,1039 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T11:18:18.987Z",
+    "slug": "juliusbrussee-caveman-compress",
+    "source_url": "https://github.com/juliusbrussee/caveman/tree/main/caveman-compress/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2f4509b305faab0c738773f1cf48dcf24aac17dc426e685878fab2f9cb5a1691",
+    "tree_hash": "60051176b59b4d1db2ff7f2e909df121fe30bbd280b331cf53e0e8c82adcca21",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "caveman-compress",
+    "description": "Compresses natural language memory files such as CLAUDE.md, todos, and preferences into shorter markdown. It preserves code blocks, URLs, headings, and paths, then saves the original as FILE.original.md.",
+    "summary": "Compress markdown memory files to reduce recurring AI context tokens.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "juliusbrussee",
+    "license": "MIT",
+    "tags": [
+      "memory-compression",
+      "token-optimization",
+      "markdown",
+      "claude-code",
+      "productivity"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands",
+      "env_access"
+    ],
+    "category": "productivity"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from markdown backticks, regex patterns, comments, and documented safe credential use. The meaningful residual risks are that selected files are sent to Claude and model output can overwrite future agent memory files.",
+    "remediation": [
+      {
+        "issue": "Untrusted memory content can influence the replacement file.",
+        "suggestion": "Delimit source content clearly, instruct the model to ignore instructions inside source text, and scan output for new agent directives before writing.",
+        "severity": "high"
+      },
+      {
+        "issue": "Selected file content is submitted to an external LLM service.",
+        "suggestion": "Show a preflight warning before submission and recommend removing secrets from memory files before compression.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Readable backups may retain sensitive content beside the compressed file.",
+        "suggestion": "Warn users that FILE.original.md may be committed and recommend adding backup patterns to project ignore rules.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/cli.py",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/validate.py",
+            "line_start": 11,
+            "line_end": 11
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 16,
+            "line_end": 21
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 70,
+            "line_end": 75
+          },
+          {
+            "file": "scripts/validate.py",
+            "line_start": 6,
+            "line_end": 43
+          },
+          {
+            "file": "SECURITY.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SECURITY.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SECURITY.md",
+            "line_start": 23,
+            "line_end": 23
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:scripts/benchmark.py:38:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/benchmark.py",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "print(\"\\n| File | Original | Compressed | Saved % | Valid |\")"
+      },
+      {
+        "id": "filesystem:scripts/cli.py:48:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/cli.py",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "print(\"Starting caveman compression...\\n\")"
+      },
+      {
+        "id": "external_commands:scripts/compress.py:53:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/compress.py",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/compress.py:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/compress.py",
+        "line_start": 16,
+        "line_end": 21,
+        "snippet": "r\"\\A\\s*(`{3,}|~{3,})[^\\n]*\\n(.*)\\n\\1\\s*\\Z\", re.DOTALL"
+      },
+      {
+        "id": "external_commands:scripts/compress.py:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/compress.py",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "\"\"\"Strip outer ```markdown ... ``` fence when it wraps the entire output.\"\"\""
+      },
+      {
+        "id": "external_commands:scripts/compress.py:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/compress.py",
+        "line_start": 70,
+        "line_end": 75,
+        "snippet": "- Do NOT modify anything inside ``` code blocks"
+      },
+      {
+        "id": "env_access:scripts/compress.py:37:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/compress.py",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "api_key = os.environ.get(\"ANTHROPIC_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/compress.py:44:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/compress.py",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "model=os.environ.get(\"CAVEMAN_MODEL\", \"claude-sonnet-4-5\"),"
+      },
+      {
+        "id": "env_access:scripts/compress.py:37:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/compress.py",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "api_key = os.environ.get(\"ANTHROPIC_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/compress.py:38:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/compress.py",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "if api_key:"
+      },
+      {
+        "id": "env_access:scripts/compress.py:42:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/compress.py",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "client = anthropic.Anthropic(api_key=api_key)"
+      },
+      {
+        "id": "sensitive:scripts/detect.py:14:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/detect.py",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "\".toml\", \".env\", \".lock\", \".css\", \".scss\", \".html\", \".xml\","
+      },
+      {
+        "id": "sensitive:scripts/detect.py:74:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/detect.py",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "return \"code\" if ext not in {\".json\", \".yaml\", \".yml\", \".toml\", \".ini\", \".cfg\", \".env\"} else \"config"
+      },
+      {
+        "id": "blocker:scripts/detect.py:38:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/detect.py",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "\"\"\"Check if content is valid JSON.\"\"\""
+      },
+      {
+        "id": "external_commands:scripts/validate.py:6:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/validate.py",
+        "line_start": 6,
+        "line_end": 43,
+        "snippet": "FENCE_OPEN_REGEX = re.compile(r\"^(\\s{0,3})(`{3,}|~{3,})(.*)$\")"
+      },
+      {
+        "id": "filesystem:scripts/validate.py:11:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/validate.py",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "# Requires either a path prefix (./ ../ / or drive letter) or a slash/backslash within the match"
+      },
+      {
+        "id": "blocker:scripts/validate.py:17:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate.py",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "self.is_valid = True"
+      },
+      {
+        "id": "blocker:scripts/validate.py:22:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate.py",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "self.is_valid = False"
+      },
+      {
+        "id": "external_commands:SECURITY.md:9:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "SECURITY.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "1. **subprocess usage**: The skill calls the `claude` CLI via `subprocess.run()` as a fallback when "
+      },
+      {
+        "id": "env_access:SECURITY.md:9:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SECURITY.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "1. **subprocess usage**: The skill calls the `claude` CLI via `subprocess.run()` as a fallback when "
+      },
+      {
+        "id": "env_access:SECURITY.md:23:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SECURITY.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "If `ANTHROPIC_API_KEY` is set, the skill uses the Anthropic Python SDK directly (no subprocess). If "
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "Compress natural language files (CLAUDE.md, todos, preferences) into caveman-speak to reduce input t"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "`/caveman:compress <filepath>` or when user asks to compress a memory file."
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "1. The compression scripts live in `caveman-compress/scripts/` (adjacent to this SKILL.md). If the p"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 50,
+        "snippet": "- Code blocks (fenced ``` and indented)"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 52,
+        "snippet": "- Inline code (`backtick content`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "- File paths (`/src/components/...`, `./config.yaml`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "- Commands (`npm install`, `git commit`, `docker build`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "- Environment variables (`$HOME`, `NODE_ENV`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "Anything inside ``` ... ``` must be copied EXACTLY."
+      },
+      {
+        "id": "sensitive:SKILL.md:107:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 107,
+        "line_end": 107,
+        "snippet": "- NEVER modify: .py, .js, .ts, .json, .yaml, .yml, .toml, .env, .lock, .css, .html, .xml, .sql, .sh"
+      },
+      {
+        "id": "blocker:SKILL.md:30:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 31,
+        "snippet": "- call Claude to compress"
+      },
+      {
+        "id": "blocker:SKILL.md:66:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 67,
+        "snippet": "### Compress"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:scripts/benchmark.py:38:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 38 only prints a markdown benchmark table header. It does not inspect the system or collect host information."
+      },
+      {
+        "id": "filesystem:scripts/cli.py:48:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 48 only prints a status message before compression. There is no path traversal sequence or filesystem access on that line."
+      },
+      {
+        "id": "external_commands:scripts/compress.py:53:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The subprocess call uses a fixed argument list, [\"claude\", \"--print\"], with user content passed through stdin. No shell interpolation or user-controlled executable path is present."
+      },
+      {
+        "id": "external_commands:scripts/compress.py:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks appear inside a regular expression for markdown fence detection. They are not shell backticks and do not execute commands."
+      },
+      {
+        "id": "external_commands:scripts/compress.py:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are part of a docstring describing markdown fence stripping. This is documentation text, not executable shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/compress.py:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are in a prompt rule telling Claude to preserve markdown code blocks. They are data inside a string, not command execution."
+      },
+      {
+        "id": "env_access:scripts/compress.py:37:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The environment lookup reads ANTHROPIC_API_KEY only to authenticate the Anthropic SDK. The key is not printed, written to disk, or passed to an arbitrary endpoint."
+      },
+      {
+        "id": "env_access:scripts/compress.py:44:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "CAVEMAN_MODEL is read as an optional model selector with a fixed default. This does not expose secrets or create a command injection path."
+      },
+      {
+        "id": "env_access:scripts/compress.py:37:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The API key variable is used for the documented Anthropic client initialization. There is no evidence that the secret is logged, persisted, or sent outside Anthropic authentication."
+      },
+      {
+        "id": "env_access:scripts/compress.py:38:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The line only checks whether the API key exists before choosing SDK or CLI behavior. It does not reveal or transform the secret."
+      },
+      {
+        "id": "env_access:scripts/compress.py:42:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The API key is passed directly to the official Anthropic client constructor for authentication. This is expected credential use, not secret exfiltration."
+      },
+      {
+        "id": "sensitive:scripts/detect.py:14:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The .env string is listed among extensions that should be skipped. This prevents compression of environment files rather than accessing them."
+      },
+      {
+        "id": "sensitive:scripts/detect.py:74:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line classifies .env as config based on extension. It avoids reading or modifying environment files in the normal classification path."
+      },
+      {
+        "id": "blocker:scripts/detect.py:38:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 38 is a docstring for JSON content detection. It does not query system state or enumerate host details."
+      },
+      {
+        "id": "external_commands:scripts/validate.py:6:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are part of a regex that parses markdown code fences during validation. The expression does not execute shell commands."
+      },
+      {
+        "id": "filesystem:scripts/validate.py:11:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The path traversal strings appear in a comment explaining path matching for validation. The regex extracts paths from text and does not open those paths."
+      },
+      {
+        "id": "blocker:scripts/validate.py:17:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line initializes a validation result flag. It has no relation to host inspection or reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/validate.py:22:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line marks validation as failed when an error is added. It does not collect system information."
+      },
+      {
+        "id": "external_commands:SECURITY.md:9:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This is documentation describing the subprocess fallback and its fixed arguments. The documented behavior does not use shell interpolation."
+      },
+      {
+        "id": "env_access:SECURITY.md:9:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This documentation mentions ANTHROPIC_API_KEY to explain authentication behavior. It is not code that reads or exposes a credential."
+      },
+      {
+        "id": "env_access:SECURITY.md:23:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This line documents that the SDK uses ANTHROPIC_API_KEY when present. It does not contain a secret value or implement unsafe handling."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks format a backup filename in markdown prose. They are not command syntax and do not trigger execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks format the user-facing slash command in documentation. No shell command is executed from this markdown text."
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks mark file paths in markdown instructions. This is documentation formatting, not shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The triple backticks describe fenced code blocks that must be preserved. They are markdown examples, not executable shell constructs."
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks identify inline code formatting that should be preserved. This is markdown syntax and cannot execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks wrap example file paths in documentation. They are not Ruby or shell execution syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The backticks wrap example commands that the compressor should preserve as text. The skill file is documenting preservation rules, not running those commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks format environment variable examples in markdown. There is no command execution path in this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The triple backticks are markdown fence examples in a rule about preserving code blocks. They are not shell backticks."
+      },
+      {
+        "id": "sensitive:SKILL.md:107:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The .env extension appears in a rule that says never to modify such files. This is a safety boundary, not evidence of environment file access."
+      },
+      {
+        "id": "blocker:SKILL.md:30:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The line says the workflow calls Claude to compress, which is expected LLM use. It does not describe probing networks, scanning hosts, or gathering network topology."
+      },
+      {
+        "id": "blocker:SKILL.md:66:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 66 is a markdown heading for compression rules. It contains no network behavior or reconnaissance instruction."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "External LLM Submission of Local File Content",
+        "description": "The selected file content is embedded in a Claude prompt and sent through the Anthropic SDK or Claude CLI. Users can disclose sensitive memory notes if they compress confidential files.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 43,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 79,
+            "line_end": 80
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 141,
+            "line_end": 143
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The data flow is direct: original file text is inserted into the prompt and submitted to Claude. The risk depends on user-selected file sensitivity, but the external submission is clear."
+      },
+      {
+        "title": "Persistent Prompt Injection Through Compressed Memory",
+        "description": "The model output is written back to the original memory file after compressing untrusted file text. A hostile source file could influence the model to add future agent instructions to CLAUDE.md.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 65,
+            "line_end": 80
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 145,
+            "line_end": 147
+          }
+        ],
+        "confidence": 0.78,
+        "confidence_reasoning": "The prompt includes the original content and the resulting text overwrites the memory file. Exploitation requires malicious content in the selected file, so confidence is high but not absolute."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Persistent Prompt Injection Through Compressed Memory",
+        "description": "The model output is written back to the original memory file after compressing untrusted file text. A hostile source file could influence the model to add future agent instructions to CLAUDE.md.",
+        "locations": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 65,
+            "line_end": 80
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 145,
+            "line_end": 147
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.78,
+        "confidence_reasoning": "The prompt includes the original content and the resulting text overwrites the memory file. Exploitation requires malicious content in the selected file, so confidence is high but not absolute."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "External LLM Submission of Local File Content",
+        "description": "The selected file content is embedded in a Claude prompt and sent through the Anthropic SDK or Claude CLI. Users can disclose sensitive memory notes if they compress confidential files.",
+        "locations": [
+          {
+            "file": "scripts/compress.py",
+            "line_start": 43,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 79,
+            "line_end": 80
+          },
+          {
+            "file": "scripts/compress.py",
+            "line_start": 141,
+            "line_end": 143
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The data flow is direct: original file text is inserted into the prompt and submitted to Claude. The risk depends on user-selected file sensitivity, but the external submission is clear."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 10,
+    "total_lines": 964,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T11:18:18.987Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Compress Project Memory Files",
+    "value_statement": "Large project memory files consume tokens every time an AI coding session starts. This skill compresses prose memory files while preserving technical details and saving a readable backup.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "memory compression",
+      "token reduction",
+      "CLAUDE.md",
+      "markdown compression",
+      "AI skill",
+      "context optimization"
+    ],
+    "actual_capabilities": [
+      "Detects natural language files and skips common code or configuration extensions.",
+      "Compresses markdown, text, and extensionless prose through Claude.",
+      "Preserves headings, code blocks, URLs, paths, commands, and inline code during validation.",
+      "Creates a FILE.original.md backup before replacing the selected file.",
+      "Retries targeted fixes up to two times when validation errors occur.",
+      "Rejects files larger than 500 KB before any Claude call."
+    ],
+    "limitations": [
+      "Requires an Anthropic API key or an authenticated Claude CLI session.",
+      "Sends the selected file content to Claude for compression.",
+      "Designed for prose memory files, not source code or configuration files.",
+      "Validation cannot prove that every natural language nuance is preserved."
+    ],
+    "use_cases": [
+      {
+        "title": "Reduce Recurring Project Context",
+        "description": "Compress CLAUDE.md so each Claude Code or Codex session loads fewer repeated tokens.",
+        "target_user": "AI coding assistant user"
+      },
+      {
+        "title": "Maintain Compact Team Notes",
+        "description": "Shorten project preferences, todo files, and onboarding notes while keeping links and commands intact.",
+        "target_user": "Engineering team lead"
+      },
+      {
+        "title": "Prepare Memory Files for Long Projects",
+        "description": "Trim large prose memory files before starting long-running tasks that need stable context.",
+        "target_user": "Developer working on large repositories"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Compress One Memory File",
+        "scenario": "Beginner use on a known memory file.",
+        "prompt": "Use caveman-compress on CLAUDE.md and tell me where the backup was saved."
+      },
+      {
+        "title": "Compress Project Notes",
+        "scenario": "Compress a markdown note file with validation feedback.",
+        "prompt": "Compress docs/project-notes.md, preserve headings and links, and report any validation warnings."
+      },
+      {
+        "title": "Check Before Compression",
+        "scenario": "Verify that a target file is suitable before changing it.",
+        "prompt": "Check whether todos.md is a safe natural language target, then compress it only if it passes detection."
+      },
+      {
+        "title": "Plan Memory Cleanup",
+        "scenario": "Advanced cleanup across several project memory files.",
+        "prompt": "Find project memory files that are safe compression candidates, explain the order, and compress selected files one at a time with validation."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Compress CLAUDE.md.",
+        "output": "Compression completed. CLAUDE.md now contains compressed instructions, and CLAUDE.original.md contains the readable backup."
+      },
+      {
+        "input": "Compress project-notes.md with validation.",
+        "output": "Compressed file saved after validation. Headings, links, code blocks, and paths were preserved."
+      },
+      {
+        "input": "Try to compress a configuration file.",
+        "output": "The file was skipped because it was classified as code or configuration, not natural language prose."
+      }
+    ],
+    "best_practices": [
+      "Review the readable backup before committing compressed memory changes.",
+      "Remove secrets and private notes before sending a file for compression.",
+      "Use the skill on focused memory files instead of broad mixed-content documents."
+    ],
+    "anti_patterns": [
+      "Do not use it to compress source code, environment files, or configuration files.",
+      "Do not ignore validation warnings when paths, links, or bullets changed unexpectedly.",
+      "Do not run it on untrusted memory files without reviewing the output first."
+    ],
+    "faq": [
+      {
+        "question": "What files should I use with this skill?",
+        "answer": "Use it with markdown, text, or extensionless prose files that store project memory, preferences, or todo notes."
+      },
+      {
+        "question": "Does it preserve code blocks?",
+        "answer": "Yes. The validation checks compare fenced code blocks and report errors if they changed."
+      },
+      {
+        "question": "Where is the original file saved?",
+        "answer": "The original content is saved beside the target file as FILE.original.md before replacement."
+      },
+      {
+        "question": "Can it run without an API key?",
+        "answer": "Yes. If ANTHROPIC_API_KEY is not set, it uses the authenticated Claude CLI fallback."
+      },
+      {
+        "question": "Will it compress code or configuration?",
+        "answer": "No. It skips common code and configuration extensions, including environment files and lock files."
+      },
+      {
+        "question": "Is the file content sent outside my machine?",
+        "answer": "Yes. The selected file content is sent to Claude through the Anthropic SDK or Claude CLI."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "__init__.py",
+          "type": "file",
+          "path": "scripts/__init__.py",
+          "lines": 10
+        },
+        {
+          "name": "__main__.py",
+          "type": "file",
+          "path": "scripts/__main__.py",
+          "lines": 4
+        },
+        {
+          "name": "benchmark.py",
+          "type": "file",
+          "path": "scripts/benchmark.py",
+          "lines": 79
+        },
+        {
+          "name": "cli.py",
+          "type": "file",
+          "path": "scripts/cli.py",
+          "lines": 74
+        },
+        {
+          "name": "compress.py",
+          "type": "file",
+          "path": "scripts/compress.py",
+          "lines": 177
+        },
+        {
+          "name": "detect.py",
+          "type": "file",
+          "path": "scripts/detect.py",
+          "lines": 122
+        },
+        {
+          "name": "validate.py",
+          "type": "file",
+          "path": "scripts/validate.py",
+          "lines": 190
+        }
+      ]
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 164
+    },
+    {
+      "name": "SECURITY.md",
+      "type": "file",
+      "path": "SECURITY.md",
+      "lines": 32
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 112
+    }
+  ]
+}

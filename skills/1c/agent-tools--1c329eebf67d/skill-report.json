@@ -1,0 +1,1579 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-12T09:41:56.762Z",
+    "slug": "101-skills-agent-tools",
+    "source_url": "https://github.com/101-skills/skills/tree/main/tools/agent-tools/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "1c329eebf67dd1a21b090dff738948c1590f919f6e808829b5c4f3b7b5ef6e79",
+    "tree_hash": "553edc5b2fe2263a43e20d3bda9f0bdce001f5f6945b3b32abbb9c478ff86643",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "agent-tools",
+    "description": "Guide agents through the inference.sh belt CLI for cloud AI app discovery, execution, local media uploads, task tracking, and authentication.",
+    "summary": "Run image, video, language, search, 3D, and social automation apps through the inference.sh CLI.",
+    "icon": "📦",
+    "version": "1.0.2",
+    "author": "101-skills",
+    "license": "MIT",
+    "category": "productivity",
+    "tags": [
+      "inference-sh",
+      "cloud-ai",
+      "image-generation",
+      "video-generation",
+      "web-search"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "env_access",
+      "filesystem",
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The documentation contains four remote installer commands that pipe downloaded content directly into a shell, plus an unpinned package installation and a remote-data command substitution. Most other detections are Markdown examples, documentation links, placeholder credentials, or intentional user-selected paths. The skill also permits automatic cloud uploads and social account changes without requiring explicit confirmation.",
+    "remediation": [
+      {
+        "issue": "Remote installer content is piped directly into a shell.",
+        "suggestion": "Replace every pipe-to-shell command with version-pinned download steps, published checksums, signature verification, and execution only after verification.",
+        "severity": "critical"
+      },
+      {
+        "issue": "The manual installer derives a download URL from a remote manifest using shell substitution.",
+        "suggestion": "Use a structured manifest parser, restrict accepted hosts, pin a release version, and verify against a checksum obtained through an independent trust path.",
+        "severity": "high"
+      },
+      {
+        "issue": "The skill automatically uploads local paths to cloud applications.",
+        "suggestion": "Require explicit user confirmation that names each local file, destination app, and data handling impact before any upload.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Commands can publish posts and perform other social account actions.",
+        "suggestion": "Require explicit confirmation immediately before every post, message, follow, like, or repost, and preview the exact action first.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 6,
+            "line_end": 6
+          },
+          {
+            "file": "references/authentication.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 6,
+            "line_end": 6
+          },
+          {
+            "file": "references/running-apps.md",
+            "line_start": 152,
+            "line_end": 152
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 140,
+            "line_end": 140
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 142,
+            "line_end": 142
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 144,
+            "line_end": 144
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 145,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 146,
+            "line_end": 146
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "references/authentication.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 79,
+            "line_end": 79
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 91,
+            "line_end": 91
+          },
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 91,
+            "line_end": 91
+          },
+          {
+            "file": "references/running-apps.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 7,
+            "line_end": 7
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 34
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:references/authentication.md:6:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/authentication.md",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "network:references/authentication.md:44:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/authentication.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "env_access:references/authentication.md:30:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/authentication.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "export INFSH_API_KEY=your-api-key"
+      },
+      {
+        "id": "env_access:references/authentication.md:53:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/authentication.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "| \"API key invalid\" | Check `INFSH_API_KEY` or re-login |"
+      },
+      {
+        "id": "blocker:references/authentication.md:6:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "references/authentication.md",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "blocker:references/authentication.md:44:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "references/authentication.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "network:references/cli-reference.md:6:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/cli-reference.md",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "filesystem:references/cli-reference.md:91:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/cli-reference.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "belt completion fish > ~/.config/fish/completions/infsh.fish"
+      },
+      {
+        "id": "filesystem:references/cli-reference.md:91:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/cli-reference.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "belt completion fish > ~/.config/fish/completions/infsh.fish"
+      },
+      {
+        "id": "env_access:references/cli-reference.md:79:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/cli-reference.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "| `INFSH_API_KEY` | API key (overrides config) |"
+      },
+      {
+        "id": "blocker:references/cli-reference.md:6:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "references/cli-reference.md",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "network:references/running-apps.md:152:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/running-apps.md",
+        "line_start": 152,
+        "line_end": 152,
+        "snippet": "\"url\": \"https://cloud.inference.sh/...\","
+      },
+      {
+        "id": "filesystem:references/running-apps.md:41:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/running-apps.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "- Relative paths: `./image.png`, `../data/video.mp4`"
+      },
+      {
+        "id": "blocker:references/running-apps.md:163:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/running-apps.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "| \"invalid input\" | Schema mismatch | Check `belt app get` for required fields |"
+      },
+      {
+        "id": "external_commands:SKILL.md:7:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "> **Install the belt CLI skill:** `npx skills add belt-sh/cli`"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 20,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 22,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 25,
+        "snippet": "> **What does the installer do?** The [install script](https://cli.inference.sh) detects your OS and"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 34,
+        "snippet": "> ```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 38,
+        "snippet": "> ```"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 56,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 62,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 74,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 80,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 81,
+        "snippet": "| Browse the app store | `belt app store` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 82,
+        "snippet": "| Search apps | `belt app store search \"flux\"` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 83,
+        "snippet": "| Filter by category | `belt app store --category image` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 84,
+        "snippet": "| Get app details | `belt app get google/veo-3-1-fast` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 85,
+        "snippet": "| Generate sample input | `belt app sample google/veo-3-1-fast --save input.json` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 86,
+        "snippet": "| Run app | `belt app run google/veo-3-1-fast --input input.json` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 87,
+        "snippet": "| Run without waiting | `belt app run <app> --input input.json --no-wait` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 103,
+        "snippet": "| Check task status | `belt task get <task-id>` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 129,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "> curl -LO $(curl -fsSL https://dist.inference.sh/cli/manifest.json | grep -o '\"url\":\"[^\"]*\"' | grep"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 34,
+        "snippet": "> ```bash"
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "# [inference.sh](https://inference.sh)"
+      },
+      {
+        "id": "network:SKILL.md:13:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "![[inference.sh](https://inference.sh)](https://cloud.inference.sh/app/files/u/4mg21r6ta37mpaz6ktzwt"
+      },
+      {
+        "id": "network:SKILL.md:18:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "> **What does the installer do?** The [install script](https://cli.inference.sh) detects your OS and"
+      },
+      {
+        "id": "network:SKILL.md:27:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "> curl -LO https://dist.inference.sh/cli/checksums.txt"
+      },
+      {
+        "id": "network:SKILL.md:28:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "> curl -LO $(curl -fsSL https://dist.inference.sh/cli/manifest.json | grep -o '\"url\":\"[^\"]*\"' | grep"
+      },
+      {
+        "id": "network:SKILL.md:140:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 140,
+        "line_end": 140,
+        "snippet": "- [Agent Skills Overview](https://inference.sh/blog/skills/skills-overview) - The open standard for "
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "- [Getting Started](https://inference.sh/docs/getting-started/introduction) - Introduction to infere"
+      },
+      {
+        "id": "network:SKILL.md:142:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "- [What is inference.sh?](https://inference.sh/docs/getting-started/what-is-inference) - Platform ov"
+      },
+      {
+        "id": "network:SKILL.md:143:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "- [Apps Overview](https://inference.sh/docs/apps/overview) - Understanding the app ecosystem"
+      },
+      {
+        "id": "network:SKILL.md:144:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 144,
+        "line_end": 144,
+        "snippet": "- [CLI Setup](https://inference.sh/docs/extend/cli-setup) - Installing the CLI"
+      },
+      {
+        "id": "network:SKILL.md:145:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 145,
+        "line_end": 145,
+        "snippet": "- [Workflows vs Agents](https://inference.sh/blog/concepts/workflows-vs-agents) - When to use each"
+      },
+      {
+        "id": "network:SKILL.md:146:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 146,
+        "line_end": 146,
+        "snippet": "- [Why Agent Runtimes Matter](https://inference.sh/blog/agent-runtime/why-runtimes-matter) - Runtime"
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "> mv inferencesh-cli-* ~/.local/bin/inferencesh"
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "> mv inferencesh-cli-* ~/.local/bin/inferencesh"
+      },
+      {
+        "id": "blocker:SKILL.md:18:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:references/authentication.md:6:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The fixed first-party URL is expected installation documentation. The unsafe pipe-to-shell behavior on the same line is assessed separately."
+      },
+      {
+        "id": "network:references/authentication.md:44:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The fixed first-party URL is expected reinstallation documentation. The unsafe pipe-to-shell behavior on the same line is assessed separately."
+      },
+      {
+        "id": "env_access:references/authentication.md:30:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a placeholder showing users how to set INFSH_API_KEY. It contains no real credential and does not read or transmit other environment variables."
+      },
+      {
+        "id": "env_access:references/authentication.md:53:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This troubleshooting row only names INFSH_API_KEY. It neither contains a secret nor performs environment access."
+      },
+      {
+        "id": "blocker:references/authentication.md:6:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The command downloads mutable remote content and executes it immediately in a shell. A compromised host, route, or installer can execute arbitrary code.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:references/authentication.md:44:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The reinstall command executes remote content without allowing local inspection or independent verification. Compromise of the delivery path would provide arbitrary shell execution.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:references/cli-reference.md:6:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "A first-party installation URL is normal documentation and is not independently dangerous. The execution risk from piping it to a shell is covered by its blocker finding."
+      },
+      {
+        "id": "filesystem:references/cli-reference.md:91:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The command writes generated Fish completion data to the standard user completion directory. It does not inspect unrelated hidden files or conceal a payload."
+      },
+      {
+        "id": "filesystem:references/cli-reference.md:91:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is an explicit shell completion installation path selected by the user. The command does not access sensitive hidden configuration."
+      },
+      {
+        "id": "env_access:references/cli-reference.md:79:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line documents the supported API key variable without reading it or exposing a value. No credential is embedded."
+      },
+      {
+        "id": "blocker:references/cli-reference.md:6:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The installation command directly executes a script downloaded from the network. It provides no pre-execution inspection or independently pinned integrity check.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:references/running-apps.md:152:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is an abbreviated example result URL showing where generated output may be hosted. It is not an executable request or suspicious endpoint."
+      },
+      {
+        "id": "filesystem:references/running-apps.md:41:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory path is a documented user-supplied media path, not untrusted input used to bypass a path boundary. Automatic upload risk is assessed semantically."
+      },
+      {
+        "id": "blocker:references/running-apps.md:163:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The command retrieves a selected app's required input schema for troubleshooting. It does not enumerate host, network, process, or account information."
+      },
+      {
+        "id": "external_commands:SKILL.md:7:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The inline Markdown contains an actual npx installation command for an unpinned remote skill. Running it introduces package and skill supply-chain execution risk.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The detector matched the opening marker of a Markdown Bash block. The marker itself performs no shell or Ruby execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The detector matched a Markdown code fence delimiter. It is formatting syntax, not a shell backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format the dist.inference.sh host as inline documentation. They do not execute the enclosed text."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This finding begins at a quoted Markdown code fence. The fence is not Ruby or shell backtick execution; the separate command substitution finding covers the executable construct."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet is the closing marker for a quoted Markdown code block. It does not invoke an external command."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet is an opening Markdown Bash fence. It is documentation formatting rather than a backtick execution expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet is a closing Markdown code fence. No command is executed by the fence itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet is an opening Markdown Bash fence. It does not represent Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The detector matched a Markdown code fence delimiter. The delimiter has no execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks format a documented belt command in a table. They are not shell command substitution or Ruby execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:81:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is an inline Markdown example for searching the app store. Markdown backticks do not execute the command."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a formatted CLI example for filtering apps. It contains no Ruby backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The inline command is documentation for retrieving app metadata. The surrounding backticks are Markdown formatting."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks format a sample-generation command in documentation. They do not execute it."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The documented belt app run command is intentionally shown as inline code. The matched backticks have no execution semantics."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is a formatted asynchronous run example. It is not a shell backtick expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks only format a task status command in a Markdown table. They do not execute the command."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched snippet is an opening Markdown Bash fence. It is not shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The shell expands a URL parsed from a mutable remote manifest and passes it to curl. The same origin supplies checksums, so compromise can redirect and validate a malicious download.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The matched line is a Markdown Bash fence, not a programming-language template literal. The real nested shell substitution on line 28 has its own confirmed finding."
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is the first-party project link in a heading. It does not initiate a hidden network request."
+      },
+      {
+        "id": "network:SKILL.md:13:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The URL is a first-party illustrative image embedded in the documentation. No credential, local data, or tracking parameter is included."
+      },
+      {
+        "id": "network:SKILL.md:18:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The fixed installation URL is not independently suspicious. The direct execution of its response is covered by the confirmed pipe-to-shell finding."
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line links to the first-party installer while explaining its behavior. The URL itself does not execute content."
+      },
+      {
+        "id": "network:SKILL.md:27:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This explicit first-party URL downloads a checksum file as part of a manual installation. Its trust-model weakness is covered by the command-substitution finding and remediation."
+      },
+      {
+        "id": "network:SKILL.md:28:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The fixed first-party manifest URL is not independently dangerous. Parsing remote data into a shell argument is covered by the confirmed command-substitution finding."
+      },
+      {
+        "id": "network:SKILL.md:140:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party documentation link. It does not transmit secrets or run code."
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party getting-started link. It is normal documentation content."
+      },
+      {
+        "id": "network:SKILL.md:142:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party platform overview link. It performs no automatic network action."
+      },
+      {
+        "id": "network:SKILL.md:143:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a first-party documentation link about applications. It is not a hidden endpoint or data transfer."
+      },
+      {
+        "id": "network:SKILL.md:144:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party CLI setup link. It does not execute the linked installer."
+      },
+      {
+        "id": "network:SKILL.md:145:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party article link. It has no executable or secret-bearing behavior."
+      },
+      {
+        "id": "network:SKILL.md:146:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a visible first-party article link about agent runtimes. It does not create an unauthorized request."
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The manual installation explicitly moves the verified CLI binary into the conventional user-local executable directory. It does not conceal or inspect unrelated files."
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command writes to a standard user installation path with clear documentation. This is intended installation behavior, not covert hidden-file access."
+      },
+      {
+        "id": "blocker:SKILL.md:18:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The primary setup instructions execute an unaudited network response directly in the user's shell. A delivery compromise would permit arbitrary code execution.",
+        "severity": "critical"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Automatic Local File Upload Without Confirmation",
+        "description": "The skill states that local paths are automatically uploaded to cloud apps, including absolute, parent-directory, and home-directory paths. It does not require confirmation before transferring user files.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/running-apps.md",
+            "line_start": 21,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 73
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "Both files explicitly document automatic uploads from local paths to cloud applications, and neither includes a confirmation requirement."
+      },
+      {
+        "title": "Unconfirmed Social Account Actions",
+        "description": "The skill exposes commands that can publish posts and identifies direct messages, follows, likes, and reposts as available actions. It provides no requirement to preview or confirm these external side effects.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 98
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The listed capabilities directly modify a connected social account, while the skill contains no confirmation or preview guardrail."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command downloads mutable remote content and executes it immediately in a shell. A compromised host, route, or installer can execute arbitrary code."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The reinstall command executes remote content without allowing local inspection or independent verification. Compromise of the delivery path would provide arbitrary shell execution."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The installation command directly executes a script downloaded from the network. It provides no pre-execution inspection or independently pinned integrity check."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The primary setup instructions execute an unaudited network response directly in the user's shell. A delivery compromise would permit arbitrary code execution."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "> curl -LO $(curl -fsSL https://dist.inference.sh/cli/manifest.json | grep -o '\"url\":\"[^\"]*\"' | grep",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The shell expands a URL parsed from a mutable remote manifest and passes it to curl. The same origin supplies checksums, so compromise can redirect and validate a malicious download."
+      },
+      {
+        "title": "Unconfirmed Social Account Actions",
+        "description": "The skill exposes commands that can publish posts and identifies direct messages, follows, likes, and reposts as available actions. It provides no requirement to preview or confirm these external side effects.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 98
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The listed capabilities directly modify a connected social account, while the skill contains no confirmation or preview guardrail."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "> **Install the belt CLI skill:** `npx skills add belt-sh/cli`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The inline Markdown contains an actual npx installation command for an unpinned remote skill. Running it introduces package and skill supply-chain execution risk."
+      },
+      {
+        "title": "Automatic Local File Upload Without Confirmation",
+        "description": "The skill states that local paths are automatically uploaded to cloud apps, including absolute, parent-directory, and home-directory paths. It does not require confirmation before transferring user files.",
+        "locations": [
+          {
+            "file": "references/running-apps.md",
+            "line_start": 21,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "Both files explicitly document automatic uploads from local paths to cloud applications, and neither includes a confirmation requirement."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command downloads mutable remote content and executes it immediately in a shell. A compromised host, route, or installer can execute arbitrary code."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/authentication.md",
+            "line_start": 44,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The reinstall command executes remote content without allowing local inspection or independent verification. Compromise of the delivery path would provide arbitrary shell execution."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "references/cli-reference.md",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The installation command directly executes a script downloaded from the network. It provides no pre-execution inspection or independently pinned integrity check."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The primary setup instructions execute an unaudited network response directly in the user's shell. A delivery compromise would permit arbitrary code execution."
+      }
+    ],
+    "files_scanned": 5,
+    "total_lines": 599,
+    "audit_model": "codex",
+    "audited_at": "2026-07-12T09:41:56.762Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Run Cloud AI Apps from Your Agent",
+    "value_statement": "Managing separate AI APIs and workflows slows production. This skill guides Claude, Codex, and Claude Code through inference.sh discovery, execution, uploads, and task tracking.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "inference.sh",
+      "AI app CLI",
+      "image generation",
+      "video generation",
+      "web search",
+      "cloud AI",
+      "agent tools"
+    ],
+    "actual_capabilities": [
+      "Finds public inference.sh apps by category, keyword, featured status, or release order.",
+      "Inspects app input requirements and creates sample input files.",
+      "Runs image, video, language, search, audio, 3D, and social applications through belt.",
+      "Uploads user-selected local media when a supported input receives a file path.",
+      "Tracks asynchronous tasks and saves generated results to local files.",
+      "Supports browser login and API key authentication for automated environments."
+    ],
+    "limitations": [
+      "The belt CLI and an inference.sh account are required.",
+      "Cloud execution sends prompts and selected media to external application providers.",
+      "Available models, pricing, quotas, and output formats depend on the selected app.",
+      "Social account actions require careful preview and explicit user approval."
+    ],
+    "use_cases": [
+      {
+        "title": "Create Campaign Media",
+        "description": "Generate images and videos, then monitor long-running tasks from one command workflow.",
+        "target_user": "Content producer"
+      },
+      {
+        "title": "Compare AI Applications",
+        "description": "Search the public catalog, inspect input requirements, and test suitable models.",
+        "target_user": "AI application developer"
+      },
+      {
+        "title": "Automate Research Collection",
+        "description": "Run search and language applications, then save task results for later review.",
+        "target_user": "Research analyst"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Find an App",
+        "prompt": "Search the inference.sh store for applications that handle [task]. Compare the most relevant options and explain their required inputs.",
+        "scenario": "Beginner app discovery"
+      },
+      {
+        "title": "Run a Generation Task",
+        "prompt": "Inspect [app name], prepare inputs for [desired result], show me the final request, and run it after I approve.",
+        "scenario": "Guided single-app execution"
+      },
+      {
+        "title": "Use Local Media",
+        "prompt": "Prepare [app name] with [local file path]. State which file will be uploaded and the destination, then wait for my confirmation.",
+        "scenario": "Privacy-aware media processing"
+      },
+      {
+        "title": "Build a Tracked Workflow",
+        "prompt": "Design a version-pinned workflow using [apps]. Validate each schema, obtain approval for external actions, submit long tasks asynchronously, and summarize their results.",
+        "scenario": "Advanced multi-app workflow"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Find an image generator suitable for a landscape product banner.",
+        "output": [
+          "Recommended app: FLUX development model",
+          "Required input: a detailed image prompt",
+          "Optional input: landscape dimensions and image count",
+          "Next step: review the prepared request before execution"
+        ]
+      },
+      {
+        "input": "Create a short video from my approved image and track it without waiting.",
+        "output": "The selected video app accepted the image after upload confirmation. The task was submitted, tracked to completion, and its download location was reported."
+      },
+      {
+        "input": "Search for recent AI platform news.",
+        "output": "The search application returned a concise source list with titles, publication details, and links for manual review."
+      }
+    ],
+    "best_practices": [
+      "Inspect each app schema and pin its version before execution.",
+      "Confirm every local file upload, paid request, and external account action.",
+      "Keep API keys in protected environment variables and exclude them from logs and prompts."
+    ],
+    "anti_patterns": [
+      "Do not pipe remote installer content directly into a shell.",
+      "Do not upload broad directories or sensitive files to cloud applications.",
+      "Do not post, message, follow, like, or repost without immediate user approval."
+    ],
+    "faq": [
+      {
+        "question": "What is required to use this skill?",
+        "answer": "You need the belt CLI, an inference.sh account, and authentication through browser login or an API key."
+      },
+      {
+        "question": "Which AI tasks are supported?",
+        "answer": "The catalog includes image, video, language, search, audio, 3D, utility, and social applications."
+      },
+      {
+        "question": "Can it process local files?",
+        "answer": "Yes. The CLI can upload an explicitly selected local file after you review and approve the transfer."
+      },
+      {
+        "question": "Does it run long tasks?",
+        "answer": "Yes. It can submit asynchronous tasks, check their status, and save completed results."
+      },
+      {
+        "question": "Are model versions fixed?",
+        "answer": "Not automatically. Use the documented version syntax to pin an app release for repeatable behavior."
+      },
+      {
+        "question": "Can it change a social account?",
+        "answer": "Some apps can post, message, follow, like, or repost. Review the exact action and require explicit approval before execution."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "app-discovery.md",
+          "type": "file",
+          "path": "references/app-discovery.md",
+          "lines": 106
+        },
+        {
+          "name": "authentication.md",
+          "type": "file",
+          "path": "references/authentication.md",
+          "lines": 60
+        },
+        {
+          "name": "cli-reference.md",
+          "type": "file",
+          "path": "references/cli-reference.md",
+          "lines": 113
+        },
+        {
+          "name": "running-apps.md",
+          "type": "file",
+          "path": "references/running-apps.md",
+          "lines": 172
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 148
+    }
+  ]
+}

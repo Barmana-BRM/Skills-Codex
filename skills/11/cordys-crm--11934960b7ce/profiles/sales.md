@@ -1,0 +1,153 @@
+# 销售角色配置
+
+> 匹配规则见 core/role-engine.md
+>
+> 匹配关键词：销售、BD、专员、顾问、业务员、运营
+
+## 核心关注
+- **我的线索**：待跟进、今日新增、即将超时
+- **我的商机**：推进中、即将赢单、卡住需要推动
+- **我的客户**：近期活跃、需要回访、跟进记录
+- **今日计划**：今日跟进计划提醒
+- **我的业绩**：合同签约、目标进度
+- **L2C 链路**：我的线索→客户→商机→合同转化
+
+## 默认查询偏好
+| 场景 | 推荐命令 |
+|------|---------|
+| 查看今天的跟进计划 | `crm follow plan lead '{"myPlan":true,"status":"UNFINISHED","sourceId":"..."}'` |
+| 查看我的线索列表 | `crm page lead '{"viewId":"SELF"}'` |
+| 查看我的待办商机 | `crm page opportunity '{"viewId":"SELF","filters":[{"field":"stage","operator":"not equals","value":"Closed Lost"}]}'` |
+| 查看我的客户 | `crm page account '{"viewId":"SELF"}'` |
+| 查看协作客户 | `crm page account '{"viewId":"CUSTOMER_COLLABORATION"}'` |
+| 查看今日新增线索 | `crm search lead '{"combineSearch":{"conditions":[{"operator":"DYNAMICS","name":"createTime","value":"TODAY","type":"TIME_RANGE_PICKER"}]}}'` |
+| 查看我的签约 | `crm page contract '{"viewId":"SELF","combineSearch":{"conditions":[{"operator":"DYNAMICS","name":"signTime","value":"MONTH","type":"TIME_RANGE_PICKER"}]}}'` |
+| 查询/新增/修改报价单 | `crm page/get opportunity/quotation`；写入先 `crm form opportunity/quotation` 再 `crm add/update` |
+| 新增/修改跟进计划 | `crm form follow/plan` → `crm add/update <父模块>/follow/plan <JSON>` |
+| 新增/修改跟进记录 | `crm form follow/record` → `crm add/update <父模块>/follow/record <JSON>` |
+
+## L2C 典型工作流
+
+### 日常
+
+#### 晨会速览（"看看今天"）
+```
+执行流程：
+  1. cordys.sh crm follow plan lead '{"myPlan":true,"status":"UNFINISHED"}'
+     → 今日跟进计划
+  2. cordys.sh crm search lead '{"combineSearch":{"conditions":[
+       {"value":"TODAY","operator":"DYNAMICS","name":"createTime","type":"TIME_RANGE_PICKER"}
+     ]}}'
+     → 今日新增线索
+  3. cordys.sh crm page lead '{"viewId":"SELF"}'
+     → 我的线索列表（提取总数、检查风险）
+输出：今日计划 + 最新线索 + 风险提醒
+```
+
+#### 跟进优先级排序（"哪些要先跟"）
+```
+排序规则（按紧急度降序）：
+  1. 🚨 超过 7 天未跟进的线索/商机
+  2. ⚠️  商机在某个阶段停留超过 7 天
+  3. 📋 今日跟进计划中的待办
+  4. 🟢 近 3 天新创建的线索
+
+执行：
+  1. cordys.sh crm page lead '{"viewId":"SELF","sort":{"followTime":"asc"}}'
+     → 按跟进时间升序，最久未跟的排前面
+  2. cordys.sh crm page opportunity '{"viewId":"SELF","sort":{"followTime":"asc"}}'
+```
+
+#### 客户深耕（"看看XX公司"）
+```
+执行：
+  1. 全局搜索找到客户 account ID
+  2. 客户360：名下商机、合同、回款、联系人
+  3. 跟进历史：最近 5 条跟进记录
+  4. 关联线索（如果有）
+输出：公司全景视图
+```
+
+### 周常
+
+#### 周回顾（"这周怎么样"）
+```
+执行流程：
+  1. 本周新增线索数（DYNAMICS WEEK）
+  2. 本周新增商机数 + 金额汇总
+  3. 本周签约合同数 + 金额汇总
+  4. 超期未跟进线索（followTime < 3天前）
+输出：漏斗快照 + 跟进行为 + 签约成果
+```
+
+#### 管线检查（"我的商机怎么样"）
+```
+执行：
+  1. cordys.sh crm page opportunity '{"viewId":"SELF"}'
+     → 按阶段分组统计
+  2. 识别卡点商机（在阶段停留 > 7 天）
+  3. 汇总各阶段金额
+输出：阶段分布 + 卡点商机 + 金额预测
+```
+
+### 月常
+
+#### 月度总结（"本月做了多少"）
+```
+执行流程：
+  1. 本月新增线索/商机数 + 环比
+  2. 本月签约合同数 + 金额
+  3. 本月回款金额
+  4. 下月预测（当前进行中商机金额 × 赢单率）
+输出：月度漏斗 + 签约成果 + 下月预测
+```
+
+#### 链路回查（"查查这笔单子"）
+> 完整流程见 `core/linkage-engine.md` §3.3 合同全线追踪
+
+## KPI 基准线
+| 指标 | 正常 | 警戒 | 严重 |
+|------|------|------|------|
+| 线索首次跟进 | ≤ 24h | 24-48h ⚠️ | > 48h 🚨 |
+| 线索跟进间隔 | ≤ 3 天 | 3-5 天 ⚠️ | > 5 天 🚨 |
+| 商机阶段停留 | ≤ 7 天 | 7-14 天 ⚠️ | > 14 天 🚨 |
+| 周签约量 | ≥ 1 个 | 0 个 ⚠️ | 连续 2 周 0 🚨 |
+| 线索积压 | ≤ 20 条 | 20-30 条 ⚠️ | > 30 条 🚨 |
+
+## 跨角色协作
+| 触发条件 | 动作 |
+|---------|------|
+| 商机赢单 | 提醒 **商务** "合同待创建" + 提醒 **财务** "准备回款计划" |
+| 客户催合同 | 提醒 **商务** "加速合同审批" |
+| 合同签约 30 天未回款 | 提醒自己 "联系客户确认回款" + 提醒 **财务** "确认催收" |
+| 线索超过 90 天未转化 | 提醒 **经理** "该线索是否需要放弃/转公共池" |
+| 大额商机（> ¥50万） | 提醒 **经理** "重点关注" |
+
+## 权限边界
+| 能做 | 不能做 |
+|------|--------|
+| 查自己名下线索/客户/商机/合同 | 查其他销售名下数据 |
+| 查协作客户（CUSTOMER_COLLABORATION） | 查全公司漏斗数据 |
+| 创建、修改本人有权限的跟进计划和记录 | 审批合同（除非是被指定的审批人） |
+| 查自己相关合同的回款和发票 | 查其他部门的财务数据 |
+
+## 角色内子类型
+| 子类型 | 关键词 | 差异 |
+|--------|--------|------|
+| 新销售 | 实习、初级、新人 | 额外关注：话术引导、线索跟进步骤、商机推进建议 |
+| 老销售 | 高级、资深、大客户 | 额外关注：大客户深耕、续约预警、客户健康度 |
+| 售前顾问 | 售前、解决方案 | 额外关注：商机技术方案、产品配置、报价准确性 |
+
+> 可通过 `ROLE_MAP` 创建独立 profile。当前默认统一按"老销售"视角，覆盖大部分场景。
+
+## 交互模式
+- **默认输出**：列表优先，摘要展示，辅以关键状态 emoji
+- **数据深度**：默认查看自己相关的数据，需要时再扩展到团队
+- **提醒风格**：主动提醒跟进超时、线索积压、商机停滞
+- **行动建议**：具体到"联系谁、做什么、优先级"
+- **链路视角**：查看客户时自动检查名下商机和合同状态
+
+## 异常预警
+详见核心引擎：
+- [risk-engine.md §2 销售预警](../core/risk-engine.md#2-销售预警)
+- [risk-engine.md §6 L2C 跨模块风险](../core/risk-engine.md#6-l2c-跨模块风险链断裂检测)

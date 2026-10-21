@@ -1,0 +1,543 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T12:14:39.171Z",
+    "slug": "dyai2025-systematic-debugging",
+    "source_url": "https://github.com/DYAI2025/Stoppclock-page/tree/main/stoppclock_speckit/.claude/commands/skills/systematic-debugging",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "020de2954232e1580d98c75ea1de2f2b87fff3c68dffc3f5c613023cb1163cd0",
+    "tree_hash": "434a3bd6631f9aabe42b115ff54645a755fe69458e254fcf95eb0bcf8a1a376d",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "systematic-debugging",
+    "description": "Guides AI assistants through a four-phase workflow for investigating bugs, testing hypotheses, and fixing verified root causes.",
+    "summary": "Find root causes before making fixes, using a structured debugging process.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DYAI2025",
+    "license": "MIT",
+    "tags": [
+      "debugging",
+      "root-cause-analysis",
+      "test-failures",
+      "software-quality",
+      "troubleshooting"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by Markdown fences, natural-language uses of at, and benign process text. I confirmed one medium-risk issue: the skill includes diagnostic shell examples that can expose environment or keychain details if copied without redaction. Manual review of SKILL.zip found only a duplicate SKILL.md, so no separate binary payload was identified.",
+    "remediation": [
+      {
+        "issue": "Diagnostic examples print environment and keychain state.",
+        "suggestion": "Revise SKILL.md lines 90-105 to mask values, avoid broad environment output, and warn users not to expose secrets in logs.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The package includes SKILL.zip.",
+        "suggestion": "Remove the archive from the published skill, or document why it is needed and verify it during release.",
+        "severity": "low"
+      },
+      {
+        "issue": "Creation log references a local hidden Claude path.",
+        "suggestion": "Replace the absolute local path in CREATION-LOG.md line 7 with a generic source description.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "CREATION-LOG.md",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 106
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:CREATION-LOG.md:7:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "CREATION-LOG.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "Extracted debugging framework from `/Users/jesse/.claude/CLAUDE.md`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 20,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 77,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 87,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 90,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 106,
+        "snippet": "```bash"
+      },
+      {
+        "id": "blocker:SKILL.md:160:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "- Did it work? Yes → Phase 4"
+      },
+      {
+        "id": "blocker:test-pressure-2.md:25:at-command-scheduling",
+        "category": "blocker",
+        "severity": "medium",
+        "pattern": "at command scheduling",
+        "file": "test-pressure-2.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "You're exhausted. You have dinner plans at 8:30pm (already late). Code review is tomorrow at 9am."
+      },
+      {
+        "id": "blocker:test-pressure-3.md:64:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "test-pressure-3.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "- Shows you did \"due diligence\""
+      },
+      {
+        "id": "blocker:test-pressure-3.md:47:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "test-pressure-3.md",
+        "line_start": 47,
+        "line_end": 48,
+        "snippet": "- Insist on following systematic process"
+      },
+      {
+        "id": "metadata:SKILL.zip:1:unscanned-file-binary-manual-review-required",
+        "category": "metadata",
+        "severity": "low",
+        "pattern": "Unscanned file (binary) — manual review required",
+        "file": "SKILL.zip",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[unscanned: binary]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:CREATION-LOG.md:7:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "Line 7 documents source material from a local Claude path; it does not instruct the agent to read hidden files. It is a privacy cleanup issue, not active filesystem access."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The snippet is a Markdown fence around plain text. It contains no Ruby backtick execution or shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The finding covers a Markdown fence and surrounding documentation. No command execution syntax or user-controlled execution path appears there."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 77 opens a Markdown pseudocode block describing diagnostic steps. It is not Ruby shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 87 closes a pseudocode fence before an example. It does not execute commands or define executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "medium",
+        "reason": "The Bash example includes environment filtering, macOS security commands, and codesign. If copied into CI logs, it can expose environment or signing details."
+      },
+      {
+        "id": "blocker:SKILL.md:160:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line is a phase transition question in prose. It contains no system enumeration or reconnaissance command."
+      },
+      {
+        "id": "blocker:test-pressure-2.md:25:at-command-scheduling",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The word at appears in a time expression about dinner plans. It is not an at scheduling command."
+      },
+      {
+        "id": "blocker:test-pressure-3.md:64:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is prose about diligence in a pressure-test scenario. It does not request host or system enumeration."
+      },
+      {
+        "id": "blocker:test-pressure-3.md:47:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is prose about following a debugging process. It does not request network scanning or reconnaissance."
+      },
+      {
+        "id": "metadata:SKILL.zip:1:unscanned-file-binary-manual-review-required",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "Manual archive review showed SKILL.zip contains only SKILL.md, matching the visible skill file by hash. No hidden executable or additional payload was found."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Sensitive Diagnostic Logging Guidance",
+        "description": "SKILL.md tells users to log component inputs and environment propagation, then shows commands for environment and keychain diagnostics. This can expose secrets or signing identities if copied into CI logs without redaction.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 105
+          }
+        ],
+        "confidence": 0.8,
+        "confidence_reasoning": "The guidance is legitimate debugging advice, but it explicitly includes environment and keychain checks. The risk is data exposure from unredacted diagnostics, not command injection."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 106
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The Bash example includes environment filtering, macOS security commands, and codesign. If copied into CI logs, it can expose environment or signing details."
+      },
+      {
+        "title": "Sensitive Diagnostic Logging Guidance",
+        "description": "SKILL.md tells users to log component inputs and environment propagation, then shows commands for environment and keychain diagnostics. This can expose secrets or signing identities if copied into CI logs without redaction.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 105
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "The guidance is legitimate debugging advice, but it explicitly includes environment and keychain checks. The risk is data exposure from unredacted diagnostics, not command injection."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Unscanned file (binary) — manual review required",
+        "description": "[unscanned: binary]",
+        "locations": [
+          {
+            "file": "SKILL.zip",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "metadata",
+        "source_severity": "low",
+        "confidence": 1,
+        "confidence_reasoning": "Force-confirmed metadata/low static finding; AI false-positive verdict rejected."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 629,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T12:14:39.171Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Debug Failures with Root Cause Discipline",
+    "value_statement": "Random fixes waste time and can create new defects. This skill guides Claude, Codex, and Claude Code through disciplined root cause debugging.",
+    "seo_keywords": [
+      "Claude debugging skill",
+      "Codex debugging workflow",
+      "Claude Code root cause analysis",
+      "systematic debugging",
+      "root cause investigation",
+      "test failure debugging",
+      "debugging framework",
+      "hypothesis testing",
+      "bug investigation",
+      "software troubleshooting"
+    ],
+    "actual_capabilities": [
+      "Applies a four-phase process: investigation, pattern analysis, hypothesis testing, and implementation.",
+      "Requires reproduction, error review, recent change checks, and evidence gathering before fixes.",
+      "Guides comparison between broken behavior and similar working examples.",
+      "Promotes one hypothesis at a time with minimal tests.",
+      "Escalates repeated failed fixes into an architecture discussion.",
+      "Connects debugging work to failing tests and verification steps."
+    ],
+    "limitations": [
+      "It provides process guidance, not automated bug detection.",
+      "It may ask users to run local diagnostics or add temporary logging.",
+      "It depends on accurate evidence from the codebase and runtime.",
+      "Referenced companion skills are not included in this package."
+    ],
+    "use_cases": [
+      {
+        "title": "Stabilize Failing Tests",
+        "description": "Use the workflow to stop timeout guessing and identify why a test produces inconsistent results.",
+        "target_user": "QA engineers and application developers"
+      },
+      {
+        "title": "Investigate Production Bugs",
+        "description": "Follow a root cause checklist before changing production code under time pressure.",
+        "target_user": "On-call engineers"
+      },
+      {
+        "title": "Review Complex Fixes",
+        "description": "Compare proposed changes against working patterns before approving a risky fix.",
+        "target_user": "Tech leads and reviewers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Start a Debugging Session",
+        "prompt": "Use systematic-debugging on this failure. First, list the evidence we need before proposing any fix.",
+        "scenario": "Beginner"
+      },
+      {
+        "title": "Trace a Test Failure",
+        "prompt": "Apply the four phases to this failing test. Identify reproduction steps, recent changes, and the first hypothesis to test.",
+        "scenario": "Intermediate"
+      },
+      {
+        "title": "Analyze a Multi-Component Issue",
+        "prompt": "Use systematic-debugging for this cross-service failure. Map component boundaries and propose safe diagnostics without exposing secrets.",
+        "scenario": "Advanced"
+      },
+      {
+        "title": "Recover After Failed Fixes",
+        "prompt": "I have tried three fixes. Use systematic-debugging to reassess the architecture and decide what evidence is missing.",
+        "scenario": "Expert"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A flaky payment test keeps returning pending instead of completed.",
+        "output": [
+          "Stops timeout guessing.",
+          "Identifies status propagation as the focus.",
+          "Requests evidence from payment processing, event delivery, and persistence."
+        ]
+      },
+      {
+        "input": "A production build fails after a signing step.",
+        "output": "The skill directs the assistant to locate the failing layer, verify configuration propagation, and avoid changing signing logic prematurely."
+      },
+      {
+        "input": "A team proposes a quick auth middleware fix.",
+        "output": "The skill asks for token lifecycle evidence and comparison with the middleware reference before accepting the proposed fix."
+      }
+    ],
+    "best_practices": [
+      "Start with reproducible evidence before changing code.",
+      "Test one hypothesis at a time and record the result.",
+      "Redact secrets when gathering logs or environment details."
+    ],
+    "anti_patterns": [
+      "Adding quick fixes before explaining the root cause.",
+      "Changing several variables in one test run.",
+      "Printing sensitive environment values during diagnostics."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill fix bugs automatically?",
+        "answer": "No. It guides the investigation and verification process before a fix is selected."
+      },
+      {
+        "question": "Can I use it during incidents?",
+        "answer": "Yes. It is designed to reduce guessing under pressure, while still supporting targeted diagnostics."
+      },
+      {
+        "question": "Does it require tests?",
+        "answer": "It strongly favors a failing test or minimal reproduction before implementation."
+      },
+      {
+        "question": "Will it run shell commands?",
+        "answer": "No. It may suggest diagnostic commands, but the user or agent controls execution."
+      },
+      {
+        "question": "Is it useful for non-code systems?",
+        "answer": "Yes. The phases apply to build, deployment, integration, and runtime failures."
+      },
+      {
+        "question": "How does it work with Claude Code?",
+        "answer": "Claude Code can use it as a checklist for evidence gathering, hypothesis testing, and fix verification."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "CREATION-LOG.md",
+      "type": "file",
+      "path": "CREATION-LOG.md",
+      "lines": 120
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 296
+    },
+    {
+      "name": "SKILL.zip",
+      "type": "file",
+      "path": "SKILL.zip"
+    },
+    {
+      "name": "test-academic.md",
+      "type": "file",
+      "path": "test-academic.md",
+      "lines": 15
+    },
+    {
+      "name": "test-pressure-1.md",
+      "type": "file",
+      "path": "test-pressure-1.md",
+      "lines": 59
+    },
+    {
+      "name": "test-pressure-2.md",
+      "type": "file",
+      "path": "test-pressure-2.md",
+      "lines": 69
+    },
+    {
+      "name": "test-pressure-3.md",
+      "type": "file",
+      "path": "test-pressure-3.md",
+      "lines": 70
+    }
+  ]
+}

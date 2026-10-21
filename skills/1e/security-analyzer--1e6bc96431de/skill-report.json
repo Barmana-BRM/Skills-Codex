@@ -1,0 +1,1380 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T07:10:16.807Z",
+    "slug": "cornjebus-security-analyzer",
+    "source_url": "https://github.com/Cornjebus/security-analyzer/tree/main/.claude/skills/security-analyzer",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "54f1e90d87b0ecdb321889b767583300510434790a73121a0d06979013656619",
+    "tree_hash": "8bbae36465fd0daeb9a29fe8151d7a5b732183f6497b35bb3c88e80a53682a4b",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "security-analyzer",
+    "description": "Analyze project security posture with dependency, container, cloud, and secret exposure discovery. Query OSV.dev and generate technical and executive remediation reports.",
+    "summary": "Scan project assets, check OSV.dev vulnerabilities, and draft prioritized security remediation reports.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Cornjebus",
+    "license": "MIT",
+    "tags": [
+      "security",
+      "vulnerability-scanning",
+      "dependency-audit",
+      "cve",
+      "remediation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "security"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "AI review found that the high static score is driven by expected security scanner behavior and Markdown or generated-code examples. The scripts query OSV.dev for dependency vulnerabilities, enumerate .env filenames without reading values, and generate reports instead of executing fixes. No prompt injection, credential exfiltration, or hidden command execution evidence was found.",
+    "remediation": [
+      {
+        "issue": "OSV.dev lookups disclose package metadata to an external service.",
+        "suggestion": "Document the exact data sent to OSV.dev and ask users to confirm scans for private projects.",
+        "severity": "low"
+      },
+      {
+        "issue": "Environment file discovery records full local paths in inventory output.",
+        "suggestion": "Prefer relative paths for .env findings and keep the existing rule to avoid reading or printing secret values.",
+        "severity": "low"
+      },
+      {
+        "issue": "Generated fix commands are displayed as shell guidance.",
+        "suggestion": "Label commands as review-before-run and validate package names and versions before presenting shell commands.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 135,
+            "line_end": 135
+          },
+          {
+            "file": "scripts/fetch_vulns.py",
+            "line_start": 173,
+            "line_end": 173
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 256,
+            "line_end": 256
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 254,
+            "line_end": 254
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 76,
+            "line_end": 76
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 163,
+            "line_end": 165
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 165,
+            "line_end": 170
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 170,
+            "line_end": 172
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 172,
+            "line_end": 175
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 175,
+            "line_end": 177
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 177,
+            "line_end": 180
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 180,
+            "line_end": 182
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 182,
+            "line_end": 197
+          },
+          {
+            "file": "scripts/generate_report.py",
+            "line_start": 197,
+            "line_end": 201
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 108
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 129
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/report-templates.md:200:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/report-templates.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "\"\"\"Test that version bump produces valid package.json.\"\"\""
+      },
+      {
+        "id": "sensitive:scripts/discover_env.py:100:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "scripts/discover_env.py",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "env_files = find_files(root, ['.env', '.env.*', '*.env'])"
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:10:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:41:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "req = urllib.request.Request("
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:48:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "with urllib.request.urlopen(req, timeout=10) as response:"
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "OSV_API = \"https://api.osv.dev/v1/query\""
+      },
+      {
+        "id": "filesystem:scripts/fetch_vulns.py:135:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 135,
+        "line_end": 135,
+        "snippet": "for vuln in vulns:"
+      },
+      {
+        "id": "filesystem:scripts/fetch_vulns.py:173:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "scripts/fetch_vulns.py",
+        "line_start": 173,
+        "line_end": 173,
+        "snippet": "for vuln in vulnerabilities:"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:53:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/generate_report.py",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:76:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/generate_report.py",
+        "line_start": 76,
+        "line_end": 76,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:163:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 163,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 165,
+        "line_end": 170,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 170,
+        "line_end": 172,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 172,
+        "line_end": 175,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:175:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 175,
+        "line_end": 177,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 177,
+        "line_end": 180,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:180:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 180,
+        "line_end": 182,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:182:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 182,
+        "line_end": 197,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/generate_report.py",
+        "line_start": 197,
+        "line_end": 201,
+        "snippet": "report += f\"- `{f}`\\n\""
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:256:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/generate_report.py",
+        "line_start": 256,
+        "line_end": 256,
+        "snippet": "report += f\"{i}. **{cve_id}** ({vuln.get('package')}) - {vuln.get('summary', 'No summary')[:60]}...\\"
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:123:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "scripts/generate_report.py",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "for vuln in vulns:"
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:141:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "scripts/generate_report.py",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "for vuln in phase_vulns:"
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:254:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "scripts/generate_report.py",
+        "line_start": 254,
+        "line_end": 254,
+        "snippet": "for i, vuln in enumerate(vulns[:5], 1):"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:40:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "cve_id = vuln.get('cves', [vuln.get('id', 'UNKNOWN')])[0]"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:142:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "cve_id = vuln.get('cves', [vuln.get('id', 'UNKNOWN')])[0]"
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:255:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/generate_report.py",
+        "line_start": 255,
+        "line_end": 255,
+        "snippet": "cve_id = vuln.get('cves', [vuln.get('id', 'UNKNOWN')])[0]"
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "1. Run environment discovery: `python .claude/skills/security-analyzer/scripts/discover_env.py .`"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "2. Save output to `inventory.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "3. Run vulnerability scan: `python .claude/skills/security-analyzer/scripts/fetch_vulns.py inventory"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "4. Save output to `scan_results.json`"
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "5. Generate reports: `python .claude/skills/security-analyzer/scripts/generate_report.py scan_result"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- **Dependencies**: `package.json`, `requirements.txt`, `Gemfile`, `go.mod`, `Cargo.toml`, `pom.xml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- **Containers**: `Dockerfile`, `docker-compose.yml`, `kubernetes/*.yaml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "- **Cloud IaC**: `terraform/*.tf`, `cloudformation/*.yaml`, `*.bicep`"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "- **Secrets**: `.env*` files (flag exposure risk, never log values)"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 34,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 40,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 42,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 52,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 54,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 60,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 66,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 72,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 74,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 86,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 87,
+        "snippet": "- `security-report-technical.md` — Full details for engineers"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 89,
+        "snippet": "- `security-report-executive.md` — Summary for leadership"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 95,
+        "snippet": "See `references/report-templates.md` for output structure."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 108,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 118,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 129,
+        "snippet": "| Secret exposure | Rotation commands + `.gitignore` update |"
+      },
+      {
+        "id": "filesystem:SKILL.md:79:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "3. Pre-fix test (proves vuln exists)"
+      },
+      {
+        "id": "filesystem:SKILL.md:81:hard-link-creation",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hard link creation",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "5. Post-fix validation (proves vuln resolved)"
+      },
+      {
+        "id": "sensitive:SKILL.md:29:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "- **Secrets**: `.env*` files (flag exposure risk, never log values)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/report-templates.md:200:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is a report template test description about validating a package version bump. It performs no system reconnaissance or host enumeration."
+      },
+      {
+        "id": "sensitive:scripts/discover_env.py:100:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The code enumerates .env style filenames to flag exposure risk and compare gitignore coverage. It does not open, print, or transmit secret values."
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:10:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The network call is a bounded OSV.dev vulnerability lookup using package metadata from the inventory. It does not send credentials or arbitrary file contents."
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:41:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The network call is a bounded OSV.dev vulnerability lookup using package metadata from the inventory. It does not send credentials or arbitrary file contents."
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:48:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The network call is a bounded OSV.dev vulnerability lookup using package metadata from the inventory. It does not send credentials or arbitrary file contents."
+      },
+      {
+        "id": "network:scripts/fetch_vulns.py:14:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The network call is a bounded OSV.dev vulnerability lookup using package metadata from the inventory. It does not send credentials or arbitrary file contents."
+      },
+      {
+        "id": "filesystem:scripts/fetch_vulns.py:135:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The flagged line only iterates over vulnerability records. There is no os.link call, hardlink API, or filesystem mutation at this location."
+      },
+      {
+        "id": "filesystem:scripts/fetch_vulns.py:173:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The flagged line only iterates over vulnerability records. There is no os.link call, hardlink API, or filesystem mutation at this location."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:53:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The subprocess.run text is inside generated validation test snippets that are printed into a report. generate_report.py does not execute those snippets itself."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:76:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The subprocess.run text is inside generated validation test snippets that are printed into a report. generate_report.py does not execute those snippets itself."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:163:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:170:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:175:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:180:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:182:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "external_commands:scripts/generate_report.py:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks are Markdown code fences or inline formatting in generated report text. They are not Ruby backticks, shell evaluation, or command execution."
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:256:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The detected sequence is a literal ellipsis used to truncate a vulnerability summary in report output. It is not a filesystem path or traversal operation."
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:123:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The flagged line only iterates over vulnerability records. There is no os.link call, hardlink API, or filesystem mutation at this location."
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:141:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The flagged line only iterates over vulnerability records. There is no os.link call, hardlink API, or filesystem mutation at this location."
+      },
+      {
+        "id": "filesystem:scripts/generate_report.py:254:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The flagged line only iterates over vulnerability records. There is no os.link call, hardlink API, or filesystem mutation at this location."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:40:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line reads CVE identifiers from vulnerability metadata for reporting. CVE handling is not system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:142:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line reads CVE identifiers from vulnerability metadata for reporting. CVE handling is not system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/generate_report.py:255:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line reads CVE identifiers from vulnerability metadata for reporting. CVE handling is not system reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The line documents a visible command for the user-requested security scan workflow. It is not hidden execution, and the command invokes the bundled scanner scripts."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks mark filenames, report names, WebSearch examples, or fenced example text in documentation. They do not execute Ruby or shell commands."
+      },
+      {
+        "id": "filesystem:SKILL.md:79:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is prose describing pre-fix or post-fix validation concepts. It does not create hard links or write filesystem objects."
+      },
+      {
+        "id": "filesystem:SKILL.md:81:hard-link-creation",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The line is prose describing pre-fix or post-fix validation concepts. It does not create hard links or write filesystem objects."
+      },
+      {
+        "id": "sensitive:SKILL.md:29:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The documentation tells the scanner to flag .env file exposure while explicitly saying never to log values. This is disclosure guidance, not credential collection."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 5,
+    "total_lines": 1084,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T07:10:16.807Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Analyze Project Security Risks",
+    "value_statement": "Security reviews are slow when dependency, container, and IaC data are spread across a repository. This skill inventories assets, checks OSV.dev, and drafts prioritized remediation reports.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "security analyzer",
+      "vulnerability scan",
+      "dependency audit",
+      "OSV.dev CVE lookup",
+      "container security",
+      "IaC security audit",
+      "secrets exposure detection"
+    ],
+    "actual_capabilities": [
+      "Discovers npm, pip, gem, and Go dependencies from common manifest files.",
+      "Finds Docker, Docker Compose, Kubernetes, Terraform, and CloudFormation configuration files.",
+      "Flags .env style files that may be exposed without reading secret values.",
+      "Queries OSV.dev for known open source dependency vulnerabilities.",
+      "Calculates simple vulnerability risk scores from severity, exploitability, criticality, and exposure.",
+      "Generates technical and executive security report content with remediation guidance."
+    ],
+    "limitations": [
+      "OSV.dev lookups send package names and versions to an external service.",
+      "The scanner does not replace manual penetration testing or threat modeling.",
+      "Generated fix commands and validation tests require human review before use.",
+      "Coverage depends on supported manifest and infrastructure file patterns."
+    ],
+    "use_cases": [
+      {
+        "title": "Repository Security Review",
+        "description": "Inventory dependencies, containers, infrastructure files, and possible secret exposure before a release.",
+        "target_user": "Engineering leads"
+      },
+      {
+        "title": "DevOps Configuration Check",
+        "description": "Identify container and cloud configuration files that need security review and remediation planning.",
+        "target_user": "DevOps engineers"
+      },
+      {
+        "title": "Remediation Planning",
+        "description": "Turn vulnerability scan results into prioritized technical and executive report sections.",
+        "target_user": "Security analysts"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Scan a Project",
+        "scenario": "Beginner scan of the current repository.",
+        "prompt": "Use security-analyzer to scan this repository and summarize dependency, container, IaC, and secret exposure risks."
+      },
+      {
+        "title": "Review Dependencies",
+        "scenario": "Focused dependency vulnerability review.",
+        "prompt": "Use security-analyzer to inventory supported dependency manifests, query OSV.dev, and rank findings by remediation priority."
+      },
+      {
+        "title": "Plan Remediation",
+        "scenario": "Create an engineering remediation plan from scan results.",
+        "prompt": "Use security-analyzer to create a phased remediation plan with risk scores, owner-ready actions, and validation test guidance."
+      },
+      {
+        "title": "Prepare Leadership Report",
+        "scenario": "Advanced reporting for stakeholders.",
+        "prompt": "Use security-analyzer to produce an executive summary and a technical report from the latest inventory and vulnerability results."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Run a security scan before release.",
+        "output": "The skill reports dependency counts, container and IaC files, secret exposure risk, OSV.dev vulnerability totals, and priority phases."
+      },
+      {
+        "input": "Explain the highest risk dependency issues.",
+        "output": "The skill lists top vulnerabilities with affected packages, severity, risk score, remediation direction, and validation guidance."
+      },
+      {
+        "input": "Create an executive security summary.",
+        "output": "The skill summarizes overall posture, vulnerability counts by priority, estimated remediation effort, and recommended next actions."
+      }
+    ],
+    "best_practices": [
+      "Run scans from the intended project root and review the inventory before sharing results.",
+      "Confirm external OSV.dev lookups are acceptable for private package names and versions.",
+      "Review generated fix commands and tests before applying changes to production projects."
+    ],
+    "anti_patterns": [
+      "Do not run scans on repositories that contain secrets unless handling rules are clear.",
+      "Do not execute generated remediation commands without validating package names and versions.",
+      "Do not treat generated reports as a complete security assessment without human review."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill read secret values?",
+        "answer": "The included discovery script flags .env style filenames and gitignore exposure. It is designed not to read secret values."
+      },
+      {
+        "question": "Does it use external network access?",
+        "answer": "Yes. The vulnerability scanner queries OSV.dev with package names, versions, and ecosystem names."
+      },
+      {
+        "question": "Can it scan containers and cloud files?",
+        "answer": "It can find Docker, Docker Compose, Kubernetes, Terraform, and CloudFormation files for review context."
+      },
+      {
+        "question": "Does it automatically fix vulnerabilities?",
+        "answer": "No. It generates remediation guidance, report content, and validation test ideas for review."
+      },
+      {
+        "question": "Which AI tools can use it?",
+        "answer": "The report declares support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "What should I verify before publishing reports?",
+        "answer": "Verify package names, vulnerability details, risk scores, generated commands, and any external data sharing requirements."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "report-templates.md",
+          "type": "file",
+          "path": "references/report-templates.md",
+          "lines": 207
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "discover_env.py",
+          "type": "file",
+          "path": "scripts/discover_env.py",
+          "lines": 249
+        },
+        {
+          "name": "fetch_vulns.py",
+          "type": "file",
+          "path": "scripts/fetch_vulns.py",
+          "lines": 194
+        },
+        {
+          "name": "generate_report.py",
+          "type": "file",
+          "path": "scripts/generate_report.py",
+          "lines": 301
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 133
+    }
+  ]
+}

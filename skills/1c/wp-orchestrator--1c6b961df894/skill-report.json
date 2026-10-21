@@ -1,0 +1,3577 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T11:22:11.647Z",
+    "slug": "crazyswami-wp-orchestrator",
+    "source_url": "https://github.com/CrazySwami/wordpress-dev-skills/tree/main/skills/wp-orchestrator",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "47e10e59b7c2ea89776cb7858c6b9b496cd2189d2979816094c52de31fb1b468",
+    "tree_hash": "e105cb76c1668941da29b0f7b589f66992731c86adb312faf9cb0d12040a560d",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "wp-orchestrator",
+    "description": "Coordinates WordPress project setup, audits, SEO review, visual QA, performance checks, theme packaging, deployment, and client handoff workflows.",
+    "summary": "Coordinate WordPress setup, audits, testing, deployment, and handoff workflows.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "CrazySwami",
+    "license": "MIT",
+    "tags": [
+      "wordpress",
+      "docker",
+      "site-audit",
+      "seo",
+      "deployment"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "No prompt injection, credential exfiltration, or covert command execution was found in the reviewed WordPress orchestrator files. Most static findings are documentation examples for URLs, Claude skill paths, local temporary paths, .env handling, and Markdown code fences. The confirmed risks are operational: an unsigned remote WP-CLI download and temporary WordPress database dump handling that should be tightened before publication.",
+    "remediation": [
+      {
+        "issue": "The install guide downloads WP-CLI PHAR from raw GitHub and installs it without verification.",
+        "suggestion": "Use an official pinned release and verify checksum or signature before making the binary executable.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The workflow writes a WordPress database dump to /tmp and copies it into the project directory.",
+        "suggestion": "Store database dumps in a restricted path, document cleanup steps, and warn users not to commit or share the dump.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Absolute /root/.claude and ~/.claude paths reduce portability and can look like hidden file access.",
+        "suggestion": "Document these as user-approved installation paths and prefer variables or relative skill references where possible.",
+        "severity": "low"
+      },
+      {
+        "issue": "Frontend examples include third-party CDN URLs for development assets.",
+        "suggestion": "Recommend pinned, bundled, or integrity-checked assets for production themes.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "DISCOVERY.md",
+            "line_start": 425,
+            "line_end": 425
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 29,
+            "line_end": 29
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 225,
+            "line_end": 225
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 237,
+            "line_end": 237
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 257,
+            "line_end": 257
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 379,
+            "line_end": 379
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 158,
+            "line_end": 158
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 170,
+            "line_end": 170
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 191
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 206,
+            "line_end": 206
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 209,
+            "line_end": 209
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 210,
+            "line_end": 210
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 342,
+            "line_end": 342
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 346,
+            "line_end": 346
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 351,
+            "line_end": 351
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 380,
+            "line_end": 380
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 517,
+            "line_end": 517
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 609,
+            "line_end": 609
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 610,
+            "line_end": 610
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 660,
+            "line_end": 660
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 694,
+            "line_end": 694
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "DISCOVERY.md",
+            "line_start": 424,
+            "line_end": 424
+          },
+          {
+            "file": "DISCOVERY.md",
+            "line_start": 429,
+            "line_end": 429
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 149,
+            "line_end": 149
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 224,
+            "line_end": 224
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 236,
+            "line_end": 236
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 249,
+            "line_end": 249
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 250,
+            "line_end": 250
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 347,
+            "line_end": 347
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 348,
+            "line_end": 348
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 401,
+            "line_end": 401
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 149,
+            "line_end": 149
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 224,
+            "line_end": 224
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 236,
+            "line_end": 236
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 249,
+            "line_end": 249
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 250,
+            "line_end": 250
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 347,
+            "line_end": 347
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 348,
+            "line_end": 348
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 401,
+            "line_end": 401
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 226,
+            "line_end": 226
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 229,
+            "line_end": 229
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 245,
+            "line_end": 245
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 246,
+            "line_end": 246
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 158,
+            "line_end": 158
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 672,
+            "line_end": 672
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 673,
+            "line_end": 673
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 674,
+            "line_end": 674
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 675,
+            "line_end": 675
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 676,
+            "line_end": 676
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 677,
+            "line_end": 677
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 678,
+            "line_end": 678
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 679,
+            "line_end": 679
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 680,
+            "line_end": 680
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 681,
+            "line_end": 681
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 684,
+            "line_end": 684
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 685,
+            "line_end": 685
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 686,
+            "line_end": 686
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 689,
+            "line_end": 689
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 341,
+            "line_end": 341
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 345,
+            "line_end": 345
+          },
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 350,
+            "line_end": 350
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "INSTALL.md",
+            "line_start": 119,
+            "line_end": 120
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 120,
+            "line_end": 121
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 121,
+            "line_end": 140
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 140,
+            "line_end": 141
+          },
+          {
+            "file": "INSTALL.md",
+            "line_start": 141,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 140
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 140,
+            "line_end": 147
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 153
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 153,
+            "line_end": 156
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 165
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 168
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 168,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 257
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 257,
+            "line_end": 335
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 335,
+            "line_end": 344
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 344,
+            "line_end": 348
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 348,
+            "line_end": 356
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 356,
+            "line_end": 364
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 364,
+            "line_end": 414
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 414,
+            "line_end": 418
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 418,
+            "line_end": 429
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 429,
+            "line_end": 437
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 437,
+            "line_end": 475
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 475,
+            "line_end": 479
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 479,
+            "line_end": 516
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 516,
+            "line_end": 526
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 526,
+            "line_end": 539
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 539,
+            "line_end": 543
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 543,
+            "line_end": 550
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 550,
+            "line_end": 558
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 558,
+            "line_end": 571
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 571,
+            "line_end": 578
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 578,
+            "line_end": 582
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 582,
+            "line_end": 595
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 595,
+            "line_end": 602
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 602,
+            "line_end": 603
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:DISCOVERY.md:425:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "DISCOVERY.md",
+        "line_start": 425,
+        "line_end": 425,
+        "snippet": "--url https://existing-site.com \\"
+      },
+      {
+        "id": "filesystem:DISCOVERY.md:424:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "DISCOVERY.md",
+        "line_start": 424,
+        "line_end": 424,
+        "snippet": "python3 /root/.claude/skills/brand-guide/extract-brand.py \\"
+      },
+      {
+        "id": "filesystem:DISCOVERY.md:429:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "DISCOVERY.md",
+        "line_start": 429,
+        "line_end": 429,
+        "snippet": "python3 /root/.claude/skills/brand-guide/extract-brand.py \\"
+      },
+      {
+        "id": "external_commands:INSTALL.md:119:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "INSTALL.md",
+        "line_start": 119,
+        "line_end": 120,
+        "snippet": "| `/wp-setup` | Set up a new WordPress site with Docker, plugins, white-labeling |"
+      },
+      {
+        "id": "external_commands:INSTALL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "INSTALL.md",
+        "line_start": 120,
+        "line_end": 121,
+        "snippet": "| `/wp-audit` | Run comprehensive site audit (SEO, visual, performance, security) |"
+      },
+      {
+        "id": "external_commands:INSTALL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "INSTALL.md",
+        "line_start": 121,
+        "line_end": 140,
+        "snippet": "| `/wp-launch` | Pre-launch checklist and handoff documentation |"
+      },
+      {
+        "id": "external_commands:INSTALL.md:140:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "INSTALL.md",
+        "line_start": 140,
+        "line_end": 141,
+        "snippet": "- **\"Set up a new WordPress site\"** → Use `/wp-setup` or wp-docker skill"
+      },
+      {
+        "id": "external_commands:INSTALL.md:141:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "INSTALL.md",
+        "line_start": 141,
+        "line_end": 145,
+        "snippet": "- **\"Audit this site\"** → Use `/wp-audit`"
+      },
+      {
+        "id": "network:INSTALL.md:26:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "git clone https://github.com/CrazySwami/wordpress-dev-skills.git"
+      },
+      {
+        "id": "network:INSTALL.md:29:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "git clone https://github.com/CrazySwami/wordpress-dev-skills/wp-orchestrator"
+      },
+      {
+        "id": "network:INSTALL.md:30:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "git clone https://github.com/CrazySwami/wordpress-dev-skills/wp-docker"
+      },
+      {
+        "id": "network:INSTALL.md:225:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 225,
+        "line_end": 225,
+        "snippet": "--url https://wordpress.org \\"
+      },
+      {
+        "id": "network:INSTALL.md:237:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 237,
+        "line_end": 237,
+        "snippet": "--base-url https://wordpress.org \\"
+      },
+      {
+        "id": "network:INSTALL.md:257:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 257,
+        "line_end": 257,
+        "snippet": "curl -I http://localhost:8080"
+      },
+      {
+        "id": "network:INSTALL.md:379:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "INSTALL.md",
+        "line_start": 379,
+        "line_end": 379,
+        "snippet": "curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+      },
+      {
+        "id": "filesystem:INSTALL.md:39:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "~/.claude/skills/"
+      },
+      {
+        "id": "filesystem:INSTALL.md:108:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "Add to your `~/.claude/CLAUDE.md`:"
+      },
+      {
+        "id": "filesystem:INSTALL.md:149:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "Create the slash command files in `~/.claude/commands/`:"
+      },
+      {
+        "id": "filesystem:INSTALL.md:224:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 224,
+        "line_end": 224,
+        "snippet": "python3 ~/.claude/skills/visual-qa/screenshot.py \\"
+      },
+      {
+        "id": "filesystem:INSTALL.md:236:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "python3 ~/.claude/skills/seo-optimizer/audit.py \\"
+      },
+      {
+        "id": "filesystem:INSTALL.md:249:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 249,
+        "line_end": 249,
+        "snippet": "cp ~/.claude/skills/wp-docker/templates/docker-compose.yml ."
+      },
+      {
+        "id": "filesystem:INSTALL.md:250:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 250,
+        "line_end": 250,
+        "snippet": "cp ~/.claude/skills/wp-docker/templates/.env.example .env"
+      },
+      {
+        "id": "filesystem:INSTALL.md:347:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 347,
+        "line_end": 347,
+        "snippet": "chmod +x ~/.claude/skills/*/scripts/*.sh"
+      },
+      {
+        "id": "filesystem:INSTALL.md:348:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "chmod +x ~/.claude/skills/*/scripts/*.py"
+      },
+      {
+        "id": "filesystem:INSTALL.md:401:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "INSTALL.md",
+        "line_start": 401,
+        "line_end": 401,
+        "snippet": "cd ~/.claude/skills/wordpress-dev-skills"
+      },
+      {
+        "id": "filesystem:INSTALL.md:25:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "cd /root/.claude/skills"
+      },
+      {
+        "id": "filesystem:INSTALL.md:39:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "~/.claude/skills/"
+      },
+      {
+        "id": "filesystem:INSTALL.md:108:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "Add to your `~/.claude/CLAUDE.md`:"
+      },
+      {
+        "id": "filesystem:INSTALL.md:149:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "Create the slash command files in `~/.claude/commands/`:"
+      },
+      {
+        "id": "filesystem:INSTALL.md:224:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 224,
+        "line_end": 224,
+        "snippet": "python3 ~/.claude/skills/visual-qa/screenshot.py \\"
+      },
+      {
+        "id": "filesystem:INSTALL.md:236:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "python3 ~/.claude/skills/seo-optimizer/audit.py \\"
+      },
+      {
+        "id": "filesystem:INSTALL.md:249:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 249,
+        "line_end": 249,
+        "snippet": "cp ~/.claude/skills/wp-docker/templates/docker-compose.yml ."
+      },
+      {
+        "id": "filesystem:INSTALL.md:250:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 250,
+        "line_end": 250,
+        "snippet": "cp ~/.claude/skills/wp-docker/templates/.env.example .env"
+      },
+      {
+        "id": "filesystem:INSTALL.md:347:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 347,
+        "line_end": 347,
+        "snippet": "chmod +x ~/.claude/skills/*/scripts/*.sh"
+      },
+      {
+        "id": "filesystem:INSTALL.md:348:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "chmod +x ~/.claude/skills/*/scripts/*.py"
+      },
+      {
+        "id": "filesystem:INSTALL.md:401:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "INSTALL.md",
+        "line_start": 401,
+        "line_end": 401,
+        "snippet": "cd ~/.claude/skills/wordpress-dev-skills"
+      },
+      {
+        "id": "filesystem:INSTALL.md:226:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "INSTALL.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "--output /tmp/test-screenshots"
+      },
+      {
+        "id": "filesystem:INSTALL.md:229:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "INSTALL.md",
+        "line_start": 229,
+        "line_end": 229,
+        "snippet": "ls -la /tmp/test-screenshots"
+      },
+      {
+        "id": "filesystem:INSTALL.md:245:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "INSTALL.md",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "mkdir -p /tmp/wp-test"
+      },
+      {
+        "id": "filesystem:INSTALL.md:246:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "INSTALL.md",
+        "line_start": 246,
+        "line_end": 246,
+        "snippet": "cd /tmp/wp-test"
+      },
+      {
+        "id": "sensitive:INSTALL.md:250:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "INSTALL.md",
+        "line_start": 250,
+        "line_end": 250,
+        "snippet": "cp ~/.claude/skills/wp-docker/templates/.env.example .env"
+      },
+      {
+        "id": "sensitive:INSTALL.md:294:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "INSTALL.md",
+        "line_start": 294,
+        "line_end": 294,
+        "snippet": "- `.env` with project settings"
+      },
+      {
+        "id": "sensitive:INSTALL.md:315:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "INSTALL.md",
+        "line_start": 315,
+        "line_end": 315,
+        "snippet": "├── .env                     # Environment variables"
+      },
+      {
+        "id": "blocker:INSTALL.md:363:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "INSTALL.md",
+        "line_start": 363,
+        "line_end": 363,
+        "snippet": "ss -tlnp | grep 8080"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "| `/wp-setup` | Set up a new WordPress site with Docker, plugins, white-labeling |"
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "| `/wp-audit` | Run comprehensive site audit (SEO, visual, performance, security) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "| `/wp-launch` | Pre-launch checklist and handoff documentation |"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 39,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 46,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 57,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 65,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 68,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 73,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 98,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 140,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:140:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 140,
+        "line_end": 147,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 153,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 153,
+        "line_end": 156,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 159,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 162,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 168,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 171,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 177,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 257,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 257,
+        "line_end": 335,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:335:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 335,
+        "line_end": 344,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 344,
+        "line_end": 348,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:348:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 348,
+        "line_end": 356,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:356:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 356,
+        "line_end": 364,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:364:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 364,
+        "line_end": 414,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:414:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 414,
+        "line_end": 418,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:418:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 418,
+        "line_end": 429,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:429:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 429,
+        "line_end": 437,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:437:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 437,
+        "line_end": 475,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:475:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 475,
+        "line_end": 479,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:479:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 479,
+        "line_end": 516,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:516:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 516,
+        "line_end": 526,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:526:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 526,
+        "line_end": 539,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:539:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 539,
+        "line_end": 543,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:543:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 543,
+        "line_end": 550,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:550:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 550,
+        "line_end": 558,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:558:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 558,
+        "line_end": 571,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:571:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 571,
+        "line_end": 578,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:578:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 578,
+        "line_end": 582,
+        "snippet": "3. Verify `demo-content.json` is updated in theme folder"
+      },
+      {
+        "id": "external_commands:SKILL.md:582:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 582,
+        "line_end": 595,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:595:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 595,
+        "line_end": 602,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:602:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 602,
+        "line_end": 603,
+        "snippet": "3. Enter repository: `username/theme-name`"
+      },
+      {
+        "id": "external_commands:SKILL.md:603:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 603,
+        "line_end": 639,
+        "snippet": "4. Branch: `main`"
+      },
+      {
+        "id": "external_commands:SKILL.md:639:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 639,
+        "line_end": 645,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:645:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 645,
+        "line_end": 655,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:655:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 655,
+        "line_end": 656,
+        "snippet": "| \"Set up a new WordPress site\" | `/wp-setup` → Discovery interview → Docker/Playground → Install pl"
+      },
+      {
+        "id": "external_commands:SKILL.md:656:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 656,
+        "line_end": 661,
+        "snippet": "| \"Audit this site\" | `/wp-audit` → Run all audit skills in parallel → Compile report |"
+      },
+      {
+        "id": "external_commands:SKILL.md:661:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 661,
+        "line_end": 672,
+        "snippet": "| \"Prepare for launch\" | `/wp-launch` → Run all checks → Generate handoff docs |"
+      },
+      {
+        "id": "external_commands:SKILL.md:672:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 672,
+        "line_end": 673,
+        "snippet": "- `/root/.claude/skills/wordpress-dev/` - Development best practices"
+      },
+      {
+        "id": "external_commands:SKILL.md:673:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 673,
+        "line_end": 674,
+        "snippet": "- `/root/.claude/skills/wordpress-admin/` - Site management"
+      },
+      {
+        "id": "external_commands:SKILL.md:674:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 674,
+        "line_end": 675,
+        "snippet": "- `/root/.claude/skills/seo-optimizer/` - SEO auditing"
+      },
+      {
+        "id": "external_commands:SKILL.md:675:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 675,
+        "line_end": 676,
+        "snippet": "- `/root/.claude/skills/visual-qa/` - Visual testing"
+      },
+      {
+        "id": "external_commands:SKILL.md:676:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 676,
+        "line_end": 677,
+        "snippet": "- `/root/.claude/skills/brand-guide/` - Brand documentation"
+      },
+      {
+        "id": "external_commands:SKILL.md:677:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 677,
+        "line_end": 678,
+        "snippet": "- `/root/.claude/skills/white-label/` - Admin white-labeling (ASE + Branda)"
+      },
+      {
+        "id": "external_commands:SKILL.md:678:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 678,
+        "line_end": 679,
+        "snippet": "- `/root/.claude/skills/gsap-animations/` - Animation best practices"
+      },
+      {
+        "id": "external_commands:SKILL.md:679:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 679,
+        "line_end": 680,
+        "snippet": "- `/root/.claude/skills/wp-performance/` - Performance optimization"
+      },
+      {
+        "id": "external_commands:SKILL.md:680:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 680,
+        "line_end": 681,
+        "snippet": "- `/root/.claude/skills/wp-docker/` - Docker environment"
+      },
+      {
+        "id": "external_commands:SKILL.md:681:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 681,
+        "line_end": 684,
+        "snippet": "- `/root/.claude/skills/wp-playground/` - WordPress Playground"
+      },
+      {
+        "id": "external_commands:SKILL.md:684:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 684,
+        "line_end": 685,
+        "snippet": "- `/root/.claude/commands/wp-setup.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:685:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 685,
+        "line_end": 686,
+        "snippet": "- `/root/.claude/commands/wp-audit.md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:686:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 686,
+        "line_end": 689,
+        "snippet": "- `/root/.claude/commands/wp-launch.md`"
+      },
+      {
+        "id": "network:SKILL.md:158:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py --base-url https://site.com --json"
+      },
+      {
+        "id": "network:SKILL.md:164:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "python3 /root/.claude/skills/visual-qa/screenshot.py --all --base-url https://site.com"
+      },
+      {
+        "id": "network:SKILL.md:170:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 170,
+        "snippet": "curl \"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://site.com&strategy=mobil"
+      },
+      {
+        "id": "network:SKILL.md:191:email-sending-capability",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Email sending capability",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "- [ ] WP Mail SMTP - Email delivery"
+      },
+      {
+        "id": "filesystem:SKILL.md:158:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py --base-url https://site.com --json"
+      },
+      {
+        "id": "filesystem:SKILL.md:164:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "python3 /root/.claude/skills/visual-qa/screenshot.py --all --base-url https://site.com"
+      },
+      {
+        "id": "filesystem:SKILL.md:672:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 672,
+        "line_end": 672,
+        "snippet": "- `/root/.claude/skills/wordpress-dev/` - Development best practices"
+      },
+      {
+        "id": "filesystem:SKILL.md:673:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 673,
+        "line_end": 673,
+        "snippet": "- `/root/.claude/skills/wordpress-admin/` - Site management"
+      },
+      {
+        "id": "filesystem:SKILL.md:674:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 674,
+        "line_end": 674,
+        "snippet": "- `/root/.claude/skills/seo-optimizer/` - SEO auditing"
+      },
+      {
+        "id": "filesystem:SKILL.md:675:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 675,
+        "line_end": 675,
+        "snippet": "- `/root/.claude/skills/visual-qa/` - Visual testing"
+      },
+      {
+        "id": "filesystem:SKILL.md:676:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 676,
+        "line_end": 676,
+        "snippet": "- `/root/.claude/skills/brand-guide/` - Brand documentation"
+      },
+      {
+        "id": "filesystem:SKILL.md:677:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 677,
+        "line_end": 677,
+        "snippet": "- `/root/.claude/skills/white-label/` - Admin white-labeling (ASE + Branda)"
+      },
+      {
+        "id": "filesystem:SKILL.md:678:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 678,
+        "line_end": 678,
+        "snippet": "- `/root/.claude/skills/gsap-animations/` - Animation best practices"
+      },
+      {
+        "id": "filesystem:SKILL.md:679:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 679,
+        "line_end": 679,
+        "snippet": "- `/root/.claude/skills/wp-performance/` - Performance optimization"
+      },
+      {
+        "id": "filesystem:SKILL.md:680:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 680,
+        "line_end": 680,
+        "snippet": "- `/root/.claude/skills/wp-docker/` - Docker environment"
+      },
+      {
+        "id": "filesystem:SKILL.md:681:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 681,
+        "line_end": 681,
+        "snippet": "- `/root/.claude/skills/wp-playground/` - WordPress Playground"
+      },
+      {
+        "id": "filesystem:SKILL.md:684:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 684,
+        "line_end": 684,
+        "snippet": "- `/root/.claude/commands/wp-setup.md`"
+      },
+      {
+        "id": "filesystem:SKILL.md:685:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 685,
+        "line_end": 685,
+        "snippet": "- `/root/.claude/commands/wp-audit.md`"
+      },
+      {
+        "id": "filesystem:SKILL.md:686:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 686,
+        "line_end": 686,
+        "snippet": "- `/root/.claude/commands/wp-launch.md`"
+      },
+      {
+        "id": "filesystem:SKILL.md:689:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 689,
+        "line_end": 689,
+        "snippet": "- `/root/.claude/plugins/wordpress-dev-skills/`"
+      },
+      {
+        "id": "sensitive:SKILL.md:570:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 570,
+        "line_end": 570,
+        "snippet": "-x \"*.env*\""
+      },
+      {
+        "id": "blocker:SKILL.md:192:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "- [ ] Solid Security - Additional security"
+      },
+      {
+        "id": "blocker:SKILL.md:422:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 422,
+        "line_end": 422,
+        "snippet": "2. When did you last update WordPress/plugins?"
+      },
+      {
+        "id": "network:WORKFLOW.md:206:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 206,
+        "line_end": 206,
+        "snippet": "wp_enqueue_script('tailwind', 'https://cdn.tailwindcss.com', [], null);"
+      },
+      {
+        "id": "network:WORKFLOW.md:209:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 209,
+        "line_end": 209,
+        "snippet": "wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js', [], null"
+      },
+      {
+        "id": "network:WORKFLOW.md:210:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "wp_enqueue_script('gsap-st', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.j"
+      },
+      {
+        "id": "network:WORKFLOW.md:342:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 342,
+        "line_end": 342,
+        "snippet": "--base-url https://local2.hustletogether.com"
+      },
+      {
+        "id": "network:WORKFLOW.md:346:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 346,
+        "line_end": 346,
+        "snippet": "--base-url https://local2.hustletogether.com \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:351:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 351,
+        "line_end": 351,
+        "snippet": "--base-url https://local2.hustletogether.com \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:375:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 375,
+        "line_end": 375,
+        "snippet": "--base-url https://local2.hustletogether.com \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:380:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 380,
+        "line_end": 380,
+        "snippet": "--url https://local2.hustletogether.com/about/ \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:517:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 517,
+        "line_end": 517,
+        "snippet": "git remote add origin https://github.com/username/client-theme.git"
+      },
+      {
+        "id": "network:WORKFLOW.md:609:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 609,
+        "line_end": 609,
+        "snippet": "'https://local.domain.com' \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:610:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 610,
+        "line_end": 610,
+        "snippet": "'https://production.com' \\"
+      },
+      {
+        "id": "network:WORKFLOW.md:660:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "WORKFLOW.md",
+        "line_start": 660,
+        "line_end": 660,
+        "snippet": "- URL: https://yoursite.com/client-login"
+      },
+      {
+        "id": "network:WORKFLOW.md:694:email-sending-capability",
+        "category": "network",
+        "severity": "medium",
+        "pattern": "Email sending capability",
+        "file": "WORKFLOW.md",
+        "line_start": 694,
+        "line_end": 694,
+        "snippet": "- [ ] Email delivery configured (WP Mail SMTP)"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:32:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "cp /root/.claude/skills/wp-docker/templates/docker-compose.yml ."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:33:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "cp /root/.claude/skills/wp-docker/templates/uploads.ini ."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:34:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "cp /root/.claude/skills/wp-docker/templates/.env.example .env"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:118:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "python3 /root/.claude/skills/brand-guide/extract-brand.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:341:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 341,
+        "line_end": 341,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:345:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 345,
+        "line_end": 345,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:350:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 350,
+        "line_end": 350,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:373:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 373,
+        "line_end": 373,
+        "snippet": "python3 /root/.claude/skills/visual-qa/screenshot.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:379:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 379,
+        "line_end": 379,
+        "snippet": "python3 /root/.claude/skills/visual-qa/screenshot.py \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:638:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 638,
+        "line_end": 638,
+        "snippet": "/root/.claude/skills/white-label/scripts/apply-white-label.sh \\"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:741:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 741,
+        "line_end": 741,
+        "snippet": "python3 /root/.claude/skills/visual-qa/screenshot.py --all --base-url URL"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:742:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "WORKFLOW.md",
+        "line_start": 742,
+        "line_end": 742,
+        "snippet": "python3 /root/.claude/skills/seo-optimizer/audit.py --base-url URL"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:604:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "WORKFLOW.md",
+        "line_start": 604,
+        "line_end": 604,
+        "snippet": "docker exec wordpress wp db export /tmp/local-db.sql --allow-root"
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:605:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "WORKFLOW.md",
+        "line_start": 605,
+        "line_end": 605,
+        "snippet": "docker cp wordpress:/tmp/local-db.sql ./local-db.sql"
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:34:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "WORKFLOW.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "cp /root/.claude/skills/wp-docker/templates/.env.example .env"
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:36:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "WORKFLOW.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "# Edit .env with project details"
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:37:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "WORKFLOW.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "nano .env"
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:453:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "WORKFLOW.md",
+        "line_start": 453,
+        "line_end": 453,
+        "snippet": "-x \"*.env*\""
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:505:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "WORKFLOW.md",
+        "line_start": 505,
+        "line_end": 505,
+        "snippet": ".env"
+      },
+      {
+        "id": "blocker:WORKFLOW.md:397:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "WORKFLOW.md",
+        "line_start": 397,
+        "line_end": 397,
+        "snippet": "| Mobile | mobile-android | 412×915 |"
+      },
+      {
+        "id": "blocker:WORKFLOW.md:477:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "WORKFLOW.md",
+        "line_start": 477,
+        "line_end": 478,
+        "snippet": "- [ ] Version number updated in style.css"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:DISCOVERY.md:425:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "filesystem:DISCOVERY.md:424:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:DISCOVERY.md:429:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "external_commands:INSTALL.md:119:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:INSTALL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:INSTALL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:INSTALL.md:140:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:INSTALL.md:141:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "network:INSTALL.md:26:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The URL is part of explicit installation or troubleshooting instructions for public WordPress tooling. It is user-visible and not used for hidden data transfer."
+      },
+      {
+        "id": "network:INSTALL.md:29:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The URL is part of explicit installation or troubleshooting instructions for public WordPress tooling. It is user-visible and not used for hidden data transfer."
+      },
+      {
+        "id": "network:INSTALL.md:30:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The URL is part of explicit installation or troubleshooting instructions for public WordPress tooling. It is user-visible and not used for hidden data transfer."
+      },
+      {
+        "id": "network:INSTALL.md:225:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:INSTALL.md:237:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:INSTALL.md:257:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL targets localhost during a Docker verification step. This is a local connectivity check, not external communication."
+      },
+      {
+        "id": "network:INSTALL.md:379:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "medium",
+        "reason": "The troubleshooting step downloads WP-CLI PHAR from raw GitHub, and the surrounding commands make it executable and install it. This creates a supply-chain risk because no checksum, signature, or pinned release is verified."
+      },
+      {
+        "id": "filesystem:INSTALL.md:39:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This references the standard user skill installation directory in documentation. It is expected setup guidance, not covert home-directory access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:108:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "This documents Claude Code configuration or command file locations for user setup. It does not secretly read or modify hidden files."
+      },
+      {
+        "id": "filesystem:INSTALL.md:149:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "This documents Claude Code configuration or command file locations for user setup. It does not secretly read or modify hidden files."
+      },
+      {
+        "id": "filesystem:INSTALL.md:224:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This references the standard user skill installation directory in documentation. It is expected setup guidance, not covert home-directory access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:236:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This references the standard user skill installation directory in documentation. It is expected setup guidance, not covert home-directory access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:249:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This references the standard user skill installation directory in documentation. It is expected setup guidance, not covert home-directory access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:250:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This copies a template environment example into a project configuration file. The source is an example file, not a hidden secret store."
+      },
+      {
+        "id": "filesystem:INSTALL.md:347:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This is a troubleshooting command to mark installed skill scripts executable. It targets user-installed skill files and is not stealthy persistence."
+      },
+      {
+        "id": "filesystem:INSTALL.md:348:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This is a troubleshooting command to mark installed skill scripts executable. It targets user-installed skill files and is not stealthy persistence."
+      },
+      {
+        "id": "filesystem:INSTALL.md:401:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This references the standard user skill installation directory in documentation. It is expected setup guidance, not covert home-directory access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:25:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:39:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:108:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This documents a Claude Code configuration file location for setup. It is not hidden extraction or unauthorized file access."
+      },
+      {
+        "id": "filesystem:INSTALL.md:149:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:224:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:236:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:249:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:250:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The hidden file reference is for creating or documenting project-local environment configuration. It does not read existing secrets or transmit them."
+      },
+      {
+        "id": "filesystem:INSTALL.md:347:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:348:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:401:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:INSTALL.md:226:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The temporary path is used for test screenshots or a disposable WordPress test project. This is normal local testing behavior."
+      },
+      {
+        "id": "filesystem:INSTALL.md:229:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The temporary path is used for test screenshots or a disposable WordPress test project. This is normal local testing behavior."
+      },
+      {
+        "id": "filesystem:INSTALL.md:245:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The temporary path is used for test screenshots or a disposable WordPress test project. This is normal local testing behavior."
+      },
+      {
+        "id": "filesystem:INSTALL.md:246:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The temporary path is used for test screenshots or a disposable WordPress test project. This is normal local testing behavior."
+      },
+      {
+        "id": "sensitive:INSTALL.md:250:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This copies an example environment template into a project file. The referenced file is a template and no credentials are collected or transmitted."
+      },
+      {
+        "id": "sensitive:INSTALL.md:294:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "sensitive:INSTALL.md:315:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "blocker:INSTALL.md:363:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The command checks whether a local development port is already in use while troubleshooting Docker. It is scoped to localhost and not network scanning."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:18:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:140:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:335:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:344:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:348:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:356:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:364:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:414:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:418:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:429:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:437:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:475:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:479:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:516:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:526:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:539:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:543:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:550:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:558:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:571:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:578:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is Markdown formatting around examples or placeholder values, not executable Ruby code. No dynamic command execution path is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:582:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:595:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:602:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is Markdown formatting around examples or placeholder values, not executable Ruby code. No dynamic command execution path is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:603:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is Markdown formatting around examples or placeholder values, not executable Ruby code. No dynamic command execution path is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:639:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:645:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks are Markdown code fence delimiters around examples. The file is documentation, not executable Ruby or shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:655:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:656:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:661:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:672:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:673:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:674:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:675:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:676:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:677:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:678:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:679:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:680:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:681:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:684:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:685:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:686:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown inline formatting for slash command names in documentation. There is no Ruby backtick operator or dynamic shell execution."
+      },
+      {
+        "id": "network:SKILL.md:158:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:SKILL.md:164:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:SKILL.md:170:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The URL calls Google PageSpeed in a documented performance check. It does not include secret material or covert exfiltration logic."
+      },
+      {
+        "id": "network:SKILL.md:191:email-sending-capability",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a checklist item for configuring WP Mail SMTP email delivery. No code sends email or routes messages to an attacker-controlled address."
+      },
+      {
+        "id": "filesystem:SKILL.md:158:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:164:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:672:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:673:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:674:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:675:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:676:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:677:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:678:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:679:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:680:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:681:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:684:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:685:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:686:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:SKILL.md:689:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "sensitive:SKILL.md:570:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "blocker:SKILL.md:192:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The flagged text is a WordPress security checklist or audit question, not system enumeration. It does not collect host details or execute reconnaissance commands."
+      },
+      {
+        "id": "blocker:SKILL.md:422:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The flagged text is a WordPress security checklist or audit question, not system enumeration. It does not collect host details or execute reconnaissance commands."
+      },
+      {
+        "id": "network:WORKFLOW.md:206:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The URL appears in a WordPress asset enqueue example for frontend libraries. It is a visible dependency example, not hidden network behavior."
+      },
+      {
+        "id": "network:WORKFLOW.md:209:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The URL appears in a WordPress asset enqueue example for frontend libraries. It is a visible dependency example, not hidden network behavior."
+      },
+      {
+        "id": "network:WORKFLOW.md:210:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The URL appears in a WordPress asset enqueue example for frontend libraries. It is a visible dependency example, not hidden network behavior."
+      },
+      {
+        "id": "network:WORKFLOW.md:342:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:346:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:351:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:375:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:380:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:517:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:609:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:610:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:660:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The URL is a placeholder or example site address used in documentation for audits, screenshots, deployment, or handoff. No secret data is sent at this location."
+      },
+      {
+        "id": "network:WORKFLOW.md:694:email-sending-capability",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a checklist item for configuring WP Mail SMTP email delivery. No code sends email or routes messages to an attacker-controlled address."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:32:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:33:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:34:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The hidden file reference is for creating or documenting project-local environment configuration. It does not read existing secrets or transmit them."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:118:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:341:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:345:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:350:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:373:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:379:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:638:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:741:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:742:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.85,
+        "reason": "This references installed Claude skill, command, or plugin paths so the orchestrator can coordinate companion tools. The access is documented and user-directed."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:604:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "severity": "medium",
+        "reason": "The workflow exports a WordPress database dump to /tmp/local-db.sql. Database dumps can contain credentials, user data, and tokens, so temporary storage requires cleanup and access controls."
+      },
+      {
+        "id": "filesystem:WORKFLOW.md:605:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.79,
+        "severity": "medium",
+        "reason": "The workflow copies the temporary WordPress database dump into the project directory. This can expose sensitive database contents if the file is committed, shared, or left unprotected."
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:34:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This copies an example environment template into a project file. The referenced file is a template and no credentials are collected or transmitted."
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:36:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:37:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:453:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This line documents editing or storing a project-local .env file for WordPress setup. It does not read existing secrets or send them elsewhere."
+      },
+      {
+        "id": "sensitive:WORKFLOW.md:505:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is a .gitignore entry or project structure reference for excluding environment files. It protects secrets instead of accessing them."
+      },
+      {
+        "id": "blocker:WORKFLOW.md:397:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The flagged text is a WordPress security checklist or audit question, not system enumeration. It does not collect host details or execute reconnaissance commands."
+      },
+      {
+        "id": "blocker:WORKFLOW.md:477:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The flagged text is a launch checklist item, not a network probing command. No reconnaissance behavior appears at this location."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar",
+        "locations": [
+          {
+            "file": "INSTALL.md",
+            "line_start": 379,
+            "line_end": 379
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "The troubleshooting step downloads WP-CLI PHAR from raw GitHub, and the surrounding commands make it executable and install it. This creates a supply-chain risk because no checksum, signature, or pinned release is verified."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "docker exec wordpress wp db export /tmp/local-db.sql --allow-root",
+        "locations": [
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 604,
+            "line_end": 604
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "The workflow exports a WordPress database dump to /tmp/local-db.sql. Database dumps can contain credentials, user data, and tokens, so temporary storage requires cleanup and access controls."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "docker cp wordpress:/tmp/local-db.sql ./local-db.sql",
+        "locations": [
+          {
+            "file": "WORKFLOW.md",
+            "line_start": 605,
+            "line_end": 605
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.79,
+        "confidence_reasoning": "The workflow copies the temporary WordPress database dump into the project directory. This can expose sensitive database contents if the file is committed, shared, or left unprotected."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 2333,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T11:22:11.647Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Coordinate WordPress Site Builds and Audits",
+    "value_statement": "WordPress projects require setup, audits, SEO, testing, and handoff across several tools. This skill coordinates those phases and calls related WordPress skills.",
+    "seo_keywords": [
+      "WordPress automation",
+      "WordPress orchestrator",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "WordPress audit",
+      "Docker WordPress",
+      "SEO audit",
+      "visual QA",
+      "client handoff"
+    ],
+    "actual_capabilities": [
+      "Runs a structured discovery interview for WordPress requirements, branding, SEO goals, and handoff needs.",
+      "Builds phased todo lists for setup, content, SEO, performance, security, visual QA, and launch tasks.",
+      "Coordinates companion skills for Docker setup, SEO audits, visual QA, performance checks, and white-label admin work.",
+      "Defines workflows for wp-setup, wp-audit, and wp-launch style project commands.",
+      "Documents theme packaging, GitHub deployment, WP Pusher setup, production sync, and client handoff steps."
+    ],
+    "limitations": [
+      "Requires companion WordPress skills and local tools for many scripted workflows.",
+      "Needs user-approved credentials, URLs, hosting access, and repository access before deployment tasks.",
+      "Does not replace manual review for security, legal text, content quality, or production change control.",
+      "Example paths and domains must be adapted before use in a real project."
+    ],
+    "use_cases": [
+      {
+        "title": "Plan a New WordPress Site",
+        "description": "Gather business goals, brand assets, pages, integrations, SEO targets, and handoff needs before setup starts.",
+        "target_user": "Freelance WordPress developer"
+      },
+      {
+        "title": "Audit an Existing Site",
+        "description": "Coordinate SEO, visual QA, performance, security, and content checks into a prioritized action plan.",
+        "target_user": "Agency project manager"
+      },
+      {
+        "title": "Prepare Client Handoff",
+        "description": "Package the theme, verify launch readiness, configure admin branding, and prepare clear client documentation.",
+        "target_user": "WordPress delivery team"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Start Project Discovery",
+        "scenario": "Beginner request for a new site build.",
+        "prompt": "Use wp-orchestrator to interview me for a new WordPress site. Focus on business goals, pages, branding, SEO, and handoff needs."
+      },
+      {
+        "title": "Build a Setup Plan",
+        "scenario": "Turn discovery answers into an implementation plan.",
+        "prompt": "Use wp-orchestrator to create a phased setup plan for my WordPress project. Include Docker setup, theme tasks, plugins, SEO, QA, and launch steps."
+      },
+      {
+        "title": "Run a Site Audit",
+        "scenario": "Review an existing WordPress site.",
+        "prompt": "Use wp-orchestrator to audit this WordPress site: [site URL]. Coordinate SEO, visual QA, performance, security, and handoff findings into one report."
+      },
+      {
+        "title": "Prepare Production Launch",
+        "scenario": "Advanced launch and deployment workflow.",
+        "prompt": "Use wp-orchestrator to prepare this WordPress project for launch. Verify packaging, repository deployment, production sync, admin branding, documentation, and client handoff."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Set up a WordPress site for a local service business.",
+        "output": "A discovery checklist, plugin plan, Docker setup sequence, theme task list, SEO checklist, and launch readiness plan."
+      },
+      {
+        "input": "Audit my staging WordPress site before launch.",
+        "output": "A consolidated audit report with prioritized SEO, visual, performance, security, content, and handoff recommendations."
+      },
+      {
+        "input": "Prepare a client handoff for a finished theme.",
+        "output": "A launch checklist, packaging steps, deployment guidance, admin training outline, and client documentation topics."
+      }
+    ],
+    "best_practices": [
+      "Run discovery before setup so requirements, brand assets, and handoff expectations are documented.",
+      "Confirm commands, credentials, domains, and deployment targets before running shell or production tasks.",
+      "Use the audit output to create prioritized todos with owners, severity, and launch impact."
+    ],
+    "anti_patterns": [
+      "Do not run production sync or database commands without verified backups and approval.",
+      "Do not use placeholder domains, paths, or credentials in a live project.",
+      "Do not treat automated audit results as a substitute for manual launch review."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill coordinate?",
+        "answer": "It coordinates WordPress discovery, setup, auditing, testing, packaging, deployment, and client handoff workflows."
+      },
+      {
+        "question": "Does it create a complete WordPress site by itself?",
+        "answer": "No. It guides and coordinates tasks, often using companion skills and local development tools."
+      },
+      {
+        "question": "Can it audit an existing site?",
+        "answer": "Yes. It can organize SEO, visual QA, performance, security, and content checks into one action plan."
+      },
+      {
+        "question": "Does it require shell access?",
+        "answer": "Many workflows use shell, Docker, WP-CLI, Git, or local scripts, so commands should be reviewed before execution."
+      },
+      {
+        "question": "Is it suitable for client handoff work?",
+        "answer": "Yes. It includes launch checks, white-label admin guidance, documentation topics, and training preparation."
+      },
+      {
+        "question": "Which tools does it support?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "DISCOVERY.md",
+      "type": "file",
+      "path": "DISCOVERY.md",
+      "lines": 449
+    },
+    {
+      "name": "INSTALL.md",
+      "type": "file",
+      "path": "INSTALL.md",
+      "lines": 421
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 690
+    },
+    {
+      "name": "WORKFLOW.md",
+      "type": "file",
+      "path": "WORKFLOW.md",
+      "lines": 773
+    }
+  ]
+}

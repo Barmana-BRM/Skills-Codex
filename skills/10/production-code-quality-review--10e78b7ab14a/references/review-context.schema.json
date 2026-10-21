@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dengyie/awesome-skills/production-code-quality-review/review-context.schema.json",
+  "title": "Production Code Quality Review Context",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "repo",
+    "base",
+    "scope_mode",
+    "changed_files",
+    "changed_line_ranges",
+    "detected_stack",
+    "suggested_references",
+    "risk_flags",
+    "risk_level",
+    "safe_check_commands",
+    "review_plan"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "review-context/v1"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "base": {
+      "type": "string"
+    },
+    "current_branch": {
+      "type": "string"
+    },
+    "scope_mode": {
+      "enum": ["branch", "working_tree"]
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "staged": { "$ref": "#/$defs/stringArray" },
+        "unstaged": { "$ref": "#/$defs/stringArray" },
+        "untracked": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
+    "changed_files": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "changed_line_ranges": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "added": { "$ref": "#/$defs/lineRanges" },
+          "deleted": { "$ref": "#/$defs/lineRanges" }
+        },
+        "required": ["added", "deleted"],
+        "additionalProperties": false
+      }
+    },
+    "detected_stack": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "suggested_references": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "risk_flags": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "risk_level": {
+      "enum": ["low", "medium", "high", "critical", "unknown"]
+    },
+    "review_mode_reason": {
+      "type": "string"
+    },
+    "safe_check_commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["command", "reason"],
+        "properties": {
+          "command": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "review_plan": {
+      "type": "object",
+      "required": ["mode", "reviewers", "follow_up", "risk_level", "review_mode_reason"],
+      "properties": {
+        "mode": { "enum": ["single", "specialist"] },
+        "reviewers": { "$ref": "#/$defs/stringArray" },
+        "follow_up": { "$ref": "#/$defs/stringArray" },
+        "risk_level": { "enum": ["low", "medium", "high", "critical", "unknown"] },
+        "review_mode_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "lineRanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end"],
+        "properties": {
+          "start": { "type": "integer", "minimum": 0 },
+          "end": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+# test-assumptions - Test assumptions
+
+**Enter when:** the brief feels too neat, the customer is very confident about the solution (not the problem), someone says "we just need…" about a complex system, or discover surfaced contradictions between what was said and what the codebase shows.
+
+**Read first:** `brief.md`, `reality.md`, `terrain.md`, `context.md`. The assumptions are hiding between what the brief says and what the code does.
+
+Every engagement is built on assumptions. Most are invisible until they're wrong and the build is two weeks deep. The assumption audit makes them visible - and killable - before they cost time.
+
+## Method (you do this work)
+
+**1. Extract the assumptions.** Read `brief.md`, `reality.md`, and `terrain.md` `## Parts` line by line. Every statement that isn't backed by evidence is an assumption. Treat every "obvious" block as a convention until a receipt proves it. Common hiding places:
+
+| Where assumptions hide | Example | The real question |
+|----------------------|---------|-------------------|
+| **The problem statement** | "The API is slow" | Slow for whom? Measured how? Since when? |
+| **The proposed solution** | "We need to migrate to microservices" | Is the monolith actually the bottleneck, or is it the database? |
+| **The timeline** | "This should take two weeks" | Based on what? Who estimated? Have they done this before? |
+| **The stakeholder claim** | "The team is on board" | Who specifically? Have they been asked? What did the resistors say? |
+| **The data claim** | "We have good data for this" | Defined how? Validated when? By whom? Sample checked? |
+| **The "just"** | "We just need to add a feature" | On what system? With what dependencies? What breaks? |
+
+**2. Kind first, then blast radius.** For each row, classify:
+
+| Kind | Meaning |
+|------|---------|
+| **FACT** | A dated receipt, a measurement, or the repo. You can point at it. |
+| **CONVENTION** | How they have always done it. The playbook. "We just…" |
+| **UNKNOWN** | No evidence either way. |
+
+Order the list load-bearing first. For each CONVENTION or UNKNOWN, one line: what breaks if it is wrong, and what opens if you **invert** it (stop obeying it). A FACT with no receipt is UNKNOWN - do not promote it to protect the brief.
+
+Then classify blast radius:
+
+```
+CRITICAL - if wrong, the engagement fails or the approach changes fundamentally
+  → Resolve before dependent commitments; provisional planning may proceed
+
+LOAD-BEARING - if wrong, significant rework or timeline change
+  → Resolve before dependent build work; independent authorized work may proceed
+
+CONVENIENCE - if wrong, a task changes but the approach holds
+  → Validate when you get there
+```
+
+**3. Design the validation.** Each critical assumption gets one specific test - not a discussion, a test:
+
+| Assumption | Validation method | Effort | Evidence threshold |
+|-----------|-------------------|--------|-------------------|
+| "The API is the bottleneck" | Instrument the three slowest endpoints, measure p95 over 24h | 2h | Latency data shows >80% of wait time in API layer |
+| "Users can complete the target task with the prototype" | Observe affected users attempting a representative task in a permitted environment | Timebox agreed for the task | Pre-agreed completion, error and assistance criteria; report sample and limits, not adoption |
+| "The data is clean enough for ML" | Sample 200 records, count nulls/duplicates/format errors | 1h | <5% error rate on the fields the model needs |
+
+**4. Run the killer test first.** The assumption with the highest blast radius AND the cheapest validation gets tested immediately. This single principle saves more engagement time than any other: if the killer assumption is wrong, you've saved weeks; if it holds, you've bought confidence. Write the kill observation in `How we test` as the result that would **stop** the plan - plan copies that line onto each Now PR as `Kill if`.
+
+**5. Present findings as a fact base, not a challenge.**
+
+The customer's assumptions are often wrong, but calling them wrong is a trust withdrawal. Frame as curiosity, not contradiction:
+
+> "The brief says the API is the bottleneck. The codebase shows 80% of latency is in the database layer - here's the evidence. Should we adjust the focus?"
+
+Evidence first, then the question. Let them reach the conclusion.
+
+## Artifact
+
+**`assumptions.md`** - this IS the register (create if land did not). Keep one live table; do not only bury results in `reality.md`:
+
+```markdown
+| # | Assumption | Kind | Blast radius | How we test | Status | Evidence |
+|---|------------|------|--------------|-------------|--------|----------|
+| 1 | API is the bottleneck | CONVENTION | CRITICAL | p95 instrumentation 24h | DISPROVED | 80% wait in DB layer (Day N) |
+| 2 | Team will adopt new tool | UNKNOWN | LOAD-BEARING | Observe task use, then assess sustained use over an agreed period | OPEN | 2/3 describe a use case unprompted; interest reported, use not yet observed |
+| 3 | Data clean enough for ML | UNKNOWN | CRITICAL | 200-record sample | PARTIAL → OPEN follow-up | 12% nulls on key field; cleaning task added |
+```
+
+Status values: `OPEN` · `TESTING` · `CONFIRMED` · `DISPROVED` · `PARKED`. An unresolved CRITICAL assumption blocks commitments and execution that depend on it. A provisional plan and independently authorized work may proceed with that dependency explicit.
+
+**`reality.md`** - short pointer only: which assumptions changed the approach and the implication for build.
+
+**`decisions.md`** - when evidence changes a premise, check the affected prior decisions and slices even if nobody has revised the approach yet. Name the dependency, evidence and commitment needing reconsideration. Preserve the earlier decision as history; a proposed replacement is not approved. Keep independently authorized work moving and follow the existing record-confirmation rules.
+
+## Checkpoint
+
+Tell the FDE: how many assumptions extracted, how many critical, which ones were tested, which changed the direction. If a critical assumption is disproved: recommend the next move (rescope, pivot, or the conversation with the sponsor) before the FDE asks. For each unresolved CRITICAL assumption, name the dependent commitment that must wait and the independently authorized work that can continue; route provisional planning with those limits explicit.
+
+## Worked example
+
+Acme's brief reads cleanly, which is the signal.
+
+Extracted assumptions include one nobody said aloud: *finance would act on an alert*. The whole plan rests on it, and the evidence behind it is a sentence in a kickoff. Blast radius CRITICAL - if false, alerting changes nothing and the engagement delivers a page nobody answers.
+
+Validation is a test, not a discussion, and it is cheap: send one real failure notification to the finance channel and watch what happens. It goes first because highest blast radius × cheapest test is the killer test.
+
+Result: acked in 40 minutes, by Marco, not finance. Assumption DISPROVED, and the plan changes before six weeks are spent on it - the alert needs a rota with an owner, which is a different piece of work than the one that was funded. `assumptions.md` records the status, the evidence, and the date; the finding is presented to the FDE as a fact base, not as "the brief was wrong".
+
+## Principles
+
+- Every "just" is an assumption. Every "should" is an assumption.
+- Kind before blast radius. A FACT with no receipt is UNKNOWN.
+- Kill the riskiest, cheapest-to-test assumption first.
+- Evidence first, then the question. Let the customer reach the conclusion.
+- Design tests that could disprove consequential assumptions, and report what the evidence shows. All assumptions may survive a rigorous audit; never invent a contradiction to demonstrate skepticism.
+- Two weeks of building on a wrong assumption costs more than two hours of testing.

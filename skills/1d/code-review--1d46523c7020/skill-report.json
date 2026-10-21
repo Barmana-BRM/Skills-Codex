@@ -1,0 +1,239 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-04T16:28:29.086Z",
+    "slug": "21pounder-code-review",
+    "source_url": "https://github.com/21pounder/terminalAgent/tree/main/deepresearch/.claude/skills/code-review",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "1d46523c702007ecce02b6693bb65ff92ba776e58cc337d754030a75a5f6a376",
+    "tree_hash": "bdefb4921026ccb66e1cddf563526f2edbba96ea71e3f1dbbfe481d08c80254e",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "code-review",
+    "description": "Guides structured code reviews for bugs, security issues, performance concerns, maintainability, and actionable improvement suggestions.",
+    "summary": "Review code with prioritized findings, line references, and concrete fixes.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "21pounder",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "code-review",
+      "security-review",
+      "bug-finding",
+      "maintainability",
+      "developer-tools"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The only static finding is a false positive caused by markdown fence backticks around a JSON parameter schema. No prompt injection, data exfiltration intent, or executable command behavior was found in SKILL.md.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 31
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 31,
+        "snippet": "```json"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 14 opens a markdown fenced JSON block for parameter documentation, and lines 15-31 contain a JSON schema. No executable Ruby backticks, shell command, or command invocation is present."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 99,
+    "audit_model": "codex",
+    "audited_at": "2026-07-04T16:28:29.086Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Review Code for Bugs and Security Issues",
+    "value_statement": "Code reviews can miss bugs, security flaws, and maintainability issues. This skill guides Claude, Codex, and Claude Code through structured review steps.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code review",
+      "security review",
+      "bug finding",
+      "maintainability analysis",
+      "performance review",
+      "AI coding assistant",
+      "developer workflow"
+    ],
+    "actual_capabilities": [
+      "Reviews a specified file, directory, or glob target for code issues.",
+      "Checks logic, edge cases, security risks, performance, and style consistency.",
+      "Prioritizes findings by severity so users can address important issues first.",
+      "Provides line references and explains why each issue matters.",
+      "Suggests concrete fixes and examples when they help clarify the review."
+    ],
+    "limitations": [
+      "It cannot run tests or commands because the skill only allows reading and searching files.",
+      "It depends on the user selecting the correct files or directories for review.",
+      "It may miss runtime, integration, or environment-specific defects.",
+      "It provides review guidance, not a replacement for expert security assessment."
+    ],
+    "use_cases": [
+      {
+        "title": "Security Review Before Merge",
+        "description": "Identify authentication, injection, validation, and error-handling risks before a pull request is approved.",
+        "target_user": "Application security engineer"
+      },
+      {
+        "title": "Bug Review for Feature Code",
+        "description": "Find logic gaps, edge cases, and missing error handling in a focused implementation.",
+        "target_user": "Software developer"
+      },
+      {
+        "title": "Maintainability Review for Shared Modules",
+        "description": "Evaluate naming, structure, duplication, and style consistency in common utility code.",
+        "target_user": "Engineering lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Review One File",
+        "prompt": "Review src/auth.ts for bugs and security issues. Prioritize findings by severity and include line references.",
+        "scenario": "Beginner review of a specific file"
+      },
+      {
+        "title": "Review a Directory",
+        "prompt": "Review the src/utils directory for maintainability, duplicate logic, and error handling. Suggest concrete improvements.",
+        "scenario": "Focused review of a small code area"
+      },
+      {
+        "title": "Security-Focused Review",
+        "prompt": "Review the API handlers for injection, authorization, data exposure, and unsafe input handling. Include only evidence-backed findings.",
+        "scenario": "Security review before release"
+      },
+      {
+        "title": "Architecture and Risk Review",
+        "prompt": "Review the changed files for correctness, performance, security, and long-term maintainability. Group findings by severity and explain tradeoffs.",
+        "scenario": "Advanced review across multiple concerns"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review src/auth.ts for security issues.",
+        "output": [
+          "High: Password reset tokens are accepted without checking expiration. Add an expiration check before account updates.",
+          "Medium: Login errors reveal whether an email exists. Return a consistent authentication failure message.",
+          "Low: The rate-limit constant is duplicated. Move it to a shared configuration file."
+        ]
+      },
+      {
+        "input": "Review src/utils for maintainability.",
+        "output": [
+          "Summary: The utilities are readable, but two helpers duplicate date parsing rules.",
+          "Medium: Date normalization differs between two modules. Consolidate the behavior into one helper.",
+          "Low: Several helper names hide side effects. Rename them to show that they mutate input."
+        ]
+      },
+      {
+        "input": "Review this pull request for correctness and performance.",
+        "output": [
+          "Critical: No evidence found.",
+          "High: A cache key omits the user identifier, which can return another user's result.",
+          "Medium: A loop performs one database lookup per item. Batch the lookup to reduce latency."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Provide the smallest file set that still includes the full behavior under review.",
+      "Ask for a specific focus, such as security, performance, correctness, or maintainability.",
+      "Share relevant tests or related modules so the review can check behavior in context."
+    ],
+    "anti_patterns": [
+      "Do not ask for a broad repository review when only one feature needs attention.",
+      "Do not treat the review as proof that the code is free of defects.",
+      "Do not omit generated code, configuration, or tests when they affect the reviewed behavior."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill review?",
+        "answer": "It reviews code for bugs, security issues, performance problems, style concerns, and maintainability risks."
+      },
+      {
+        "question": "Can it run the project tests?",
+        "answer": "No. The skill is designed for reading and searching files, not executing commands."
+      },
+      {
+        "question": "Does it support security reviews?",
+        "answer": "Yes. It includes checks for common security issues such as injection, authorization gaps, and unsafe input handling."
+      },
+      {
+        "question": "Can it review a whole directory?",
+        "answer": "Yes. The documented target can be a file path, directory, or glob pattern."
+      },
+      {
+        "question": "Will the output include line numbers?",
+        "answer": "Yes. The skill instructs the assistant to provide specific line references when findings are reported."
+      },
+      {
+        "question": "Which tools can use this skill?",
+        "answer": "The report marks it as compatible with Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 99
+    }
+  ]
+}
