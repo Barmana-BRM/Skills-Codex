@@ -1,0 +1,369 @@
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { AppError, fail, readJson, writeJson, verifyDirectoryRoot, redact } from './files.mjs';
+import { buildUpdateItems, applyObservations, targetKey } from './sources.mjs';
+import { defaultSchedule, defaultUpdateState } from './update-state.mjs';
+import { compareVersions } from './versions.mjs';
+
+export { defaultSchedule, defaultUpdateState };
+
+export function validateTarget(target) {
+  if (!target || typeof target !== 'object' || Array.isArray(target) || Object.keys(target).some(key => !['kind', 'id', 'agent', 'confirmation'].includes(key)) || !['skill', 'plugin', 'host'].includes(target.kind) || typeof target.id !== 'string' || !target.id || target.id.length > 300 || /[\x00-\x1f]/.test(target.id)) fail(400, 'INVALID_TARGET', '更新目标无效。');
+  // 36c §6: a target names its side; Codex is the default and is written without it.
+  if (target.agent !== undefined && !['codex', 'claude'].includes(target.agent) || target.agent === 'claude' && target.kind === 'host') fail(400, 'INVALID_TARGET', '更新目标无效。');
+  if (target.agent === 'codex') delete target.agent;
+  // A snapshot's target may come back with its confirmation; only `confirm` confirms (36c §6).
+  if (target.confirmation !== undefined && !['pending', 'confirmed'].includes(target.confirmation)) fail(400, 'INVALID_TARGET', '更新目标无效。');
+  delete target.confirmation;
+  return target;
+}
+export function validateSchedule(schedule) {
+  if (!schedule || typeof schedule !== 'object' || Array.isArray(schedule) || Object.keys(schedule).some(key => !['enabled', 'intervalMinutes', 'timezone', 'autoApply', 'targets'].includes(key))) fail(400, 'INVALID_SCHEDULE', '自动更新配置格式无效。');
+  if (typeof schedule.enabled !== 'boolean' || typeof schedule.autoApply !== 'boolean' || !Number.isInteger(schedule.intervalMinutes) || schedule.intervalMinutes < 15 || schedule.intervalMinutes > 10080) fail(400, 'INVALID_SCHEDULE', '周期必须是 15–10080 分钟的整数，开关必须是布尔值。');
+  if (typeof schedule.timezone !== 'string' || schedule.timezone.length > 100) fail(400, 'INVALID_TIMEZONE', '请选择有效时区。');
+  try { new Intl.DateTimeFormat('en', { timeZone: schedule.timezone }).format(); } catch { fail(400, 'INVALID_TIMEZONE', '请选择有效时区。'); }
+  if (!Array.isArray(schedule.targets) || schedule.targets.length > 1000) fail(400, 'INVALID_TARGET', '目标列表无效或超过 1000 项。');
+  schedule.targets.forEach(validateTarget);
+  return schedule;
+}
+
+// What a binding names besides content: 'same' when nothing else differs. 'upgraded' when only the
+// version's directory does, under the same plugin cache directory and named by a higher version: Codex
+// installs each version of a plugin into its own directory, so it updating a plugin itself is not a
+// new object (HLD 3.8, v1.36). Anything else, a directory replaced at the same version included, is null.
+function bindingIdentity(before, after) {
+  if (!before || !after || typeof before.fingerprint !== 'string' || typeof after.fingerprint !== 'string') return null;
+  const { fingerprint: oldContent, real: oldReal, ino: oldIno, ...oldRest } = before;
+  const { fingerprint: newContent, real: newReal, ino: newIno, ...newRest } = after;
+  if (JSON.stringify(oldRest) !== JSON.stringify(newRest) || typeof oldReal !== 'string' || typeof newReal !== 'string') return null;
+  if (oldReal === newReal) return oldIno === newIno ? 'same' : null;
+  return path.dirname(oldReal) === path.dirname(newReal) && compareVersions(path.basename(newReal), path.basename(oldReal)) === 1 ? 'upgraded' : null;
+}
+
+
+export async function createScheduler({ environments, snapshot, perform, signature, verifySynchronized, hasPreview, coreBusy, clock = () => Date.now(), pollMs = 1000, startTimer = false, recover = true, beforeConfigure, disabledSchedule = async () => null, planVersion = 1, paused = async () => null, migrate = async () => null, crossSide = null }) {
+  const states = {}; const writes = {}; const configuring = new Set(); let running = false; let activeMode; let closed = false; let runningPromise; let timer; let readGeneration = 0;
+  const timestamp = () => new Date(clock()).toISOString();
+  // The separate record of a plan turned off carries the request's schedule. A target in it that has
+  // no state yet takes the record's request version, so a target added while turning the plan off is
+  // not taken for one inherited from 0.10.x (36c §6, 5c review P1-01).
+  function adoptDisabled(state, { origin, ...disabled }, { keepNextRun = false } = {}) {
+    // Only what the record adds: one already in the plan keeps what it had (0.10.x's had nothing; re-review P3-02).
+    const planned = new Set((state.schedule.targets ?? []).map(targetKey));
+    Object.assign(state.schedule, disabled, { enabled: false }); if (!keepNextRun) delete state.schedule.nextRunAt;
+    state.targetMeta ??= {};
+    for (const target of state.schedule.targets ?? []) if (!planned.has(targetKey(target))) state.targetMeta[targetKey(target)] ??= { origin: origin === 'v2' ? 'v2' : 'v1' };
+  }
+  async function persist(mode) {
+    writes[mode] = (writes[mode] || Promise.resolve()).catch(() => {}).then(async () => { await verifyDirectoryRoot(environments[mode].stateBoundary); const disabled = await disabledSchedule(mode); if (disabled) adoptDisabled(states[mode], disabled); await writeJson(path.join(environments[mode].root, 'updates.json'), states[mode]); });
+    return writes[mode];
+  }
+  async function reload({ recover = false } = {}) {
+    if (running) return;
+    const generation = ++readGeneration;
+    for (const mode of Object.keys(environments)) {
+      const state = await readJson(path.join(environments[mode].root, 'updates.json'), defaultUpdateState(planVersion, defaultSchedule()));
+      if (state && Number.isInteger(state.version) && state.version >= 1 && state.version < planVersion) state.version = planVersion;
+      if (!state || state.version !== planVersion || !Array.isArray(state.runs) || typeof state.bindings !== 'object' || !state.schedule || !state.observations) fail(422, 'INVALID_UPDATE_STATE', '更新状态文件格式无效，未启用自动更新。');
+      validateSchedule({ enabled: state.schedule.enabled, intervalMinutes: state.schedule.intervalMinutes, timezone: state.schedule.timezone, autoApply: state.schedule.autoApply, targets: state.schedule.targets });
+      if (running || generation !== readGeneration) return;
+      state.activity ||= []; states[mode] = state;
+      const disabled = await disabledSchedule(mode); if (disabled) adoptDisabled(state, disabled);
+      if (!recover) continue;
+      state.schedule.running = false;
+      let interrupted = false;
+      for (const run of state.runs.filter(item => item.status === 'running')) {
+        run.status = 'error'; run.finishedAt = timestamp(); interrupted = true;
+        run.items.push({ target: { kind: 'host', id: 'interrupted-run' }, name: 'Interrupted update run', status: 'error', occurredAt: timestamp(), reasonCode: 'RUN_INTERRUPTED', message: '上次服务在运行中停止，执行结果未确认。恢复后重新检查实际状态，不重放旧的写请求。' });
+      }
+      if (interrupted) { state.schedule.lastOutcome = 'error'; if (state.schedule.enabled) state.schedule.nextRunAt = timestamp(); await persist(mode); }
+    }
+  }
+  await reload({ recover });
+  function progress(mode) {
+    const record = states[mode].runs[0];
+    if (!record) return null;
+    const active = record.status === 'running';
+    const counts = { current: 0, updated: 0, available: 0, skipped: 0, error: 0 };
+    for (const item of record.items) if (Object.hasOwn(counts, item.status)) counts[item.status]++;
+    const completed = record.items.filter(item => !['update-run', 'interrupted-run'].includes(item.target.id)).length;
+    return structuredClone({ id: record.id, trigger: record.trigger, startedAt: record.startedAt,
+      finishedAt: active ? undefined : record.finishedAt, status: active ? 'running' : record.status,
+      phase: active ? record.phase || 'preparing' : 'finished', total: record.total ?? null,
+      completed: record.total === undefined ? completed : Math.min(completed, record.total),
+      current: active ? record.current : undefined, counts });
+  }
+  function data(mode, currentSnapshot) {
+    const state = states[mode];
+    return { updateProgress: progress(mode), updates: buildUpdateItems(currentSnapshot, state.observations, hasPreview), schedule: { ...state.schedule, running: state.schedule.running }, updateRuns: state.runs.slice(0, 50), extraActivity: state.activity.slice(0, 100) };
+  }
+  /** Another side's items take the same observations as the Codex ones. */
+  function decorate(mode, items) { return applyObservations(items, states[mode].observations, hasPreview); }
+  function canonicalTarget(target, current) {
+    validateTarget(target);
+    if (target.kind === 'skill' && !target.agent) {
+      const skill = current.skills.find(item => item.id === target.id);
+      if (skill?.pluginId && current.plugins.some(plugin => plugin.id === skill.pluginId && plugin.installed)) return { kind: 'plugin', id: skill.pluginId };
+      if (skill?.scope === 'system') return { kind: 'host', id: 'codex-system-skills' };
+    }
+    return target;
+  }
+  async function normalize(mode, targets, current) {
+    const result = []; const seen = new Set();
+    for (const original of targets) { const target = canonicalTarget(original, current); const key = targetKey(target); if (!seen.has(key)) { seen.add(key); result.push(target); } }
+    return result;
+  }
+  async function configure(mode, input, options = {}) {
+    if (configuring.has(mode)) fail(409, 'BUSY', '计划配置正在保存，请完成后重试。');
+    configuring.add(mode);
+    try { return await configureTransaction(mode, input, options); } finally { configuring.delete(mode); }
+  }
+  /** Each plan target's origin (`v1` or `v2`) and, for a cross-side skill, its confirmation (36c §6). */
+  function targetMeta(mode) { return structuredClone(states[mode].targetMeta ?? {}); }
+  /** 36c §6: a version-1 request replaces Codex's targets only; another side's stay. */
+  function requestedTargets(mode, input, version2) {
+    return version2 ? input.targets : [...input.targets.filter(target => !target.agent), ...states[mode].schedule.targets.filter(target => target.agent && target.agent !== 'codex')];
+  }
+  async function configureTransaction(mode, input, { version2 = false, confirm = false } = {}) {
+    validateSchedule(input); const state = states[mode];
+    if (running && input.enabled) fail(409, 'BUSY', '一轮更新正在执行；可先关闭计划，执行结束后再调整。');
+    const prior = state.schedule; const priorKeys = new Set(prior.targets.map(targetKey)); const priorMeta = state.targetMeta ?? {};
+    // Another side's targets kept from a version-1 request keep their state too.
+    const kept = version2 ? [] : prior.targets.filter(target => target.agent && target.agent !== 'codex');
+    let targets = requestedTargets(mode, input, version2); const bindings = {}; let current;
+    if (input.enabled) {
+      current = await snapshot(mode); targets = await normalize(mode, targets, current);
+      if (!targets.length) fail(400, 'EMPTY_TARGETS', '启用计划前至少选择一个有效目标。');
+      for (const target of targets) {
+        const key = targetKey(target);
+        // Targets kept from outside the request, and a version-2 request's targets whose Agent is
+        // paused, keep their binding and do not stop the plan (HLD 3.6, 3.8).
+        if (kept.some(entry => targetKey(entry) === key) || version2 && await paused(mode, target)) { if (state.bindings[key]) bindings[key] = state.bindings[key]; continue; }
+        const item = current.updates.find(item => targetKey(item.target) === key);
+        if (!item || !item.canCheck) fail(422, 'TARGET_NOT_READY', '所选目标尚不能检查更新，请先确认来源。');
+        bindings[key] = await signature(mode, target, current);
+      }
+    }
+    // A target submitted as it was keeps its state; a new one is this request's. "As it was" compares the
+    // target's identity only (36c §6; 5c review P2-01): what the confirmation answers is checked afresh.
+    const resubmitted = key => priorKeys.has(key);
+    const meta = {};
+    for (const target of targets) { const key = targetKey(target); meta[key] = resubmitted(key) ? { ...(priorMeta[key] ?? { origin: 'v1' }) } : { origin: version2 ? 'v2' : 'v1' }; }
+    if (version2 && crossSide && mode === 'local') {
+      // A skill whose content lies in the other side's plugin is confirmed for a plan while that side is managed.
+      const cross = await crossSide(current ?? await snapshot(mode), targets);
+      const counted = targets.filter(target => cross.get(targetKey(target))?.otherEnabled && meta[targetKey(target)].origin === 'v2');
+      const unconfirmed = counted.filter(target => meta[targetKey(target)].confirmation !== 'confirmed');
+      const starts = input.enabled && input.autoApply && (!prior.enabled || !prior.autoApply);
+      const needed = counted.some(target => !resubmitted(targetKey(target))) || starts;
+      if (unconfirmed.length && needed && !confirm) throw new AppError(409, 'CONFIRMATION_REQUIRED', '计划中有技能的内容在另一侧插件的目录中，请确认后重试。', { nativeRules: [{ kind: 'affected-plugins',
+        message: '计划中的这些技能，内容在另一侧插件的目录中；自动应用会改写这些插件：', items: unconfirmed.map(target => { const info = cross.get(targetKey(target)); return `${info.name} (${info.plugins.join(', ')})`; }) }] });
+      for (const target of unconfirmed) meta[targetKey(target)].confirmation = confirm ? 'confirmed' : 'pending';
+    }
+    await beforeConfigure?.(mode, input);
+    const event = { id: crypto.randomUUID(), action: 'schedule.configure', target: mode, createdAt: timestamp(), status: 'success', message: input.enabled ? `已启用固定 ${input.intervalMinutes} 分钟周期，${targets.length} 个明确目标；${input.autoApply ? '自动应用已验证更新' : '仅检查'}。` : '已关闭自动更新；在途单项安全结束后不启动后续对象。', canRestore: false };
+    // Commit the proposed configuration before exposing it to the timer. Failed
+    // saves must never leave an unacknowledged plan enabled in memory.
+    writes[mode] = (writes[mode] || Promise.resolve()).catch(() => {}).then(async () => {
+      const proposed = structuredClone(state);
+      proposed.schedule = { ...proposed.schedule, ...structuredClone(input), targets }; proposed.targetMeta = meta;
+      if (input.enabled) { proposed.schedule.nextRunAt = new Date(clock() + input.intervalMinutes * 60000).toISOString(); proposed.schedule.failureCount = 0; }
+      else delete proposed.schedule.nextRunAt;
+      if (input.enabled) proposed.bindings = bindings;
+      proposed.activity.unshift(event); proposed.activity = proposed.activity.slice(0, 100);
+      await verifyDirectoryRoot(environments[mode].stateBoundary);
+      await writeJson(path.join(environments[mode].root, 'updates.json'), proposed);
+      // The active run keeps this state object; preserve runtime fields that may
+      // have advanced while the atomic file write was awaiting IO.
+      const runtime = { running: state.schedule.running, lastRunAt: state.schedule.lastRunAt, lastOutcome: state.schedule.lastOutcome };
+      state.schedule = { ...proposed.schedule, ...runtime }; state.targetMeta = meta;
+      if (input.enabled) state.bindings = bindings;
+      state.activity.unshift(event); state.activity = state.activity.slice(0, 100);
+    });
+    // Like a version-1 snapshot, a version-1 answer names Codex's targets only.
+    await writes[mode]; return { message: event.message, schedule: { ...state.schedule, ...(version2 ? {} : { targets: state.schedule.targets.filter(target => !target.agent || target.agent === 'codex') }) } };
+  }
+  async function observe(mode, target, updateItem) {
+    const { sourceInfo, installedPath, affectedSkillIds, ...publicState } = updateItem;
+    states[mode].observations[targetKey(target)] = publicState; await persist(mode);
+  }
+  async function observeError(mode, target, error) {
+    states[mode].observations[targetKey(target)] = { status: 'error', canApply: false, message: redact(error.message), reasonCode: error.code || 'UPDATE_FAILED', checkedAt: timestamp() }; await persist(mode);
+  }
+  // Whether what is there now is what the plan bound. A binding saved before 0.11.2 counted Finder's
+  // files in a skill's content (HLD 3.3A): the same directory with the same files, counted that way,
+  // is the same binding, and is kept from here on as it is written now.
+  async function bound(mode, target, actual) {
+    const state = states[mode], key = targetKey(target), expected = state.bindings[key];
+    if (JSON.stringify(actual) === JSON.stringify(expected)) return true;
+    if (bindingIdentity(expected, actual) !== 'same') return false;
+    let counted; try { counted = await signature(mode, target, undefined, { finderFiles: true }); } catch { return false; }
+    if (JSON.stringify(counted) !== JSON.stringify(expected)) return false;
+    state.bindings[key] = actual;
+    return true;
+  }
+  async function reconcileBinding(mode, target, actual) {
+    const state = states[mode], key = targetKey(target), expected = state.bindings[key];
+    if (!expected) return false;
+    try { actual ||= await signature(mode, target); } catch { return false; }
+    if (await bound(mode, target, actual)) return true;
+    // Only content drift and a higher version installed by Codex itself can be reconciled. Changing
+    // owner, source, path, directory identity or generation still requires explicit selection.
+    const identity = bindingIdentity(expected, actual);
+    if (!state.schedule.enabled || target.kind !== 'plugin' || !verifySynchronized || !identity) return false;
+    try {
+      if (!await verifySynchronized(mode, target, actual)) return false;
+      if (JSON.stringify(await signature(mode, target)) !== JSON.stringify(actual)) return false;
+    } catch { return false; }
+    if (await disabledSchedule(mode) || JSON.stringify(state.bindings[key]) !== JSON.stringify(expected)) return false;
+    state.bindings[key] = actual;
+    state.activity.unshift({ id: crypto.randomUUID(), action: 'schedule.reconcile', target: target.id, ...(target.agent ? { agent: target.agent } : {}), createdAt: timestamp(), status: 'success', message: identity === 'upgraded' ? '插件已由 Codex 自行更新，装入的版本和内容与来源一致；原定时计划继续生效。' : '已核实插件外部同步，已恢复原定时计划绑定。', canRestore: false });
+    state.activity = state.activity.slice(0, 100);
+    await persist(mode);
+    return true;
+  }
+  async function beforeOwnUpdate(mode, target) {
+    const binding = states[mode].bindings[targetKey(target)];
+    if (!binding) return null;
+    try { return await bound(mode, target, await signature(mode, target)) ? states[mode].bindings[targetKey(target)] : null; } catch { return null; }
+  }
+  async function afterOwnUpdate(mode, target, originalBinding) {
+    // The update has landed: a binding that cannot be read again now is left to the next run, which
+    // migrates or reports it, instead of failing what was done (5a/5b review P1-01).
+    if (originalBinding && JSON.stringify(states[mode].bindings[targetKey(target)]) === JSON.stringify(originalBinding))
+      try { states[mode].bindings[targetKey(target)] = await signature(mode, target); } catch { /* kept */ }
+    states[mode].observations[targetKey(target)] = { status: 'current', canApply: false, message: '更新已读回确认。', checkedAt: timestamp() };
+    await persist(mode);
+  }
+  async function afterOwnerRefresh(mode, target, originalBinding) {
+    if (!originalBinding || JSON.stringify(states[mode].bindings[targetKey(target)]) !== JSON.stringify(originalBinding)) return;
+    const actual = await signature(mode, target);
+    // A CLI marketplace refresh may install the new package itself. Preserve a
+    // plan only for the same source/owner; source changes still require consent.
+    if (JSON.stringify(actual.sourceIdentity) !== JSON.stringify(originalBinding.sourceIdentity)) return;
+    states[mode].bindings[targetKey(target)] = actual;
+    await persist(mode);
+  }
+  // 36c §6: a plan applies a cross-side skill saved by a version-2 request only once confirmed while the
+  // other side is managed; a version-2 manual batch applies one only with the request's confirmation.
+  async function crossHold(mode, target, current, { trigger, version2, confirm }) {
+    // Only what could be held asks for the cross-side facts, which take a multi-Agent snapshot (5c review P3-04).
+    if (!crossSide || mode !== 'local' || target.kind !== 'skill') return null;
+    const meta = states[mode].targetMeta?.[targetKey(target)];
+    if (trigger === 'manual' ? !version2 || confirm : meta?.origin !== 'v2' || meta.confirmation === 'confirmed') return null;
+    const info = (await crossSide(current, [target])).get(targetKey(target)); if (!info) return null;
+    if (trigger === 'manual') return info.discovered ? '这项技能的内容在另一侧插件的目录中；这次批量执行没有确认，只检查、不应用。' : null;
+    return info.otherEnabled ? '这项技能的内容在另一侧插件的目录中；须先在 SkillDock 0.11 的计划设置中确认后才会自动应用（0.10.x 界面无法确认），这次只检查。' : null;
+  }
+  async function run(mode, { targets, autoApply, trigger = 'manual', version2 = false, confirm = false }) {
+    if (typeof autoApply !== 'boolean') fail(400, 'INVALID_ACTION', 'autoApply 必须显式为布尔值。');
+    if (closed || running || coreBusy()) fail(409, 'BUSY', '已有写操作或更新批次正在执行，请稍后重试。');
+    running = true; activeMode = mode;
+    const operation = (async () => {
+      const state = states[mode];
+      const record = { id: crypto.randomUUID(), trigger, startedAt: timestamp(), status: 'running', phase: 'preparing', items: [] };
+      state.runs.unshift(record); state.runs = state.runs.slice(0, 50); state.schedule.running = true;
+      let stopped = false;
+      try {
+        await persist(mode);
+        const current = await snapshot(mode);
+        const selected = await normalize(mode, targets || current.updates.map(item => item.target), current);
+        record.total = selected.length;
+        for (let target of selected) {
+          const disabled = await disabledSchedule(mode);
+          if (disabled) adoptDisabled(state, disabled, { keepNextRun: true });
+          if (closed || trigger !== 'manual' && !state.schedule.enabled) { stopped = true; break; }
+          record.phase = 'checking';
+          record.current = { target, name: current.updates.find(item => targetKey(item.target) === targetKey(target))?.name || target.id };
+          await persist(mode);
+          const currentState = await snapshot(mode); let item = currentState.updates.find(candidate => targetKey(candidate.target) === targetKey(target));
+          let name = item?.name || target.id;
+          let checked;
+          const appendResult = result => record.items.push({ target, name, occurredAt: timestamp(),
+            ...(checked?.installedVersion || item?.installedVersion ? { installedVersion: checked?.installedVersion || item.installedVersion } : {}),
+            ...(checked?.availableVersion ? { availableVersion: checked.availableVersion } : {}), ...result });
+          // HLD 3.8: a target whose Agent is not managed pauses; it is not a failure.
+          const pause = await paused(mode, target);
+          if (pause) { appendResult({ status: 'skipped', message: pause, reasonCode: 'AGENT_PAUSED' }); await persist(mode); continue; }
+          // A Claude skill that became shared changed its ID: its plan target follows by real path (HLD 3.8).
+          if (!item && target.agent === 'claude') {
+            const moved = await migrate(mode, target, state.bindings[targetKey(target)], currentState);
+            if (moved && targetKey(moved) !== targetKey(target)) {
+              const from = targetKey(target), to = targetKey(moved);
+              state.schedule.targets = state.schedule.targets.map(entry => targetKey(entry) === from ? moved : entry);
+              if (state.bindings[from]) { state.bindings[to] = { ...state.bindings[from], target: moved }; delete state.bindings[from]; }
+              if (state.targetMeta?.[from]) { state.targetMeta[to] = state.targetMeta[from]; delete state.targetMeta[from]; }
+              state.activity.unshift({ id: crypto.randomUUID(), action: 'schedule.migrate', target: moved.id, ...(moved.agent ? { agent: moved.agent } : {}), createdAt: timestamp(), status: 'success', message: '技能的共用状态已变化，计划中的这一项已随对象 ID 迁移。', canRestore: false });
+              state.activity = state.activity.slice(0, 100);
+              target = moved; item = currentState.updates.find(candidate => targetKey(candidate.target) === to); name = item?.name || target.id;
+              await persist(mode);
+            }
+          }
+          if (!item) { appendResult({ status: 'skipped', message: '原目标已不存在；重新选择目标后才会纳入计划。', reasonCode: 'TARGET_MISSING' }); await persist(mode); continue; }
+          if (trigger !== 'manual') {
+            let actual; let unread; try { actual = await signature(mode, target, currentState); } catch (error) { actual = null; if (error.code === 'SOURCE_MISSING') unread = error; }
+            // What cannot be read this round is no change: the binding stays (phase 5 re-review P2-01).
+            if (unread) { appendResult({ status: 'skipped', reasonCode: 'SOURCE_MISSING', message: unread.message }); await persist(mode); continue; }
+            if (!actual || !await reconcileBinding(mode, target, actual)) { appendResult({ status: 'skipped', reasonCode: 'TARGET_BINDING_CHANGED', message: '来源、所有者、安装目录或内容已变化；旧计划不接管新对象，请重新选择。' }); await persist(mode); continue; }
+          }
+          if (!item.canCheck) { appendResult({ status: 'skipped', message: item.message, reasonCode: item.reasonCode }); await persist(mode); continue; }
+          try {
+            checked = (await perform({ mode, action: 'update.check', target })).updateItem;
+            const wantsApply = !checked.updatedDuringCheck && checked.status === 'available' && autoApply && checked.canAutoApply && checked.canApply && (trigger === 'manual' || !await disabledSchedule(mode));
+            const hold = wantsApply ? await crossHold(mode, target, currentState, { trigger, version2, confirm }) : null;
+            if (checked.updatedDuringCheck) {
+              appendResult({ status: 'updated', message: checked.message });
+            } else if (hold) {
+              appendResult({ status: 'available', message: hold, reasonCode: 'CONFIRMATION_REQUIRED' });
+            } else if (wantsApply) {
+              if (trigger !== 'manual') {
+                const actual = await signature(mode, target);
+                if (JSON.stringify(actual) !== JSON.stringify(state.bindings[targetKey(target)])) {
+                  appendResult({ status: 'skipped', reasonCode: 'TARGET_BINDING_CHANGED', message: '检查期间来源或安装身份发生变化；重新选择后才会自动应用。' }); await persist(mode); continue;
+                }
+              }
+              record.phase = 'applying';
+              await persist(mode);
+              await perform({ mode, action: 'update.apply', target, previewId: checked.previewId });
+              appendResult({ status: 'updated', message: '已更新并确认结果。' });
+            } else appendResult({ status: checked.status === 'current' ? 'current' : checked.status === 'available' ? 'available' : checked.status === 'error' ? 'error' : 'skipped', message: checked.message, reasonCode: checked.reasonCode });
+          } catch (error) { appendResult({ status: 'error', message: redact(error.message), reasonCode: error.code || 'UPDATE_FAILED' }); }
+          await persist(mode);
+        }
+        const failures = record.items.filter(item => ['error', 'skipped'].includes(item.status) && item.reasonCode !== 'AGENT_PAUSED');
+        record.status = stopped || failures.length ? record.items.length && failures.length === record.items.length && record.items.every(item => item.status === 'error') ? 'error' : 'partial' : 'success';
+      } catch (error) {
+        record.status = 'error'; record.items.push({ target: { kind: 'host', id: 'update-run' }, name: 'Update run', status: 'error', occurredAt: timestamp(), reasonCode: error.code || 'UPDATE_FAILED', message: redact(error.message) });
+      } finally {
+        record.phase = 'finalizing'; delete record.current;
+        record.finishedAt = timestamp(); state.schedule.running = false; state.schedule.lastRunAt = record.startedAt; state.schedule.lastOutcome = record.status;
+        if (record.status === 'success') state.schedule.lastSuccessAt = record.finishedAt;
+        if (trigger !== 'manual') {
+          const retry = record.items.some(item => item.status === 'error');
+          state.schedule.failureCount = retry ? (state.schedule.failureCount || 0) + 1 : 0;
+          const delay = retry ? Math.min(state.schedule.intervalMinutes, 5 * 2 ** Math.min(state.schedule.failureCount - 1, 6)) : state.schedule.intervalMinutes;
+          if (state.schedule.enabled) state.schedule.nextRunAt = new Date(clock() + delay * 60000).toISOString();
+          else delete state.schedule.nextRunAt;
+        }
+        try { await persist(mode); } catch (error) { record.status = 'error'; throw error; }
+      }
+      return { message: `更新批次结束：${record.items.filter(item => item.status === 'updated').length} 项已更新。`, run: structuredClone(record) };
+    })();
+    runningPromise = operation;
+    try { return await operation; } finally { running = false; activeMode = undefined; runningPromise = undefined; }
+  }
+  let initialTick = true;
+  async function tick() {
+    if (closed || running || coreBusy()) return;
+    for (const mode of Object.keys(environments)) {
+      const schedule = states[mode].schedule;
+      if (schedule.enabled && (!schedule.nextRunAt || !Number.isFinite(Date.parse(schedule.nextRunAt)) || Date.parse(schedule.nextRunAt) <= clock())) {
+        try { await run(mode, { targets: structuredClone(schedule.targets), autoApply: schedule.autoApply, trigger: initialTick ? 'catch-up' : 'scheduled' }); } catch (error) { if (error.code !== 'BUSY') { schedule.lastOutcome = 'error'; schedule.nextRunAt = new Date(clock() + schedule.intervalMinutes * 60000).toISOString(); await persist(mode); } }
+        break;
+      }
+    }
+    initialTick = false;
+  }
+  if (startTimer) { timer = setInterval(() => { tick().catch(() => {}); }, pollMs); timer.unref(); setTimeout(() => { tick().catch(() => {}); }, 0).unref(); }
+  return { reload, data, decorate, targetMeta, requestedTargets, progress, configure, observe, observeError, reconcileBinding, beforeOwnUpdate, afterOwnUpdate, afterOwnerRefresh, run, tick, canonicalTarget, isRunning: () => running, close: async () => { closed = true; clearInterval(timer); if (runningPromise) await runningPromise.catch(() => {}); await Promise.all(Object.values(writes).map(promise => promise.catch(() => {}))); } };
+}

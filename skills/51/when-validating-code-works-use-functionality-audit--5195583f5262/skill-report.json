@@ -1,0 +1,4250 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:36:06.289Z",
+    "slug": "dnyoussef-when-validating-code-works-use-functionality-audit",
+    "source_url": "https://github.com/DNYoussef/ai-chrome-extension/tree/main/.claude/skills/testing-quality/when-validating-code-works-use-functionality-audit",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "111d6b92bfe35f5c87160d0335e221dafb8edd64c574b792534ce8522b95fe64",
+    "tree_hash": "b4c889cf0db3d1cb68eee3bd93552eb12d8e8191102b57676cf7c3db7a1629e4",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "when-validating-code-works-use-functionality-audit",
+    "description": "Guides runtime functionality audits for generated or modified code. It covers sandbox setup, test execution, debugging, regression checks, and audit reporting.",
+    "summary": "Validate code behavior through sandboxed test execution and structured debugging.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DNYoussef",
+    "license": "MIT",
+    "tags": [
+      "code-validation",
+      "testing",
+      "debugging",
+      "regression-testing",
+      "quality-assurance"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem",
+      "network",
+      "env_access"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from Markdown formatting, Graphviz labels, local test imports, and dummy environment examples. The confirmed risks are operational: the skill runs external commands, installs dependencies, mounts workspaces into Docker, deletes a fixed temporary directory, and stores audit artifacts in shared memory. No prompt injection attempt was found in the reviewed files.",
+    "remediation": [
+      {
+        "issue": "Untrusted code execution during audits",
+        "suggestion": "Require confirmation before installing dependencies or running tests. Prefer containers or virtual machines with read-only source mounts, network limits, and disabled package lifecycle scripts.",
+        "severity": "high"
+      },
+      {
+        "issue": "Persistent storage of logs and reports",
+        "suggestion": "Redact secrets, tokens, customer data, and stack traces before storing logs, reports, or metrics in Claude Flow memory.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Dynamic paths and cleanup commands",
+        "suggestion": "Use mktemp -d, quote command substitutions, validate sandbox paths, and avoid fixed rm -rf cleanup paths.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Dependency installation examples",
+        "suggestion": "Pin package versions and document npm and pip lifecycle script risks before users run install commands.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 153,
+            "line_end": 156
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 165,
+            "line_end": 169
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 572,
+            "line_end": 572
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 573,
+            "line_end": 574
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 574,
+            "line_end": 575
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 575,
+            "line_end": 576
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 576,
+            "line_end": 582
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 129,
+            "line_end": 129
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 130,
+            "line_end": 130
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 197,
+            "line_end": 197
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 200,
+            "line_end": 200
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 201,
+            "line_end": 201
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 202,
+            "line_end": 202
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 221,
+            "line_end": 221
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 226,
+            "line_end": 226
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 251,
+            "line_end": 251
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 252,
+            "line_end": 252
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 379,
+            "line_end": 379
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 383,
+            "line_end": 383
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 408,
+            "line_end": 408
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 424,
+            "line_end": 424
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 425,
+            "line_end": 425
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 428,
+            "line_end": 428
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 431,
+            "line_end": 431
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 442,
+            "line_end": 442
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 456,
+            "line_end": 456
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 457,
+            "line_end": 457
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 463,
+            "line_end": 463
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 468,
+            "line_end": 468
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 469,
+            "line_end": 469
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 470,
+            "line_end": 470
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 484,
+            "line_end": 484
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 509,
+            "line_end": 509
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 510,
+            "line_end": 510
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 511,
+            "line_end": 511
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 512,
+            "line_end": 512
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 520,
+            "line_end": 520
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 521,
+            "line_end": 521
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 525,
+            "line_end": 525
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 526,
+            "line_end": 526
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 527,
+            "line_end": 527
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 528,
+            "line_end": 528
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 534,
+            "line_end": 534
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 535,
+            "line_end": 535
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 540,
+            "line_end": 540
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 541,
+            "line_end": 541
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 542,
+            "line_end": 542
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 166,
+            "line_end": 166
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 267,
+            "line_end": 267
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 291,
+            "line_end": 291
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 154,
+            "line_end": 154
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 166,
+            "line_end": 166
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 267,
+            "line_end": 267
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 291,
+            "line_end": 291
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 157,
+            "line_end": 157
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 704,
+            "line_end": 704
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "PROCESS.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "README.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "README.md",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "README.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "README.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 707,
+            "line_end": 707
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 461,
+            "line_end": 461
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 462,
+            "line_end": 462
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 699,
+            "line_end": 699
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 700,
+            "line_end": 700
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 711,
+            "line_end": 711
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 717,
+            "line_end": 717
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 654,
+            "line_end": 654
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 650,
+            "line_end": 650
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 649,
+            "line_end": 649
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:process-diagram.gv:26:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "process-diagram.gv",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "tests_pass -> phase5 [label=\"Yes\\n(No Issues)\"];"
+      },
+      {
+        "id": "blocker:process-diagram.gv:27:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "process-diagram.gv",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "tests_pass -> phase3 [label=\"No\\n(Failures Found)\"];"
+      },
+      {
+        "id": "external_commands:PROCESS.md:153:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 153,
+        "line_end": 156,
+        "snippet": "const testFile = `tests/${file.replace('.js', '.test.js')}`;"
+      },
+      {
+        "id": "external_commands:PROCESS.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 165,
+        "line_end": 169,
+        "snippet": "`;"
+      },
+      {
+        "id": "external_commands:PROCESS.md:572:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 572,
+        "line_end": 572,
+        "snippet": "- Test logs: \\`test-output.log\\`, \\`retest-output.log\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:573:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 573,
+        "line_end": 574,
+        "snippet": "- Coverage report: \\`coverage/lcov-report/index.html\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:574:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 574,
+        "line_end": 575,
+        "snippet": "- Issue analysis: \\`issue-categories.json\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:575:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 575,
+        "line_end": 576,
+        "snippet": "- Fix strategy: \\`fix-strategy.json\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:576:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "PROCESS.md",
+        "line_start": 576,
+        "line_end": 582,
+        "snippet": "- Production readiness: \\`production-readiness.json\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:32:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "mkdir -p /tmp/functionality-audit-sandbox-$(date +%s)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:34:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "export AUDIT_SANDBOX=$(pwd)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:129:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 129,
+        "line_end": 129,
+        "snippet": "SANDBOX_CONFIG=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-1/tester/s"
+      },
+      {
+        "id": "external_commands:PROCESS.md:130:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "cd $(echo $SANDBOX_CONFIG | jq -r '.path')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:197:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 197,
+        "line_end": 197,
+        "snippet": "COVERAGE=$(grep -oP '\\d+\\.\\d+(?=%)' coverage/lcov-report/index.html | head -1 || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:200:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "TESTS_RUN=$(grep -c \"PASS\\|FAIL\" test-output.log || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:201:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "TESTS_PASSED=$(grep -c \"PASS\" test-output.log || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:202:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 202,
+        "line_end": 202,
+        "snippet": "TESTS_FAILED=$(grep -c \"FAIL\" test-output.log || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:212:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "\"timestamp\": \"$(date -Iseconds)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:221:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 221,
+        "line_end": 221,
+        "snippet": "--value \"$(cat execution-metrics.json)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:226:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "--value \"$(cat test-output.log | base64)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:251:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "EXEC_RESULTS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-2/tester/exe"
+      },
+      {
+        "id": "external_commands:PROCESS.md:252:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 252,
+        "line_end": 252,
+        "snippet": "EXIT_CODE=$(echo $EXEC_RESULTS | jq -r '.exit_code')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:379:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 379,
+        "line_end": 379,
+        "snippet": "--value \"$(cat issue-categories.json)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:383:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 383,
+        "line_end": 383,
+        "snippet": "--value \"$(cat fix-strategy.json)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:408:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 408,
+        "line_end": 408,
+        "snippet": "FIX_STRATEGY=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-3/coder/fix-"
+      },
+      {
+        "id": "external_commands:PROCESS.md:424:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 424,
+        "line_end": 424,
+        "snippet": "NEW_TESTS_PASSED=$(grep -c \"PASS\" retest-output.log || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:425:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 425,
+        "line_end": 425,
+        "snippet": "NEW_COVERAGE=$(grep -oP '\\d+\\.\\d+(?=%)' coverage/lcov-report/index.html | head -1 || echo \"0\")"
+      },
+      {
+        "id": "external_commands:PROCESS.md:428:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 428,
+        "line_end": 428,
+        "snippet": "ORIGINAL_TESTS_PASSED=$(echo $EXEC_RESULTS | jq -r '.tests_passed')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:431:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 431,
+        "line_end": 431,
+        "snippet": "IMPROVEMENT=$((NEW_TESTS_PASSED - ORIGINAL_TESTS_PASSED))"
+      },
+      {
+        "id": "external_commands:PROCESS.md:442:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 442,
+        "line_end": 442,
+        "snippet": "REGRESSIONS=$(grep \"^<.*PASS\" regression-diff.txt | wc -l)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:456:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 456,
+        "line_end": 456,
+        "snippet": "TESTS_TOTAL=$(echo $EXEC_RESULTS | jq -r '.tests_run')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:457:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 457,
+        "line_end": 457,
+        "snippet": "PASSING_PCT=$((NEW_TESTS_PASSED * 100 / TESTS_TOTAL))"
+      },
+      {
+        "id": "external_commands:PROCESS.md:463:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 463,
+        "line_end": 463,
+        "snippet": "[ \"$(echo \"$NEW_COVERAGE < $COVERAGE_THRESHOLD\" | bc)\" -eq 1 ] && READY=false"
+      },
+      {
+        "id": "external_commands:PROCESS.md:468:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 468,
+        "line_end": 468,
+        "snippet": "\"all_tests_passing\": $([ \"$RETEST_EXIT_CODE\" -eq 0 ] && echo \"true\" || echo \"false\"),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:469:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 469,
+        "line_end": 469,
+        "snippet": "\"coverage_threshold_met\": $([ \"$(echo \"$NEW_COVERAGE >= $COVERAGE_THRESHOLD\" | bc)\" -eq 1 ] && echo "
+      },
+      {
+        "id": "external_commands:PROCESS.md:470:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 470,
+        "line_end": 470,
+        "snippet": "\"no_regressions\": $([ \"$REGRESSIONS\" -eq 0 ] && echo \"true\" || echo \"false\"),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:484:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 484,
+        "line_end": 484,
+        "snippet": "--value \"$(cat production-readiness.json)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:509:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 509,
+        "line_end": 509,
+        "snippet": "SANDBOX_CONFIG=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-1/tester/s"
+      },
+      {
+        "id": "external_commands:PROCESS.md:510:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 510,
+        "line_end": 510,
+        "snippet": "EXEC_RESULTS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-2/tester/exe"
+      },
+      {
+        "id": "external_commands:PROCESS.md:511:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 511,
+        "line_end": 511,
+        "snippet": "ROOT_CAUSES=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-3/coder/root-"
+      },
+      {
+        "id": "external_commands:PROCESS.md:512:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 512,
+        "line_end": 512,
+        "snippet": "READINESS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-4/validator/rea"
+      },
+      {
+        "id": "external_commands:PROCESS.md:520:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 520,
+        "line_end": 520,
+        "snippet": "**Generated:** $(date)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:521:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 521,
+        "line_end": 521,
+        "snippet": "**Sandbox:** $(echo $SANDBOX_CONFIG | jq -r '.path')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:525:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 525,
+        "line_end": 525,
+        "snippet": "- **Status:** $(echo $READINESS | jq -r 'if .ready_for_deployment then \"✅ READY FOR PRODUCTION\" else"
+      },
+      {
+        "id": "external_commands:PROCESS.md:526:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 526,
+        "line_end": 526,
+        "snippet": "- **Tests Executed:** $(echo $READINESS | jq -r '.tests_total')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:527:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 527,
+        "line_end": 527,
+        "snippet": "- **Tests Passed:** $(echo $READINESS | jq -r '.tests_passing')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:528:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 528,
+        "line_end": 528,
+        "snippet": "- **Code Coverage:** $(echo $READINESS | jq -r '.coverage')%"
+      },
+      {
+        "id": "external_commands:PROCESS.md:534:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 534,
+        "line_end": 534,
+        "snippet": "- **Sandbox Created:** $(echo $SANDBOX_CONFIG | jq -r '.path')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:535:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 535,
+        "line_end": 535,
+        "snippet": "- **Framework:** $(echo $SANDBOX_CONFIG | jq -r '.framework')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:540:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 540,
+        "line_end": 540,
+        "snippet": "- **Initial Tests Run:** $(echo $EXEC_RESULTS | jq -r '.tests_run')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:541:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 541,
+        "line_end": 541,
+        "snippet": "- **Initial Tests Passed:** $(echo $EXEC_RESULTS | jq -r '.tests_passed')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:542:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 542,
+        "line_end": 542,
+        "snippet": "- **Initial Tests Failed:** $(echo $EXEC_RESULTS | jq -r '.tests_failed')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:543:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 543,
+        "line_end": 543,
+        "snippet": "- **Initial Coverage:** $(echo $EXEC_RESULTS | jq -r '.coverage_percentage')%"
+      },
+      {
+        "id": "external_commands:PROCESS.md:548:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 548,
+        "line_end": 548,
+        "snippet": "$(echo $ROOT_CAUSES | jq -r 'to_entries[] | \"- **\\(.key):** \\(.value | length) issue(s)\"')"
+      },
+      {
+        "id": "external_commands:PROCESS.md:558:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 558,
+        "line_end": 558,
+        "snippet": "- **Final Tests Passed:** $(echo $READINESS | jq -r '.tests_passing') / $(echo $READINESS | jq -r '."
+      },
+      {
+        "id": "external_commands:PROCESS.md:559:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 559,
+        "line_end": 559,
+        "snippet": "- **Final Coverage:** $(echo $READINESS | jq -r '.coverage')%"
+      },
+      {
+        "id": "external_commands:PROCESS.md:561:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 561,
+        "line_end": 561,
+        "snippet": "- **Production Ready:** $(echo $READINESS | jq -r 'if .ready_for_deployment then \"Yes\" else \"No\" end"
+      },
+      {
+        "id": "external_commands:PROCESS.md:580:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 580,
+        "line_end": 580,
+        "snippet": "$(echo $READINESS | jq -r 'if .ready_for_deployment then \"✅ Code is ready for production deployment."
+      },
+      {
+        "id": "external_commands:PROCESS.md:588:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 588,
+        "line_end": 588,
+        "snippet": "\"timestamp\": \"$(date -Iseconds)\","
+      },
+      {
+        "id": "external_commands:PROCESS.md:589:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 589,
+        "line_end": 589,
+        "snippet": "\"duration_minutes\": $(($(date +%s) - START_TIME) / 60),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:590:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 590,
+        "line_end": 590,
+        "snippet": "\"tests_total\": $(echo $READINESS | jq -r '.tests_total'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:591:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 591,
+        "line_end": 591,
+        "snippet": "\"tests_passed\": $(echo $READINESS | jq -r '.tests_passing'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:592:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 592,
+        "line_end": 592,
+        "snippet": "\"coverage_percentage\": $(echo $READINESS | jq -r '.coverage'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:593:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 593,
+        "line_end": 593,
+        "snippet": "\"issues_found\": $(echo $ROOT_CAUSES | jq '[.[] | length] | add'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:594:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 594,
+        "line_end": 594,
+        "snippet": "\"issues_fixed\": $(echo $ROOT_CAUSES | jq '[.[] | length] | add'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:595:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 595,
+        "line_end": 595,
+        "snippet": "\"production_ready\": $(echo $READINESS | jq -r '.ready_for_deployment'),"
+      },
+      {
+        "id": "external_commands:PROCESS.md:605:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 605,
+        "line_end": 605,
+        "snippet": "--value \"$(cat functionality-audit-report.md)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:609:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 609,
+        "line_end": 609,
+        "snippet": "--value \"$(cat audit-metrics.json)\""
+      },
+      {
+        "id": "external_commands:PROCESS.md:746:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 746,
+        "line_end": 746,
+        "snippet": "READY=$(jq -r '.ready_for_deployment' production-readiness.json)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:793:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 793,
+        "line_end": 793,
+        "snippet": "READY=$(jq -r '.ready_for_deployment' production-readiness.json)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:808:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "PROCESS.md",
+        "line_start": 808,
+        "line_end": 808,
+        "snippet": "- READY=$(jq -r '.ready_for_deployment' production-readiness.json)"
+      },
+      {
+        "id": "external_commands:PROCESS.md:576:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "PROCESS.md",
+        "line_start": 576,
+        "line_end": 582,
+        "snippet": "- Production readiness: \\`production-readiness.json\\`"
+      },
+      {
+        "id": "external_commands:PROCESS.md:846:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "PROCESS.md",
+        "line_start": 846,
+        "line_end": 846,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:PROCESS.md:150:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "PROCESS.md",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "const sourceFiles = fs.readdirSync('src').filter(f => f.endsWith('.js'));"
+      },
+      {
+        "id": "filesystem:PROCESS.md:166:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "PROCESS.md",
+        "line_start": 166,
+        "line_end": 166,
+        "snippet": "fs.writeFileSync(testFile, template);"
+      },
+      {
+        "id": "filesystem:PROCESS.md:267:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "PROCESS.md",
+        "line_start": 267,
+        "line_end": 267,
+        "snippet": "const failures = fs.readFileSync('failures.txt', 'utf-8').split('\\n');"
+      },
+      {
+        "id": "filesystem:PROCESS.md:291:node-js-fs-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Node.js fs operations",
+        "file": "PROCESS.md",
+        "line_start": 291,
+        "line_end": 291,
+        "snippet": "fs.writeFileSync('issue-categories.json', JSON.stringify(categories, null, 2));"
+      },
+      {
+        "id": "filesystem:PROCESS.md:154:node-js-fs-stat-operations",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Node.js fs stat operations",
+        "file": "PROCESS.md",
+        "line_start": 154,
+        "line_end": 154,
+        "snippet": "if (!fs.existsSync(testFile)) {"
+      },
+      {
+        "id": "filesystem:PROCESS.md:166:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "PROCESS.md",
+        "line_start": 166,
+        "line_end": 166,
+        "snippet": "fs.writeFileSync(testFile, template);"
+      },
+      {
+        "id": "filesystem:PROCESS.md:267:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "PROCESS.md",
+        "line_start": 267,
+        "line_end": 267,
+        "snippet": "const failures = fs.readFileSync('failures.txt', 'utf-8').split('\\n');"
+      },
+      {
+        "id": "filesystem:PROCESS.md:291:synchronous-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Synchronous file operations",
+        "file": "PROCESS.md",
+        "line_start": 291,
+        "line_end": 291,
+        "snippet": "fs.writeFileSync('issue-categories.json', JSON.stringify(categories, null, 2));"
+      },
+      {
+        "id": "filesystem:PROCESS.md:157:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "PROCESS.md",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "const module = require('../src/${file}');"
+      },
+      {
+        "id": "filesystem:PROCESS.md:137:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "PROCESS.md",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "cp -r /path/to/project/tests ./tests 2>/dev/null || mkdir tests"
+      },
+      {
+        "id": "filesystem:PROCESS.md:704:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "PROCESS.md",
+        "line_start": 704,
+        "line_end": 704,
+        "snippet": "npm list jest >/dev/null 2>&1 || exit 1"
+      },
+      {
+        "id": "filesystem:PROCESS.md:32:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "PROCESS.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "mkdir -p /tmp/functionality-audit-sandbox-$(date +%s)"
+      },
+      {
+        "id": "filesystem:PROCESS.md:33:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "PROCESS.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "cd /tmp/functionality-audit-sandbox-*"
+      },
+      {
+        "id": "sensitive:PROCESS.md:548:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "PROCESS.md",
+        "line_start": 548,
+        "line_end": 548,
+        "snippet": "$(echo $ROOT_CAUSES | jq -r 'to_entries[] | \"- **\\(.key):** \\(.value | length) issue(s)\"')"
+      },
+      {
+        "id": "blocker:PROCESS.md:110:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "PROCESS.md",
+        "line_start": 110,
+        "line_end": 111,
+        "snippet": "- [ ] Configuration files created and valid"
+      },
+      {
+        "id": "blocker:PROCESS.md:304:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "PROCESS.md",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "- **Cause:** Invalid JavaScript/TypeScript syntax"
+      },
+      {
+        "id": "blocker:PROCESS.md:309:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "PROCESS.md",
+        "line_start": 309,
+        "line_end": 309,
+        "snippet": "- **Cause:** Invalid operations on undefined/null values"
+      },
+      {
+        "id": "blocker:PROCESS.md:615:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "PROCESS.md",
+        "line_start": 615,
+        "line_end": 615,
+        "snippet": "npx claude-flow hooks post-task --task-id \"functionality-audit\" --export-metrics true"
+      },
+      {
+        "id": "filesystem:README.md:79:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "mkdir -p /tmp/audit-sandbox"
+      },
+      {
+        "id": "filesystem:README.md:80:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "cd /tmp/audit-sandbox"
+      },
+      {
+        "id": "filesystem:README.md:110:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "rm -rf /tmp/audit-sandbox"
+      },
+      {
+        "id": "filesystem:README.md:111:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "README.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "mkdir -p /tmp/audit-sandbox"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 96,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 99,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 100,
+        "snippet": "- Input: `testing/functionality-audit/phase-0/user/code-to-validate`"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 101,
+        "snippet": "- Output: `testing/functionality-audit/phase-1/tester/sandbox-ready`"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 122,
+        "snippet": "- Shared: `testing/functionality-audit/shared/environment-config`"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 168,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 169,
+        "snippet": "- Input: `testing/functionality-audit/phase-1/tester/sandbox-ready`"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 170,
+        "snippet": "- Output: `testing/functionality-audit/phase-2/tester/execution-results`"
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 192,
+        "snippet": "- Shared: `testing/functionality-audit/shared/test-logs`"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 236,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 239,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 239,
+        "line_end": 240,
+        "snippet": "- Input: `testing/functionality-audit/phase-2/tester/execution-results`"
+      },
+      {
+        "id": "external_commands:SKILL.md:240:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 240,
+        "line_end": 241,
+        "snippet": "- Output: `testing/functionality-audit/phase-3/coder/root-causes`"
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 241,
+        "line_end": 263,
+        "snippet": "- Shared: `testing/functionality-audit/shared/issue-tracker`"
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 309,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 309,
+        "line_end": 312,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 312,
+        "line_end": 313,
+        "snippet": "- Input: `testing/functionality-audit/phase-3/coder/root-causes`"
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 313,
+        "line_end": 314,
+        "snippet": "- Output: `testing/functionality-audit/phase-4/validator/readiness`"
+      },
+      {
+        "id": "external_commands:SKILL.md:314:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 314,
+        "line_end": 336,
+        "snippet": "- Shared: `testing/functionality-audit/shared/validation-results`"
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 336,
+        "line_end": 411,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:411:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 411,
+        "line_end": 414,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:414:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 414,
+        "line_end": 415,
+        "snippet": "- Input: `testing/functionality-audit/phase-{1-4}/*/output`"
+      },
+      {
+        "id": "external_commands:SKILL.md:415:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 415,
+        "line_end": 416,
+        "snippet": "- Output: `testing/functionality-audit/final-report`"
+      },
+      {
+        "id": "external_commands:SKILL.md:416:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 416,
+        "line_end": 435,
+        "snippet": "- Shared: `testing/functionality-audit/shared/complete-audit`"
+      },
+      {
+        "id": "external_commands:SKILL.md:435:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 435,
+        "line_end": 438,
+        "snippet": "`testing/functionality-audit/phase-{N}/{agent-type}/{data-type}`"
+      },
+      {
+        "id": "external_commands:SKILL.md:438:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 438,
+        "line_end": 439,
+        "snippet": "- `testing/functionality-audit/phase-1/tester/sandbox-config`"
+      },
+      {
+        "id": "external_commands:SKILL.md:439:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 439,
+        "line_end": 440,
+        "snippet": "- `testing/functionality-audit/phase-2/tester/execution-results`"
+      },
+      {
+        "id": "external_commands:SKILL.md:440:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 440,
+        "line_end": 441,
+        "snippet": "- `testing/functionality-audit/phase-3/coder/root-causes`"
+      },
+      {
+        "id": "external_commands:SKILL.md:441:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 441,
+        "line_end": 442,
+        "snippet": "- `testing/functionality-audit/phase-4/validator/readiness`"
+      },
+      {
+        "id": "external_commands:SKILL.md:442:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 442,
+        "line_end": 446,
+        "snippet": "- `testing/functionality-audit/shared/environment-config`"
+      },
+      {
+        "id": "external_commands:SKILL.md:446:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 446,
+        "line_end": 472,
+        "snippet": "```javascript"
+      },
+      {
+        "id": "external_commands:SKILL.md:472:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 472,
+        "line_end": 474,
+        "snippet": "console.log(`Using sandbox: ${sandboxConfig.path}`);"
+      },
+      {
+        "id": "external_commands:SKILL.md:474:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 474,
+        "line_end": 480,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:480:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 480,
+        "line_end": 500,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:500:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 500,
+        "line_end": 599,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:599:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 599,
+        "line_end": 600,
+        "snippet": "- `when-detecting-fake-code-use-theater-detection` - Pre-audit detection of non-functional code"
+      },
+      {
+        "id": "external_commands:SKILL.md:600:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 600,
+        "line_end": 601,
+        "snippet": "- `when-reviewing-code-comprehensively-use-code-review-assistant` - Post-audit quality review"
+      },
+      {
+        "id": "external_commands:SKILL.md:601:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 601,
+        "line_end": 602,
+        "snippet": "- `when-verifying-quality-use-verification-quality` - Comprehensive quality validation"
+      },
+      {
+        "id": "external_commands:SKILL.md:602:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 602,
+        "line_end": 611,
+        "snippet": "- `when-auditing-code-style-use-style-audit` - Code style and conventions validation"
+      },
+      {
+        "id": "external_commands:SKILL.md:611:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 611,
+        "line_end": 620,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:620:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 620,
+        "line_end": 628,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:628:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 628,
+        "line_end": 639,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:639:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 639,
+        "line_end": 645,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:645:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 645,
+        "line_end": 655,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:655:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 655,
+        "line_end": 679,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:679:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 679,
+        "line_end": 688,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:688:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 688,
+        "line_end": 694,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:694:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 694,
+        "line_end": 736,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:736:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 736,
+        "line_end": 740,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:740:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 740,
+        "line_end": 780,
+        "snippet": "```javascript"
+      },
+      {
+        "id": "external_commands:SKILL.md:780:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 780,
+        "line_end": 784,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:784:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 784,
+        "line_end": 824,
+        "snippet": "```javascript"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "npx claude-flow memory store --key \"testing/functionality-audit/phase-2/tester/execution-results\" --"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "npx claude-flow memory store --key \"testing/functionality-audit/phase-3/coder/root-causes\" --value \""
+      },
+      {
+        "id": "external_commands:SKILL.md:305:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 305,
+        "line_end": 305,
+        "snippet": "npx claude-flow memory store --key \"testing/functionality-audit/phase-4/validator/readiness\" --value"
+      },
+      {
+        "id": "external_commands:SKILL.md:406:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 406,
+        "line_end": 406,
+        "snippet": "npx claude-flow memory store --key \"testing/functionality-audit/final-report\" --value \"$(cat functio"
+      },
+      {
+        "id": "external_commands:SKILL.md:484:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 484,
+        "line_end": 484,
+        "snippet": "--session-id \"functionality-audit-$(date +%s)\""
+      },
+      {
+        "id": "external_commands:SKILL.md:615:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 615,
+        "line_end": 615,
+        "snippet": "--value \"$(cat functionality-audit-report.md)\""
+      },
+      {
+        "id": "external_commands:SKILL.md:638:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 638,
+        "line_end": 638,
+        "snippet": "docker run -it --rm -v $(pwd):/workspace node:18 bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 165,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 236,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:263:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 309,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:336:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 336,
+        "line_end": 411,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:480:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 480,
+        "line_end": 500,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:611:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 611,
+        "line_end": 620,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:628:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 628,
+        "line_end": 639,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:711:http-client-library",
+        "category": "network",
+        "severity": "low",
+        "pattern": "HTTP client library",
+        "file": "SKILL.md",
+        "line_start": 711,
+        "line_end": 711,
+        "snippet": "const response = await request(app).get('/api/users');"
+      },
+      {
+        "id": "network:SKILL.md:717:http-client-library",
+        "category": "network",
+        "severity": "low",
+        "pattern": "HTTP client library",
+        "file": "SKILL.md",
+        "line_start": 717,
+        "line_end": 717,
+        "snippet": "const response = await request(app)"
+      },
+      {
+        "id": "filesystem:SKILL.md:707:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 707,
+        "line_end": 707,
+        "snippet": "const app = require('../src/app');"
+      },
+      {
+        "id": "filesystem:SKILL.md:78:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "npm init -y 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:SKILL.md:79:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "npm install --save-dev jest @types/jest ts-node typescript 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "mkdir -p /tmp/functionality-audit-sandbox"
+      },
+      {
+        "id": "filesystem:SKILL.md:75:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "cd /tmp/functionality-audit-sandbox"
+      },
+      {
+        "id": "filesystem:SKILL.md:461:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 461,
+        "line_end": 461,
+        "snippet": "logs: \"/tmp/functionality-audit-sandbox/test-output.log\","
+      },
+      {
+        "id": "filesystem:SKILL.md:462:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 462,
+        "line_end": 462,
+        "snippet": "coverage: \"/tmp/functionality-audit-sandbox/coverage/\""
+      },
+      {
+        "id": "filesystem:SKILL.md:699:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 699,
+        "line_end": 699,
+        "snippet": "mkdir -p /tmp/api-audit"
+      },
+      {
+        "id": "filesystem:SKILL.md:700:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 700,
+        "line_end": 700,
+        "snippet": "cd /tmp/api-audit"
+      },
+      {
+        "id": "env_access:SKILL.md:654:dotenv-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "dotenv library",
+        "file": "SKILL.md",
+        "line_start": 654,
+        "line_end": 654,
+        "snippet": "require('dotenv').config();"
+      },
+      {
+        "id": "env_access:SKILL.md:650:database-connection-strings",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Database connection strings",
+        "file": "SKILL.md",
+        "line_start": 650,
+        "line_end": 650,
+        "snippet": "DATABASE_URL=sqlite::memory:"
+      },
+      {
+        "id": "env_access:SKILL.md:649:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 649,
+        "line_end": 649,
+        "snippet": "API_KEY=test-key-12345"
+      },
+      {
+        "id": "sensitive:SKILL.md:646:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 646,
+        "line_end": 646,
+        "snippet": "# Create .env file with required variables"
+      },
+      {
+        "id": "sensitive:SKILL.md:647:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 647,
+        "line_end": 647,
+        "snippet": "cat > .env << 'EOF'"
+      },
+      {
+        "id": "blocker:SKILL.md:24:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "post: npx claude-flow hooks post-task --task-id \"functionality-audit\""
+      },
+      {
+        "id": "blocker:SKILL.md:94:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "npx claude-flow hooks post-task --task-id \"phase-1-setup\""
+      },
+      {
+        "id": "blocker:SKILL.md:142:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "test('Happy path with valid inputs', async () => {"
+      },
+      {
+        "id": "blocker:SKILL.md:150:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "test('Error handling with invalid inputs', async () => {"
+      },
+      {
+        "id": "blocker:SKILL.md:164:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "npx claude-flow hooks post-task --task-id \"phase-2-execute\""
+      },
+      {
+        "id": "blocker:SKILL.md:235:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 235,
+        "snippet": "npx claude-flow hooks post-task --task-id \"phase-3-debug\""
+      },
+      {
+        "id": "blocker:SKILL.md:308:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 308,
+        "line_end": 308,
+        "snippet": "npx claude-flow hooks post-task --task-id \"phase-4-validate\""
+      },
+      {
+        "id": "blocker:SKILL.md:409:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 409,
+        "line_end": 409,
+        "snippet": "npx claude-flow hooks post-task --task-id \"phase-5-report\" --export-metrics true"
+      },
+      {
+        "id": "blocker:SKILL.md:484:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 484,
+        "line_end": 484,
+        "snippet": "--session-id \"functionality-audit-$(date +%s)\""
+      },
+      {
+        "id": "blocker:SKILL.md:493:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 493,
+        "line_end": 493,
+        "snippet": "--task-id \"functionality-audit\" \\"
+      },
+      {
+        "id": "blocker:SKILL.md:745:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 745,
+        "line_end": 745,
+        "snippet": "test('processes valid user data correctly', () => {"
+      },
+      {
+        "id": "blocker:SKILL.md:772:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 772,
+        "line_end": 772,
+        "snippet": "expect(() => processUserData(input)).toThrow('Invalid email format');"
+      },
+      {
+        "id": "blocker:SKILL.md:790:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 790,
+        "line_end": 790,
+        "snippet": "test('submits form with valid credentials', async () => {"
+      },
+      {
+        "id": "blocker:SKILL.md:531:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 531,
+        "line_end": 532,
+        "snippet": "- Success metric: 100% of critical functionality tests pass"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:process-diagram.gv:26:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:process-diagram.gv:27:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "external_commands:PROCESS.md:153:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:PROCESS.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:PROCESS.md:572:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:573:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:574:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:575:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:576:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:32:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:34:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:129:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "This retrieves sandbox configuration by executing npx claude-flow from a shell command. It is expected for the workflow, but it is still external command execution from a community skill.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:130:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "The workflow changes directory using a path read from shared memory without validation or quoting. A bad or stale path could redirect later file operations outside the intended sandbox.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:197:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:200:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:201:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:202:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:212:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:221:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "reason": "The command persists generated execution metrics into Claude Flow memory. This is part of the workflow, but it can move audit data outside the temporary workspace.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:226:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "The command base64-encodes full test logs and stores them in Claude Flow memory. Test logs can include secrets, paths, stack traces, or customer data.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:251:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves execution results through npx claude-flow during the audit. The external command is intentional, but it increases the trust required for the skill runtime.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:252:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:379:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "The workflow stores issue analysis from a generated file into Claude Flow memory. The file may include sensitive code paths or failure details from the audited project.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:383:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "reason": "The workflow stores a generated fix strategy into Claude Flow memory. This can persist project-specific implementation details beyond the sandbox.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:408:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves fix strategy data through npx claude-flow. The external command is expected, but it depends on trusted shared memory state.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:424:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:425:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:428:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:431:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:442:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:456:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:457:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:463:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:468:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:469:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:470:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:484:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "reason": "The workflow stores production readiness output in Claude Flow memory. Readiness files can contain project names, paths, and deployment context.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:509:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves sandbox configuration through npx claude-flow for final reporting. The report generation step depends on trusted shared memory state.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:510:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves execution results through npx claude-flow for final reporting. The external command can expose audit state if the memory backend is not trusted.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:511:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves root-cause data through npx claude-flow for final reporting. The retrieved data may include sensitive failure context from the project.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:512:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This retrieves readiness data through npx claude-flow for final reporting. The external command and shared memory use require trust in the local toolchain.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:520:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:521:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:525:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:526:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:527:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:528:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:534:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:535:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:540:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:541:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:542:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:543:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:548:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:558:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:559:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:561:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:580:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:588:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:589:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:590:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:591:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:592:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:593:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:594:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:595:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:605:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "The workflow stores the full audit report in Claude Flow memory. Audit reports can contain logs, paths, test names, and implementation details.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:609:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "The workflow stores audit metrics in Claude Flow memory. Metrics can expose project structure and test readiness information.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:PROCESS.md:746:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:793:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:808:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:PROCESS.md:576:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:PROCESS.md:846:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shebang appears in an example helper script section. By itself, it does not create hidden execution or privilege escalation."
+      },
+      {
+        "id": "filesystem:PROCESS.md:150:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:166:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:267:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:291:node-js-fs-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:154:node-js-fs-stat-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:166:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:267:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:291:synchronous-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The filesystem access is limited to generated test files, source listing, or audit artifacts in the documented workflow. It is expected local test automation, not secret collection."
+      },
+      {
+        "id": "filesystem:PROCESS.md:157:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The relative import is part of generated local tests that load project source files. It does not traverse to an arbitrary user-controlled filesystem target."
+      },
+      {
+        "id": "filesystem:PROCESS.md:137:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The snippet redirects command output to /dev/null. This suppresses noise and does not read from a sensitive device file."
+      },
+      {
+        "id": "filesystem:PROCESS.md:704:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The snippet redirects command output to /dev/null. This suppresses noise and does not read from a sensitive device file."
+      },
+      {
+        "id": "filesystem:PROCESS.md:32:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:PROCESS.md:33:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "sensitive:PROCESS.md:548:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The scanner matched the jq field name .key inside report generation. This is not certificate or private key access."
+      },
+      {
+        "id": "blocker:PROCESS.md:110:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:PROCESS.md:304:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:PROCESS.md:309:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:PROCESS.md:615:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "filesystem:README.md:79:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:README.md:80:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:README.md:110:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "The troubleshooting step uses rm -rf on a fixed temporary directory. It is scoped to /tmp, but destructive cleanup commands should still be treated carefully.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:README.md:111:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:236:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:240:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:309:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:314:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:336:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:411:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:414:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:415:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:416:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:435:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:438:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:439:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:440:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:441:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:442:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:446:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:472:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The backticks are JavaScript template literals or Markdown formatting in examples. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:474:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:480:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:500:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:599:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:600:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:601:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:602:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:611:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:620:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:628:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:639:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:645:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:655:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:679:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:688:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:694:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:736:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:740:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:780:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:784:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "reason": "This stores execution results through npx claude-flow after running tests. It is expected, but it persists audit state outside the test command itself.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "This stores generated root-cause analysis through npx claude-flow. The stored content can include project-specific failure details.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:305:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This stores production readiness data through npx claude-flow. The data can contain deployment and test context that should be controlled.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:406:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "This stores a complete functionality audit report through npx claude-flow. Reports can contain logs, paths, test output, and implementation details.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:484:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The command substitution is used for local timestamps, counters, or report formatting. It does not execute user-supplied shell content or contact an external service."
+      },
+      {
+        "id": "external_commands:SKILL.md:615:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "This shares the audit report with another workflow through Claude Flow memory. Cross-skill sharing can propagate sensitive audit artifacts if logs are not redacted.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:638:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The Docker fallback mounts the current working directory into a container. This reduces host dependency conflicts, but the container can read and modify mounted project files.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:263:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:336:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:480:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:611:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "external_commands:SKILL.md:628:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The scanner matched Markdown code fences or inline code formatting. This text is documentation markup, not a shell execution primitive."
+      },
+      {
+        "id": "network:SKILL.md:711:http-client-library",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The request call is a Supertest example against a local app object. It does not contact an external network service."
+      },
+      {
+        "id": "network:SKILL.md:717:http-client-library",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The request call is a Supertest example against a local app object. It does not contact an external network service."
+      },
+      {
+        "id": "filesystem:SKILL.md:707:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The relative import is part of generated local tests that load project source files. It does not traverse to an arbitrary user-controlled filesystem target."
+      },
+      {
+        "id": "filesystem:SKILL.md:78:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The snippet redirects command output to /dev/null. This suppresses noise and does not read from a sensitive device file."
+      },
+      {
+        "id": "filesystem:SKILL.md:79:standard-device-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "reason": "The line installs npm development dependencies in the audit environment. npm installs can execute package lifecycle scripts, so this is real operational risk even though output is redirected.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:74:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:SKILL.md:75:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:SKILL.md:461:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:SKILL.md:462:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:SKILL.md:699:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "filesystem:SKILL.md:700:temp-directory-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The path is a fixed temporary sandbox or artifact location for test execution. No sensitive host path or arbitrary target is shown."
+      },
+      {
+        "id": "env_access:SKILL.md:654:dotenv-library",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The environment values are dummy test variables in a troubleshooting example. No real host secret is read or exfiltrated."
+      },
+      {
+        "id": "env_access:SKILL.md:650:database-connection-strings",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The environment values are dummy test variables in a troubleshooting example. No real host secret is read or exfiltrated."
+      },
+      {
+        "id": "env_access:SKILL.md:649:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The environment values are dummy test variables in a troubleshooting example. No real host secret is read or exfiltrated."
+      },
+      {
+        "id": "sensitive:SKILL.md:646:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The snippet creates a local test .env example with placeholder values. It does not read or transmit real environment secrets."
+      },
+      {
+        "id": "sensitive:SKILL.md:647:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The snippet creates a local test .env example with placeholder values. It does not read or transmit real environment secrets."
+      },
+      {
+        "id": "blocker:SKILL.md:24:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:94:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:142:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:150:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:164:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:235:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:308:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:409:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:484:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:493:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:745:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:772:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:790:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:531:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The snippet is a workflow label, checklist item, test name, or hook identifier. It does not perform host or network reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Untrusted Code Execution Workflow",
+        "description": "The skill instructs users to create a sandbox, install packages, and run project tests. Package lifecycle scripts and tests can execute arbitrary code, and the Docker fallback mounts the current workspace.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 638,
+            "line_end": 638
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The cited workflow directly installs dependencies, runs tests, and mounts the workspace into Docker. These are legitimate audit actions, but they execute untrusted project and package code."
+      },
+      {
+        "title": "Persistent Storage of Audit Artifacts",
+        "description": "The workflow stores logs, reports, and metrics in Claude Flow memory. These artifacts can contain secrets, stack traces, file paths, or implementation details from the audited project.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 221,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 406,
+            "line_end": 406
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 615,
+            "line_end": 615
+          }
+        ],
+        "confidence": 0.8,
+        "confidence_reasoning": "The cited lines store execution metrics, full test logs, and final reports in shared memory. The risk depends on log contents, so confidence is high but not absolute."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "docker run -it --rm -v $(pwd):/workspace node:18 bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 638,
+            "line_end": 638
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The Docker fallback mounts the current working directory into a container. This reduces host dependency conflicts, but the container can read and modify mounted project files."
+      },
+      {
+        "title": "Untrusted Code Execution Workflow",
+        "description": "The skill instructs users to create a sandbox, install packages, and run project tests. Package lifecycle scripts and tests can execute arbitrary code, and the Docker fallback mounts the current workspace.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 638,
+            "line_end": 638
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The cited workflow directly installs dependencies, runs tests, and mounts the workspace into Docker. These are legitimate audit actions, but they execute untrusted project and package code."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "SANDBOX_CONFIG=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-1/tester/s",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 129,
+            "line_end": 129
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "This retrieves sandbox configuration by executing npx claude-flow from a shell command. It is expected for the workflow, but it is still external command execution from a community skill."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "cd $(echo $SANDBOX_CONFIG | jq -r '.path')",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 130,
+            "line_end": 130
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The workflow changes directory using a path read from shared memory without validation or quoting. A bad or stale path could redirect later file operations outside the intended sandbox."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat execution-metrics.json)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 221,
+            "line_end": 221
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "The command persists generated execution metrics into Claude Flow memory. This is part of the workflow, but it can move audit data outside the temporary workspace."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat test-output.log | base64)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 226,
+            "line_end": 226
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The command base64-encodes full test logs and stores them in Claude Flow memory. Test logs can include secrets, paths, stack traces, or customer data."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "EXEC_RESULTS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-2/tester/exe",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 251,
+            "line_end": 251
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves execution results through npx claude-flow during the audit. The external command is intentional, but it increases the trust required for the skill runtime."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat issue-categories.json)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 379,
+            "line_end": 379
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "The workflow stores issue analysis from a generated file into Claude Flow memory. The file may include sensitive code paths or failure details from the audited project."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat fix-strategy.json)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 383,
+            "line_end": 383
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "The workflow stores a generated fix strategy into Claude Flow memory. This can persist project-specific implementation details beyond the sandbox."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "FIX_STRATEGY=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-3/coder/fix-",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 408,
+            "line_end": 408
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves fix strategy data through npx claude-flow. The external command is expected, but it depends on trusted shared memory state."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat production-readiness.json)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 484,
+            "line_end": 484
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "The workflow stores production readiness output in Claude Flow memory. Readiness files can contain project names, paths, and deployment context."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "SANDBOX_CONFIG=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-1/tester/s",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 509,
+            "line_end": 509
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves sandbox configuration through npx claude-flow for final reporting. The report generation step depends on trusted shared memory state."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "EXEC_RESULTS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-2/tester/exe",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 510,
+            "line_end": 510
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves execution results through npx claude-flow for final reporting. The external command can expose audit state if the memory backend is not trusted."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "ROOT_CAUSES=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-3/coder/root-",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 511,
+            "line_end": 511
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves root-cause data through npx claude-flow for final reporting. The retrieved data may include sensitive failure context from the project."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "READINESS=$(npx claude-flow memory retrieve --key \"testing/functionality-audit/phase-4/validator/rea",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 512,
+            "line_end": 512
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This retrieves readiness data through npx claude-flow for final reporting. The external command and shared memory use require trust in the local toolchain."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat functionality-audit-report.md)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 605,
+            "line_end": 605
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The workflow stores the full audit report in Claude Flow memory. Audit reports can contain logs, paths, test names, and implementation details."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat audit-metrics.json)\"",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 609,
+            "line_end": 609
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "The workflow stores audit metrics in Claude Flow memory. Metrics can expose project structure and test readiness information."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "rm -rf /tmp/audit-sandbox",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 110,
+            "line_end": 110
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "The troubleshooting step uses rm -rf on a fixed temporary directory. It is scoped to /tmp, but destructive cleanup commands should still be treated carefully."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "npx claude-flow memory store --key \"testing/functionality-audit/phase-2/tester/execution-results\" --",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 161
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "This stores execution results through npx claude-flow after running tests. It is expected, but it persists audit state outside the test command itself."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "npx claude-flow memory store --key \"testing/functionality-audit/phase-3/coder/root-causes\" --value \"",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 232,
+            "line_end": 232
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "This stores generated root-cause analysis through npx claude-flow. The stored content can include project-specific failure details."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "npx claude-flow memory store --key \"testing/functionality-audit/phase-4/validator/readiness\" --value",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 305,
+            "line_end": 305
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This stores production readiness data through npx claude-flow. The data can contain deployment and test context that should be controlled."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "npx claude-flow memory store --key \"testing/functionality-audit/final-report\" --value \"$(cat functio",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 406,
+            "line_end": 406
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "This stores a complete functionality audit report through npx claude-flow. Reports can contain logs, paths, test output, and implementation details."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "--value \"$(cat functionality-audit-report.md)\"",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 615,
+            "line_end": 615
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "This shares the audit report with another workflow through Claude Flow memory. Cross-skill sharing can propagate sensitive audit artifacts if logs are not redacted."
+      },
+      {
+        "title": "Standard device file access",
+        "description": "npm install --save-dev jest @types/jest ts-node typescript 2>/dev/null || true",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 79
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "low",
+        "confidence": 0.72,
+        "confidence_reasoning": "The line installs npm development dependencies in the audit environment. npm installs can execute package lifecycle scripts, so this is real operational risk even though output is redirected."
+      },
+      {
+        "title": "Persistent Storage of Audit Artifacts",
+        "description": "The workflow stores logs, reports, and metrics in Claude Flow memory. These artifacts can contain secrets, stack traces, file paths, or implementation details from the audited project.",
+        "locations": [
+          {
+            "file": "PROCESS.md",
+            "line_start": 221,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 406,
+            "line_end": 406
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 615,
+            "line_end": 615
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "The cited lines store execution metrics, full test logs, and final reports in shared memory. The risk depends on log contents, so confidence is high but not absolute."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 1927,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:36:06.289Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Validate Code Functionality With Runtime Audits",
+    "value_statement": "Code can look complete while failing at runtime. This skill guides sandbox setup, test execution, debugging, regression checks, and reporting.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "functionality audit",
+      "runtime testing",
+      "code validation",
+      "sandbox testing",
+      "regression testing",
+      "test automation",
+      "debugging workflow"
+    ],
+    "actual_capabilities": [
+      "Guides creation of isolated temporary test workspaces.",
+      "Runs unit, integration, and edge-case test scenarios.",
+      "Captures test logs, coverage metrics, and exit codes.",
+      "Categorizes failures into syntax, runtime, logic, dependency, and integration issues.",
+      "Reruns tests after fixes to check regressions and readiness.",
+      "Produces Markdown reports and metrics artifacts."
+    ],
+    "limitations": [
+      "Requires local test tooling and dependencies to be available or installable.",
+      "Can execute project code and package scripts, so untrusted projects need stronger isolation.",
+      "Examples focus mainly on Node.js, Jest, and pytest workflows.",
+      "Does not replace human review for security or product correctness."
+    ],
+    "use_cases": [
+      {
+        "title": "Validate AI-Generated Features",
+        "description": "Run generated code with realistic inputs before review or merge.",
+        "target_user": "Software engineers"
+      },
+      {
+        "title": "Check Release Readiness",
+        "description": "Confirm tests, coverage, and regressions before a production deployment.",
+        "target_user": "Release managers"
+      },
+      {
+        "title": "Debug Reported Failures",
+        "description": "Categorize failing tests and guide fixes with a repeatable audit process.",
+        "target_user": "QA engineers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run a Basic Audit",
+        "scenario": "Beginner validation after a small code change.",
+        "prompt": "Use this skill to validate the changed module. Create a temporary test workspace, run the existing tests, and report failures with next steps."
+      },
+      {
+        "title": "Audit a New Feature",
+        "scenario": "Intermediate validation for generated feature code.",
+        "prompt": "Use this skill to test the new feature with realistic happy-path, edge-case, and error inputs. Capture logs, coverage, and regression results."
+      },
+      {
+        "title": "Debug Failing Tests",
+        "scenario": "Advanced troubleshooting after a failed test run.",
+        "prompt": "Use this skill to categorize the failures by root cause, propose minimal fixes, apply them incrementally, and rerun the affected tests."
+      },
+      {
+        "title": "Prepare Release Evidence",
+        "scenario": "Advanced release validation with stakeholder reporting.",
+        "prompt": "Use this skill to run a full functionality audit, verify readiness criteria, identify remaining risks, and produce a concise release report."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Validate an authentication module after generated changes.",
+        "output": [
+          "Audit status: partial pass.",
+          "Unit tests passed, but two integration checks failed on token refresh behavior.",
+          "Recommended fix: update refresh handling and rerun the authentication regression suite."
+        ]
+      },
+      {
+        "input": "Check a data processing function before merge.",
+        "output": [
+          "Audit status: pass.",
+          "Happy-path, missing-field, and invalid-format cases passed.",
+          "Coverage improved, and no regressions were detected in related tests."
+        ]
+      },
+      {
+        "input": "Review deployment readiness for a service change.",
+        "output": [
+          "Audit status: not ready.",
+          "The service passed local unit tests but failed one production readiness gate.",
+          "Recommended action: resolve the failing health-check scenario before deployment."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Run audits in disposable workspaces with only the files needed for validation.",
+      "Record commands, exit codes, logs, and coverage so results can be reproduced.",
+      "Rerun previously passing tests after each fix to catch regressions early."
+    ],
+    "anti_patterns": [
+      "Running untrusted projects on the host without isolation or confirmation.",
+      "Accepting generated tests that only assert placeholder success.",
+      "Reporting readiness without rerunning tests after fixes."
+    ],
+    "faq": [
+      {
+        "question": "What problem does this skill solve?",
+        "answer": "It helps verify that code works at runtime instead of relying only on static review or visual inspection."
+      },
+      {
+        "question": "Does it write or run files?",
+        "answer": "Yes. The workflow includes creating test artifacts, installing dependencies, and running tests in a temporary workspace."
+      },
+      {
+        "question": "Can it validate third-party code?",
+        "answer": "Yes, but third-party code should run in stronger isolation because tests and package scripts can execute arbitrary commands."
+      },
+      {
+        "question": "Which stacks are covered best?",
+        "answer": "The examples focus on Node.js, Jest, TypeScript, and pytest, with room to adapt to other test frameworks."
+      },
+      {
+        "question": "Does it replace CI pipelines?",
+        "answer": "No. It complements CI by guiding local or agent-assisted audits and producing evidence for later automation."
+      },
+      {
+        "question": "What should users review before running it?",
+        "answer": "Users should review dependency installs, test commands, Docker mounts, and any logs stored outside the sandbox."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "process-diagram.gv",
+      "type": "file",
+      "path": "process-diagram.gv",
+      "lines": 97
+    },
+    {
+      "name": "PROCESS.md",
+      "type": "file",
+      "path": "PROCESS.md",
+      "lines": 870
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 135
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 825
+    }
+  ]
+}

@@ -1,0 +1,273 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-04T15:00:22.056Z",
+    "slug": "1gy-implementing-code",
+    "source_url": "https://github.com/1gy/jpp/tree/main/.claude/skills/implementing-code",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "53c6167be89e1c463b6efe7247162c122dc84a004a92b07afc9e148abcd0fd9a",
+    "tree_hash": "218150c3a272ba646deb5960fea971137e5e9f28384101123a4b2ae45fb8b369",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "implementing-code",
+    "description": "Guides AI agents through code investigation, implementation, git commits, and completion reporting for development tasks.",
+    "summary": "Implements code changes, creates conventional commits, and reports completed work.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "1gy",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "code-implementation",
+      "git-commits",
+      "bug-fixes",
+      "feature-development",
+      "developer-workflow"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The three static findings are false positives caused by Markdown code fences, not Ruby or shell backtick execution. The skill documents limited git add and git commit usage for its implementation workflow. I found no evidence of prompt injection, secret access, network access, or data exfiltration intent.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 43
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 27,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 40,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 43,
+        "snippet": "```bash"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 25 is a Markdown code fence for a conventional commit message template. It is not Ruby or shell backtick execution and contains no executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 27 closes the Markdown code fence that starts on line 25. It is documentation formatting, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Line 40 opens a Markdown bash example for git add and git commit. The backticks are documentation syntax, and the example does not use dynamic shell interpolation."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 56,
+    "audit_model": "codex",
+    "audited_at": "2026-07-04T15:00:22.056Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Implement Code Changes With Git Commits",
+    "value_statement": "Implementation tasks need consistent edits, commits, and status reporting. This skill guides Claude, Codex, and Claude Code through investigation, code changes, git commits, and completion reports.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code implementation",
+      "git commits",
+      "bug fixes",
+      "feature development",
+      "conventional commits",
+      "developer workflow",
+      "AI coding skill"
+    ],
+    "actual_capabilities": [
+      "Investigates related code with Read, Glob, and Grep.",
+      "Applies code changes with Write and Edit.",
+      "Follows existing project patterns during implementation.",
+      "Creates git commits with conventional commit messages.",
+      "Reports changed files, implementation summary, and commit hash."
+    ],
+    "limitations": [
+      "Only allows git Bash commands, not arbitrary shell commands.",
+      "Does not define test or build commands.",
+      "Relies on CLAUDE.md for project-specific rules when present.",
+      "Requires conflict reporting when parallel tasks touch the same files."
+    ],
+    "use_cases": [
+      {
+        "title": "Ship a Small Feature",
+        "description": "Implement a requested feature, follow existing code patterns, and commit the result.",
+        "target_user": "Application developer"
+      },
+      {
+        "title": "Fix a Production Bug",
+        "description": "Investigate related files, apply a focused fix, and create a conventional commit.",
+        "target_user": "Maintainer"
+      },
+      {
+        "title": "Coordinate Parallel Work",
+        "description": "Keep implementation work isolated and report file conflicts to a coordinating manager.",
+        "target_user": "Engineering lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Implement a Simple Change",
+        "prompt": "Implement this requested change: [describe the change]. Follow existing project patterns and commit the completed work.",
+        "scenario": "Beginner implementation task"
+      },
+      {
+        "title": "Fix a Bug",
+        "prompt": "Investigate and fix this bug: [describe the bug]. Review related files first, then commit the smallest correct fix.",
+        "scenario": "Focused debugging task"
+      },
+      {
+        "title": "Add a Feature With Constraints",
+        "prompt": "Add this feature: [feature]. Preserve current behavior, follow CLAUDE.md rules, and report changed files and the commit hash.",
+        "scenario": "Feature development with project rules"
+      },
+      {
+        "title": "Coordinate an Isolated Implementation",
+        "prompt": "Implement this scoped task: [task]. Avoid files owned by parallel work, report conflicts immediately, and create a conventional commit.",
+        "scenario": "Advanced multi-agent workflow"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Implement a validation fix for empty form names.",
+        "output": [
+          "Changed files: form validation and related tests.",
+          "Summary: Added an empty-name guard that matches existing validation behavior.",
+          "Commit: fix: validate empty form names."
+        ]
+      },
+      {
+        "input": "Add a small settings toggle and commit it.",
+        "output": [
+          "Changed files: settings view, toggle component, and state handling.",
+          "Summary: Added the requested toggle using the existing settings pattern.",
+          "Commit: feat: add settings toggle."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Provide a clear purpose and completion criteria before starting implementation.",
+      "Review CLAUDE.md and nearby code before editing files.",
+      "Keep commits focused and use conventional commit messages."
+    ],
+    "anti_patterns": [
+      "Do not edit files assigned to parallel tasks.",
+      "Do not skip investigation before writing changes.",
+      "Do not create broad commits that mix unrelated work."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help with?",
+        "answer": "It helps AI agents investigate code, implement changes, create commits, and report the completed work."
+      },
+      {
+        "question": "Which tools can use this skill?",
+        "answer": "It supports Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Does it run arbitrary shell commands?",
+        "answer": "No. The declared Bash access is limited to git commands."
+      },
+      {
+        "question": "Does it include testing instructions?",
+        "answer": "No. It does not define test commands, so users should provide project-specific validation steps."
+      },
+      {
+        "question": "How does it handle project rules?",
+        "answer": "It instructs the agent to check CLAUDE.md for project-specific commit and implementation rules."
+      },
+      {
+        "question": "How does it handle parallel work?",
+        "answer": "It tells the agent not to edit the same files and to report conflicts to a manager."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 56
+    }
+  ]
+}

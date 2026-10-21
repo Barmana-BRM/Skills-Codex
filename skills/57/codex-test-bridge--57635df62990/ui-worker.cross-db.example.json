@@ -1,0 +1,39 @@
+{
+  "backend": "windowsDesktop",
+  "windowsRawCommandLine": true,
+  "testHost": "127.0.0.1",
+  "testPort": "auto",
+  "probeTestPort": false,
+  "startupDelaySeconds": 20,
+  "startupTimeoutSeconds": 60,
+  "managerStartupTimeoutSeconds": 60,
+  "timeoutSeconds": 900,
+  "resultTransport": "bridgeJob",
+  "captureOnFinish": true,
+  "bridgeBaseUrl": "{managerBridgeBaseUrl}",
+  "targetBridgeBaseUrl": "{clientBridgeBaseUrl}",
+  "environmentPlaceholders": {
+    "platformExecutable": "CODEX_1C_EXECUTABLE",
+    "clientServerConnection": "CODEX_1C_CLIENT_SERVER_CONNECTION",
+    "clientUsername": "CODEX_1C_CLIENT_USERNAME",
+    "managerServerConnection": "CODEX_1C_MANAGER_SERVER_CONNECTION",
+    "managerBridgeBaseUrl": "CODEX_1C_MANAGER_BRIDGE_URL",
+    "clientBridgeBaseUrl": "CODEX_1C_CLIENT_BRIDGE_URL",
+    "managerUsername": "CODEX_1C_MANAGER_USERNAME"
+  },
+  "clientCommand": [
+    "{platformExecutable}", "ENTERPRISE",
+    "/S", "{clientServerConnection}",
+    "/N", "{clientUsername}",
+    "/DisableStartupDialogs", "/DisableStartupMessages", "/DisableSplash", "/TestClient", "-TPort", "{testPort}",
+    "/C", "CodexUITestClient;Job={jobId}"
+  ],
+  "managerCommand": [
+    "{platformExecutable}", "ENTERPRISE",
+    "/S", "{managerServerConnection}",
+    "/N", "{managerUsername}",
+    "/DisableStartupDialogs", "/DisableStartupMessages", "/DisableSplash", "/TestManager",
+    "/C", "CodexUITest;Job={jobId};Host=127.0.0.1;Port={testPort}",
+    "/Out", "{managerLog}"
+  ]
+}

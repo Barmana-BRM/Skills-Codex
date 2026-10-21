@@ -1,0 +1,263 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T05:12:02.049Z",
+    "slug": "byronwilliamscpa-quality",
+    "source_url": "https://github.com/ByronWilliamsCPA/fragrance-rater/tree/main/.claude/skills/quality",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "1a9f3b7274dad0d2d60a7736860391cf08c2bffa5178ab470880a931bb3873cf",
+    "tree_hash": "ac8291b5cfe5285d9e2ced3696784c4182255dc5202b328e61e7486befbb338a",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "quality",
+    "description": "Code quality validation, formatting, linting, and pre-commit checks.",
+    "summary": "Code quality validation, formatting, linting, and pre-commit checks.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "ByronWilliamsCPA",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "code-quality",
+      "formatting",
+      "linting",
+      "python",
+      "pre-commit"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The two static findings are false positives from Markdown backtick fences around documented shell commands in SKILL.md. The skill is prompt-only and lists fixed quality-tool commands; no prompt injection, exfiltration intent, or dynamic execution logic was found.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 55
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 42,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 55,
+        "snippet": "```"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "SKILL.md line 28 opens a Markdown bash code block; the following lines document fixed uv-run quality commands. The file is prompt documentation, not Ruby backtick execution or dynamic shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "SKILL.md line 42 closes the Markdown code block that began at line 28. It is not executable syntax and does not introduce command execution."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 61,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T05:12:02.049Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Validate Python Code Quality",
+    "value_statement": "Python projects need consistent formatting, linting, and pre-commit checks before review. This skill guides Claude, Codex, and Claude Code through Black, Ruff, BasedPyright, and pre-commit workflows.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "code quality",
+      "Python formatting",
+      "Ruff linting",
+      "Black formatter",
+      "BasedPyright",
+      "pre-commit checks",
+      "naming validation"
+    ],
+    "actual_capabilities": [
+      "Lists Black and Ruff commands for formatting a Python project.",
+      "Lists Ruff commands for lint checks and automatic fixes.",
+      "Includes BasedPyright type checking for the src directory.",
+      "Includes a pre-commit command for all configured hooks.",
+      "Summarizes Python quality standards, rule categories, and relaxed test rules."
+    ],
+    "limitations": [
+      "It depends on project tools such as uv, Black, Ruff, BasedPyright, and pre-commit being installed.",
+      "It does not define formatter, linter, or type checker configuration.",
+      "It does not inspect files unless the AI tool has workspace access.",
+      "It cannot guarantee fixes are correct without tests or review."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare a Python Pull Request",
+        "description": "Format code, run lint checks, and verify pre-commit hooks before requesting review.",
+        "target_user": "Python developer"
+      },
+      {
+        "title": "Check Repository Standards",
+        "description": "Confirm that project code follows documented Python quality rules and naming expectations.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Run Pre-Commit Before Release",
+        "description": "Validate all configured hooks before a release branch or deployment review.",
+        "target_user": "Release manager"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Format the Project",
+        "prompt": "Use the quality skill to format this Python project. Report which formatter steps ran and whether files changed.",
+        "scenario": "Beginner formatting task"
+      },
+      {
+        "title": "Lint and Fix Issues",
+        "prompt": "Use the quality skill to run lint checks and apply safe automatic fixes. Summarize remaining issues for manual review.",
+        "scenario": "Standard lint cleanup"
+      },
+      {
+        "title": "Validate Types and Hooks",
+        "prompt": "Use the quality skill to run type checking and all pre-commit hooks. Explain any failures with file-level guidance.",
+        "scenario": "Pre-merge validation"
+      },
+      {
+        "title": "Audit the Quality Workflow",
+        "prompt": "Use the quality skill to review the repository quality workflow. Compare formatting, linting, type checking, and pre-commit coverage.",
+        "scenario": "Advanced process review"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Format the project and report the result.",
+        "output": [
+          "Applied the formatting workflow with Black and Ruff.",
+          "Formatting completed without remaining style issues.",
+          "Review changed files before committing."
+        ]
+      },
+      {
+        "input": "Run quality checks before merge.",
+        "output": [
+          "Linting found import order and error message issues.",
+          "Type checking completed for source files.",
+          "Pre-commit hooks should be rerun after fixes."
+        ]
+      },
+      {
+        "input": "Review our Python quality standards.",
+        "output": [
+          "The workflow uses an 88 character line length.",
+          "Ruff rules cover blind exceptions, error messages, private access, package files, debugger use, and logging formats.",
+          "Tests and scripts have more relaxed rules."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Run formatting before linting so style changes are stable.",
+      "Review automatic fixes before committing them.",
+      "Use the same tool versions in local and continuous integration checks."
+    ],
+    "anti_patterns": [
+      "Running fixes without reviewing changed files.",
+      "Ignoring type checker failures because tests pass.",
+      "Changing lint rules only to silence current errors."
+    ],
+    "faq": [
+      {
+        "question": "What languages does this skill focus on?",
+        "answer": "It focuses on Python projects that use Black, Ruff, BasedPyright, and pre-commit."
+      },
+      {
+        "question": "Can it install missing tools?",
+        "answer": "No. The required tools must already be available in the project environment."
+      },
+      {
+        "question": "Does it change source files automatically?",
+        "answer": "It can guide an AI tool to run formatting or safe lint fixes when the user asks."
+      },
+      {
+        "question": "Can it replace code review?",
+        "answer": "No. It supports review by catching quality issues, but humans should still inspect changes."
+      },
+      {
+        "question": "Does it include type checking?",
+        "answer": "Yes. The documented workflow includes BasedPyright checks for source files."
+      },
+      {
+        "question": "Can it run all pre-commit hooks?",
+        "answer": "Yes. The workflow includes a full pre-commit validation step when hooks are configured."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 61
+    }
+  ]
+}

@@ -1,0 +1,727 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T05:25:49.833Z",
+    "slug": "chachamaru127-setup",
+    "source_url": "https://github.com/Chachamaru127/claude-code-harness/tree/main/skills/setup",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "f0325e735daffe0b308274192db6db5534130c9f5770a736443ac9448265729c",
+    "tree_hash": "f6f01d328b592e631daffe5dd2a9392fe565ca786ffcd4336a78454215f914c1",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "setup",
+    "description": "Guides project initialization for Claude Code and Codex workflows. It selects setup steps, scaffolds common files, and generates CLAUDE.md, AGENTS.md, Plans.md, and Claude settings.",
+    "summary": "Initialize project workflow files and Claude Code settings from project context.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Chachamaru127",
+    "license": "MIT",
+    "tags": [
+      "project-setup",
+      "claude-code",
+      "codex",
+      "workflow-files",
+      "scaffolding"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives from Markdown examples, Japanese text, and protective deny-list documentation. I confirmed the hidden-plugin shell execution path in adaptive setup and added semantic findings for permission-bypass and overbroad allowlist guidance. The author should narrow permission defaults and avoid encouraging bypass modes before publication.",
+    "remediation": [
+      {
+        "issue": "Permission bypass is presented as the preferred default.",
+        "suggestion": "Remove the default bypassPermissions recommendation, keep disableBypassPermissionsMode available, and require explicit user confirmation for any bypass mode.",
+        "severity": "high"
+      },
+      {
+        "issue": "Wildcard MCP and broad Bash allow rules are too permissive.",
+        "suggestion": "Replace wildcard grants with project-specific allow entries and keep risky package scripts behind ask or deny rules.",
+        "severity": "high"
+      },
+      {
+        "issue": "Adaptive setup executes a script from a hidden plugin path.",
+        "suggestion": "Resolve the plugin path from a trusted install root, validate the script location, and show the command before execution.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "adaptive-setup/doc.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 251,
+            "line_end": 258
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "adaptive-setup/doc.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 262,
+            "line_end": 262
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 262,
+            "line_end": 262
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:adaptive-setup/doc.md:38:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "adaptive-setup/doc.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "ANALYSIS=$(\"$PLUGIN_PATH/scripts/analyze-project.sh\")"
+      },
+      {
+        "id": "filesystem:adaptive-setup/doc.md:37:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "adaptive-setup/doc.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "PLUGIN_PATH=\"${CLAUDE_PLUGIN_ROOT:-$HOME/.claude/plugins/claude-code-harness}\""
+      },
+      {
+        "id": "external_commands:generate-claude-settings/doc.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 251,
+        "line_end": 258,
+        "snippet": "📌 推奨(プロジェクト限定・未コミット): `.claude/settings.local.json` で bypassPermissions を既定化できます。"
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:88:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "詳細: [docs/LSP_INTEGRATION.md](../../../docs/LSP_INTEGRATION.md) または `/lsp-setup` コマンドを実行してください。"
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:262:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 262,
+        "line_end": 262,
+        "snippet": "Claude Code の設定優先順位は `.claude/settings.local.json`(ローカル)→ `.claude/settings.json`(共有)→ `~/.claude/se"
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:262:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 262,
+        "line_end": 262,
+        "snippet": "Claude Code の設定優先順位は `.claude/settings.local.json`(ローカル)→ `.claude/settings.json`(共有)→ `~/.claude/se"
+      },
+      {
+        "id": "sensitive:generate-claude-settings/doc.md:39:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- `permissions.deny`: 機密ファイル読み取り(.env, secrets, SSH鍵)、危険なDB操作"
+      },
+      {
+        "id": "sensitive:generate-claude-settings/doc.md:229:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 229,
+        "line_end": 229,
+        "snippet": "- `permissions.deny` に `.env` / `secrets` / SSH鍵系の `Read(...)` が含まれる"
+      },
+      {
+        "id": "sensitive:project-scaffolder/doc.md:87:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "project-scaffolder/doc.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "- .env.example"
+      },
+      {
+        "id": "obfuscation:adaptive-setup/doc.md:1:heuristic-high-file-entropy-6-49-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.49 bits) - possible binary/encrypted content",
+        "file": "adaptive-setup/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: adaptive-setup/doc.md"
+      },
+      {
+        "id": "obfuscation:ask-project-type/doc.md:3:heuristic-very-high-entropy-string-5-73-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.73 bits) - likely encoded/encrypted payload",
+        "file": "ask-project-type/doc.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "曖昧なプロジェクト状態（ambiguous）のときにユーザーへ新規/既存を質問し、project_type を確定するスキル"
+      },
+      {
+        "id": "obfuscation:ask-project-type/doc.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.12 bits) - possible binary/encrypted content",
+        "file": "ask-project-type/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: ask-project-type/doc.md"
+      },
+      {
+        "id": "obfuscation:generate-claude-settings/doc.md:1:heuristic-high-file-entropy-6-42-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.42 bits) - possible binary/encrypted content",
+        "file": "generate-claude-settings/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: generate-claude-settings/doc.md"
+      },
+      {
+        "id": "obfuscation:generate-workflow-files/doc.md:3:heuristic-very-high-entropy-string-5-51-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.51 bits) - likely encoded/encrypted payload",
+        "file": "generate-workflow-files/doc.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "ワークフロー用ファイル（AGENTS.md, CLAUDE.md, Plans.md）を生成するスキル。新しいワークフローファイルを生成する必要がある場合に使用..."
+      },
+      {
+        "id": "obfuscation:generate-workflow-files/doc.md:1:heuristic-high-file-entropy-6-27-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.27 bits) - possible binary/encrypted content",
+        "file": "generate-workflow-files/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: generate-workflow-files/doc.md"
+      },
+      {
+        "id": "obfuscation:project-scaffolder/doc.md:1:heuristic-high-file-entropy-6-25-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.25 bits) - possible binary/encrypted content",
+        "file": "project-scaffolder/doc.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: project-scaffolder/doc.md"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:adaptive-setup/doc.md:38:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "The skill instructs Bash to execute analyze-project.sh from a plugin path controlled by CLAUDE_PLUGIN_ROOT or a hidden home directory. This is legitimate setup behavior only when the plugin path is trusted, so the execution risk remains real."
+      },
+      {
+        "id": "filesystem:adaptive-setup/doc.md:37:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.68,
+        "severity": "medium",
+        "reason": "The documented default path reads from $HOME/.claude/plugins, and the next line executes a script from that hidden location. Hidden plugin execution can evade project-local review if the install root is not verified."
+      },
+      {
+        "id": "external_commands:generate-claude-settings/doc.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Line 251 uses Markdown backticks around a settings filename, not Ruby backtick execution. The surrounding shell lines are user-facing setup instructions, with the permission-bypass risk handled as a semantic finding."
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:88:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The ../../../ sequence appears inside a Markdown documentation link to LSP_INTEGRATION.md. It is not used to read or write arbitrary filesystem paths."
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:262:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The line documents Claude Code settings precedence and mentions ~/.claude/settings.json as the user-level fallback. It does not instruct reading or modifying the home-directory settings file."
+      },
+      {
+        "id": "filesystem:generate-claude-settings/doc.md:262:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The hidden path is explanatory text about settings priority, not an access operation. The documented write target is the project-local .claude settings file."
+      },
+      {
+        "id": "sensitive:generate-claude-settings/doc.md:39:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The .env reference is in permissions.deny guidance that blocks reading secrets and SSH keys. This is a protective rule, not sensitive file access."
+      },
+      {
+        "id": "sensitive:generate-claude-settings/doc.md:229:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line requires .env, secrets, and SSH key patterns to appear in permissions.deny. It reinforces secret protection rather than instructing the skill to read those files."
+      },
+      {
+        "id": "sensitive:project-scaffolder/doc.md:87:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": ".env.example is listed as a generated template file. It is not an instruction to read real .env files or extract secrets."
+      },
+      {
+        "id": "obfuscation:adaptive-setup/doc.md:1:heuristic-high-file-entropy-6-49-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The inspected file is readable Markdown with YAML front matter, Japanese prose, and a small Bash snippet. No encoded, encrypted, or binary payload was found."
+      },
+      {
+        "id": "obfuscation:ask-project-type/doc.md:3:heuristic-very-high-entropy-string-5-73-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Line 3 is a Japanese description string for the skill. It is human-readable text, not an encoded or encrypted payload."
+      },
+      {
+        "id": "obfuscation:ask-project-type/doc.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The file is plain Markdown documentation with YAML metadata and examples. The entropy signal appears to come from Japanese text and punctuation, not obfuscation."
+      },
+      {
+        "id": "obfuscation:generate-claude-settings/doc.md:1:heuristic-high-file-entropy-6-42-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The file is readable Markdown describing Claude settings and permission policy. No hidden payload, decoding routine, or unreadable binary content was found."
+      },
+      {
+        "id": "obfuscation:generate-workflow-files/doc.md:3:heuristic-very-high-entropy-string-5-51-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Line 3 is a Japanese natural-language description of workflow file generation. It does not contain encoded data or executable obfuscation."
+      },
+      {
+        "id": "obfuscation:generate-workflow-files/doc.md:1:heuristic-high-file-entropy-6-27-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The file is plain Markdown with examples for AGENTS.md, CLAUDE.md, and Plans.md. The high entropy heuristic is explained by multilingual prose and markup."
+      },
+      {
+        "id": "obfuscation:project-scaffolder/doc.md:1:heuristic-high-file-entropy-6-25-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "The file is readable Markdown about project scaffolding and generated files. No encoded payload or binary content was identified."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unsafe Permission Bypass Guidance",
+        "description": "The settings generator presents bypassPermissions as the preferred mode, recommends project-local default bypass settings, and removes disableBypassPermissionsMode. This weakens normal confirmation prompts for edits and commands.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 34,
+            "line_end": 43
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 92,
+            "line_end": 95
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 140,
+            "line_end": 145
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 242,
+            "line_end": 263
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "Multiple sections explicitly recommend bypassPermissions, mention dangerously-skip-permissions, and instruct removal of disableBypassPermissionsMode. This is direct policy guidance, not a weak pattern match."
+      },
+      {
+        "title": "Overbroad Tool Allowlist Guidance",
+        "description": "The settings guidance recommends wildcard MCP permissions and broad Bash allow entries such as package manager commands and cat. These defaults can grant more tool access than a project needs.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 44,
+            "line_end": 65
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 172,
+            "line_end": 185
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "The file contains concrete wildcard MCP patterns and broad Bash allow examples. The guidance may be operationally useful, but it creates a clear least-privilege concern."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Unsafe Permission Bypass Guidance",
+        "description": "The settings generator presents bypassPermissions as the preferred mode, recommends project-local default bypass settings, and removes disableBypassPermissionsMode. This weakens normal confirmation prompts for edits and commands.",
+        "locations": [
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 34,
+            "line_end": 43
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 92,
+            "line_end": 95
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 140,
+            "line_end": 145
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 242,
+            "line_end": 263
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "Multiple sections explicitly recommend bypassPermissions, mention dangerously-skip-permissions, and instruct removal of disableBypassPermissionsMode. This is direct policy guidance, not a weak pattern match."
+      },
+      {
+        "title": "Overbroad Tool Allowlist Guidance",
+        "description": "The settings guidance recommends wildcard MCP permissions and broad Bash allow entries such as package manager commands and cat. These defaults can grant more tool access than a project needs.",
+        "locations": [
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 44,
+            "line_end": 65
+          },
+          {
+            "file": "generate-claude-settings/doc.md",
+            "line_start": 172,
+            "line_end": 185
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The file contains concrete wildcard MCP patterns and broad Bash allow examples. The guidance may be operationally useful, but it creates a clear least-privilege concern."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Shell command substitution",
+        "description": "ANALYSIS=$(\"$PLUGIN_PATH/scripts/analyze-project.sh\")",
+        "locations": [
+          {
+            "file": "adaptive-setup/doc.md",
+            "line_start": 38,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "The skill instructs Bash to execute analyze-project.sh from a plugin path controlled by CLAUDE_PLUGIN_ROOT or a hidden home directory. This is legitimate setup behavior only when the plugin path is trusted, so the execution risk remains real."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "PLUGIN_PATH=\"${CLAUDE_PLUGIN_ROOT:-$HOME/.claude/plugins/claude-code-harness}\"",
+        "locations": [
+          {
+            "file": "adaptive-setup/doc.md",
+            "line_start": 37,
+            "line_end": 37
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.68,
+        "confidence_reasoning": "The documented default path reads from $HOME/.claude/plugins, and the next line executes a script from that hidden location. Hidden plugin execution can evade project-local review if the install root is not verified."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 6,
+    "total_lines": 751,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T05:25:49.833Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Initialize Claude and Codex Project Workflows",
+    "value_statement": "New projects often lack consistent AI workflow files and setup rules. This skill guides setup, scaffolding, and settings generation for Claude, Codex, and Claude Code projects.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "project setup",
+      "AI workflow files",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "Plans.md",
+      "project scaffolding",
+      "Claude settings"
+    ],
+    "actual_capabilities": [
+      "Classifies setup requests and routes them to focused setup sub-skills.",
+      "Analyzes project state before choosing new-project or existing-project setup.",
+      "Prompts users when project type is ambiguous instead of guessing.",
+      "Generates AGENTS.md, CLAUDE.md, and Plans.md from project context.",
+      "Scaffolds common project directories and starter configuration files.",
+      "Creates or merges .claude/settings.json with permission policy guidance."
+    ],
+    "limitations": [
+      "Some flows can run Bash commands or local plugin scripts.",
+      "Generated Claude settings require security review before use.",
+      "The skill does not install dependencies without user confirmation.",
+      "It targets Claude Code harness workflows and may need adaptation elsewhere."
+    ],
+    "use_cases": [
+      {
+        "title": "Start an AI-ready project",
+        "description": "Create starter files and workflow documents for a new Claude Code or Codex project.",
+        "target_user": "Solo developer"
+      },
+      {
+        "title": "Standardize team setup",
+        "description": "Generate shared AGENTS.md, CLAUDE.md, and Plans.md files for consistent AI-assisted work.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Repair missing workflow files",
+        "description": "Add missing setup files to an existing repository without overwriting user work.",
+        "target_user": "Maintainer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Set up a new project",
+        "prompt": "Initialize this repository for a new Claude Code and Codex workflow. Ask before overwriting any existing file.",
+        "scenario": "Beginner setup"
+      },
+      {
+        "title": "Add workflow files",
+        "prompt": "Generate AGENTS.md, CLAUDE.md, and Plans.md for this existing project. Use the detected technology stack.",
+        "scenario": "Existing repository"
+      },
+      {
+        "title": "Scaffold project structure",
+        "prompt": "Scaffold a minimal web application structure for my selected stack. Show created files and skip dependency installation.",
+        "scenario": "Project scaffolding"
+      },
+      {
+        "title": "Merge Claude settings",
+        "prompt": "Review the current .claude settings, merge the safe policy template, and explain any permission changes before writing files.",
+        "scenario": "Advanced settings review"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A new TypeScript web project needs AI workflow files.",
+        "output": [
+          "Created a plan for AGENTS.md, CLAUDE.md, and Plans.md.",
+          "Detected TypeScript and selected web workflow sections.",
+          "Asked before writing files that already existed."
+        ]
+      },
+      {
+        "input": "An existing repository has partial Claude Code settings.",
+        "output": "The skill reports the current settings state, proposes a merge, and lists permission changes for review."
+      },
+      {
+        "input": "The repository state is ambiguous.",
+        "output": [
+          "The skill asks whether the project is new or existing.",
+          "Setup continues only after the user chooses a project type."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Review generated permission settings before enabling them in a real repository.",
+      "Commit shared workflow files, but keep local settings out of version control.",
+      "Run setup in a clean branch so changes are easy to inspect."
+    ],
+    "anti_patterns": [
+      "Do not enable bypass permissions without a project-specific security review.",
+      "Do not use generated settings as a substitute for repository policy.",
+      "Do not run setup scripts from untrusted plugin paths."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill create files?",
+        "answer": "Yes. It can write workflow files, settings files, and starter project structure when the user approves the setup flow."
+      },
+      {
+        "question": "Does it work with Codex?",
+        "answer": "Yes. It supports Codex-oriented workflow files such as AGENTS.md, alongside Claude and Claude Code files."
+      },
+      {
+        "question": "Will it overwrite existing files?",
+        "answer": "The documented flow asks before overwriting and prefers merges or additions for existing projects."
+      },
+      {
+        "question": "Does it install dependencies?",
+        "answer": "No. The scaffolder says dependency installation should wait for user confirmation."
+      },
+      {
+        "question": "Why is security review important?",
+        "answer": "The settings generator discusses permission bypass and broad tool allowlists, so teams should review those choices."
+      },
+      {
+        "question": "What projects fit best?",
+        "answer": "It fits repositories that need AI coding workflow files, project setup guidance, or Claude Code settings."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "adaptive-setup",
+      "type": "dir",
+      "path": "adaptive-setup",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "adaptive-setup/doc.md",
+          "lines": 76
+        }
+      ]
+    },
+    {
+      "name": "ask-project-type",
+      "type": "dir",
+      "path": "ask-project-type",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "ask-project-type/doc.md",
+          "lines": 132
+        }
+      ]
+    },
+    {
+      "name": "generate-claude-settings",
+      "type": "dir",
+      "path": "generate-claude-settings",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "generate-claude-settings/doc.md",
+          "lines": 272
+        }
+      ]
+    },
+    {
+      "name": "generate-workflow-files",
+      "type": "dir",
+      "path": "generate-workflow-files",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "generate-workflow-files/doc.md",
+          "lines": 131
+        }
+      ]
+    },
+    {
+      "name": "project-scaffolder",
+      "type": "dir",
+      "path": "project-scaffolder",
+      "children": [
+        {
+          "name": "doc.md",
+          "type": "file",
+          "path": "project-scaffolder/doc.md",
+          "lines": 100
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 40
+    }
+  ]
+}

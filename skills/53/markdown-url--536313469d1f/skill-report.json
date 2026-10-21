@@ -1,0 +1,853 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T05:45:22.369Z",
+    "slug": "am-will-markdown-url",
+    "source_url": "https://github.com/am-will/codex-skills/tree/main/skills/markdown-url/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "536313469d1ff94a52a146fe509750e094513fbd340e445a41c61ef41a744063",
+    "tree_hash": "99e5839ecf3a60bd4802036104e18f9a504376d58c869da5e4fd405d17f5a843",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "markdown-url",
+    "description": "Convert HTTP and HTTPS destinations into markdown.new URLs for cleaner reading and text extraction.",
+    "summary": "Create markdown.new proxy links for readable web content.",
+    "icon": "📦",
+    "author": "am-will",
+    "license": "MIT",
+    "category": "documentation",
+    "tags": [
+      "markdown",
+      "url-conversion",
+      "web-reading",
+      "content-extraction"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "filesystem",
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most external-command and filesystem detections are false positives caused by Markdown formatting and a URL-scheme regex. The skill intentionally routes suitable URLs through markdown.new, creating a third-party network dependency that may expose destination URLs. No prompt injection or command execution behavior was found.",
+    "remediation": [
+      {
+        "issue": "Destination URLs are disclosed to a third-party proxy.",
+        "suggestion": "Warn users before proxying and reject URLs containing credentials, sensitive query parameters, private hosts, or confidential resource identifiers.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/markdown-url.js",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/markdown-url.js",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 82
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:scripts/markdown-url.js:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/markdown-url.js",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "return 'https://markdown.new/' + abs;"
+      },
+      {
+        "id": "filesystem:scripts/markdown-url.js:12:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/markdown-url.js",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s)) return null;"
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "1) rewrite it to go through `https://markdown.new/`, then"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "1. Normalize the destination into an absolute URL with a scheme (`https://` preferred)."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "2. Prefix it with `https://markdown.new/` (do not drop the original scheme)."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- `https://example.com` -> `https://markdown.new/https://example.com`"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- `https://example.com/docs?a=1#b` -> `https://markdown.new/https://example.com/docs?a=1#b`"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- `example.com` -> `https://markdown.new/https://example.com`"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "1. Produce the rewritten `markdown.new` URL."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "If the `markdown.new` view fails to load or breaks critical functionality, fall back to the original"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "Do NOT route every site through `markdown.new`. Use it primarily for \"read-only\" pages where you wan"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "Skip `markdown.new` and go straight to the original URL when the destination is likely to be blocked"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "If you try `markdown.new` and see any of the below, stop retrying and fall back to the original URL:"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "- HTTP `401/403/429`, \"Access denied\", \"Forbidden\", \"rate limited\""
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "1. Attempt `markdown.new` once when appropriate."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "3. If you still need extractable text, try to extract from the original page (reader mode / copy tex"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "- Do not rewrite local paths (`./README.md`) or non-HTTP(S) schemes."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 82,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "1) rewrite it to go through `https://markdown.new/`, then"
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "1. Normalize the destination into an absolute URL with a scheme (`https://` preferred)."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "2. Prefix it with `https://markdown.new/` (do not drop the original scheme)."
+      },
+      {
+        "id": "network:SKILL.md:25:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- `https://example.com` -> `https://markdown.new/https://example.com`"
+      },
+      {
+        "id": "network:SKILL.md:26:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- `https://example.com/docs?a=1#b` -> `https://markdown.new/https://example.com/docs?a=1#b`"
+      },
+      {
+        "id": "network:SKILL.md:27:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- `example.com` -> `https://markdown.new/https://example.com`"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "node skills/markdown-url/scripts/markdown-url.js \"https://example.com/docs\""
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:scripts/markdown-url.js:21:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "reason": "The helper deliberately embeds destinations under markdown.new. Visiting its output exposes the destination URL to an external service, although the script itself makes no request.",
+        "severity": "low"
+      },
+      {
+        "id": "filesystem:scripts/markdown-url.js:12:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "This line is a regular expression that rejects non-HTTP URL schemes. It does not read, write, enumerate, or reference hidden files."
+      },
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format a URL as inline Markdown. They do not invoke Ruby, a shell, or any executable."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format the HTTPS scheme in prose. No command is present or executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format the markdown.new URL in documentation. This is not shell substitution or code execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Both backtick spans are illustrative URLs in Markdown. They contain no executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Both backtick spans are URL examples with a query and fragment. They do not execute through a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks delimit input and output URL examples. No command execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The service name is formatted as inline code. The line describes URL rewriting and contains no executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format a service name in prose. There is no shell or Ruby syntax to execute."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a prose policy with inline Markdown formatting. It does not request command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks only identify markdown.new within a fallback instruction. No external command appears."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The service name is inline Markdown in a failure-handling instruction. It is not a shell expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks format HTTP status codes. Status-code text cannot execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:67:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses inline formatting for the service name. It contains no shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The service name is formatted as inline code within prose. No executable content is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks mark a local-path example. The instruction explicitly says not to rewrite it and does not execute it."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a fenced Bash example invoking the bundled Node helper with a fixed demonstration URL. It uses no shell interpolation or untrusted command construction."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The instruction requires routing web destinations through markdown.new. This creates an intentional external network dependency and discloses visited destination URLs.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line mentions the HTTPS scheme without naming a destination host or initiating a request. It is URL-normalization guidance."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The line directs the agent to prefix destinations with the external markdown.new service. Following it routes subsequent browsing through that third party.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:25:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are documentation examples using the reserved example.com domain. The line itself does not perform a network request."
+      },
+      {
+        "id": "network:SKILL.md:26:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are inert example URLs illustrating query and fragment preservation. The line does not initiate network activity."
+      },
+      {
+        "id": "network:SKILL.md:27:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line documents URL transformation with the reserved example.com domain. It does not make a request."
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The CLI example passes a reserved example.com URL to a helper that only prints a transformed URL. The helper performs no network request."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Third-Party Destination URL Disclosure",
+        "description": "The required workflow sends destination URLs through markdown.new. Sensitive query parameters or confidential resource names could be disclosed to that service.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 36
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "The instructions explicitly require rewriting and visiting destination URLs through markdown.new. The privacy impact follows directly from that proxy workflow."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Third-Party Destination URL Disclosure",
+        "description": "The required workflow sends destination URLs through markdown.new. Sensitive query parameters or confidential resource names could be disclosed to that service.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 36
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The instructions explicitly require rewriting and visiting destination URLs through markdown.new. The privacy impact follows directly from that proxy workflow."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "return 'https://markdown.new/' + abs;",
+        "locations": [
+          {
+            "file": "scripts/markdown-url.js",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.92,
+        "confidence_reasoning": "The helper deliberately embeds destinations under markdown.new. Visiting its output exposes the destination URL to an external service, although the script itself makes no request."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "1) rewrite it to go through `https://markdown.new/`, then",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The instruction requires routing web destinations through markdown.new. This creates an intentional external network dependency and discloses visited destination URLs."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "2. Prefix it with `https://markdown.new/` (do not drop the original scheme).",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The line directs the agent to prefix destinations with the external markdown.new service. Following it routes subsequent browsing through that third party."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 114,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T05:45:22.369Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Convert Web Pages into Clean Markdown",
+    "value_statement": "Web pages can be difficult to extract and summarize. This skill routes suitable public pages through markdown.new for cleaner Markdown content.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Markdown URL converter",
+      "markdown.new",
+      "web page to Markdown",
+      "content extraction",
+      "documentation reader",
+      "URL rewriting"
+    ],
+    "actual_capabilities": [
+      "Normalizes bare hosts and paths into HTTPS URLs.",
+      "Preserves existing HTTP and HTTPS destinations.",
+      "Prefixes destinations with the markdown.new service URL.",
+      "Defines fallback rules for blocked or incomplete proxy responses.",
+      "Provides a Node command-line helper that prints transformed URLs."
+    ],
+    "limitations": [
+      "The workflow depends on the availability and behavior of markdown.new.",
+      "Authenticated, private, interactive, and payment pages should use the original site.",
+      "JavaScript applications, paywalls, CAPTCHAs, and bot controls may prevent extraction.",
+      "The command-line helper only rewrites URLs; it does not fetch or validate page content."
+    ],
+    "use_cases": [
+      {
+        "title": "Read technical documentation",
+        "description": "Convert public documentation links into cleaner Markdown before summarizing or taking notes.",
+        "target_user": "Software developers"
+      },
+      {
+        "title": "Prepare research notes",
+        "description": "Open public articles through a text-focused view for easier quotation and structured note creation.",
+        "target_user": "Researchers and analysts"
+      },
+      {
+        "title": "Review publication content",
+        "description": "Transform public blog posts and changelogs into readable Markdown for editing and comparison.",
+        "target_user": "Technical writers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Convert one URL",
+        "prompt": "Convert [public URL] into a markdown.new URL. Return only the transformed destination.",
+        "scenario": "Use this for a simple public page."
+      },
+      {
+        "title": "Summarize documentation",
+        "prompt": "Open [documentation URL] through markdown.new, then summarize the main concepts and list important configuration details.",
+        "scenario": "Use this for public technical documentation."
+      },
+      {
+        "title": "Extract structured notes",
+        "prompt": "Read [article URL] through markdown.new. Produce headings, key claims, supporting details, and source quotations.",
+        "scenario": "Use this when preparing research notes."
+      },
+      {
+        "title": "Apply fallback policy",
+        "prompt": "Try [public URL] through markdown.new once. If blocked or incomplete, use the original page and clearly identify the fallback.",
+        "scenario": "Use this when proxy compatibility is uncertain."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Convert https://example.com/docs for Markdown reading.",
+        "output": "https://markdown.new/https://example.com/docs"
+      },
+      {
+        "input": "Prepare notes from a public product changelog.",
+        "output": "A structured summary with release headings, major changes, compatibility notes, and concise source quotations."
+      },
+      {
+        "input": "The proxy returns an access-denied response.",
+        "output": "The markdown.new view was blocked, so the original public page was used for the summary."
+      }
+    ],
+    "best_practices": [
+      "Use the proxy only for public, read-only pages.",
+      "Inspect URLs for credentials or sensitive query parameters before rewriting them.",
+      "Fall back to the original page after one failed proxy attempt."
+    ],
+    "anti_patterns": [
+      "Do not route login, OAuth, payment, upload, or authenticated workflows through the proxy.",
+      "Do not rewrite local paths or non-HTTP schemes.",
+      "Do not repeatedly retry blocked pages or bypass access controls."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill download web pages?",
+        "answer": "The helper only prints a rewritten URL. An agent may visit that URL when performing the documented workflow."
+      },
+      {
+        "question": "Which URL schemes are supported?",
+        "answer": "The helper accepts HTTP and HTTPS destinations. Bare hosts are normalized to HTTPS."
+      },
+      {
+        "question": "Can it process authenticated pages?",
+        "answer": "No. Use the original site for pages requiring cookies, sessions, login, OAuth, or private access."
+      },
+      {
+        "question": "What happens when markdown.new fails?",
+        "answer": "The workflow switches to the original page after one failed or incomplete proxy attempt."
+      },
+      {
+        "question": "Does it preserve query parameters?",
+        "answer": "Yes. The helper preserves the supplied HTTP or HTTPS URL when adding the service prefix."
+      },
+      {
+        "question": "Is every public URL suitable?",
+        "answer": "No. Interactive applications, paywalls, CAPTCHAs, and access-controlled pages may not work correctly."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "markdown-url.js",
+          "type": "file",
+          "path": "scripts/markdown-url.js",
+          "lines": 31
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 83
+    }
+  ]
+}

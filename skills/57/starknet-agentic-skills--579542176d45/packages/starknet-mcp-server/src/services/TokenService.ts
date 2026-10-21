@@ -1,0 +1,557 @@
+/**
+ * Token Service for Starknet MCP Server.
+ * Manages token resolution and caching.
+ */
+
+import {
+  fetchTokenByAddress,
+  fetchVerifiedTokenBySymbol,
+  type Token,
+} from "@avnu/avnu-sdk";
+import { Contract, shortString, byteArray, type RpcProvider } from "starknet";
+import { type CachedToken, TOKEN_TTL_MS } from "../types/token.js";
+import { normalizeAddress } from "../utils.js";
+import {
+  AVNU_API_URLS,
+  MAINNET_TOKENS,
+  SEPOLIA_TOKENS,
+  type StarknetNetwork,
+} from "@starknetfoundation/starknet-agentic-shared/constants";
+
+const ERC20_METADATA_ABI = [
+  {
+    name: "symbol",
+    type: "function",
+    inputs: [],
+    outputs: [{ name: "symbol", type: "felt" }],
+    stateMutability: "view",
+  },
+  {
+    name: "name",
+    type: "function",
+    inputs: [],
+    outputs: [{ name: "name", type: "felt" }],
+    stateMutability: "view",
+  },
+  {
+    name: "decimals",
+    type: "function",
+    inputs: [],
+    outputs: [{ name: "decimals", type: "felt" }],
+    stateMutability: "view",
+  },
+];
+
+/** Static token defaults - shared by all static tokens */
+const STATIC_TOKEN_DEFAULTS = {
+  logoUri: null,
+  lastDailyVolumeUsd: 0,
+  tags: ["Verified"] as const,
+  extensions: {},
+  isStatic: true,
+  lastUpdated: 0,
+} as const;
+
+/** Core token data per network - only the fields that differ per token */
+const STATIC_TOKEN_DATA = {
+  mainnet: [
+    { address: MAINNET_TOKENS.ETH, symbol: "ETH", name: "Ether", decimals: 18 },
+    { address: MAINNET_TOKENS.STRK, symbol: "STRK", name: "Starknet Token", decimals: 18 },
+    { address: MAINNET_TOKENS.USDC, symbol: "USDC", name: "USD Coin", decimals: 6 },
+    { address: MAINNET_TOKENS.USDC_E, symbol: "USDC.e", name: "Bridged USDC", decimals: 6 },
+    { address: MAINNET_TOKENS.USDT, symbol: "USDT", name: "Tether USD", decimals: 6 },
+  ],
+  sepolia: [
+    { address: SEPOLIA_TOKENS.ETH, symbol: "ETH", name: "Ether", decimals: 18 },
+    { address: SEPOLIA_TOKENS.STRK, symbol: "STRK", name: "Starknet Token", decimals: 18 },
+    { address: SEPOLIA_TOKENS.USDC, symbol: "USDC", name: "USD Coin", decimals: 6 },
+    { address: SEPOLIA_TOKENS.USDC_E, symbol: "USDC.e", name: "Bridged USDC", decimals: 6 },
+  ],
+} as const satisfies Record<
+  StarknetNetwork,
+  readonly { address: string; symbol: string; name: string; decimals: number }[]
+>;
+
+/**
+ * Static token definitions per network - these always take precedence and never expire.
+ * Single source of truth for token addresses and decimals.
+ */
+export const STATIC_TOKENS_BY_NETWORK: Record<StarknetNetwork, CachedToken[]> = {
+  mainnet: STATIC_TOKEN_DATA.mainnet.map(toStaticToken),
+  sepolia: STATIC_TOKEN_DATA.sepolia.map(toStaticToken),
+};
+
+/**
+ * Mainnet static tokens. Prefer `getTokenService().getStaticTokens()`, which
+ * follows the configured network.
+ */
+export const STATIC_TOKENS: CachedToken[] = STATIC_TOKENS_BY_NETWORK.mainnet;
+
+/**
+ * Mainnet token addresses indexed by symbol. ETH and STRK are identical on
+ * Sepolia; the others are not, so resolve those through the TokenService.
+ */
+export const TOKENS = Object.fromEntries(
+  STATIC_TOKENS.map((t) => [t.symbol, t.address])
+) as Record<"ETH" | "STRK" | "USDC" | "USDC.e" | "USDT", string>;
+
+function toStaticToken(token: { address: string; symbol: string; name: string; decimals: number }): CachedToken {
+  return {
+    ...STATIC_TOKEN_DEFAULTS,
+    tags: [...STATIC_TOKEN_DEFAULTS.tags],
+    ...token,
+  };
+}
+
+/**
+ * Find the static token at `address` on `network`, comparing addresses as
+ * numbers so padding and case do not matter. Undefined for non-hex input.
+ */
+export function findStaticToken(address: string, network: StarknetNetwork): CachedToken | undefined {
+  let target: bigint;
+  try {
+    target = BigInt(address);
+  } catch {
+    return undefined;
+  }
+  return STATIC_TOKENS_BY_NETWORK[network].find((token) => BigInt(token.address) === target);
+}
+
+/**
+ * Check if a cached token has expired (TTL 24h).
+ * Static tokens never expire.
+ */
+function isExpired(token: CachedToken): boolean {
+  if (token.isStatic) return false;
+  return Date.now() - token.lastUpdated > TOKEN_TTL_MS;
+}
+
+/**
+ * Convert an avnu Token to a CachedToken.
+ */
+function toCachedToken(token: Token, isStatic: boolean): CachedToken {
+  return {
+    ...token,
+    address: normalizeAddress(token.address),
+    isStatic,
+    lastUpdated: Date.now(),
+  };
+}
+
+/**
+ * Readable text for a rejection that may not be an Error, or may be an Error
+ * with an empty message.
+ */
+function describeError(error: unknown): string {
+  if (error instanceof Error) return error.message || `${error.name} (no message)`;
+  return String(error);
+}
+
+/**
+ * TokenService manages token resolution and caching.
+ * Uses avnu SDK for lazy fetching of unknown tokens.
+ */
+export class TokenService {
+  /** Token cache by normalized address */
+  private cache: Map<string, CachedToken> = new Map();
+  /** Symbol to address index for fast lookup */
+  private symbolIndex: Map<string, string> = new Map();
+  /** avnu API base URL */
+  private baseUrl: string;
+  /** RPC provider for on-chain fallback */
+  private provider: RpcProvider | null = null;
+  /** Network whose static tokens are loaded */
+  private network: StarknetNetwork;
+  /** Maximum number of dynamic (non-static) entries allowed in cache */
+  private static readonly MAX_DYNAMIC_CACHE_SIZE = 512;
+
+  /**
+   * @param baseUrl - avnu API base URL (defaults to the avnu API for `network`)
+   * @param network - Network whose static tokens take precedence (default mainnet)
+   */
+  constructor(baseUrl?: string, network: StarknetNetwork = "mainnet") {
+    this.baseUrl = baseUrl ?? AVNU_API_URLS[network];
+    this.network = network;
+    this.loadStaticTokens();
+  }
+
+  /**
+   * Set the RPC provider for on-chain fallback when avnu is unavailable.
+   */
+  setProvider(provider: RpcProvider): void {
+    this.provider = provider;
+  }
+
+  /**
+   * Network whose static tokens are loaded.
+   */
+  getNetwork(): StarknetNetwork {
+    return this.network;
+  }
+
+  /**
+   * Switch the static token set to `network`, and the avnu base URL to
+   * `baseUrl` if given. Drops every cached token, dynamic ones included,
+   * since they were resolved for the previous network.
+   */
+  setNetwork(network: StarknetNetwork, baseUrl: string = this.baseUrl): void {
+    if (network === this.network && baseUrl === this.baseUrl) return;
+    this.network = network;
+    this.baseUrl = baseUrl;
+    this.cache.clear();
+    this.symbolIndex.clear();
+    this.loadStaticTokens();
+  }
+
+  /**
+   * Static tokens for the configured network.
+   */
+  getStaticTokens(): CachedToken[] {
+    return STATIC_TOKENS_BY_NETWORK[this.network];
+  }
+
+  /**
+   * Symbol of the static token at `address` on the configured network, or
+   * undefined if it is not one. Never derived from avnu or on-chain metadata.
+   */
+  getStaticSymbol(address: string): string | undefined {
+    return findStaticToken(address, this.network)?.symbol;
+  }
+
+  /**
+   * Load static tokens for the configured network into cache.
+   */
+  private loadStaticTokens(): void {
+    for (const token of STATIC_TOKENS_BY_NETWORK[this.network]) {
+      const normalized = normalizeAddress(token.address);
+      this.cache.set(normalized, { ...token, address: normalized });
+      this.symbolIndex.set(token.symbol.toUpperCase(), normalized);
+    }
+  }
+
+  /**
+   * Add a token to cache. Never overwrites static tokens.
+   */
+  private addToCache(token: Token, isStatic: boolean): CachedToken {
+    const normalized = normalizeAddress(token.address);
+
+    // Never overwrite static tokens
+    const existing = this.cache.get(normalized);
+    if (existing?.isStatic) {
+      return existing;
+    }
+
+    const cached = toCachedToken(token, isStatic);
+    cached.address = normalized;
+    this.cache.set(normalized, cached);
+
+    // Only index symbol if not already taken by a static token
+    const upperSymbol = token.symbol.toUpperCase();
+    const existingAddr = this.symbolIndex.get(upperSymbol);
+    if (!existingAddr || !this.cache.get(existingAddr)?.isStatic) {
+      this.symbolIndex.set(upperSymbol, normalized);
+    }
+
+    // Evict oldest dynamic entries when cache exceeds cap
+    this.evictIfNeeded();
+
+    return cached;
+  }
+
+  // ============================================
+  // SYNCHRONOUS METHODS (cache only)
+  // ============================================
+
+  /**
+   * Resolve token symbol or address to normalized address.
+   * Synchronous - only checks cache.
+   * @throws Error if symbol not found in cache and not a hex address
+   */
+  resolveSymbol(symbolOrAddress: string): string {
+    const upper = symbolOrAddress.toUpperCase();
+
+    // Check symbol index first
+    const indexed = this.symbolIndex.get(upper);
+    if (indexed) {
+      return indexed;
+    }
+
+    // If it's a hex address, normalize and return
+    if (symbolOrAddress.startsWith("0x")) {
+      return normalizeAddress(symbolOrAddress);
+    }
+
+    throw new Error(`Unknown token: ${symbolOrAddress}`);
+  }
+
+  /**
+   * Get cached decimals for a token.
+   * Returns undefined if not in cache.
+   */
+  getDecimals(address: string): number | undefined {
+    const normalized = normalizeAddress(address);
+    const cached = this.cache.get(normalized);
+    if (!cached || isExpired(cached)) {
+      return undefined;
+    }
+    return cached.decimals;
+  }
+
+  // ============================================
+  // ASYNCHRONOUS METHODS (with avnu fetch)
+  // ============================================
+
+  /**
+   * Get token by address, fetching from avnu if not cached or expired.
+   * Falls back to on-chain contract calls if avnu is unavailable.
+   */
+  async getTokenByAddress(address: string): Promise<CachedToken> {
+    const normalized = normalizeAddress(address);
+    const cached = this.cache.get(normalized);
+
+    // Return cached if valid and not expired
+    if (cached && !isExpired(cached)) {
+      return cached;
+    }
+
+    // Fetch from avnu
+    try {
+      const token = await fetchTokenByAddress(address, { baseUrl: this.baseUrl });
+      return this.addToCache(token, false);
+    } catch {
+      // Fall back to on-chain if provider available
+      if (!this.provider) {
+        throw new Error(`Token ${address} not found and no RPC provider configured for on-chain fallback`);
+      }
+
+      return this.fetchTokenFromChain(normalized);
+    }
+  }
+
+  /**
+   * Fetch token metadata directly from the contract.
+   * @throws Error if all contract calls fail (not a valid ERC20 token)
+   */
+  private async fetchTokenFromChain(address: string): Promise<CachedToken> {
+    const contract = new Contract({
+      abi: ERC20_METADATA_ABI,
+      address,
+      providerOrAccount: this.provider!,
+    });
+
+    const [symbolResult, nameResult, decimalsResult] = await Promise.all([
+      contract.symbol().catch(() => null),
+      contract.name().catch(() => null),
+      contract.decimals().catch(() => null),
+    ]);
+
+    // If all contract calls failed, this is likely not a valid ERC20 token
+    // Don't cache invalid data that could silently treat non-tokens as tokens
+    if (symbolResult === null && nameResult === null && decimalsResult === null) {
+      throw new Error(
+        `Address ${address} does not appear to be a valid ERC20 token: all metadata calls failed`
+      );
+    }
+
+    const symbol = this.decodeStringResult(symbolResult, address);
+    const name = this.decodeStringResult(nameResult, "Unknown Token");
+    const rawDecimals = Number(decimalsResult?.decimals ?? decimalsResult ?? 18);
+    const decimals = Number.isNaN(rawDecimals) ? 18 : rawDecimals;
+
+    // Route through addToCache to preserve static token precedence
+    return this.addToCache(
+      {
+        address,
+        symbol,
+        name,
+        decimals,
+        logoUri: null,
+        lastDailyVolumeUsd: 0,
+        tags: [],
+        extensions: {},
+      },
+      false
+    );
+  }
+
+  /**
+   * Check if an object is a Cairo ByteArray structure.
+   * ByteArray has: data (array of felts), pending_word, pending_word_len
+   */
+  private isByteArray(obj: unknown): obj is { data: unknown[]; pending_word: unknown; pending_word_len: unknown } {
+    if (typeof obj !== "object" || obj === null) return false;
+    const record = obj as Record<string, unknown>;
+    return "data" in record && "pending_word" in record && "pending_word_len" in record;
+  }
+
+  /**
+   * Decode a felt252 short string or ByteArray result from contract call.
+   * Handles:
+   * - Direct felt252 values (bigint or string)
+   * - Wrapped responses like { symbol: felt } or { name: felt }
+   * - Cairo 1 ByteArray structures { data, pending_word, pending_word_len }
+   */
+  private decodeStringResult(result: unknown, fallback: string): string {
+    if (!result) return fallback;
+
+    try {
+      // Unwrap { symbol: ... } or { name: ... } responses, unless it's a direct ByteArray
+      let value: unknown = result;
+      if (typeof result === "object" && !Array.isArray(result) && !this.isByteArray(result)) {
+        const record = result as Record<string, unknown>;
+        if ("symbol" in record) value = record.symbol;
+        else if ("name" in record) value = record.name;
+      }
+
+      // ByteArray (Cairo 1 long strings)
+      if (this.isByteArray(value)) {
+        return byteArray.stringFromByteArray(value as Parameters<typeof byteArray.stringFromByteArray>[0]) || fallback;
+      }
+
+      // Short string (felt252)
+      if (typeof value === "bigint" || typeof value === "string") {
+        return shortString.decodeShortString(value.toString()) || fallback;
+      }
+    } catch {
+      // Decoding failed
+    }
+
+    return fallback;
+  }
+
+  /**
+   * Get token by symbol, fetching from avnu if not cached or expired.
+   * Only fetches verified tokens from avnu.
+   */
+  async getTokenBySymbol(symbol: string): Promise<CachedToken> {
+    const upper = symbol.toUpperCase();
+    const addr = this.symbolIndex.get(upper);
+
+    if (addr) {
+      const cached = this.cache.get(addr);
+      if (cached && !isExpired(cached)) {
+        return cached;
+      }
+    }
+
+    const builtIns = this.getStaticTokens().map((t) => t.symbol).join(", ");
+    const unknown = `Unknown token "${symbol}": not a built-in token on ${this.network} (built-ins: ${builtIns})`;
+
+    // Fetch from avnu (verified tokens only)
+    let token: Token | null | undefined;
+    try {
+      token = await fetchVerifiedTokenBySymbol(symbol, { baseUrl: this.baseUrl });
+    } catch (error) {
+      // The avnu SDK rejects with `undefined` when no verified token matches.
+      if (error !== undefined) {
+        throw new Error(`${unknown}, and avnu's verified list could not be checked: ${describeError(error)}`, {
+          cause: error,
+        });
+      }
+    }
+    if (!token) {
+      throw new Error(`${unknown} and not in avnu's verified list`);
+    }
+    return this.addToCache(token, false);
+  }
+
+  /**
+   * Resolve symbol or address asynchronously.
+   * Fetches from avnu if symbol not in cache.
+   */
+  async resolveSymbolAsync(symbolOrAddress: string): Promise<string> {
+    // Try sync first
+    try {
+      return this.resolveSymbol(symbolOrAddress);
+    } catch {
+      // If not a hex address, try fetching from avnu
+      if (!symbolOrAddress.startsWith("0x")) {
+        const token = await this.getTokenBySymbol(symbolOrAddress);
+        return token.address;
+      }
+      throw new Error(`Unknown token: ${symbolOrAddress}`);
+    }
+  }
+
+  /**
+   * Get decimals asynchronously.
+   * Tries: cache → avnu → on-chain (if provider set).
+   * Results are cached to avoid repeated calls.
+   */
+  async getDecimalsAsync(address: string): Promise<number> {
+    const cached = this.getDecimals(address);
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    // getTokenByAddress handles avnu → on-chain fallback
+    const token = await this.getTokenByAddress(address);
+    return token.decimals;
+  }
+
+  /**
+   * Get full token info asynchronously, fetching from avnu if not cached.
+   */
+  async getTokenInfoAsync(addressOrSymbol: string): Promise<CachedToken> {
+    if (addressOrSymbol.startsWith("0x")) {
+      return this.getTokenByAddress(addressOrSymbol);
+    }
+    return this.getTokenBySymbol(addressOrSymbol);
+  }
+
+  /**
+   * Evict oldest dynamic cache entries when cache exceeds MAX_DYNAMIC_CACHE_SIZE.
+   */
+  private evictIfNeeded(): void {
+    const dynamicEntries = Array.from(this.cache.entries())
+      .filter(([, t]) => !t.isStatic);
+    if (dynamicEntries.length <= TokenService.MAX_DYNAMIC_CACHE_SIZE) return;
+
+    // Sort by lastUpdated ascending (oldest first) and remove excess
+    dynamicEntries.sort((a, b) => a[1].lastUpdated - b[1].lastUpdated);
+    const toRemove = dynamicEntries.length - TokenService.MAX_DYNAMIC_CACHE_SIZE;
+    for (let i = 0; i < toRemove; i++) {
+      const [addr, token] = dynamicEntries[i];
+      this.cache.delete(addr);
+      const sym = token.symbol.toUpperCase();
+      if (this.symbolIndex.get(sym) === addr) {
+        this.symbolIndex.delete(sym);
+      }
+    }
+  }
+
+  // ============================================
+  // CACHE MANAGEMENT
+  // ============================================
+
+  /**
+   * Clear all non-static tokens from cache.
+   */
+  clearDynamicCache(): void {
+    for (const [addr, token] of this.cache) {
+      if (!token.isStatic) {
+        this.cache.delete(addr);
+      }
+    }
+
+    for (const [symbol, addr] of this.symbolIndex) {
+      if (!this.cache.has(addr)) {
+        this.symbolIndex.delete(symbol);
+      }
+    }
+  }
+
+  /**
+   * Get all cached tokens (for debugging/inspection).
+   */
+  getAllCached(): CachedToken[] {
+    return Array.from(this.cache.values());
+  }
+
+  /**
+   * Get cache size.
+   */
+  getCacheSize(): number {
+    return this.cache.size;
+  }
+}

@@ -1,0 +1,544 @@
+# Codex Test Bridge
+
+Поставляются две сборки:
+
+- `codex-test-bridge.cfe` — HTTP API и нативный UI-worker для режима
+  совместимости `8.3.13+`;
+- `codex-test-bridge-legacy.cfe` — тот же server-side HTTP API без `uiJob*` и
+  UI-метаданных для режимов `8.3.11` и ниже. UI таких баз тестируется через
+  отдельную ИБ-менеджер с полной сборкой.
+
+Режим основной конфигурации ради bridge не повышается.
+Full-сборка не переопределяет `DefaultRoles` и использует права пользователя
+тестовой ИБ — это позволяет UI-worker работать и с конфигурациями в режиме
+`8.3.12`, где в целевую базу ставится legacy-вариант.
+
+Служебное расширение для демо/тестовых баз. Публикует HTTP-сервис `codex-test`
+и дает внешний JSON API для быстрых проверок с Linux-агента.
+
+Это расширение намеренно рассчитано на доверенные демо-базы. Оно выполняет
+команды с привилегиями серверного кода 1С, поэтому не подключайте его к боевым
+базам и не публикуйте наружу.
+
+## Endpoints
+
+После подключения расширения и публикации базы HTTP-сервис доступен как:
+
+```text
+http://<host>/<publication>/hs/codex-test/health
+http://<host>/<publication>/hs/codex-test/command
+```
+
+Для HTTP-сервисов из расширений в `default.vrd` должна быть разрешена публикация
+расширений:
+
+```xml
+<httpServices publishByDefault="true" publishExtensionsByDefault="true">
+  <service name="CodexTestBridge" rootUrl="codex-test" enable="true"
+           reuseSessions="dontuse" sessionMaxAge="20"/>
+</httpServices>
+```
+
+## Commands
+
+Все команды отправляются `POST /hs/codex-test/command` JSON-телом.
+
+JSON-тело всегда декодируется как UTF-8. После обновления проверьте этот
+контракт одной командой:
+
+```powershell
+python .\client.py --base-url $bridgeUrl smoke-utf8
+```
+
+Она посылает UTF-8 JSON с `ВЫБРАТЬ 1 КАК X;` и с `ExecuteBSL`, создающим
+`Структура("Проверка", Истина)`. Успех требует корректного результата обоих
+запросов.
+
+Расширение не завязано на УНФ: все универсальные команды принимают `kind`
+(`catalog`, `document`, `enum`) и имя объекта метаданных.
+
+### Health
+
+```json
+{"command":"Health"}
+```
+
+### Metadata
+
+```json
+{
+  "command": "Metadata",
+  "sections": ["catalogs", "documents", "enums"]
+}
+```
+
+`sections` можно не передавать, тогда вернутся основные коллекции метаданных.
+
+### Describe
+
+```json
+{
+  "command": "Describe",
+  "kind": "catalog",
+  "name": "Контрагенты"
+}
+```
+
+Возвращает реквизиты и табличные части объекта метаданных.
+
+### Query
+
+Поле с текстом запроса называется `text`. Для совместимости Bridge также
+принимает `query`, если `text` не передан; новые сценарии должны использовать
+`text`.
+
+```json
+{
+  "command": "Query",
+  "text": "ВЫБРАТЬ ПЕРВЫЕ 10 Ссылка, Наименование ИЗ Справочник.Контрагенты",
+  "limit": 10,
+  "params": {}
+}
+```
+
+### EventLog
+
+Читает журнал регистрации через `ВыгрузитьЖурналРегистрации`. Не подменяй
+эту команду произвольным `ExecuteBSL`. По умолчанию берётся последний час,
+возвращаются самые новые записи.
+
+```json
+{
+  "command": "EventLog",
+  "minutes": 60,
+  "limit": 50,
+  "level": "error"
+}
+```
+
+Фильтры: `level` (`error`/`warning`/`information`/`note` или русские имена),
+`event`, `user`, `comment`, `metadata`, `application`, `session`, `data`,
+`startDate`, `endDate`. Даты — ISO 8601 или `{ "type": "Date", "value": "20260918120000" }`.
+`minutes` не больше 1440, `limit` не больше 1000. Ответ: `events[]` с полями
+`date`, `level`, `event`, `user`, `comment`, `metadata`, `data`,
+`dataPresentation`, `application`, `computer`, `session`; `scanned` — сколько
+записей попало в окно до обрезки по `limit`. `events[0]` — самая новая запись.
+
+```powershell
+python .\client.py --base-url $bridgeUrl event-log --minutes 30 --level error --limit 50
+```
+
+### ExecuteBSL
+
+Выполняет серверный код через `Выполнить()`. В коде доступен массив
+`Параметры`; чтобы вернуть значение, запишите его в `РезультатВыполнения`.
+
+```json
+{
+  "command": "ExecuteBSL",
+  "code": "РезультатВыполнения = ТекущаяДата();",
+  "params": []
+}
+```
+
+### CallCommonModule
+
+Вызывает экспортную функцию или процедуру общего модуля. `params` передаются как
+позиционные аргументы. Для процедуры передайте `expectResult: false`.
+
+```json
+{
+  "command": "CallCommonModule",
+  "module": "ОбщегоНазначения",
+  "method": "ЗначениеРеквизитаОбъекта",
+  "params": [
+    {"type": "CatalogRef", "name": "Контрагенты", "uuid": "00000000-0000-0000-0000-000000000000"},
+    "Наименование"
+  ],
+  "expectResult": true
+}
+```
+
+### WriteObject
+
+Создает или обновляет объект данных. Если `uuid` не передан, объект создается.
+
+```json
+{
+  "command": "WriteObject",
+  "kind": "catalog",
+  "name": "Контрагенты",
+  "fields": {
+    "Наименование": "Codex test customer"
+  }
+}
+```
+
+Для документа:
+
+```json
+{
+  "command": "WriteObject",
+  "kind": "document",
+  "name": "ЗаказПокупателя",
+  "fields": {
+    "Дата": {"type": "Date", "value": "20260521100000"}
+  },
+  "tables": {},
+  "writeMode": "write"
+}
+```
+
+`writeMode` может быть `write` или `post`. `post` применяется только к
+документам.
+
+### GetObject
+
+```json
+{
+  "command": "GetObject",
+  "kind": "catalog",
+  "name": "Контрагенты",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "includeTables": true
+}
+```
+
+### DeleteObject
+
+Устанавливает или снимает пометку удаления.
+
+```json
+{
+  "command": "DeleteObject",
+  "kind": "catalog",
+  "name": "Контрагенты",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "deletionMark": true
+}
+```
+
+### Compatibility commands
+
+Старые команды оставлены как обертки над универсальным API:
+
+- `CreateCatalogItem`
+- `CreateDocument`
+- `PostDocument`
+
+### RenderExternalPrintForm
+
+Серверная проверка внешней печатной формы без UI. Команда создает внешнюю
+обработку из `externalPath`, берет документ по `uuid` либо первый документ
+указанного вида, вызывает экспортную процедуру/функцию
+`СформироватьПечатнуюФормуДляТеста(МассивОбъектов)` и сохраняет результат в
+`mxl`, `html`, `txt`.
+
+```json
+{
+  "command": "RenderExternalPrintForm",
+  "externalPath": "<server-visible-epf-path>",
+  "outputDir": "<server-visible-output-directory>",
+  "outputName": "print-result",
+  "assignment": "Документ.ЗаказПокупателя",
+  "documentName": "ЗаказПокупателя",
+  "uuid": ""
+}
+```
+
+`assignment` нужен для обычных ВПФ, `documentName` можно передать явно. Агент
+разработки должен добавлять в ВПФ экспортную функцию
+`СформироватьПечатнуюФормуДляТеста`, чтобы pipeline мог получить
+машиночитаемый результат и проверить текст, дубли заголовков, границы таблиц и
+итоги.
+
+### RenderExternalReport
+
+Серверная проверка внешнего отчета без UI. Команда создает внешний отчет из
+`externalPath`, вызывает экспортную функцию
+`СформироватьОтчетДляТеста(Параметры)` и сохраняет возвращенный
+`ТабличныйДокумент` в `mxl`, `html`, `txt`.
+
+```json
+{
+  "command": "RenderExternalReport",
+  "externalPath": "<server-visible-erf-path>",
+  "outputDir": "<server-visible-output-directory>",
+  "outputName": "report-result",
+  "reportParams": {}
+}
+```
+
+Агент разработки должен добавлять в ERF экспортную функцию
+`СформироватьОтчетДляТеста`, чтобы pipeline мог получить машиночитаемый
+результат отчета и проверить пользовательские тексты, таблицы и итоги.
+
+### Ref values
+
+Для ссылочных значений можно передать UUID ссылки:
+
+```json
+{
+  "type": "CatalogRef",
+  "name": "Контрагенты",
+  "uuid": "00000000-0000-0000-0000-000000000000"
+}
+```
+
+Поддерживаются `CatalogRef`, `DocumentRef`, `EnumRef`,
+`ChartOfCharacteristicTypesRef`, `ChartOfAccountsRef` и
+`ChartOfCalculationTypesRef`.
+
+Также можно использовать универсальный формат:
+
+```json
+{
+  "kind": "catalog",
+  "name": "Контрагенты",
+  "uuid": "00000000-0000-0000-0000-000000000000"
+}
+```
+
+## Python client
+
+Клиент принудительно отключает proxy, потому что на dev-машине задан
+`HTTP_PROXY`, а локальные обращения к `127.0.0.1` иначе уходят через proxy и
+возвращают ложный `502`.
+
+```bash
+$bridgeUrl = $env:CODEX_1C_BRIDGE_URL
+python .\client.py --base-url $bridgeUrl health
+python .\client.py --base-url $bridgeUrl metadata --sections catalogs,documents
+python .\client.py --base-url $bridgeUrl describe catalog Контрагенты
+python .\client.py --base-url $bridgeUrl write-object catalog Контрагенты --fields "{`"Наименование`":`"Codex smoke`"}"
+python .\client.py --base-url $bridgeUrl render-print-form $env:CODEX_1C_EPF_PATH --output-dir $env:CODEX_1C_OUTPUT_DIR --assignment Документ.ЗаказПокупателя --document-name ЗаказПокупателя
+python .\client.py --base-url $bridgeUrl render-report $env:CODEX_1C_ERF_PATH --output-dir $env:CODEX_1C_OUTPUT_DIR
+```
+
+## Headless-сценарии для ИИ-агентов
+
+`scenario_runner.py` выполняет декларативный JSON-сценарий поверх HTTP API.
+Сценарий не запускает клиент 1С и не открывает окна. Поддерживаются:
+
+- последовательные вызовы любых команд bridge;
+- сохранение ответа шага через `saveAs`;
+- подстановка `${alias.path}` в следующих шагах;
+- проверки `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `contains`, `matches`,
+  `exists`, `empty`, `notEmpty`;
+- повтор шага до выполнения проверки;
+- автоматическая пометка на удаление созданных справочников и документов;
+- единый JSON-отчет с `runId`, длительностью, запросами и ответами.
+
+Файл [`scenario.schema.json`](scenario.schema.json) содержит JSON Schema Draft
+2020-12. Укажи `"$schema": "../scenario.schema.json"` в сценарии, чтобы IDE и
+ИИ-инструменты получали автодополнение и проверку структуры. CLI дополнительно
+валидирует обязательные поля, aliases, retry и операторы assertions без внешних
+Python-зависимостей.
+
+Запуск smoke-примера:
+
+```powershell
+python .\client.py `
+  --base-url $env:CODEX_1C_BRIDGE_URL `
+  run-scenario .\examples\smoke.scenario.json `
+  --report .\artifacts\smoke-report.json
+```
+
+Набор сценариев запускается рекурсивно по маске `*.scenario.json`. Отчёты
+рекомендуется писать в отдельный каталог `artifacts`, поэтому они никогда не
+попадут в следующий прогон:
+
+```powershell
+python .\client.py `
+  --base-url $env:CODEX_1C_BRIDGE_URL `
+  run-suite .\examples `
+  --report .\artifacts\suite.json `
+  --junit .\artifacts\junit.xml
+```
+
+Опция `--fail-fast` останавливает suite после первого упавшего или невалидного
+сценария. Без неё каждый сценарий выполняет собственный cleanup и остальные
+тесты продолжаются.
+
+Формат шага:
+
+```json
+{
+  "name": "Дождаться движения документа",
+  "saveAs": "movements",
+  "request": {
+    "command": "Query",
+    "text": "ВЫБРАТЬ ... ГДЕ Документ = &Документ",
+    "params": {"Документ": "${document.ref}"}
+  },
+  "retry": {"attempts": 10, "delaySeconds": 1},
+  "assert": [
+    {"path": "count", "operator": "gte", "expected": 1}
+  ]
+}
+```
+
+Cleanup включен по умолчанию. Его можно отключить на уровне сценария полем
+`"cleanup": false`. Cleanup выполняется и при падении шага, но является
+компенсирующей операцией: объекты получают пометку удаления, а не удаляются
+физически.
+
+Для побочных эффектов, которые нельзя определить по `WriteObject`, добавь
+явные команды `finally`. Они всегда выполняются в обратном порядке:
+
+```json
+{
+  "steps": [
+    {"saveAs": "setting", "request": {"command": "CallCommonModule", "module": "Тесты", "method": "ВключитьРежим"}}
+  ],
+  "finally": [
+    {"request": {"command": "CallCommonModule", "module": "Тесты", "method": "ВыключитьРежим"}}
+  ]
+}
+```
+
+Если cleanup падает после успешных шагов, прогон получает
+`status: "cleanupFailed"` и ненулевой код возврата. Секретные поля запроса можно
+исключить из отчета через `redactRequest`:
+
+```json
+{
+  "request": {"command": "WriteObject", "fields": {"Password": "secret"}},
+  "redactRequest": ["fields.Password"]
+}
+```
+
+Транспортный таймаут задается общей опцией `--timeout`. HTTP-ошибки bridge
+возвращаются в отчет с полем `httpStatus` и участвуют в обычном механизме retry.
+
+## Изолированные нативные UI-тесты
+
+Для сценариев, которые действительно должны проверить управляемую форму,
+используй `run-ui`. Worker запускает штатные `/TestClient` и `/TestManager` на
+worker-owned Windows session desktop или в Xvfb и не требует web-клиента:
+
+Win32 desktop и явные UIA-сценарии доступны только на Windows. Linux backend
+использует Xvfb и штатную объектную модель TestClient/TestManager. Для декорации
+проверен резерв `Активизировать()` → `Нажать()`; после него доступен best-effort
+AT-SPI. Отправка клавиш на Linux адресуется X11-окну TestClient, с AT-SPI как
+резервным механизмом.
+UIA на Linux не эмулируется, а backend при ошибке не переключается.
+
+Полная матрица действий находится в `ui-actions.matrix.json`. Исполняемый
+fixture-suite, тестовые объекты метаданных и CFE вынесены в отдельный проект
+`codex-ui-test-fixtures`; они не входят в Bridge. Команда
+`python3 codex-ui-test-fixtures/scripts/run_conformance.py --validate-only`
+из корня репозитория проверяет полноту без запуска 1С; registry mode выполняет
+одиннадцать сценариев, все 49 публичных действий и
+62 обязательных варианта одним
+тёплым TestClient, затем добавляет пооперационный раздел `conformance` в
+JSON-отчёт. Каталог не принимает публичную возможность без исполняемого
+fixture-покрытия. Fixture включает реальные ссылки справочника,
+документа, ПВХ, плана счетов, ПВР, перечисления, составного поля и табличной
+колонки. Linux worker сам выбирает свободный Xvfb display.
+
+```powershell
+python .\client.py run-ui `
+  .\server.example.invalid.json `
+  .\examples\native-ui-smoke.ui.json `
+  --artifact-dir .\artifacts\ui-smoke `
+  --report .\artifacts\ui-smoke\worker.json
+```
+
+Примеры настроек — `ui-worker.example.json`, шаблон серверной ИБ
+`ui-worker.server.example.json` и cross-database шаблон
+`ui-worker.cross-db.example.json`. Для конфигураций с прикладным списком
+пользователей есть `ui-worker.cross-db.credentials.example.json`. Все используют
+только env-плейсхолдеры. Worker автоматически добавляет
+`/DisableStartupDialogs /DisableStartupMessages /DisableSplash`; TestManager
+закрывает только безопасные стартовые диалоги.
+Автоматический выбор `Перезапустить` по умолчанию отключён; при необходимости
+он включается в сценарии через `restartTestClientOnStartup: true`.
+Встроенный test manager находится в модуле
+управляемого приложения CFE; внешние обработки не нужны. Полный контракт backend,
+DSL и placeholders описан в [`UI_WORKER.md`](UI_WORKER.md).
+Сценарий и результат передаются через команды `uiJobCreate`, `uiJobGet` и
+`uiJobDelete` и хранятся в регистре расширения `CodexUIJobs`. Поэтому встроенный
+TestManager совместим с безопасным режимом CFE и не требует доступа к файлам.
+`process` предназначен только для диагностики; на Windows применяй
+`windowsDesktop` или `auto`, чтобы окна 1С не появлялись на рабочем столе.
+Доступы из `test-databases.json` в Windows PowerShell читай только с
+`Get-Content -Encoding UTF8`, иначе кириллический логин будет искажён до
+передачи в TestClient.
+
+В конфигурациях с режимом `8.3.11` и ниже платформа не разрешает внедрить
+перехват модуля управляемого приложения. В этом случае целевая база запускается
+как обычный `/TestClient`, а `/TestManager` — в отдельной тестовой базе с полным
+bridge. Тестовый протокол 1С не требует совпадения конфигураций этих баз.
+`scripts/run_cross_db_ui_with_bootstrap.py` может создать в обеих тестовых ИБ
+скрытых одноразовых пользователей без пароля, выполнить сценарий и удалить их в
+`finally`; запуск требует явного `--allow-bootstrap-user`.
+Если конфигурация не регистрирует платформенного пользователя в прикладном
+списке БСП, используй credentials-шаблон и существующего прикладного тестового
+пользователя: диалог с единственной кнопкой завершения сеанса не является
+устранимой заставкой.
+
+## Build
+
+Пример сборки CFE из XML на Linux:
+
+```bash
+export CODEX_IBCMD=/opt/1cv8/x86_64/8.5.1.1529/ibcmd
+IBCMD="$CODEX_IBCMD" ./scripts/build_cfe_linux.sh
+```
+
+Скрипт принимает точный executable или каталог версии платформы 8.5. Для
+каталога строго поддерживаются `<version>/ibcmd` и `<version>/bin/ibcmd`.
+Если присутствуют оба, нужно передать точный путь: неявного выбора нет.
+Сборка использует отдельный каталог `--data`; Designer fallback отсутствует.
+`/opt/1cv8/env` можно загрузить, когда он существует, но этот файл не является
+обязательной частью Linux-пакетов 8.5.
+
+Полная проверка Linux-стенда:
+
+```bash
+./scripts/linux_flow.sh doctor
+./scripts/linux_flow.sh run
+```
+
+`run` выполняет реальную сборку, установку, изменение VRD, проверку и reload
+Apache, оба HTTP health-запроса и `assertConnected` через Xvfb. Скрипт не
+устанавливает зависимости и не вызывает `sudo`; недостающая зависимость или
+нехватка прав являются ошибкой.
+
+## Контракт для агентов
+
+Перед генерацией теста агент может проверить установленный вариант bridge:
+
+```powershell
+python .\client.py --base-url $bridgeUrl capabilities
+python .\client.py --base-url $bridgeUrl doctor --worker-config .\local.worker.json
+```
+
+`capabilities` сообщает версию контракта, `full|legacy`, серверные команды и
+доступность UI worker. `doctor` не запускает 1С: он проверяет HTTP-контракт и
+валидность локальной конфигурации worker.
+
+Для сквозного теста используй `run-hybrid`: server arrange создаёт данные,
+результаты `saveAs` подставляются в UI-сценарий, затем выполняется server assert,
+а созданные arrange-объекты удаляются даже при падении UI:
+
+```powershell
+python .\client.py --base-url $bridgeUrl run-hybrid .\local.worker.json .\case.hybrid.json --artifact-dir .\artifacts\case
+```
+
+Если `before` создаёт задачу, открывай её в UI через `openForm` с
+`metadataKind: "task"`, `metadataName`, `uuid: "${alias.Задача}"`, `formName`
+и `targetForm`. Bridge передаёт ссылку на задачу через временное хранилище
+TestClient. Не используй в этом пути `openNavigationLink`: у задач после server
+hook он может потерять связь TestManager/TestClient.
+Для штатной формы выполнения задачи используй `openTaskExecutionForm` с UUID и
+`targetForm`: bridge получает форму через `ФормаВыполненияЗадачи()` и передаёт
+её параметры TestClient. Не моделируй переход UIA-кликом по декорации.
+
+Несколько коротких UI-сценариев можно выполнить одним запуском клиента и
+менеджера: `run-ui-suite worker.json a.ui.json b.ui.json --junit junit.xml`. Это
+тёплый suite: каждый файл остаётся отдельным testcase в JSON/JUnit, а один
+упавший сценарий не удаляет результаты предыдущих. `run-ui-batch` сохранён как
+совместимый псевдоним.
+не фоновый сервис: процессы гарантированно завершаются после набора.

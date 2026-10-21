@@ -1,0 +1,563 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T12:28:47.438Z",
+    "slug": "emasoft-ghe-status",
+    "source_url": "https://github.com/Emasoft/ghe-marketplace/tree/main/plugins/ghe/skills/ghe-status",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "f54ea62ecf847b75a584b415ac1a35512c81d7564b4203fc6d7b3382991c656b",
+    "tree_hash": "6a6c9d73c055d800c8db321deb861168fe65e961c56feb8aeb71fb13e9dd8fbe",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "ghe-status",
+    "description": "Read-only GitHub Elements status overview for active threads, phase distribution, available work, and workflow health indicators.",
+    "summary": "Shows a quick read-only status overview for GitHub Elements workflows.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Emasoft",
+    "license": "MIT",
+    "tags": [
+      "github-elements",
+      "workflow-status",
+      "issue-triage",
+      "read-only-reporting",
+      "devops"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most external command findings are false positives caused by Markdown inline code and fenced output examples. The hidden home directory access is confirmed because a read-only status skill grants write scope to ~/.claude. Semantic review also found absolute behavioral override language and mandatory report posting that conflict with read-only expectations.",
+    "remediation": [
+      {
+        "issue": "Hidden home configuration access in a read-only status skill.",
+        "suggestion": "Remove ~/.claude from the allowed write locations, or require explicit user confirmation in a separate maintenance skill.",
+        "severity": "high"
+      },
+      {
+        "issue": "Absolute instruction hierarchy inside the skill text.",
+        "suggestion": "Replace the IRON LAW section with neutral guidance that respects platform, developer, safety, and user instructions.",
+        "severity": "high"
+      },
+      {
+        "issue": "Status workflow mandates posting full reports to GitHub issue threads.",
+        "suggestion": "Make external posting opt-in and keep the default status response local and read-only.",
+        "severity": "high"
+      },
+      {
+        "issue": "Read-only description conflicts with write boundary instructions.",
+        "suggestion": "Move background-agent write boundaries into the skills that actually modify issues, reports, or settings.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 108
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "**Report naming:** `<TIMESTAMP>_<title or description>_(<AGENT>).md`"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "**Timestamp format:** `YYYYMMDDHHMMSSTimezone`"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "Respects `.claude/ghe.local.md`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "- `enabled`: If false, return minimal status"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "- `notification_level`: Affects output verbosity"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 104,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 108,
+        "snippet": "```"
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "- ~/.claude (for plugin/settings fixes)"
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "- ~/.claude (for plugin/settings fixes)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 44 is a Markdown naming template inside inline code formatting, not Ruby or shell execution. No command is invoked or constructed."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "Line 45 documents a timestamp format using inline code formatting. It contains no executable command or user-controlled command string."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 57 names a local settings file in Markdown formatting. The text describes settings awareness and does not execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 58 documents the enabled setting using Markdown inline code. There is no shell, Ruby, or dynamic execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 59 documents the notification_level setting using Markdown inline code. It is descriptive text, not executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 88 starts a fenced Markdown output example. The fenced block shows report formatting and does not contain commands to run."
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "Line 104 closes the fenced Markdown example. This is formatting syntax and not external command execution."
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "high",
+        "reason": "Line 31 explicitly allows writes to ~/.claude for plugin or settings fixes. A read-only status skill should not authorize modification of hidden home configuration."
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "severity": "high",
+        "reason": "The skill grants access to a hidden home directory that can affect Claude configuration. This is a real filesystem risk even without a concrete write command."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "The skill states \"THIS LAW IS ABSOLUTE\" and tells the agent to follow every user word verbatim with no exceptions. This can conflict with higher-priority safety and workflow instructions.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 11,
+            "line_end": 24
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The language is directive, absolute, and attempts to control agent behavior across tasks. It does not explicitly say to ignore system instructions, so confidence is high but not maximal."
+      },
+      {
+        "title": "Read-Only Claim Conflicts With Write Permissions",
+        "description": "The skill says its purpose is read-only, but it also defines writable background-agent locations including the project, parent directory, ~/.claude, and /tmp. This mismatch can cause unexpected file changes during a status workflow.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 65
+          }
+        ],
+        "confidence": 0.78,
+        "confidence_reasoning": "The write boundary text and read-only purpose are both present in the same file. The skill does not include direct write commands, so the risk is contextual rather than immediate execution."
+      },
+      {
+        "title": "Mandatory External Report Posting",
+        "description": "The skill mandates posting full reports to a GitHub issue thread and to GHE_REPORTS. This creates an external publication side effect that does not match a simple status check.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 42
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "The text explicitly requires full report text to be posted to a GitHub issue thread. It is prose rather than executable code, but the intended side effect is clear."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "- ~/.claude (for plugin/settings fixes)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "Line 31 explicitly allows writes to ~/.claude for plugin or settings fixes. A read-only status skill should not authorize modification of hidden home configuration."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "- ~/.claude (for plugin/settings fixes)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill grants access to a hidden home directory that can affect Claude configuration. This is a real filesystem risk even without a concrete write command."
+      },
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "The skill states \"THIS LAW IS ABSOLUTE\" and tells the agent to follow every user word verbatim with no exceptions. This can conflict with higher-priority safety and workflow instructions.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 11,
+            "line_end": 24
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "The language is directive, absolute, and attempts to control agent behavior across tasks. It does not explicitly say to ignore system instructions, so confidence is high but not maximal."
+      },
+      {
+        "title": "Mandatory External Report Posting",
+        "description": "The skill mandates posting full reports to a GitHub issue thread and to GHE_REPORTS. This creates an external publication side effect that does not match a simple status check.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The text explicitly requires full report text to be posted to a GitHub issue thread. It is prose rather than executable code, but the intended side effect is clear."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Read-Only Claim Conflicts With Write Permissions",
+        "description": "The skill says its purpose is read-only, but it also defines writable background-agent locations including the project, parent directory, ~/.claude, and /tmp. This mismatch can cause unexpected file changes during a status workflow.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 65
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The write boundary text and read-only purpose are both present in the same file. The skill does not include direct write commands, so the risk is contextual rather than immediate execution."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 109,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T12:28:47.438Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Check GitHub Elements Workflow Status",
+    "value_statement": "Teams need a quick view of GitHub Elements workflow health without changing issue state. This skill produces a read-only status overview for active threads, phases, and warnings.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "GitHub Elements",
+      "workflow status",
+      "issue triage",
+      "read-only reporting",
+      "phase distribution",
+      "active threads",
+      "DevOps automation"
+    ],
+    "actual_capabilities": [
+      "Requests a GitHub Elements status report through the reporter agent.",
+      "Summarizes active DEV, TEST, and REVIEW threads.",
+      "Shows phase distribution across active workflow items.",
+      "Lists available work that is ready but not claimed.",
+      "Highlights workflow health indicators, violations, and checkpoint frequency.",
+      "Respects local settings that can disable or reduce status output."
+    ],
+    "limitations": [
+      "It is intended for status review, not issue claiming or phase transitions.",
+      "It depends on GitHub Elements labels and reporter-agent behavior.",
+      "It does not provide detailed metrics or epic-specific reports.",
+      "Local settings can reduce the amount of information returned."
+    ],
+    "use_cases": [
+      {
+        "title": "Start a Coordination Session",
+        "description": "Get a quick overview of active work before assigning or reviewing GitHub Elements issues.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Check Review Load",
+        "description": "See how many items are in DEV, TEST, and REVIEW before planning the next handoff.",
+        "target_user": "Release manager"
+      },
+      {
+        "title": "Find Ready Work",
+        "description": "Identify ready issues that are not claimed without changing the workflow state.",
+        "target_user": "Contributor"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Status Check",
+        "scenario": "Beginner request for a current overview.",
+        "prompt": "Show the current GitHub Elements status overview."
+      },
+      {
+        "title": "Phase Summary",
+        "scenario": "Intermediate request focused on workflow distribution.",
+        "prompt": "Show active GitHub Elements threads and summarize the DEV, TEST, and REVIEW phase counts."
+      },
+      {
+        "title": "Available Work Review",
+        "scenario": "Intermediate request before selecting the next issue.",
+        "prompt": "Check GitHub Elements status and highlight ready work that is not claimed."
+      },
+      {
+        "title": "Health-Focused Status Report",
+        "scenario": "Advanced request for coordination risk review.",
+        "prompt": "Run a GitHub Elements status overview with active threads, phase distribution, recent completions, and workflow health warnings."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Show the current GitHub Elements status.",
+        "output": "The response summarizes active threads, phase counts, available work, and workflow health indicators in a compact status report."
+      },
+      {
+        "input": "What work is ready but not claimed?",
+        "output": "The response lists ready issues that are not assigned, with enough context to choose the next action."
+      },
+      {
+        "input": "Give me a health check for the workflow.",
+        "output": "The response calls out violations, checkpoint frequency, and recent completions so the team can spot coordination issues."
+      }
+    ],
+    "best_practices": [
+      "Use this skill at session start before claiming or transitioning issues.",
+      "Keep local settings current so disabled or reduced output is intentional.",
+      "Use ghe-report when you need detailed metrics or epic-specific analysis."
+    ],
+    "anti_patterns": [
+      "Do not use this skill to claim issues or change issue phases.",
+      "Do not treat the status overview as a full audit or detailed report.",
+      "Do not post status information externally unless the user explicitly requests it."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill change GitHub issues?",
+        "answer": "No. It is intended for read-only status checks and overview reporting."
+      },
+      {
+        "question": "Which tools can use this skill?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "When should I use ghe-report instead?",
+        "answer": "Use ghe-report for detailed metrics, health checks, or epic-specific reports."
+      },
+      {
+        "question": "Can it show active workflow phases?",
+        "answer": "Yes. It is designed to show active DEV, TEST, and REVIEW threads."
+      },
+      {
+        "question": "Does it respect local settings?",
+        "answer": "Yes. The skill describes settings that can disable or reduce output verbosity."
+      },
+      {
+        "question": "Is this a security or compliance audit tool?",
+        "answer": "No. It provides workflow status and health indicators, not a full security audit."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 109
+    }
+  ]
+}

@@ -1,0 +1,1739 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-07T07:41:32.677Z",
+    "slug": "verging-ai-background-remover",
+    "source_url": "https://github.com/verging-ai/agent-skills/tree/main/skills/background-removal",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "2363e8fd272880df5692583e1d20cddd8fa8fb88d1bf43f3016cad8a3ca510e9",
+    "tree_hash": "2f441b069fe7461aca0d4a60b550057a480bf74e93e8a268b0983b3deb846953",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "background-remover",
+    "description": "Remove backgrounds from JPG, PNG, and WebP images by sending them to the verging.ai background removal API.",
+    "summary": "Creates transparent-background images through the verging.ai background removal service.",
+    "icon": "📦",
+    "version": "1.0.1",
+    "author": "verging.ai",
+    "license": "MIT",
+    "category": "design",
+    "tags": [
+      "background removal",
+      "image editing",
+      "product photos",
+      "transparent PNG",
+      "AI design"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem",
+      "env_access"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The skill is a documented client for the verging.ai background removal service and intentionally performs authenticated network uploads of user images. Most markdown backtick findings are false positives, but the curl workflow, external API calls, API key handling, temporary files, and public result URLs are real security and privacy risks.",
+    "remediation": [
+      {
+        "issue": "API key exposure risk",
+        "suggestion": "Prefer environment variables or a secret manager, discourage command-line API keys, and never print Authorization headers in logs or examples.",
+        "severity": "high"
+      },
+      {
+        "issue": "External image transfer and public result URLs",
+        "suggestion": "Warn users before uploading sensitive images, document retention and access controls, and use expiring private result URLs where possible.",
+        "severity": "high"
+      },
+      {
+        "issue": "Unconstrained curl workflow",
+        "suggestion": "Validate URL schemes and hosts, quote all local paths, and restrict downloads to http or https resources requested by the user.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Temporary file handling",
+        "suggestion": "Use a unique per-run temporary directory with restrictive permissions and clean it up on success, failure, and cancellation.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 85
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 153,
+            "line_end": 153
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 160
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 160,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 162
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 162,
+            "line_end": 165
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 231
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 236
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 114,
+            "line_end": 114
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 215,
+            "line_end": 215
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 224,
+            "line_end": 224
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 236,
+            "line_end": 236
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 214,
+            "line_end": 214
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 231
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 35,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 64,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 66,
+        "snippet": "All API requests require authentication via the `Authorization` header:"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 68,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 73,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 79,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 85,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 123,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 126,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 127,
+        "snippet": "- Replace `$VERGING_API_KEY` with your actual API key or set it as an environment variable"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "- The `Authorization` header uses format: `ApiKey <key>` (not `Bearer <key>`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 153,
+        "line_end": 153,
+        "snippet": "- Call `/api/v1/upload-video` with Form Data (`video_file_name`, `job_type`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 159,
+        "snippet": "- Save the `public_url` from response for next step"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 160,
+        "snippet": "- Call `/api/v1/background-removal/create-job` with Form Data:"
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 160,
+        "line_end": 161,
+        "snippet": "- `image`: Image file (will be uploaded to R2)"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 162,
+        "snippet": "- `file_name`: Original file name"
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 162,
+        "line_end": 165,
+        "snippet": "- `job_type`: \"background-removal\""
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 231,
+        "snippet": "- Every 5 seconds call `/api/v1/background-removal/jobs?job_ids=xxx` to query status"
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 236,
+        "snippet": "- Set it via environment variable: `export VERGING_API_KEY=\"your_key\"`"
+      },
+      {
+        "id": "network:SKILL.md:51:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "| VERGING_API_URL | API base URL (default: https://verging.ai/api/v1) |"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "You can get your API key from https://verging.ai (Login → Click avatar → API Keys)."
+      },
+      {
+        "id": "network:SKILL.md:88:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "https://verging.ai/api/v1/auth/me"
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "https://verging.ai/api/v1/upload-video"
+      },
+      {
+        "id": "network:SKILL.md:99:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "#     \"url\": \"https://...r2.cloudflarestorage.com/...jpg?X-Amz-...\","
+      },
+      {
+        "id": "network:SKILL.md:100:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "#     \"public_url\": \"https://img.panpan8.com/background-removal/2026-03-11/xxx.jpg\""
+      },
+      {
+        "id": "network:SKILL.md:106:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "\"https://...presigned-url-from-step-1...\""
+      },
+      {
+        "id": "network:SKILL.md:114:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 114,
+        "line_end": 114,
+        "snippet": "https://verging.ai/api/v1/background-removal/create-job"
+      },
+      {
+        "id": "network:SKILL.md:118:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "\"https://verging.ai/api/v1/background-removal/jobs?job_ids=123\""
+      },
+      {
+        "id": "network:SKILL.md:122:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "https://verging.ai/api/v1/background-removal/jobs"
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "- For remote image URLs (https://example.com/image.jpg), use curl to download"
+      },
+      {
+        "id": "network:SKILL.md:200:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "User: /background-removal -i https://example.com/photo.jpg"
+      },
+      {
+        "id": "network:SKILL.md:215:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 215,
+        "line_end": 215,
+        "snippet": "- **If user doesn't provide API Key**: Prompt user to get one at https://verging.ai (Login → Click u"
+      },
+      {
+        "id": "network:SKILL.md:224:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 224,
+        "line_end": 224,
+        "snippet": "1. Visit https://verging.ai"
+      },
+      {
+        "id": "filesystem:SKILL.md:236:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "SKILL.md",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "- **Temporary files:** Local temporary files are stored in `/tmp/verging-bg-removal/` and cleaned up"
+      },
+      {
+        "id": "env_access:SKILL.md:12:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- VERGING_API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:15:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "primaryEnv: VERGING_API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:42:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "| --api-key | -k | Your API Key | VERGING_API_KEY env |"
+      },
+      {
+        "id": "env_access:SKILL.md:50:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "| VERGING_API_KEY | Your API Key |"
+      },
+      {
+        "id": "env_access:SKILL.md:67:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "Authorization: ApiKey <your_api_key>"
+      },
+      {
+        "id": "env_access:SKILL.md:87:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\"
+      },
+      {
+        "id": "env_access:SKILL.md:91:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "curl -X POST -H \"Authorization: ApiKey $VERGING_API_KEY\" \\"
+      },
+      {
+        "id": "env_access:SKILL.md:110:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "curl -X POST -H \"Authorization: ApiKey $VERGING_API_KEY\" \\"
+      },
+      {
+        "id": "env_access:SKILL.md:117:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\"
+      },
+      {
+        "id": "env_access:SKILL.md:121:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\"
+      },
+      {
+        "id": "env_access:SKILL.md:126:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "- Replace `$VERGING_API_KEY` with your actual API key or set it as an environment variable"
+      },
+      {
+        "id": "env_access:SKILL.md:214:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 214,
+        "line_end": 214,
+        "snippet": "- API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:231:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 231,
+        "line_end": 231,
+        "snippet": "- Set it via environment variable: `export VERGING_API_KEY=\"your_key\"`"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:85:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "This block documents curl commands that send an API key and image data to external endpoints. It is documentation rather than embedded code, but the skill instructs the agent to run these external commands.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:162:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "reason": "This range includes the documented workflow to poll remote job URLs and use curl to download the result. The static trigger is a markdown backtick, but the surrounding instructions require external command execution.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:231:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text is markdown fencing or inline markdown around command names and parameters, not Ruby backtick execution. No executable script is present at this location."
+      },
+      {
+        "id": "network:SKILL.md:51:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The skill defines https://verging.ai/api/v1 as the default outbound API base URL. This is expected for the service, but it is real network access.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This URL only tells the user where to obtain an API key. It is not part of an automatic data transfer path."
+      },
+      {
+        "id": "network:SKILL.md:88:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "reason": "The documented curl command calls the verging.ai auth endpoint with the API key. This is real authenticated network access.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:94:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The documented upload-video endpoint starts the upload flow for user images. This creates external transfer of user-provided files.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:99:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.85,
+        "reason": "The example response contains a presigned Cloudflare R2 upload URL. It indicates that image content is transferred to external object storage.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:100:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "The example public_url uses an external image delivery domain. This is a real privacy consideration because processed image results are exposed by URL.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:106:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The documented curl PUT sends the local image to a presigned external URL. Even though the URL is a placeholder, the workflow is an external upload.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:114:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The documented create-job call sends image metadata and job data to verging.ai. This is a core outbound network action.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:118:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The documented job-status request polls an external API endpoint. This is expected behavior, but it is real network access.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:122:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The documented jobs endpoint lists remote processing jobs through the external API. This confirms ongoing network dependency.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:141:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "The skill instructs the agent to download remote image URLs with curl. User-supplied URL downloads can contact arbitrary hosts and should be constrained.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:200:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.75,
+        "reason": "The example demonstrates processing a remote image URL. This confirms the skill may fetch user-provided network resources.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:SKILL.md:215:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This line directs users to a website to create an API key. It does not itself instruct the agent to transmit files or secrets."
+      },
+      {
+        "id": "network:SKILL.md:224:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "This is a manual website visit instruction for account setup. It is not an automated network request or data transfer path."
+      },
+      {
+        "id": "filesystem:SKILL.md:236:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The skill documents storing temporary files under /tmp/verging-bg-removal. A fixed temp directory can expose image data or collide across runs if permissions and cleanup are weak.",
+        "severity": "medium"
+      },
+      {
+        "id": "env_access:SKILL.md:12:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:15:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:42:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:50:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:67:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:87:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:91:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:110:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:117:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:121:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:126:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:214:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:231:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials.",
+        "severity": "high"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "External Image Upload and Public Result Exposure",
+        "description": "The skill instructs agents to upload images to verging.ai storage for processing and return processed images through a public URL. Users may expose private photos if they are not warned before upload or if result URLs are shared.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 152,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 233,
+            "line_end": 237
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "The processing flow explicitly uploads images to external storage and the privacy section states that result images are returned via a public URL."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Generic API/secret keys",
+        "description": "- VERGING_API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "primaryEnv: VERGING_API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "| --api-key | -k | Your API Key | VERGING_API_KEY env |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "| VERGING_API_KEY | Your API Key |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "Authorization: ApiKey <your_api_key>",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 67,
+            "line_end": 67
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "curl -X POST -H \"Authorization: ApiKey $VERGING_API_KEY\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 91
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "curl -X POST -H \"Authorization: ApiKey $VERGING_API_KEY\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 110
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 117
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "curl -H \"Authorization: ApiKey $VERGING_API_KEY\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "- Replace `$VERGING_API_KEY` with your actual API key or set it as an environment variable",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 126
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "- API Key can be passed via --api-key parameter or read from environment variable VERGING_API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 214,
+            "line_end": 214
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "- Set it via environment variable: `export VERGING_API_KEY=\"your_key\"`",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 231,
+            "line_end": 231
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The skill requires a verging.ai API key and uses it for authenticated API requests. This is intended behavior, but it is real handling of sensitive credentials."
+      },
+      {
+        "title": "External Image Upload and Public Result Exposure",
+        "description": "The skill instructs agents to upload images to verging.ai storage for processing and return processed images through a public URL. Users may expose private photos if they are not warned before upload or if result URLs are shared.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 152,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 233,
+            "line_end": 237
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The processing flow explicitly uploads images to external storage and the privacy section states that result images are returned via a public URL."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 85,
+            "line_end": 123
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "This block documents curl commands that send an API key and image data to external endpoints. It is documentation rather than embedded code, but the skill instructs the agent to run these external commands."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- Every 5 seconds call `/api/v1/background-removal/jobs?job_ids=xxx` to query status",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 231
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "This range includes the documented workflow to poll remote job URLs and use curl to download the result. The static trigger is a markdown backtick, but the surrounding instructions require external command execution."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://verging.ai/api/v1/upload-video",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.9,
+        "confidence_reasoning": "The documented upload-video endpoint starts the upload flow for user images. This creates external transfer of user-provided files."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "#     \"url\": \"https://...r2.cloudflarestorage.com/...jpg?X-Amz-...\",",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 99
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.85,
+        "confidence_reasoning": "The example response contains a presigned Cloudflare R2 upload URL. It indicates that image content is transferred to external object storage."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "#     \"public_url\": \"https://img.panpan8.com/background-removal/2026-03-11/xxx.jpg\"",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "The example public_url uses an external image delivery domain. This is a real privacy consideration because processed image results are exposed by URL."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "\"https://...presigned-url-from-step-1...\"",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 106
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.84,
+        "confidence_reasoning": "The documented curl PUT sends the local image to a presigned external URL. Even though the URL is a placeholder, the workflow is an external upload."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://verging.ai/api/v1/background-removal/create-job",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 114,
+            "line_end": 114
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.9,
+        "confidence_reasoning": "The documented create-job call sends image metadata and job data to verging.ai. This is a core outbound network action."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "- For remote image URLs (https://example.com/image.jpg), use curl to download",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 141
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.76,
+        "confidence_reasoning": "The skill instructs the agent to download remote image URLs with curl. User-supplied URL downloads can contact arbitrary hosts and should be constrained."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "User: /background-removal -i https://example.com/photo.jpg",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 200
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.75,
+        "confidence_reasoning": "The example demonstrates processing a remote image URL. This confirms the skill may fetch user-provided network resources."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "- **Temporary files:** Local temporary files are stored in `/tmp/verging-bg-removal/` and cleaned up",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 236,
+            "line_end": 236
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The skill documents storing temporary files under /tmp/verging-bg-removal. A fixed temp directory can expose image data or collide across runs if permissions and cleanup are weak."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "| VERGING_API_URL | API base URL (default: https://verging.ai/api/v1) |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 51
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.86,
+        "confidence_reasoning": "The skill defines https://verging.ai/api/v1 as the default outbound API base URL. This is expected for the service, but it is real network access."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://verging.ai/api/v1/auth/me",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 88
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.91,
+        "confidence_reasoning": "The documented curl command calls the verging.ai auth endpoint with the API key. This is real authenticated network access."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "\"https://verging.ai/api/v1/background-removal/jobs?job_ids=123\"",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 118
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "The documented job-status request polls an external API endpoint. This is expected behavior, but it is real network access."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "https://verging.ai/api/v1/background-removal/jobs",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 122
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.86,
+        "confidence_reasoning": "The documented jobs endpoint lists remote processing jobs through the external API. This confirms ongoing network dependency."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 239,
+    "audit_model": "codex",
+    "audited_at": "2026-07-07T07:41:32.677Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Remove Image Backgrounds with AI",
+    "value_statement": "Manual cutouts take time and often look uneven. This skill sends images to verging.ai and returns transparent-background results.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI background remover",
+      "transparent PNG generator",
+      "product photo background removal",
+      "portrait background removal",
+      "image editing skill",
+      "verging.ai background removal",
+      "ecommerce image cleanup"
+    ],
+    "actual_capabilities": [
+      "Accepts local image paths and remote image URLs as input.",
+      "Supports JPG, JPEG, PNG, and WebP files up to 10MB.",
+      "Uses a verging.ai API key from an option or environment variable.",
+      "Checks account information and credits before processing.",
+      "Uploads images to a presigned storage URL for processing.",
+      "Polls job status and returns the processed result URL."
+    ],
+    "limitations": [
+      "Requires a verging.ai API key and available credits.",
+      "Uploads source images to an external service for processing.",
+      "Needs network access and curl for the documented workflow.",
+      "Only documents common raster image formats, not vector files."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare Product Listings",
+        "target_user": "E-commerce seller",
+        "description": "Remove distracting backgrounds from product photos before publishing catalog images or marketplace listings."
+      },
+      {
+        "title": "Clean Profile Images",
+        "target_user": "Marketing specialist",
+        "description": "Create headshots with transparent backgrounds for profile pages, decks, and brand materials."
+      },
+      {
+        "title": "Build Design Assets",
+        "target_user": "Designer",
+        "description": "Convert source images into transparent PNG assets for layouts, campaigns, and visual mockups."
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Remove One Background",
+        "scenario": "Beginner local image workflow",
+        "prompt": "Remove the background from ./photo.jpg and return the result URL when processing is complete."
+      },
+      {
+        "title": "Download the Result",
+        "scenario": "Save a transparent image locally",
+        "prompt": "Remove the background from ./product.png and download the finished transparent image to the current folder."
+      },
+      {
+        "title": "Use a Remote Image",
+        "scenario": "Process an image from a URL",
+        "prompt": "Remove the background from https://example.com/photo.jpg, show progress, and report the final image link."
+      },
+      {
+        "title": "Specify Credentials and Output",
+        "scenario": "Advanced controlled run",
+        "prompt": "Use my configured VERGING_API_KEY to process ./hero.webp and save the result to ./out/hero-transparent.png."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A seller provides a product photo with a busy tabletop background.",
+        "output": "The assistant reports the upload, processing status, and a link to a transparent-background product image."
+      },
+      {
+        "input": "A designer asks to process a WebP image and save the result locally.",
+        "output": "The assistant completes the job, downloads the transparent image, and confirms the saved file path."
+      },
+      {
+        "input": "A user submits a remote portrait image URL.",
+        "output": "The assistant downloads the source image, sends it for background removal, and returns the completed result URL."
+      }
+    ],
+    "best_practices": [
+      "Use an environment variable or secret manager for the verging.ai API key.",
+      "Confirm that images are safe to upload before processing private or regulated content.",
+      "Keep source images under the documented size and format limits."
+    ],
+    "anti_patterns": [
+      "Do not paste API keys into shared chats, tickets, or repository files.",
+      "Do not process confidential images without approval for external upload.",
+      "Do not assume public result URLs are private access controls."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill do?",
+        "answer": "It removes image backgrounds by sending supported files to the verging.ai background removal API."
+      },
+      {
+        "question": "Which image formats are supported?",
+        "answer": "The skill documents JPG, JPEG, PNG, and WebP support, with a maximum file size of 10MB."
+      },
+      {
+        "question": "Does it need an API key?",
+        "answer": "Yes. It requires a verging.ai API key, usually provided through the VERGING_API_KEY environment variable."
+      },
+      {
+        "question": "Are images processed locally?",
+        "answer": "No. The documented workflow uploads images to verging.ai storage and processing endpoints."
+      },
+      {
+        "question": "Can it use remote image URLs?",
+        "answer": "Yes. The skill can download a remote image URL before uploading the image for processing."
+      },
+      {
+        "question": "Can it save the finished image locally?",
+        "answer": "Yes. The documented options include downloading the result or saving it to a requested output path."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 239
+    }
+  ]
+}

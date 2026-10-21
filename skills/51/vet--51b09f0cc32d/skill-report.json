@@ -1,0 +1,1512 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-05T15:06:34.806Z",
+    "slug": "imbue-ai-vet",
+    "source_url": "https://github.com/imbue-ai/vet/tree/main/skills/vet",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "e23a18286f8c6d666ff6a79772d02586d08ddc153a48222a7bf8c16c060485f6",
+    "tree_hash": "6a189edc330059105e321cad100065f6a158f8a627df5cc6d8e6b8e2b236ef81",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "vet",
+    "description": "Run the vet CLI after small code changes to review git diffs and optional agent session history for missed implementation issues.",
+    "summary": "Reviews code diffs and optional conversation history after each change.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "imbue-ai",
+    "license": "MIT",
+    "tags": [
+      "code-review",
+      "git-diff",
+      "agent-workflows",
+      "conversation-history",
+      "quality-checks"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The skill intentionally runs local vet commands and optional history-loader scripts that read assistant conversation files under hidden home directories. Many markdown backtick detections are false positives, but the documented command execution and transcript access are real privacy and execution risks. No prompt injection language or direct network exfiltration code was found in the reviewed files.",
+    "remediation": [
+      {
+        "issue": "Sensitive conversation history access",
+        "suggestion": "Require explicit user confirmation before using history loaders, document every directory read, and default to running vet without history.",
+        "severity": "high"
+      },
+      {
+        "issue": "External command and package execution",
+        "suggestion": "Avoid automatic pip, uv, or vet execution. Pin package versions and ask before running commands that process repository or session data.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Hidden application directory search",
+        "suggestion": "Replace broad grep guidance with a safer session selector, or limit searches to user-approved files and redact sensitive text before processing.",
+        "severity": "high"
+      },
+      {
+        "issue": "Unvalidated OpenCode session id",
+        "suggestion": "Validate that --session-id starts with ses_ and contains no path separators before building filesystem paths.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 78
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:scripts/export_opencode_session.py:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/export_opencode_session.py",
+        "line_start": 12,
+        "line_end": 13,
+        "snippet": "MSG_DIR = STORAGE / \"message\" / args.session_id"
+      },
+      {
+        "id": "blocker:scripts/export_opencode_session.py:32:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/export_opencode_session.py",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "msg_id = msg[\"id\"]"
+      },
+      {
+        "id": "blocker:scripts/export_opencode_session.py:34:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/export_opencode_session.py",
+        "line_start": 34,
+        "line_end": 36,
+        "snippet": "part_dir = PART_DIR / msg_id"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 25,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 32,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 34,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 37,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 39,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 42,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 44,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 47,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 49,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 53,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "**OpenCode:** The `--session-id` argument requires a `ses_...` session ID. To find the current sessi"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 57,
+        "snippet": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part "
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 58,
+        "snippet": "3. Read the `sessionID` field from that part JSON file."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 60,
+        "snippet": "4. Pass that value as `--session-id`."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 62,
+        "snippet": "**Codex:** Session files are stored in `~/.codex/sessions/YYYY/MM/DD/`. Find the correct conversatio"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "**Claude Code:** Session files are stored in `~/.claude/projects/<encoded-path>/`. The encoded path "
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 73,
+        "snippet": "- `--base-commit REF`: Git ref for diff base (default: HEAD)"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 74,
+        "snippet": "- `--model MODEL`: LLM model to use (default: claude-opus-4-6)"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 75,
+        "snippet": "- `--confidence-threshold N`: Minimum confidence 0.0-1.0 (default: 0.8)"
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "- `--output-format FORMAT`: Output as `text`, `json`, or `github`"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 77,
+        "snippet": "- `--quiet`: Suppress status messages and 'No issues found.'"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 78,
+        "snippet": "- `--agentic`: Mode that routes analysis through the locally installed Claude Code or Codex CLI inst"
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.agents/skills/vet/scripts/export_opencode_session.py --sessio"
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.codex/skills/vet/scripts/export_codex_session.py --session-fi"
+      },
+      {
+        "id": "filesystem:SKILL.md:43:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.claude/skills/vet/scripts/export_claude_code_session.py --ses"
+      },
+      {
+        "id": "filesystem:SKILL.md:55:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part "
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "**Codex:** Session files are stored in `~/.codex/sessions/YYYY/MM/DD/`. Find the correct conversatio"
+      },
+      {
+        "id": "filesystem:SKILL.md:62:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "**Claude Code:** Session files are stored in `~/.claude/projects/<encoded-path>/`. The encoded path "
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.agents/skills/vet/scripts/export_opencode_session.py --sessio"
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.codex/skills/vet/scripts/export_codex_session.py --session-fi"
+      },
+      {
+        "id": "filesystem:SKILL.md:43:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.claude/skills/vet/scripts/export_claude_code_session.py --ses"
+      },
+      {
+        "id": "filesystem:SKILL.md:55:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part "
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "**Codex:** Session files are stored in `~/.codex/sessions/YYYY/MM/DD/`. Find the correct conversatio"
+      },
+      {
+        "id": "filesystem:SKILL.md:62:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "**Claude Code:** Session files are stored in `~/.claude/projects/<encoded-path>/`. The encoded path "
+      },
+      {
+        "id": "blocker:SKILL.md:33:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "vet \"goal\" --history-loader \"python ~/.agents/skills/vet/scripts/export_opencode_session.py --sessio"
+      },
+      {
+        "id": "blocker:SKILL.md:68:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "Vet analyzes the full git diff from the base commit. This may include changes from other agents or s"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:scripts/export_opencode_session.py:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.74,
+        "reason": "The line builds the expected OpenCode message directory from a supplied session id. It does not enumerate host configuration, credentials, or network state."
+      },
+      {
+        "id": "blocker:scripts/export_opencode_session.py:32:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This reads the message id field from an already parsed local message object. It is normal data processing, not system reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/export_opencode_session.py:34:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "This maps a message id to the expected OpenCode part directory. It stays within the tool storage model and does not probe system inventory."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "medium",
+        "reason": "The fenced block instructs users to run pip, uv, and vet commands. Installing and executing a package is a real external command risk, even though the markdown fence itself is benign."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This range only closes a markdown code block and introduces the running section. It contains no command for the agent or user to execute."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.87,
+        "severity": "medium",
+        "reason": "The OpenCode example runs the vet CLI and a Python history-loader script. That is intentional external command execution with local data access."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This range closes the OpenCode example and labels the Codex example. It does not contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.87,
+        "severity": "medium",
+        "reason": "The Codex example runs vet with a Python history-loader script. This is external command execution that can process local session files."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This range closes the Codex example and labels the Claude Code example. It does not instruct execution by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.87,
+        "severity": "medium",
+        "reason": "The Claude Code example runs vet with a Python history-loader script. This is a real external command path that can read local conversation history."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This range only closes a markdown command block and introduces a no-history section. It does not contain a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "medium",
+        "reason": "The example instructs running the vet CLI. Even without history loading, it executes a local command over repository state."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This range closes the no-history command block and begins explanatory text. The command itself is not in this finding span."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The line describes the --session-id argument and uses inline markdown formatting. It does not ask the agent to execute a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "severity": "medium",
+        "reason": "The instruction uses grep over OpenCode storage to locate a session. This is external command execution against local application data."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The text tells the reader to read a JSON field and pass the value later. It is not a shell command or code execution pattern."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This line references the --session-id option and transitions to Codex storage guidance. It does not contain executable shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The text names a Codex session directory and search approach. Filesystem privacy risk is present, but this finding is not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The text names a Claude Code session directory and path encoding. It is documentation, not shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is a CLI option description in inline markdown. It does not execute a command or create an injection vector by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is a model option description, not executable code. The backticks are markdown formatting."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is a confidence-threshold option description. It contains no command execution instruction."
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This line lists output format names in inline markdown. It is not code execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The --quiet option text is simple CLI documentation. The following line describes agentic mode, but this span does not issue a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.7,
+        "severity": "medium",
+        "reason": "The --agentic option states that vet routes analysis through local Claude Code or Codex CLIs. That mode can invoke external local tools, although only when selected."
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "high",
+        "reason": "The OpenCode command runs a Python script from a hidden home directory path. It is part of the intended setup, but hidden home access is a real privacy and integrity risk."
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "high",
+        "reason": "The Codex command references a hidden ~/.codex skill path and takes a session file. This can expose local assistant conversation history."
+      },
+      {
+        "id": "filesystem:SKILL.md:43:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "high",
+        "reason": "The Claude Code command references a hidden ~/.claude skill path and a session file. This is intended but still sensitive hidden-home access."
+      },
+      {
+        "id": "filesystem:SKILL.md:55:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "severity": "high",
+        "reason": "The grep command searches ~/.local/share/opencode storage for conversation text. That directory can contain sensitive local session history."
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "high",
+        "reason": "The guidance directs users to inspect ~/.codex/sessions for the correct conversation. Codex session files can contain prompts, code, and secrets."
+      },
+      {
+        "id": "filesystem:SKILL.md:62:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "high",
+        "reason": "The guidance directs users to inspect ~/.claude/projects for conversation files. Those hidden files may contain sensitive project and prompt data."
+      },
+      {
+        "id": "filesystem:SKILL.md:33:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "medium",
+        "reason": "The OpenCode example executes a loader from a hidden home directory. This hidden-file access is expected for the skill but should be consent-gated."
+      },
+      {
+        "id": "filesystem:SKILL.md:38:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "medium",
+        "reason": "The Codex example uses a hidden ~/.codex path and a session file. Access to that data is privacy-sensitive even when used for code review."
+      },
+      {
+        "id": "filesystem:SKILL.md:43:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "medium",
+        "reason": "The Claude Code example uses a hidden ~/.claude path and session file. The access is intentional but sensitive."
+      },
+      {
+        "id": "filesystem:SKILL.md:55:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "severity": "medium",
+        "reason": "The command searches hidden OpenCode storage for a unique message. That is direct access to local conversation data."
+      },
+      {
+        "id": "filesystem:SKILL.md:60:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "medium",
+        "reason": "The guidance instructs locating files under ~/.codex/sessions. This is hidden-file access to assistant transcripts."
+      },
+      {
+        "id": "filesystem:SKILL.md:62:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "medium",
+        "reason": "The guidance instructs locating files under ~/.claude/projects. This is hidden-file access to assistant transcripts."
+      },
+      {
+        "id": "blocker:SKILL.md:33:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.76,
+        "reason": "The line is a usage example for a history loader, not a host reconnaissance instruction. Its real risk is hidden file access, which is covered by filesystem findings."
+      },
+      {
+        "id": "blocker:SKILL.md:68:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The line explains how to interpret vet results from broad git diffs. It does not gather system information or inspect the host environment."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Sensitive Conversation History Exposure",
+        "description": "The skill is designed to review conversation history along with git diffs. The documented history loaders and session discovery steps can expose prompts, assistant replies, code, file paths, and secrets to vet processing.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 62
+          }
+        ],
+        "confidence": 0.91,
+        "confidence_reasoning": "The documentation explicitly says vet reviews conversation history and gives loader commands for OpenCode, Codex, and Claude Code. The listed hidden session paths are known places where sensitive transcripts are stored."
+      },
+      {
+        "title": "Autonomous Tool Execution Pressure",
+        "description": "The skill tells agents to run vet immediately after each logical unit of code changes and not wait to be asked. This can lead to unrequested command execution, especially when combined with history-loader guidance.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "The instruction is repeated in the front matter and main text. It is not malicious by itself, but it creates consent risk for commands that inspect local data."
+      },
+      {
+        "title": "Unvalidated Session Identifier Used in File Paths",
+        "description": "The OpenCode exporter uses the supplied session id to build a filesystem path before validating the expected ses_ format. A malformed value could cause unintended directory traversal behavior in local file reads.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/export_opencode_session.py",
+            "line_start": 8,
+            "line_end": 12
+          },
+          {
+            "file": "scripts/export_opencode_session.py",
+            "line_start": 32,
+            "line_end": 34
+          }
+        ],
+        "confidence": 0.63,
+        "confidence_reasoning": "The path is directly derived from user input and message ids without visible normalization or validation. Exploitability is limited because the script expects OpenCode-shaped local JSON, so confidence is medium."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "vet \"goal\" --history-loader \"python ~/.agents/skills/vet/scripts/export_opencode_session.py --sessio",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "The OpenCode command runs a Python script from a hidden home directory path. It is part of the intended setup, but hidden home access is a real privacy and integrity risk."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "vet \"goal\" --history-loader \"python ~/.codex/skills/vet/scripts/export_codex_session.py --session-fi",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The Codex command references a hidden ~/.codex skill path and takes a session file. This can expose local assistant conversation history."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "vet \"goal\" --history-loader \"python ~/.claude/skills/vet/scripts/export_claude_code_session.py --ses",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The Claude Code command references a hidden ~/.claude skill path and a session file. This is intended but still sensitive hidden-home access."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 55
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.92,
+        "confidence_reasoning": "The grep command searches ~/.local/share/opencode storage for conversation text. That directory can contain sensitive local session history."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "**Codex:** Session files are stored in `~/.codex/sessions/YYYY/MM/DD/`. Find the correct conversatio",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The guidance directs users to inspect ~/.codex/sessions for the correct conversation. Codex session files can contain prompts, code, and secrets."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "**Claude Code:** Session files are stored in `~/.claude/projects/<encoded-path>/`. The encoded path ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The guidance directs users to inspect ~/.claude/projects for conversation files. Those hidden files may contain sensitive project and prompt data."
+      },
+      {
+        "title": "Sensitive Conversation History Exposure",
+        "description": "The skill is designed to review conversation history along with git diffs. The documented history loaders and session discovery steps can expose prompts, assistant replies, code, file paths, and secrets to vet processing.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.91,
+        "confidence_reasoning": "The documentation explicitly says vet reviews conversation history and gives loader commands for OpenCode, Codex, and Claude Code. The listed hidden session paths are known places where sensitive transcripts are stored."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 25
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The fenced block instructs users to run pip, uv, and vet commands. Installing and executing a package is a real external command risk, even though the markdown fence itself is benign."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 34
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.87,
+        "confidence_reasoning": "The OpenCode example runs the vet CLI and a Python history-loader script. That is intentional external command execution with local data access."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 39
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.87,
+        "confidence_reasoning": "The Codex example runs vet with a Python history-loader script. This is external command execution that can process local session files."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 44
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.87,
+        "confidence_reasoning": "The Claude Code example runs vet with a Python history-loader script. This is a real external command path that can read local conversation history."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The example instructs running the vet CLI. Even without history loading, it executes a local command over repository state."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 57
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The instruction uses grep over OpenCode storage to locate a session. This is external command execution against local application data."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "- `--agentic`: Mode that routes analysis through the locally installed Claude Code or Codex CLI inst",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.7,
+        "confidence_reasoning": "The --agentic option states that vet routes analysis through local Claude Code or Codex CLIs. That mode can invoke external local tools, although only when selected."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "vet \"goal\" --history-loader \"python ~/.agents/skills/vet/scripts/export_opencode_session.py --sessio",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The OpenCode example executes a loader from a hidden home directory. This hidden-file access is expected for the skill but should be consent-gated."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "vet \"goal\" --history-loader \"python ~/.codex/skills/vet/scripts/export_codex_session.py --session-fi",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 38
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The Codex example uses a hidden ~/.codex path and a session file. Access to that data is privacy-sensitive even when used for code review."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "vet \"goal\" --history-loader \"python ~/.claude/skills/vet/scripts/export_claude_code_session.py --ses",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The Claude Code example uses a hidden ~/.claude path and session file. The access is intentional but sensitive."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "2. Run: `grep -rl \"UNIQUE_MESSAGE\" ~/.local/share/opencode/storage/part/` to find the matching part ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 55
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.92,
+        "confidence_reasoning": "The command searches hidden OpenCode storage for a unique message. That is direct access to local conversation data."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "**Codex:** Session files are stored in `~/.codex/sessions/YYYY/MM/DD/`. Find the correct conversatio",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The guidance instructs locating files under ~/.codex/sessions. This is hidden-file access to assistant transcripts."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "**Claude Code:** Session files are stored in `~/.claude/projects/<encoded-path>/`. The encoded path ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 62
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The guidance instructs locating files under ~/.claude/projects. This is hidden-file access to assistant transcripts."
+      },
+      {
+        "title": "Autonomous Tool Execution Pressure",
+        "description": "The skill tells agents to run vet immediately after each logical unit of code changes and not wait to be asked. This can lead to unrequested command execution, especially when combined with history-loader guidance.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The instruction is repeated in the front matter and main text. It is not malicious by itself, but it creates consent risk for commands that inspect local data."
+      },
+      {
+        "title": "Unvalidated Session Identifier Used in File Paths",
+        "description": "The OpenCode exporter uses the supplied session id to build a filesystem path before validating the expected ses_ format. A malformed value could cause unintended directory traversal behavior in local file reads.",
+        "locations": [
+          {
+            "file": "scripts/export_opencode_session.py",
+            "line_start": 8,
+            "line_end": 12
+          },
+          {
+            "file": "scripts/export_opencode_session.py",
+            "line_start": 32,
+            "line_end": 34
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.63,
+        "confidence_reasoning": "The path is directly derived from user input and message ids without visible normalization or validation. Exploitability is limited because the script expects OpenCode-shaped local JSON, so confidence is medium."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 269,
+    "audit_model": "codex",
+    "audited_at": "2026-07-05T15:06:34.806Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Review Code Changes with Vet",
+    "value_statement": "Code changes can drift from the user request, and tests may miss workflow issues. Vet reviews git diffs and optional session history so agents can catch problems earlier.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "AI code review",
+      "vet CLI",
+      "git diff review",
+      "conversation history audit",
+      "agent workflow validation",
+      "OpenCode",
+      "code quality checks"
+    ],
+    "actual_capabilities": [
+      "Runs the vet CLI after small logical code changes.",
+      "Reviews git diffs from a selected base commit.",
+      "Can include OpenCode, Codex, or Claude Code session history.",
+      "Shows commands for using vet with or without conversation history.",
+      "Documents options for model choice, confidence threshold, and output format.",
+      "Supports an agentic mode that can route analysis through local AI CLIs."
+    ],
+    "limitations": [
+      "Requires the verify-everything package and vet CLI to be installed.",
+      "History loaders can read sensitive local conversation files.",
+      "Vet does not replace tests, type checks, or manual review.",
+      "Broad git diffs may include changes from other users or agents."
+    ],
+    "use_cases": [
+      {
+        "title": "Check Agent Code Changes",
+        "description": "Run vet after each focused implementation step to catch missed requirements or regression risks.",
+        "target_user": "AI coding agent operators"
+      },
+      {
+        "title": "Review Diff Against Intent",
+        "description": "Use conversation history with a git diff to compare what was requested with what was changed.",
+        "target_user": "Software engineers"
+      },
+      {
+        "title": "Standardize Review Output",
+        "description": "Use output and threshold options to create consistent findings for pull requests or local review.",
+        "target_user": "Engineering teams"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run Basic Vet Review",
+        "scenario": "Beginner check after a small code change.",
+        "prompt": "Run vet on the current git diff without conversation history. Summarize any issues and mention whether tests are still needed."
+      },
+      {
+        "title": "Review With Session Context",
+        "scenario": "Intermediate review when the change depends on prior instructions.",
+        "prompt": "Run vet with the correct session history for this conversation. Check whether the implementation matches the user request and list only actionable issues."
+      },
+      {
+        "title": "Tune Review Strictness",
+        "scenario": "Advanced review for noisy or large diffs.",
+        "prompt": "Run vet with a chosen base commit and confidence threshold. Explain which findings are high confidence and which require human judgment."
+      },
+      {
+        "title": "Prepare Pull Request Findings",
+        "scenario": "Advanced workflow for team review.",
+        "prompt": "Run vet with a pull request friendly output format. Convert the results into a concise review summary with risks, evidence, and suggested fixes."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A small refactor changes authentication middleware and updates tests.",
+        "output": "Vet reports that the middleware now skips one error path. The review recommends adding a test for expired tokens before merging."
+      },
+      {
+        "input": "A Codex session implemented a requested UI change across several files.",
+        "output": "Vet compares the conversation request with the diff and notes that mobile spacing was not handled. It suggests checking the narrow viewport."
+      },
+      {
+        "input": "A large branch includes work from another agent and the current task.",
+        "output": "Vet flags issues from the full diff and separates items that appear unrelated to the current session for human triage."
+      }
+    ],
+    "best_practices": [
+      "Run vet after small, logical changes so findings stay focused.",
+      "Ask for consent before loading conversation history from hidden directories.",
+      "Treat vet as an extra review layer, then run the project tests."
+    ],
+    "anti_patterns": [
+      "Do not run history loaders on private sessions without user approval.",
+      "Do not ignore findings solely because the change came from another session.",
+      "Do not use vet results as a substitute for compiling, testing, or manual review."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill do?",
+        "answer": "It guides an agent to run the vet CLI after code changes and review the resulting findings."
+      },
+      {
+        "question": "Does it need conversation history?",
+        "answer": "No. Vet can run without history, but history can help compare the implementation with the request."
+      },
+      {
+        "question": "Which tools does it support?",
+        "answer": "The instructions include examples for OpenCode, Codex, and Claude Code session history."
+      },
+      {
+        "question": "Can it read sensitive files?",
+        "answer": "Yes. History-loader workflows can read hidden session directories that may contain sensitive prompts and code."
+      },
+      {
+        "question": "Does vet replace tests?",
+        "answer": "No. The skill states that vet is not a replacement for running tests."
+      },
+      {
+        "question": "Who should use it?",
+        "answer": "It is most useful for developers and agent operators who want frequent review of code diffs."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "export_claude_code_session.py",
+          "type": "file",
+          "path": "scripts/export_claude_code_session.py",
+          "lines": 62
+        },
+        {
+          "name": "export_codex_session.py",
+          "type": "file",
+          "path": "scripts/export_codex_session.py",
+          "lines": 57
+        },
+        {
+          "name": "export_opencode_session.py",
+          "type": "file",
+          "path": "scripts/export_opencode_session.py",
+          "lines": 71
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 79
+    }
+  ]
+}

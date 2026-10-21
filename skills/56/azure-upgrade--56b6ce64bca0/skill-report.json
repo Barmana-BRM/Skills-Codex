@@ -1,0 +1,2857 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T19:35:25.639Z",
+    "slug": "microsoft-azure-upgrade",
+    "source_url": "https://github.com/microsoft/azure-skills/tree/main/.github/plugins/azure-skills/skills/azure-upgrade/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "56b6ce64bca0630e42a3691a08b624227fd5c45e082adc328bfd4ef356a00b20",
+    "tree_hash": "a221f4331feb70c410eb738fba9a30b4e52047310b78f0b65a23047aa35853e5",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "azure-upgrade",
+    "description": "Assess Azure upgrades, migrate Linux Functions to Flex Consumption, and modernize legacy Azure Java SDK dependencies. Route Redis migrations to the correct dedicated skill.",
+    "summary": "Plan and validate Azure service upgrades and legacy Java SDK modernization.",
+    "icon": "📦",
+    "version": "1.1.4",
+    "author": "microsoft",
+    "license": "MIT",
+    "tags": [
+      "azure",
+      "cloud-migration",
+      "azure-functions",
+      "java-sdk",
+      "devops"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access",
+      "filesystem",
+      "network"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static matches are documentation syntax, relative links, or scoped Azure checks. Confirmed risks include untrusted wrapper execution, destructive build-file handling, and credential exposure. Hidden persistent directives and unpinned external skill installation add supply-chain and agent-control risk.",
+    "remediation": [
+      {
+        "issue": "The BOM helper overwrites and deletes an existing rewrite.yml file.",
+        "suggestion": "Create a unique temporary recipe outside the project, or back up and restore any existing rewrite.yml atomically.",
+        "severity": "high"
+      },
+      {
+        "issue": "Project wrappers and command overrides execute without a trust decision.",
+        "suggestion": "Require confirmation before wrapper execution, validate executable paths, and never add execute permission automatically.",
+        "severity": "high"
+      },
+      {
+        "issue": "Regex-based Gradle injection and cleanup can corrupt build files.",
+        "suggestion": "Use a Gradle-aware transformation, preserve exact original content, and restore atomically after failures.",
+        "severity": "high"
+      },
+      {
+        "issue": "Function App settings and storage connection strings can reach logs or process arguments.",
+        "suggestion": "Do not print settings. Use identity authentication, quote all variables, and avoid connection strings on command lines.",
+        "severity": "high"
+      },
+      {
+        "issue": "Generated templates embed hidden instructions that reject user pauses and operational limits.",
+        "suggestion": "Remove persistent agent directives and require generated progress files to honor user, system, and resource limits.",
+        "severity": "high"
+      },
+      {
+        "issue": "Redis migration skills are installed from mutable external repositories.",
+        "suggestion": "Pin reviewed commits or signed releases, show the source to the user, and require confirmation before installation.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/languages/java/bom-migration/bom-gradle.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-gradle.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-gradle.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-maven.md",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-maven.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-migration.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-migration.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-migration.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "references/languages/java/bom-migration/bom-migration.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "references/languages/java/INSTRUCTION.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "references/languages/java/INSTRUCTION.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "references/languages/java/INSTRUCTION.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "references/languages/java/INSTRUCTION.md",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "references/languages/java/INSTRUCTION.md",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 195,
+            "line_end": 195
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 433,
+            "line_end": 433
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 371,
+            "line_end": 371
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 139,
+            "line_end": 143
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 152,
+            "line_end": 153
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 164,
+            "line_end": 165
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 169,
+            "line_end": 169
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 171,
+            "line_end": 171
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 213,
+            "line_end": 214
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 217,
+            "line_end": 218
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 354,
+            "line_end": 355
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 357,
+            "line_end": 357
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 4,
+            "line_end": 4
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "references/services/functions/consumption-to-flex.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 91
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+            "line_start": 61,
+            "line_end": 61
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/languages/java/rules/upgrade-strategy.md",
+            "line_start": 7,
+            "line_end": 7
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 331,
+            "line_end": 331
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 394,
+            "line_end": 394
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 425,
+            "line_end": 425
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 257,
+            "line_end": 257
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 460,
+            "line_end": 460
+          },
+          {
+            "file": "references/languages/java/workflow/phase-1-precheck.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/languages/java/workflow/phase-2-plan.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/languages/java/workflow/phase-3-execute.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/languages/java/workflow/phase-3-execute.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "references/languages/java/workflow/phase-4-summarize.md",
+            "line_start": 3,
+            "line_end": 3
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 357,
+            "line_end": 357
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 375,
+            "line_end": 375
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 169,
+            "line_end": 169
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 357,
+            "line_end": 357
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 375,
+            "line_end": 375
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:12:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-gradle.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "The following invocation works identically in **bash** and **PowerShell**:"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:121:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-gradle.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:122:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-gradle.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "# PowerShell on Windows"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-maven.md:12:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-maven.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "The following invocation works identically in **bash** and **PowerShell**:"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-maven.md:111:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-maven.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "Run `mvn -q -DskipTests dependency:tree` (the same command works in both **bash** and **PowerShell**"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:9:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-migration.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "The following check works in both **bash** and **PowerShell 7+** (the `||` operator is supported in "
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:15:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-migration.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "For Windows PowerShell 5.1, use:"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:17:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-migration.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:31:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/bom-migration/bom-migration.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "The following invocation works identically in **bash** and **PowerShell** (no shell-specific syntax)"
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:17:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/INSTRUCTION.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "PowerShell equivalent (run from repo root):"
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:19:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/INSTRUCTION.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:25:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/INSTRUCTION.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "Commonly overlooked locations:`.ci/**/pom.xml`, `ci/**`, parent/BOM poms, `buildSrc/`, `gradle/libs."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:82:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/INSTRUCTION.md",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "PowerShell equivalent (run from repo root):"
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:84:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/languages/java/INSTRUCTION.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "```powershell"
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:21:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "> **Important:** Reading `clientId`, `clientSecret`, or `tenantId` from **environment variables** (e"
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:25:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "Azure azure = Azure.authenticate(new File(System.getenv(\"AZURE_AUTH_LOCATION\")))"
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:21:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "> **Important:** Reading `clientId`, `clientSecret`, or `tenantId` from **environment variables** (e"
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:61:azure-credential-environment-variables",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Azure credential environment variables",
+        "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "If legacy code mentions `AZURE_AUTH_LOCATION` only in a validation guard or exception message, do no"
+      },
+      {
+        "id": "blocker:references/languages/java/package-specific/com.microsoft.azure.management.md:8:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/package-specific/com.microsoft.azure.management.md",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "- Keep the text emitted by logging and stdout/stderr unchanged to avoid breaking downstream consumer"
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:7:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/rules/troubleshooting.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "- **NO premature termination**: Token limits, time constraints, or complexity are NEVER valid reason"
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:10:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/rules/troubleshooting.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "- **NO categorical dismissals**: \"Test-specific issues\", \"doesn't affect production\", \"sample/demo c"
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/rules/troubleshooting.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- **Genuine limitations ONLY**: A limitation is valid ONLY if: (1) multiple distinct fix approaches "
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:19:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/rules/troubleshooting.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "- **Do NOT treat partial migration as acceptable.** Migrating some files but not others is not a val"
+      },
+      {
+        "id": "filesystem:references/languages/java/rules/upgrade-strategy.md:7:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/rules/upgrade-strategy.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "- **Automation tools**: Use automation tools like OpenRewrite for efficiency; always verify output. "
+      },
+      {
+        "id": "blocker:references/languages/java/rules/upgrade-strategy.md:3:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/rules/upgrade-strategy.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "- **Incremental upgrades**: Stepwise dependency upgrades to avoid large jumps breaking builds."
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:195:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 195,
+        "line_end": 195,
+        "snippet": "return subprocess.run(cmd, cwd=project_dir).returncode"
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:433:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 433,
+        "line_end": 433,
+        "snippet": "return subprocess.run(cmd, cwd=project_dir).returncode"
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:371:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 371,
+        "line_end": 371,
+        "snippet": "# `plugins {`, so don't add another one before the marker."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:40:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:82:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "with urllib.request.urlopen(BOM_POM_URL, timeout=HTTP_TIMEOUT_SECONDS) as response:"
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:45:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "BOM_POM_URL = \"https://raw.githubusercontent.com/Azure/azure-sdk-for-java/main/sdk/boms/azure-sdk-bo"
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:46:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "POM_NAMESPACE = {\"m\": \"http://maven.apache.org/POM/4.0.0\"}"
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:169:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "ns = {\"m\": \"http://maven.apache.org/POM/4.0.0\"}"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:331:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 331,
+        "line_end": 331,
+        "snippet": "with open(yml_path, \"w\", encoding=\"utf-8\") as f:"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:394:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 394,
+        "line_end": 394,
+        "snippet": "with open(build_file, \"w\", encoding=\"utf-8\") as f:"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:425:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 425,
+        "line_end": 425,
+        "snippet": "with open(build_file, \"w\", encoding=\"utf-8\") as f:"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:150:python-os-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python os file operations",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "os.chmod(wrapper, mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:257:python-os-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python os file operations",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 257,
+        "line_end": 257,
+        "snippet": "os.chmod(wrapper, mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:460:python-os-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python os file operations",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 460,
+        "line_end": 460,
+        "snippet": "os.remove(yml_path)"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:103:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "f\"Invalid azure-sdk-bom version '{version}'. Expected stable MAJOR.MINOR.PATCH.\""
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:171:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 171,
+        "line_end": 171,
+        "snippet": "gid = dep.find(\"m:groupId\", ns)"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "aid = dep.find(\"m:artifactId\", ns)"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:173:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 173,
+        "line_end": 173,
+        "snippet": "if gid is not None and aid is not None:"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:177:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "gid = dep.find(\"groupId\")"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:178:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 178,
+        "line_end": 178,
+        "snippet": "aid = dep.find(\"artifactId\")"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:179:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 179,
+        "line_end": 179,
+        "snippet": "if gid is not None and aid is not None:"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:352:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 352,
+        "line_end": 352,
+        "snippet": "plugin_line = '    id \"org.openrewrite.rewrite\" version \"latest.release\"'"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:414:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 414,
+        "line_end": 414,
+        "snippet": "# the following injected plugin id line."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:502:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/languages/java/scripts/upgrade_bom.py",
+        "line_start": 502,
+        "line_end": 502,
+        "snippet": "parser.error(\"project_dir is required unless --get-latest-version is used.\")"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:10:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/templates/PLAN_TEMPLATE.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "- **Incremental upgrades**: Stepwise dependency upgrades to avoid large jumps breaking builds"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:34:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/templates/PLAN_TEMPLATE.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "- **HEAD Commit ID**: <current_commit_id> <!-- replace with actual head commit id when generating --"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:180:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/languages/java/templates/PLAN_TEMPLATE.md",
+        "line_start": 180,
+        "line_end": 181,
+        "snippet": "- Expected: Compilation SUCCESS + 100% tests pass"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:16:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/templates/PROGRESS_TEMPLATE.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "- **NO premature termination**: Token limits, time constraints, or complexity are NEVER valid reason"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:27:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/templates/PROGRESS_TEMPLATE.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "- **NO categorical dismissals**: \"Test-specific issues\", \"doesn't affect production\", \"sample/demo c"
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:82:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/languages/java/templates/PROGRESS_TEMPLATE.md",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "- ⏳ In Progress - Currently working on this step"
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-1-precheck.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/workflow/phase-1-precheck.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Load this file when executing Phase 1. Refer back to [`upgrade-success-criteria`](../rules/upgrade-s"
+      },
+      {
+        "id": "blocker:references/languages/java/workflow/phase-1-precheck.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/languages/java/workflow/phase-1-precheck.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "| Invalid Goal        | No legacy Azure SDK deps found   | STOP — nothing to migrate                "
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-2-plan.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/workflow/phase-2-plan.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Load this file when executing Phase 2. Refer back to [`upgrade-success-criteria`](../rules/upgrade-s"
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-3-execute.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/workflow/phase-3-execute.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Load this file when executing Phase 3. Refer back to [`upgrade-success-criteria`](../rules/upgrade-s"
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-3-execute.md:24:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/workflow/phase-3-execute.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "- **Final Validation Step**: Achieve **Upgrade Success Criteria** — iterative test & fix loop until "
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-4-summarize.md:3:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/languages/java/workflow/phase-4-summarize.md",
+        "line_start": 3,
+        "line_end": 3,
+        "snippet": "Load this file when executing Phase 4. Refer back to [`upgrade-success-criteria`](../rules/upgrade-s"
+      },
+      {
+        "id": "blocker:references/services/functions/assessment.md:20:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/assessment.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "7. **Check Blob Triggers** — Verify blob triggers use EventGrid source (container polling not suppor"
+      },
+      {
+        "id": "blocker:references/services/functions/assessment.md:56:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/assessment.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "| Blob triggers use EventGrid | ✅ / ⚠️ / N/A | |"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 139,
+        "line_end": 143,
+        "snippet": "--query \"[?contains(name, 'azurewebsites.net')==\\`false\\`]\" --output table"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:110:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "app_settings=$(az functionapp config appsettings list --name $appName --resource-group $rgName)"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:152:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 152,
+        "line_end": 153,
+        "snippet": "systemUserId=$(az functionapp identity show --name $appName --resource-group $rgName \\"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:164:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 164,
+        "line_end": 165,
+        "snippet": "userIdentities=$(az functionapp identity show --name $appName --resource-group $rgName \\"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:169:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "echo \"User-assigned identity: $(echo \"$identity\" | jq -r '.key' | sed 's|.*/userAssignedIdentities/|"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:171:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 171,
+        "line_end": 171,
+        "snippet": "az role assignment list --assignee $(echo \"$identity\" | jq -r '.value.principalId') --all --output j"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:213:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 213,
+        "line_end": 214,
+        "snippet": "storageConnection=$(az functionapp config appsettings list --name $appName --resource-group $rgName "
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:217:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 217,
+        "line_end": 218,
+        "snippet": "packageName=$(az storage blob list --connection-string $storageConnection --container-name scm-relea"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:354:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 354,
+        "line_end": 355,
+        "snippet": "DEFAULT_HOST=$(az functionapp show --name <NEW_APP_NAME> --resource-group <RESOURCE_GROUP> \\"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:357:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/services/functions/automation.md",
+        "line_start": 357,
+        "line_end": 357,
+        "snippet": "HTTP_STATUS=$(curl -s -o /dev/null -w \"%{http_code}\" \"https://$DEFAULT_HOST\")"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:4:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/functions/automation.md",
+        "line_start": 4,
+        "line_end": 4,
+        "snippet": "> All scripts use `bash` syntax compatible with Azure Cloud Shell. For PowerShell, adapt accordingly"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:57:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/functions/automation.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "Supported stacks: `dotnet-isolated`, `node`, `java`, `python`, `powershell`, `custom`."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:68:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/functions/automation.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "Replace `<REGION>` with the app's region and `<LANGUAGE_STACK>` with one of: `dotnet-isolated`, `jav"
+      },
+      {
+        "id": "network:references/services/functions/automation.md:357:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/services/functions/automation.md",
+        "line_start": 357,
+        "line_end": 357,
+        "snippet": "HTTP_STATUS=$(curl -s -o /dev/null -w \"%{http_code}\" \"https://$DEFAULT_HOST\")"
+      },
+      {
+        "id": "network:references/services/functions/automation.md:375:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/services/functions/automation.md",
+        "line_start": 375,
+        "line_end": 375,
+        "snippet": "curl -s -o /dev/null -w \"%{http_code}\" \"https://$DEFAULT_HOST/api/<FUNCTION_NAME>\""
+      },
+      {
+        "id": "filesystem:references/services/functions/automation.md:357:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "references/services/functions/automation.md",
+        "line_start": 357,
+        "line_end": 357,
+        "snippet": "HTTP_STATUS=$(curl -s -o /dev/null -w \"%{http_code}\" \"https://$DEFAULT_HOST\")"
+      },
+      {
+        "id": "filesystem:references/services/functions/automation.md:375:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "references/services/functions/automation.md",
+        "line_start": 375,
+        "line_end": 375,
+        "snippet": "curl -s -o /dev/null -w \"%{http_code}\" \"https://$DEFAULT_HOST/api/<FUNCTION_NAME>\""
+      },
+      {
+        "id": "sensitive:references/services/functions/automation.md:169:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "references/services/functions/automation.md",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "echo \"User-assigned identity: $(echo \"$identity\" | jq -r '.key' | sed 's|.*/userAssignedIdentities/|"
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:91:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/automation.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "# Find blob triggers NOT using EventGrid source"
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:138:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/automation.md",
+        "line_start": 138,
+        "line_end": 138,
+        "snippet": "az functionapp config hostname list --webapp-name $appName --resource-group $rgName \\"
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:245:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/automation.md",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "- `--skip-hostnames` — skip migrating custom domains"
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:269:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/automation.md",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "az functionapp config hostname list --webapp-name <NEW_APP_NAME> --resource-group <RESOURCE_GROUP> \\"
+      },
+      {
+        "id": "external_commands:references/services/functions/consumption-to-flex.md:47:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/functions/consumption-to-flex.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "| `powershell` | PowerShell | ✅ Yes |"
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:57:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/consumption-to-flex.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "| Blob trigger (polling) | ❌ Only EventGrid source | Convert `LogsAndContainerScan` → `EventGrid` |"
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:139:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/consumption-to-flex.md",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "1. **Smoke test** — Get the app’s default hostname via `az functionapp show --query defaultHostName "
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:159:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/consumption-to-flex.md",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "| Azure Event Grid | Medium | Recreate event subscriptions; ensure idempotent functions |"
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:164:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/functions/consumption-to-flex.md",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "| Timer | Low | Offset schedules during cutover to avoid simultaneous execution |"
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:10:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "| Source SKU | ARM Resource Type | CLI / PowerShell | Dedicated Skill | Repo |"
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:25:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- PowerShell: `New-AzRedisCache`, `Get-AzRedisCache`, etc."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:33:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "- PowerShell: `New-AzRedisEnterpriseCache`, `Get-AzRedisEnterpriseCache`, etc."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:44:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "- Real-time pricing scripts (PowerShell + bash) with HA, clustering, and MRPP logic"
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:54:powershell-invocation",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "PowerShell invocation",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "- Three modes: automation-script update (ARM/Bicep/CLI/PowerShell/Terraform checklist), interactive "
+      },
+      {
+        "id": "blocker:references/services/redis/redis-to-amr.md:46:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "- Automated migration via ARM REST APIs with **DNS switching** (old hostname keeps working; port sti"
+      },
+      {
+        "id": "blocker:references/services/redis/redis-to-amr.md:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/services/redis/redis-to-amr.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "- **DNS-switch automated migration** keeps old hostname working, but the port change still applies —"
+      },
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "> This skill handles **assessment and automated upgrades** of existing Azure workloads from one Azur"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "4. Use `mcp_azure_mcp_get_azure_bestpractices` and `mcp_azure_mcp_documentation` MCP tools"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "5. Destructive actions require `ask_user` — [global-rules](references/global-rules.md)"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "| Legacy Azure Java SDK (`com.microsoft.azure.*`) | Modern Azure Java SDK (`com.azure.*`) | [languag"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "> No matching scenario? Use `mcp_azure_mcp_documentation` and `mcp_azure_mcp_get_azure_bestpractices"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "| `mcp_azure_mcp_get_azure_bestpractices` | Get Azure best practices for the target service |"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "| `mcp_azure_mcp_documentation` | Look up Azure documentation for upgrade scenarios |"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "| `mcp_azure_mcp_appservice` | Query App Service and Functions plan details |"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "| `mcp_azure_mcp_applicationinsights` | Verify monitoring configuration |"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "7. **Hand off** to `azure-validate` for deep validation or `azure-deploy` for CI/CD setup"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "Track progress in `upgrade-status.md` inside the workspace root."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "- `azure-validate` — for thorough post-upgrade validation"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "- `azure-deploy` — if the user wants to set up CI/CD for the new app"
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "- [Redis (ACR or ACRE) to AMR Migration](references/services/redis/redis-to-amr.md) — routes to dedi"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:12:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:121:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-gradle.md:122:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-maven.md:12:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-maven.md:111:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:9:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:15:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:17:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/bom-migration/bom-migration.md:31:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:17:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:19:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:25:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:82:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/languages/java/INSTRUCTION.md:84:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:21:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a legacy Java example or guidance that replaces file credentials with modern authentication. It does not read or exfiltrate the audit environment."
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:25:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a legacy Java example or guidance that replaces file credentials with modern authentication. It does not read or exfiltrate the audit environment."
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:21:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a legacy Java example or guidance that replaces file credentials with modern authentication. It does not read or exfiltrate the audit environment."
+      },
+      {
+        "id": "env_access:references/languages/java/package-specific/com.microsoft.azure.management.md:61:azure-credential-environment-variables",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The match is a legacy Java example or guidance that replaces file credentials with modern authentication. It does not read or exfiltrate the audit environment."
+      },
+      {
+        "id": "blocker:references/languages/java/package-specific/com.microsoft.azure.management.md:8:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:7:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:10:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/rules/troubleshooting.md:19:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "filesystem:references/languages/java/rules/upgrade-strategy.md:7:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "blocker:references/languages/java/rules/upgrade-strategy.md:3:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:195:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The helper executes a detected project Maven wrapper or an unrestricted --mvn executable. A malicious wrapper or supplied executable can run arbitrary code with the agent's privileges.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:433:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The helper executes a detected project Gradle wrapper or an unrestricted --gradle executable. A malicious wrapper or supplied executable can run arbitrary code with the agent's privileges.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/languages/java/scripts/upgrade_bom.py:371:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:40:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The import is inert, and the request uses a fixed official Microsoft GitHub URL to read one BOM XML version. It sends no project or credential data."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:82:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The import is inert, and the request uses a fixed official Microsoft GitHub URL to read one BOM XML version. It sends no project or credential data."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:45:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:46:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      },
+      {
+        "id": "network:references/languages/java/scripts/upgrade_bom.py:169:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:331:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The script opens a fixed project-root rewrite.yml path with truncation and does not preserve an existing file. The cleanup later removes that same path.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:394:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The script replaces the complete Gradle build file after regex-based injection. It performs no backup or atomic restoration if the source layout is unexpected.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:425:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "Cleanup rewrites the complete Gradle file and discards all lines after its second marker. Marker collisions or a missing trailing newline can delete legitimate content.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:150:python-os-file-operations",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The script grants execute permission to a project-provided Maven wrapper before running it. This can activate untrusted repository code without a trust check.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:257:python-os-file-operations",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The script grants execute permission to a project-provided Gradle wrapper before running it. This can activate untrusted repository code without a trust check.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:references/languages/java/scripts/upgrade_bom.py:460:python-os-file-operations",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The script removes project-root rewrite.yml after overwriting that fixed path. An existing user file is therefore destroyed rather than restored.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:103:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:171:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:173:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:177:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:178:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:179:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:352:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:414:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/scripts/upgrade_bom.py:502:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:10:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:34:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PLAN_TEMPLATE.md:180:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:16:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:27:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/languages/java/templates/PROGRESS_TEMPLATE.md:82:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-1-precheck.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "blocker:references/languages/java/workflow/phase-1-precheck.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-2-plan.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-3-execute.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-3-execute.md:24:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "filesystem:references/languages/java/workflow/phase-4-summarize.md:3:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The parent-directory sequence appears only in a relative Markdown link to another bundled reference. No user-controlled path is resolved or accessed by this line."
+      },
+      {
+        "id": "blocker:references/services/functions/assessment.md:20:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/assessment.md:56:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:110:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The command captures all Function App settings, and the next line prints them. App settings commonly contain connection strings, tokens, and other secrets.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:152:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:164:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:169:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:171:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:213:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The command extracts AzureWebJobsStorage into a shell variable. The guide later passes that connection string on command lines, exposing a storage credential.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:217:shell-command-substitution",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The command passes the storage connection string as an unquoted process argument while querying blobs. This can expose credentials through process inspection and shell expansion.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:354:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:357:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This documented Bash substitution captures scoped Azure CLI or curl output for migration checks. It does not evaluate generated shell syntax or transmit credentials."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:4:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:57:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/functions/automation.md:68:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "network:references/services/functions/automation.md:357:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      },
+      {
+        "id": "network:references/services/functions/automation.md:375:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      },
+      {
+        "id": "filesystem:references/services/functions/automation.md:357:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command writes discarded curl response bodies to /dev/null. It does not read a device or access project data."
+      },
+      {
+        "id": "filesystem:references/services/functions/automation.md:375:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The command writes discarded curl response bodies to /dev/null. It does not read a device or access project data."
+      },
+      {
+        "id": "sensitive:references/services/functions/automation.md:169:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The jq expression reads an object property named key, which is the managed-identity resource identifier. It does not access a certificate or private-key file."
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:91:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:138:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:245:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/automation.md:269:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "external_commands:references/services/functions/consumption-to-flex.md:47:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:57:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:139:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:159:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/functions/consumption-to-flex.md:164:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:10:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:25:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:33:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:44:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "external_commands:references/services/redis/redis-to-amr.md:54:powershell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The matched line is documentation, a code-fence label, a supported-stack value, or a fixed verification command. It does not invoke PowerShell with untrusted input."
+      },
+      {
+        "id": "blocker:references/services/redis/redis-to-amr.md:46:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "blocker:references/services/redis/redis-to-amr.md:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line is migration prose, template status text, parser validation, or a scoped check of the selected project or Azure resource. It is not covert reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:90:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backticks are Markdown code spans, a Python comment, or escaped JMESPath quoting in an Azure CLI example. They are not shell execution operators."
+      },
+      {
+        "id": "network:SKILL.md:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The value is an official HTTPS source, an XML namespace identifier, a variable Azure hostname, or a Markdown link. It is not an exfiltration endpoint."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Azure Credentials Exposed by Migration Commands",
+        "description": "The guide prints every Function App setting and passes AzureWebJobsStorage on command lines. These values can expose production credentials in logs and process listings.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 110,
+            "line_end": 111
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 212,
+            "line_end": 222
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The commands explicitly retrieve, print, and reuse app settings and a storage connection string. AzureWebJobsStorage is a credential-bearing setting."
+      },
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "A hidden template comment says \"DON'T REMOVE THIS COMMENT BLOCK\" and directs agents to continue without user input or token limits. Generated files can persist these directives.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/languages/java/templates/PROGRESS_TEMPLATE.md",
+            "line_start": 5,
+            "line_end": 16
+          },
+          {
+            "file": "references/languages/java/rules/troubleshooting.md",
+            "line_start": 3,
+            "line_end": 22
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The instructions are explicit, persistent, and hidden inside a generated project comment. They attempt to control future agent behavior and disregard operational limits."
+      },
+      {
+        "title": "Unpinned External Skill Installation",
+        "description": "Redis requests are redirected to separately maintained repositories, and users are told to install those skills. No immutable commit or reviewed package version is required.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 4,
+            "line_end": 6
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 64,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ],
+        "confidence": 0.91,
+        "confidence_reasoning": "The routing and installation instructions are explicit, but the linked repositories are external to this audited package. Their future content is outside this report."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Python subprocess.run",
+        "description": "return subprocess.run(cmd, cwd=project_dir).returncode",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 195,
+            "line_end": 195
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The helper executes a detected project Maven wrapper or an unrestricted --mvn executable. A malicious wrapper or supplied executable can run arbitrary code with the agent's privileges."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "return subprocess.run(cmd, cwd=project_dir).returncode",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 433,
+            "line_end": 433
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The helper executes a detected project Gradle wrapper or an unrestricted --gradle executable. A malicious wrapper or supplied executable can run arbitrary code with the agent's privileges."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "with open(yml_path, \"w\", encoding=\"utf-8\") as f:",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 331,
+            "line_end": 331
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The script opens a fixed project-root rewrite.yml path with truncation and does not preserve an existing file. The cleanup later removes that same path."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "with open(build_file, \"w\", encoding=\"utf-8\") as f:",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 394,
+            "line_end": 394
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The script replaces the complete Gradle build file after regex-based injection. It performs no backup or atomic restoration if the source layout is unexpected."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "with open(build_file, \"w\", encoding=\"utf-8\") as f:",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 425,
+            "line_end": 425
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "Cleanup rewrites the complete Gradle file and discards all lines after its second marker. Marker collisions or a missing trailing newline can delete legitimate content."
+      },
+      {
+        "title": "Python os file operations",
+        "description": "os.chmod(wrapper, mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 150,
+            "line_end": 150
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The script grants execute permission to a project-provided Maven wrapper before running it. This can activate untrusted repository code without a trust check."
+      },
+      {
+        "title": "Python os file operations",
+        "description": "os.chmod(wrapper, mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 257,
+            "line_end": 257
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The script grants execute permission to a project-provided Gradle wrapper before running it. This can activate untrusted repository code without a trust check."
+      },
+      {
+        "title": "Python os file operations",
+        "description": "os.remove(yml_path)",
+        "locations": [
+          {
+            "file": "references/languages/java/scripts/upgrade_bom.py",
+            "line_start": 460,
+            "line_end": 460
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The script removes project-root rewrite.yml after overwriting that fixed path. An existing user file is therefore destroyed rather than restored."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "app_settings=$(az functionapp config appsettings list --name $appName --resource-group $rgName)",
+        "locations": [
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 110,
+            "line_end": 110
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The command captures all Function App settings, and the next line prints them. App settings commonly contain connection strings, tokens, and other secrets."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "storageConnection=$(az functionapp config appsettings list --name $appName --resource-group $rgName ",
+        "locations": [
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 213,
+            "line_end": 214
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The command extracts AzureWebJobsStorage into a shell variable. The guide later passes that connection string on command lines, exposing a storage credential."
+      },
+      {
+        "title": "Shell command substitution",
+        "description": "packageName=$(az storage blob list --connection-string $storageConnection --container-name scm-relea",
+        "locations": [
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 217,
+            "line_end": 218
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The command passes the storage connection string as an unquoted process argument while querying blobs. This can expose credentials through process inspection and shell expansion."
+      },
+      {
+        "title": "Azure Credentials Exposed by Migration Commands",
+        "description": "The guide prints every Function App setting and passes AzureWebJobsStorage on command lines. These values can expose production credentials in logs and process listings.",
+        "locations": [
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 110,
+            "line_end": 111
+          },
+          {
+            "file": "references/services/functions/automation.md",
+            "line_start": 212,
+            "line_end": 222
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The commands explicitly retrieve, print, and reuse app settings and a storage connection string. AzureWebJobsStorage is a credential-bearing setting."
+      },
+      {
+        "title": "Prompt Injection Attempt Detected",
+        "description": "A hidden template comment says \"DON'T REMOVE THIS COMMENT BLOCK\" and directs agents to continue without user input or token limits. Generated files can persist these directives.",
+        "locations": [
+          {
+            "file": "references/languages/java/templates/PROGRESS_TEMPLATE.md",
+            "line_start": 5,
+            "line_end": 16
+          },
+          {
+            "file": "references/languages/java/rules/troubleshooting.md",
+            "line_start": 3,
+            "line_end": 22
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The instructions are explicit, persistent, and hidden inside a generated project comment. They attempt to control future agent behavior and disregard operational limits."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Unpinned External Skill Installation",
+        "description": "Redis requests are redirected to separately maintained repositories, and users are told to install those skills. No immutable commit or reviewed package version is required.",
+        "locations": [
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 4,
+            "line_end": 6
+          },
+          {
+            "file": "references/services/redis/redis-to-amr.md",
+            "line_start": 64,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.91,
+        "confidence_reasoning": "The routing and installation instructions are explicit, but the linked repositories are external to this audited package. Their future content is outside this report."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 31,
+    "total_lines": 3461,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T19:35:25.639Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Upgrade Azure Workloads and Java SDKs",
+    "value_statement": "Azure upgrades can fail when compatibility, identity, deployment, and rollback details are missed. This skill provides phased assessments, migration steps, validation, and recovery guidance.",
+    "seo_keywords": [
+      "Azure upgrade",
+      "Azure Functions Flex Consumption",
+      "Azure Java SDK migration",
+      "Azure Managed Redis migration",
+      "OpenRewrite",
+      "cloud migration automation",
+      "Azure CLI",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Assess Linux Consumption Function Apps for Flex Consumption compatibility.",
+      "Guide app creation, configuration migration, deployment, validation, cleanup, and rollback.",
+      "Inventory legacy Azure Java SDK dependencies across Maven and Gradle projects.",
+      "Modernize com.microsoft.azure usage to supported com.azure libraries.",
+      "Resolve the latest Azure SDK BOM and apply OpenRewrite migration recipes.",
+      "Route ACR and ACRE migrations to the correct Azure Managed Redis skill."
+    ],
+    "limitations": [
+      "Only documented Functions, Java, and Redis scenarios have detailed workflows.",
+      "The Flex Consumption workflow supports Linux apps and excludes unsupported platform features.",
+      "Java automation requires Python 3.10 and a Maven or Gradle project.",
+      "Azure operations require authenticated tools, adequate permissions, and user approval for resource changes."
+    ],
+    "use_cases": [
+      {
+        "title": "Assess a Functions Upgrade",
+        "description": "Check a Linux Consumption app for Flex compatibility before creating resources.",
+        "target_user": "Azure platform engineer"
+      },
+      {
+        "title": "Modernize Java Dependencies",
+        "description": "Replace unsupported Azure Java SDK packages while preserving application behavior and tests.",
+        "target_user": "Java application maintainer"
+      },
+      {
+        "title": "Plan a Redis Migration",
+        "description": "Identify ACR or ACRE resources and select the correct managed Redis migration path.",
+        "target_user": "Cloud architect"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Check Flex Readiness",
+        "prompt": "Assess whether my Linux Consumption app <APP_NAME> in <RESOURCE_GROUP> can move to Flex Consumption. Do not create resources.",
+        "scenario": "Beginner assessment"
+      },
+      {
+        "title": "Create a Functions Plan",
+        "prompt": "Plan a Flex Consumption migration for <APP_NAME>. Include compatibility, identity, deployment, validation, rollback, and confirmation gates.",
+        "scenario": "Intermediate planning"
+      },
+      {
+        "title": "Plan Java Modernization",
+        "prompt": "Inventory the Java project at <PROJECT_PATH> for legacy Azure SDKs. Resolve the latest BOM and propose changes before execution.",
+        "scenario": "Advanced source migration planning"
+      },
+      {
+        "title": "Execute an Approved Java Plan",
+        "prompt": "Execute the approved migration for <PROJECT_PATH>. Confirm wrapper trust, apply required changes, run tests, and summarize remaining risks.",
+        "scenario": "Advanced controlled execution"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Assess my Linux Consumption function app for Flex Consumption.",
+        "output": [
+          "Eligibility: conditional",
+          "Blockers: deployment slots and polling blob triggers",
+          "Required action: convert triggers and choose a supported region",
+          "Next gate: confirm the target app before creation"
+        ]
+      },
+      {
+        "input": "Plan migration from legacy Azure Java management libraries.",
+        "output": [
+          "Inventory: legacy management and authentication packages found",
+          "Target: supported Azure Resource Manager and Azure Identity libraries",
+          "Validation: compile tests, run tests, and verify zero legacy references",
+          "Rollback: retain the migration branch and last successful commit"
+        ]
+      },
+      {
+        "input": "Which Redis migration path applies to Enterprise_E20?",
+        "output": "Enterprise_E20 is an ACRE resource. Use the reviewed ACRE to AMR migration skill after confirming its pinned source."
+      }
+    ],
+    "best_practices": [
+      "Complete assessment and rollback planning before changing Azure resources.",
+      "Use managed identity and preserve the original workload until validation succeeds.",
+      "Review wrappers, generated commands, and source changes before execution."
+    ],
+    "anti_patterns": [
+      "Do not delete or stop the original workload before explicit confirmation.",
+      "Do not print app settings, connection strings, tokens, or credential files.",
+      "Do not install external migration skills from an unreviewed mutable branch."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill migrate Windows Consumption apps?",
+        "answer": "No. The included Flex Consumption workflow covers Linux apps only."
+      },
+      {
+        "question": "Can it create Azure resources automatically?",
+        "answer": "It provides creation commands, but resource creation requires authenticated tools and explicit user confirmation."
+      },
+      {
+        "question": "Which Java build systems are supported?",
+        "answer": "The Java workflow supports Maven and Gradle, including documented version catalog variants."
+      },
+      {
+        "question": "Does it perform Redis migration directly?",
+        "answer": "No. It identifies ACR or ACRE and routes the request to a dedicated migration skill."
+      },
+      {
+        "question": "How does it protect rollback options?",
+        "answer": "It keeps the original workload available until the new workload passes validation and the user approves cleanup."
+      },
+      {
+        "question": "What access is required?",
+        "answer": "Assessment needs project access and Azure read permissions. Execution also needs approved write permissions and trusted local build tools."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "languages",
+          "type": "dir",
+          "path": "references/languages",
+          "children": [
+            {
+              "name": "java",
+              "type": "dir",
+              "path": "references/languages/java",
+              "children": [
+                {
+                  "name": "bom-migration",
+                  "type": "dir",
+                  "path": "references/languages/java/bom-migration"
+                },
+                {
+                  "name": "package-specific",
+                  "type": "dir",
+                  "path": "references/languages/java/package-specific"
+                },
+                {
+                  "name": "rules",
+                  "type": "dir",
+                  "path": "references/languages/java/rules"
+                },
+                {
+                  "name": "scripts",
+                  "type": "dir",
+                  "path": "references/languages/java/scripts"
+                },
+                {
+                  "name": "templates",
+                  "type": "dir",
+                  "path": "references/languages/java/templates"
+                },
+                {
+                  "name": "workflow",
+                  "type": "dir",
+                  "path": "references/languages/java/workflow"
+                },
+                {
+                  "name": "INSTRUCTION.md",
+                  "type": "file",
+                  "path": "references/languages/java/INSTRUCTION.md",
+                  "lines": 131
+                },
+                {
+                  "name": "README.md",
+                  "type": "file",
+                  "path": "references/languages/java/README.md",
+                  "lines": 36
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "services",
+          "type": "dir",
+          "path": "references/services",
+          "children": [
+            {
+              "name": "functions",
+              "type": "dir",
+              "path": "references/services/functions",
+              "children": [
+                {
+                  "name": "assessment.md",
+                  "type": "file",
+                  "path": "references/services/functions/assessment.md",
+                  "lines": 120
+                },
+                {
+                  "name": "automation.md",
+                  "type": "file",
+                  "path": "references/services/functions/automation.md",
+                  "lines": 422
+                },
+                {
+                  "name": "consumption-to-flex.md",
+                  "type": "file",
+                  "path": "references/services/functions/consumption-to-flex.md",
+                  "lines": 228
+                }
+              ]
+            },
+            {
+              "name": "redis",
+              "type": "dir",
+              "path": "references/services/redis",
+              "children": [
+                {
+                  "name": "redis-to-amr.md",
+                  "type": "file",
+                  "path": "references/services/redis/redis-to-amr.md",
+                  "lines": 103
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "global-rules.md",
+          "type": "file",
+          "path": "references/global-rules.md",
+          "lines": 48
+        },
+        {
+          "name": "workflow-details.md",
+          "type": "file",
+          "path": "references/workflow-details.md",
+          "lines": 60
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 92
+    }
+  ]
+}

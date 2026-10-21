@@ -1,0 +1,787 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T11:44:52.138Z",
+    "slug": "crearize-pre-commit-check",
+    "source_url": "https://github.com/Crearize/ProjectTemplate/tree/main/.claude/skills/pre-commit-check",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "6e0d08aae6f2ebfb94e33693fb83bf2cf0628424b2028268bf32a24d3f4a35db",
+    "tree_hash": "017503b2b0886bde1ffec4b60a9a0482df42f20df05e8c954b01f80ea7fd7fbc",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "pre-commit-check",
+    "description": "Runs a lightweight pre-commit quality check for changed backend and frontend files.",
+    "summary": "Checks lint, targeted tests, compile status, and TypeScript types before commit.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Crearize",
+    "license": "MIT",
+    "tags": [
+      "pre-commit",
+      "linting",
+      "testing",
+      "gradle",
+      "typescript"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Confirmed command-execution risk is limited to documented Gradle, pnpm, and npx checks that run project-controlled tooling. The remaining static detections are Markdown fences, inline file paths, report examples, or a high-entropy heuristic on readable Japanese Markdown; no prompt injection or obfuscation evidence was found.",
+    "remediation": [
+      {
+        "issue": "Project-local Gradle and pnpm commands can execute repository-controlled code.",
+        "suggestion": "Require user confirmation before running these scripts and show the exact commands first.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The npx type-check command may execute package binaries or fetch tooling.",
+        "suggestion": "Prefer a pinned local TypeScript command or require confirmation before any package execution.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The skill does not state trust boundaries for running build tools.",
+        "suggestion": "Add guidance to use the skill only in trusted repositories or after reviewing project scripts.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 167
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 167,
+            "line_end": 170
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 170,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 172
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 35,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 40,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 48,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 51,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 57,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 60,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 65,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 70,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 73,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 76,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 79,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 82,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 87,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 102,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 105,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 126,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 167,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 167,
+        "line_end": 170,
+        "snippet": "- `documents/development/development-policy.md`: 開発ガイドライン"
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 171,
+        "snippet": "- `backend/config/checkstyle/checkstyle.xml`: Checkstyle設定"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 172,
+        "snippet": "- `backend/config/spotbugs/spotbugs-exclude.xml`: SpotBugs設定"
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-39-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.39 bits) - possible binary/encrypted content",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: SKILL.md"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This block documents hardcoded read-only Git inspection commands for status and staged file names. It is not Ruby backtick execution and does not include user-controlled shell interpolation."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The detected text is a Markdown code-fence delimiter and nearby heading text. It contains no command invocation or executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.79,
+        "severity": "medium",
+        "reason": "This block tells the agent to run the project-local Gradle wrapper for Checkstyle and SpotBugs. Gradle wrappers and build scripts are repository-controlled code and can execute arbitrary tasks if run without user consent."
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The detected location is the closing Markdown fence before the test section. The actual Gradle command risk is covered by the following command block, not this delimiter."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "This block instructs execution of targeted Gradle tests through the project wrapper. Tests and Gradle configuration can run repository code, so this is a real external-command risk."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The finding points at a Markdown fence boundary and compile-section heading. It does not itself contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "medium",
+        "reason": "This block directs the agent to run Gradle compilation tasks via the project wrapper. Repository-controlled Gradle scripts can execute code during compilation."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The location is a Markdown fence delimiter and frontend section heading. No shell command is present at this detected location."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "severity": "medium",
+        "reason": "This block tells the agent to enter the frontend directory and run a pnpm script. Package scripts are project-controlled and can execute arbitrary commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The finding is the closing Markdown fence before the frontend test section. It contains no command text and is not executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.79,
+        "severity": "medium",
+        "reason": "This block instructs running a pnpm test script. Project-defined test scripts can execute arbitrary code and should require user awareness before execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The detected location is only a Markdown fence boundary before the type-check section. The location does not contain a command invocation."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.72,
+        "severity": "medium",
+        "reason": "This block instructs the agent to run npx tsc. npx executes package binaries and may run local or fetched tooling, which is a real external-command risk in untrusted projects."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The location is a Markdown code-fence delimiter before report examples. It contains no command execution instruction."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This block is a Markdown example of a successful report, not a shell command block. It does not direct execution or include executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The detected text is a Markdown fence boundary between output examples. It contains no command or dynamic execution pattern."
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This block is a Markdown example of a failed report. It is display text and does not execute commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The finding starts at a closing Markdown fence and continues through prose about workflow guidance. Command execution is already represented by the specific confirmed command blocks."
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The detected text is an inline Markdown path to a development policy document. It is not a command or Ruby backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The detected text is an inline Markdown path to a Checkstyle configuration file. It is documentation, not command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The detected text is an inline Markdown path to a SpotBugs configuration file. It does not execute code."
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-39-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The file is readable Markdown with Japanese text, YAML front matter, tables, and examples. No binary, encrypted, or obfuscated content is visible at line 1 or elsewhere in the reviewed file."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 48
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.79,
+        "confidence_reasoning": "This block tells the agent to run the project-local Gradle wrapper for Checkstyle and SpotBugs. Gradle wrappers and build scripts are repository-controlled code and can execute arbitrary tasks if run without user consent."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 54
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "This block instructs execution of targeted Gradle tests through the project wrapper. Tests and Gradle configuration can run repository code, so this is a real external-command risk."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 60
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "This block directs the agent to run Gradle compilation tasks via the project wrapper. Repository-controlled Gradle scripts can execute code during compilation."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 70
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "This block tells the agent to enter the frontend directory and run a pnpm script. Package scripts are project-controlled and can execute arbitrary commands."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 76
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.79,
+        "confidence_reasoning": "This block instructs running a pnpm test script. Project-defined test scripts can execute arbitrary code and should require user awareness before execution."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 82
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.72,
+        "confidence_reasoning": "This block instructs the agent to run npx tsc. npx executes package binaries and may run local or fetched tooling, which is a real external-command risk in untrusted projects."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 173,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T11:44:52.138Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Run Fast Pre-Commit Checks",
+    "value_statement": "Late quality failures slow commits and reviews. This skill guides Claude, Codex, or Claude Code through fast lint, test, compile, and type checks before committing.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "pre-commit check",
+      "quality gate",
+      "lint automation",
+      "Gradle tests",
+      "pnpm lint",
+      "TypeScript type check",
+      "developer workflow"
+    ],
+    "actual_capabilities": [
+      "Lists changed and staged files with Git status commands.",
+      "Runs Gradle Checkstyle and SpotBugs checks for backend changes.",
+      "Runs targeted Gradle tests when test execution is enabled.",
+      "Runs pnpm lint and changed-file tests for frontend changes.",
+      "Runs TypeScript type checking without emitting files.",
+      "Formats success and failure summaries with next steps."
+    ],
+    "limitations": [
+      "Does not run the full qa-check workflow.",
+      "Does not enforce coverage thresholds.",
+      "May skip build steps when speed is prioritized.",
+      "Requires configured Gradle, pnpm, Biome, and TypeScript tooling."
+    ],
+    "use_cases": [
+      {
+        "title": "Commit Readiness Check",
+        "description": "Run a focused quality pass before committing local changes.",
+        "target_user": "Application developers"
+      },
+      {
+        "title": "Frontend Change Validation",
+        "description": "Check lint, changed tests, and TypeScript status after UI edits.",
+        "target_user": "Frontend engineers"
+      },
+      {
+        "title": "Backend Quality Sweep",
+        "description": "Run style, static analysis, related tests, and compile checks for backend updates.",
+        "target_user": "Backend engineers"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Pre-Commit Check",
+        "scenario": "Before a normal commit",
+        "prompt": "Run the pre-commit check for my current changes. Keep tests enabled and summarize only blocking issues."
+      },
+      {
+        "title": "Frontend-Only Check",
+        "scenario": "After frontend edits",
+        "prompt": "Check only frontend changes. Run lint, changed tests, and type checks, then list fixes by priority."
+      },
+      {
+        "title": "Backend Staged Check",
+        "scenario": "Before committing backend files",
+        "prompt": "Run backend checks for staged changes. Include Checkstyle, SpotBugs, related tests, and compile results."
+      },
+      {
+        "title": "Selective Risk-Aware Check",
+        "scenario": "When the change set is mixed",
+        "prompt": "Compare staged and unstaged changes, choose the smallest safe check set, ask before running project scripts, and report remaining risks."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Run a normal pre-commit check before I commit.",
+        "output": [
+          "Changed files were reviewed.",
+          "Backend lint and compile checks passed.",
+          "Frontend type checking found one blocking issue.",
+          "Commit should wait until the type issue is fixed."
+        ]
+      },
+      {
+        "input": "Skip tests and check only frontend files.",
+        "output": "The report notes that tests were skipped, frontend lint passed, type checking passed, and follow-up testing is still required."
+      }
+    ],
+    "best_practices": [
+      "Review the exact commands before approving project script execution.",
+      "Keep tests enabled unless the commit is urgent and low risk.",
+      "Run the full qa-check workflow before opening a pull request."
+    ],
+    "anti_patterns": [
+      "Using this skill as the only release gate.",
+      "Skipping tests after changing behavior or shared code.",
+      "Running project scripts from repositories you do not trust."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill check?",
+        "answer": "It checks changed files with Git, backend quality tasks, frontend lint, selected tests, and TypeScript types."
+      },
+      {
+        "question": "Is this a replacement for qa-check?",
+        "answer": "No. It is a faster local check for commits. The full qa-check workflow is still needed before pull requests."
+      },
+      {
+        "question": "Can tests be skipped?",
+        "answer": "Yes, but the skill recommends skipping tests only for urgent, low-risk changes."
+      },
+      {
+        "question": "Does it run coverage checks?",
+        "answer": "No. The source skill states that coverage is not checked in this lightweight workflow."
+      },
+      {
+        "question": "Which project tools does it expect?",
+        "answer": "It expects Git, Bash, Gradle, pnpm, Biome linting, and TypeScript type checking to be available."
+      },
+      {
+        "question": "Should I approve every command automatically?",
+        "answer": "No. Review commands first, especially Gradle, pnpm, and npx commands in unfamiliar repositories."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 173
+    }
+  ]
+}

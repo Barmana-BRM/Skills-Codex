@@ -1,0 +1,74 @@
+name: Desktop
+
+on:
+  push:
+    branches: [main]
+    paths: ["desktop/**", "scripts/**", ".github/workflows/desktop.yml"]
+  pull_request:
+    branches: [main]
+    paths: ["desktop/**", "scripts/**", ".github/workflows/desktop.yml"]
+
+jobs:
+  check:
+    name: check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/setup-uv@v10.0.1
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri
+
+      - name: Install Tauri Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      # tauri-build refuses to compile without the externalBin present for the
+      # host triple, so the sidecar is built before any cargo step.
+      - name: Build the skill_registry sidecar
+        run: npm run sidecar
+
+      - name: Sidecar smoke test
+        shell: bash
+        run: |
+          bin=$(ls src-tauri/binaries/skill_registry-*)
+          "$bin" platforms --json | head -3
+          AGENT_SKILLS_HOME="$RUNNER_TEMP/ash" "$bin" installed
+
+      - name: Type-check and build the frontend
+        run: npm run build
+
+      - name: Check the Rust bridge
+        run: cargo check --manifest-path src-tauri/Cargo.toml --locked
+
+      - name: Clippy
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked -- -D warnings
+
+      - name: Rust tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml --locked

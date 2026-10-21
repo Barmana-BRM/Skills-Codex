@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d0c" />
+    <meta
+      name="description"
+      content="把 FIT 或 KML 运动轨迹和沿途照片组合成可分享的 3D 路线故事。所有文件只在浏览器本地处理。"
+    />
+    <title>Route Relief — 3D 运动路线故事</title>
+  </head>
+  <body>
+    <div id="app" data-mode="analysis">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Ride Relief 首页">
+          <span class="brand-mark" aria-hidden="true"><i class="ph ph-person-simple-bike"></i></span>
+          <span>
+            <strong>RIDE RELIEF</strong>
+            <small>3D ROUTE STORIES</small>
+          </span>
+        </a>
+
+        <nav class="mode-tabs" aria-label="工作界面">
+          <button id="analysis-mode-button" class="mode-tab is-active" type="button" aria-pressed="true">
+            <i class="ph ph-chart-line-up" aria-hidden="true"></i>分析报告
+          </button>
+          <button id="export-mode-button" class="mode-tab" type="button" aria-pressed="false">
+            <i class="ph ph-sliders-horizontal" aria-hidden="true"></i>导出创作
+          </button>
+        </nav>
+
+        <div class="top-actions">
+          <span class="privacy-pill"><i class="ph ph-shield-check" aria-hidden="true"></i>仅在本地处理</span>
+          <label class="button button-secondary file-button">
+            <input id="fit-input" type="file" accept=".fit,.kml,application/octet-stream,application/vnd.google-earth.kml+xml" />
+            <i class="ph ph-file-arrow-up" aria-hidden="true"></i>打开轨迹
+          </label>
+          <label class="button button-secondary file-button export-only-action">
+            <input id="photo-input" type="file" accept="image/*" multiple />
+            <i class="ph ph-image-square" aria-hidden="true"></i>添加照片
+          </label>
+          <button id="export-button" class="button button-primary" type="button"><i class="ph ph-export" aria-hidden="true"></i>导出创作</button>
+        </div>
+      </header>
+
+      <div id="analysis-view" class="app-view analysis-view">
+      <main class="workspace">
+        <section id="share-stage" class="share-stage" aria-label="3D 运动路线预览">
+          <canvas id="route-canvas" role="img" aria-label="根据轨迹数据生成的三维运动路线"></canvas>
+          <div class="stage-vignette"></div>
+          <div class="stage-grain"></div>
+
+          <div class="stage-copy">
+            <span class="eyebrow" id="activity-kicker">BEIJING · EVENING RIDE</span>
+            <h1 id="activity-title" contenteditable="true" spellcheck="false" aria-label="运动故事标题">晚风十六公里</h1>
+            <p id="activity-coordinate">40.243° N · 116.264° E</p>
+          </div>
+
+          <div class="live-readout" aria-label="当前路线播放位置">
+            <span id="live-distance">0.00</span>
+            <small>KM</small>
+            <i></i>
+            <span id="live-secondary">0.0</span>
+            <small id="live-secondary-unit">KM/H</small>
+          </div>
+
+          <div class="slope-scale" aria-label="坡度颜色：冷色代表下坡，浅色代表平缓，暖色代表爬坡">
+            <div class="slope-scale-heading">
+              <span><i class="ph ph-mountains" aria-hidden="true"></i>坡度色谱</span>
+              <small>连续渐变</small>
+            </div>
+            <i class="slope-scale-bar"></i>
+            <div class="slope-scale-labels" aria-hidden="true">
+              <span>−8% 下坡</span>
+              <span>0% 平缓</span>
+              <span>+10% 爬坡</span>
+            </div>
+          </div>
+
+          <div id="photo-story" class="photo-story" hidden>
+            <img id="photo-preview" alt="当前沿途照片" />
+            <div class="photo-story-index"><span id="photo-current">01</span> / <span id="photo-total">01</span></div>
+            <div>
+              <strong id="photo-title">沿途照片</strong>
+              <span id="photo-meta">按拍摄时间落在路线中</span>
+            </div>
+          </div>
+
+          <div class="scene-controls" data-export-hide>
+            <button id="spin-button" class="icon-button is-active" type="button" title="自动旋转" aria-label="自动旋转" aria-pressed="true">
+              <i class="ph ph-arrows-clockwise" aria-hidden="true"></i>
+            </button>
+            <button id="reset-button" class="icon-button" type="button" title="重置视角" aria-label="重置视角">
+              <i class="ph ph-crosshair" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div id="stage-loader" class="stage-loader">
+            <div class="loader-orbit"><i></i></div>
+            <span>正在生成路线地形</span>
+          </div>
+
+          <div class="stage-signature">RIDE / RELIEF <span>001</span></div>
+        </section>
+
+        <aside class="inspector">
+          <section class="inspector-section activity-section">
+            <div class="section-heading">
+              <div>
+                <span class="section-number">01</span>
+                <i id="activity-summary-icon" class="ph ph-bicycle section-icon" aria-hidden="true"></i>
+                <h2 id="activity-summary-title">这次骑行</h2>
+              </div>
+              <span id="activity-source" class="source-chip">MAGENE C606V2</span>
+            </div>
+
+            <div class="metric-hero">
+              <strong id="metric-distance">16.06</strong>
+              <span>公里</span>
+            </div>
+
+            <div class="metric-grid">
+              <div id="metric-duration-card"><span><i class="ph ph-timer" aria-hidden="true"></i>移动时间</span><strong id="metric-duration">45:58</strong></div>
+              <div id="metric-speed-card"><span><i id="metric-speed-icon" class="ph ph-gauge" aria-hidden="true"></i><b id="metric-speed-label">平均速度</b></span><strong id="metric-speed">20.9 <small>km/h</small></strong></div>
+              <div><span><i class="ph ph-mountains" aria-hidden="true"></i>累计爬升</span><strong id="metric-ascent">151 <small>m</small></strong></div>
+              <div id="metric-calories-card"><span><i class="ph ph-fire" aria-hidden="true"></i>消耗估算</span><strong id="metric-calories">592 <small>kcal</small></strong></div>
+              <div id="metric-max-card"><span><i id="metric-max-icon" class="ph ph-speedometer" aria-hidden="true"></i><b id="metric-max-label">最高速度</b></span><strong id="metric-max-speed">39.0 <small>km/h</small></strong></div>
+              <div id="metric-cadence-card"><span><i id="metric-cadence-icon" class="ph ph-person-simple-bike" aria-hidden="true"></i><b id="metric-cadence-label">有效踏频</b></span><strong id="metric-cadence">72 <small>rpm</small></strong></div>
+            </div>
+          </section>
+
+          <section class="inspector-section analysis-section">
+            <div class="section-heading compact">
+              <div>
+                <span class="section-number">02</span>
+                <i class="ph ph-chart-line-up section-icon" aria-hidden="true"></i>
+                <h2 id="activity-profile-heading">骑行画像</h2>
+              </div>
+              <span id="analysis-data-quality" class="section-meta">5 / 7 数据维度</span>
+            </div>
+
+            <div class="ride-profile-card">
+              <span id="activity-profile-label">RIDE PROFILE</span>
+              <strong id="analysis-profile-title">轻度起伏 · 闭环完成</strong>
+              <p id="analysis-profile-copy">巡航段占主导，每公里爬升约 9.4 米。</p>
+            </div>
+
+            <article id="location-context-card" class="location-context-card" hidden>
+              <div class="analysis-subheading">
+                <span><i class="ph ph-map-pin-area" aria-hidden="true"></i>地点情境</span>
+                <small id="location-confidence">待确认</small>
+              </div>
+              <strong id="location-name">路线地点</strong>
+              <span id="location-region">仅显示公开区域名称</span>
+              <p id="location-summary"></p>
+              <ul id="location-facts"></ul>
+              <div id="location-sources" class="location-sources"></div>
+            </article>
+
+            <div id="pace-distribution" class="pace-distribution">
+              <div class="analysis-subheading"><span><i class="ph ph-speedometer" aria-hidden="true"></i><b id="pace-heading">速度结构</b></span><small id="pace-data-status">按轨迹记录占比</small></div>
+              <div class="pace-bar" aria-label="速度区间分布">
+                <i id="pace-easy-bar" class="pace-easy"></i>
+                <i id="pace-steady-bar" class="pace-steady"></i>
+                <i id="pace-fast-bar" class="pace-fast"></i>
+              </div>
+              <div class="pace-legend">
+                <span><i class="pace-easy"></i><b id="pace-easy-label">轻松</b> <strong id="pace-easy-value">27%</strong></span>
+                <span><i class="pace-steady"></i><b id="pace-steady-label">巡航</b> <strong id="pace-steady-value">41%</strong></span>
+                <span><i class="pace-fast"></i><b id="pace-fast-label">快速</b> <strong id="pace-fast-value">32%</strong></span>
+              </div>
+            </div>
+
+            <div id="cadence-analysis-card" class="cadence-card">
+              <div class="analysis-subheading">
+                <span><i id="cadence-heading-icon" class="ph ph-person-simple-bike" aria-hidden="true"></i><b id="cadence-heading">踏频分析</b></span>
+                <small id="cadence-data-status">踩踏记录</small>
+              </div>
+              <div class="cadence-metrics">
+                <div><span>有效平均</span><strong id="analysis-cadence-average">72 <small>rpm</small></strong></div>
+                <div><span id="cadence-max-label">最高踏频</span><strong id="analysis-cadence-max">106 <small>rpm</small></strong></div>
+                <div><span id="cadence-coverage-label">踩踏覆盖</span><strong id="analysis-cadence-coverage">68%</strong></div>
+              </div>
+              <div class="cadence-bar" aria-label="有效踩踏期间的踏频区间分布">
+                <i id="cadence-low-bar" class="cadence-low"></i>
+                <i id="cadence-cruise-bar" class="cadence-cruise"></i>
+                <i id="cadence-high-bar" class="cadence-high"></i>
+              </div>
+              <div class="cadence-legend">
+                <span><i class="cadence-low"></i>&lt;70 <strong id="cadence-low-value">31%</strong></span>
+                <span><i class="cadence-cruise"></i>70–90 <strong id="cadence-cruise-value">55%</strong></span>
+                <span><i class="cadence-high"></i>&gt;90 <strong id="cadence-high-value">14%</strong></span>
+              </div>
+              <p id="cadence-insight">巡航踏频占主导，滑行与停车记录会从有效平均值中排除。</p>
+            </div>
+
+            <div id="grade-analysis-card" class="grade-card">
+              <div class="analysis-subheading">
+                <span><i class="ph ph-mountains" aria-hidden="true"></i>坡度与爬坡</span>
+                <small id="grade-data-status">按有效距离统计</small>
+              </div>
+              <div class="grade-metrics">
+                <div><span>最高记录</span><strong id="analysis-grade-max">—</strong></div>
+                <div><span>代表性陡坡</span><strong id="analysis-grade-representative">—</strong></div>
+                <div><span>坡度覆盖</span><strong id="analysis-grade-coverage">—</strong></div>
+              </div>
+              <div class="grade-bar" aria-label="按有效距离计算的坡度区间分布">
+                <i id="grade-descent-bar" class="grade-descent"></i>
+                <i id="grade-flat-bar" class="grade-flat"></i>
+                <i id="grade-climb-bar" class="grade-climb"></i>
+                <i id="grade-steep-bar" class="grade-steep"></i>
+              </div>
+              <div class="grade-legend">
+                <span><i class="grade-descent"></i>&lt;−3% <strong id="grade-descent-value">—</strong></span>
+                <span><i class="grade-flat"></i>−3–3% <strong id="grade-flat-value">—</strong></span>
+                <span><i class="grade-climb"></i>3–6% <strong id="grade-climb-value">—</strong></span>
+                <span><i class="grade-steep"></i>&gt;6% <strong id="grade-steep-value">—</strong></span>
+              </div>
+              <div id="analysis-climb-list" class="climb-list" aria-label="主要爬坡路段"></div>
+              <p id="grade-insight">坡度分布按骑行距离加权，避免慢速路段因采样更密而被夸大。</p>
+            </div>
+
+            <div class="analysis-grid">
+              <div id="analysis-moving-card"><span><i class="ph ph-path" aria-hidden="true"></i>移动占比</span><strong id="analysis-moving-ratio">77%</strong></div>
+              <div id="analysis-pause-card"><span><i class="ph ph-clock-countdown" aria-hidden="true"></i>暂停时间</span><strong id="analysis-pause-time">13:58</strong></div>
+              <div><span><i class="ph ph-mountains" aria-hidden="true"></i>海拔范围</span><strong id="analysis-altitude-range">60–115 <small>m</small></strong></div>
+              <div><span><i class="ph ph-thermometer" aria-hidden="true"></i>平均气温</span><strong id="analysis-temperature">26 <small>°C</small></strong></div>
+              <div><span><i class="ph ph-chart-line-up" aria-hidden="true"></i>爬升密度</span><strong id="analysis-ascent-density">9.4 <small>m/km</small></strong></div>
+              <div><span><i class="ph ph-map-pin" aria-hidden="true"></i>起终点距离</span><strong id="analysis-route-gap">5 <small>m</small></strong></div>
+            </div>
+
+            <div class="trend-card">
+              <div class="analysis-subheading">
+                <span><i class="ph ph-chart-line-up" aria-hidden="true"></i><b id="trend-heading">海拔 / 速度趋势</b></span>
+                <small>整段路线</small>
+              </div>
+              <canvas id="analysis-chart" role="img" aria-label="整段骑行的海拔和速度趋势"></canvas>
+              <div class="trend-legend">
+                <span><i class="altitude-line"></i>海拔</span>
+                <span id="trend-speed-legend"><i class="speed-line"></i>速度</span>
+              </div>
+            </div>
+
+            <div id="sensor-card" class="sensor-card" hidden>
+              <div class="analysis-subheading">
+                <span><i class="ph ph-pulse" aria-hidden="true"></i>训练传感器</span>
+                <small>仅显示轨迹实测字段</small>
+              </div>
+              <div class="sensor-grid">
+                <div id="heart-rate-metric"><span><i class="ph ph-heartbeat" aria-hidden="true"></i>平均 / 最大心率</span><strong id="analysis-heart-rate">—</strong></div>
+                <div id="power-metric"><span><i class="ph ph-lightning" aria-hidden="true"></i>平均 / 最大功率</span><strong id="analysis-power">—</strong></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="inspector-section deep-analysis-section">
+            <div class="section-heading compact">
+              <div>
+                <span class="section-number">03</span>
+                <i class="ph ph-sparkle section-icon" aria-hidden="true"></i>
+                <h2>深度分析</h2>
+              </div>
+              <span id="skill-analysis-source" class="section-meta">轨迹本地分析</span>
+            </div>
+            <div id="deep-analysis-list" class="deep-analysis-list" role="list"></div>
+            <p id="deep-analysis-note" class="recommendation-disclaimer">固定指标由轨迹文件计算；扩展内容可由分析 Skill 按本次活动动态生成。</p>
+          </section>
+
+          <section class="inspector-section recommendation-section">
+            <div class="section-heading compact">
+              <div>
+                <span class="section-number">04</span>
+                <i class="ph ph-lightbulb section-icon" aria-hidden="true"></i>
+                <h2>行动建议</h2>
+              </div>
+              <span id="recommendation-count" class="section-meta">4 条</span>
+            </div>
+            <div id="recommendation-list" class="recommendation-list" role="list"></div>
+            <p class="recommendation-disclaimer">建议仅基于本次设备记录，用于路线复盘，不替代专业训练或医疗判断。</p>
+          </section>
+
+          <section class="privacy-note">
+            <span><i class="ph ph-shield-check" aria-hidden="true"></i>PRIVATE BY DEFAULT</span>
+            <p>轨迹与照片不会离开这台设备。导出前请留意路线可能暴露住址或常去地点。</p>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="timeline" data-export-hide>
+        <button id="play-button" class="play-button" type="button" aria-label="暂停动画">
+          <i class="ph ph-pause play-state-icon" aria-hidden="true"></i>
+          <i class="ph ph-play pause-state-icon" aria-hidden="true"></i>
+        </button>
+        <div class="timeline-track">
+          <div class="timeline-meta">
+            <span id="timeline-time">00:00</span>
+            <span id="timeline-label">ROUTE PLAYBACK</span>
+            <span id="timeline-duration">45:58</span>
+          </div>
+          <input id="progress-input" type="range" min="0" max="1000" value="0" aria-label="路线播放进度" />
+        </div>
+        <div class="timeline-tip">拖动画面旋转 · 滚轮缩放</div>
+      </footer>
+      </div>
+
+      <section id="export-view" class="app-view export-workspace" hidden aria-label="导出创作界面">
+        <div class="export-canvas-area">
+          <header class="export-editor-heading">
+            <div>
+              <span class="section-number">COMPOSER 02</span>
+              <h1>把路线叠在你的画面上</h1>
+              <p>地图与路线点会持续循环，数据卡固定显示全程汇总。点选图层后再拖动或缩放。</p>
+            </div>
+            <div class="format-switcher" role="group" aria-label="导出画幅">
+              <button class="is-active" type="button" data-format="portrait" aria-pressed="true">9:16</button>
+              <button type="button" data-format="portrait34" aria-pressed="false">3:4</button>
+              <button type="button" data-format="square" aria-pressed="false">1:1</button>
+              <button type="button" data-format="landscape" aria-pressed="false">16:9</button>
+            </div>
+          </header>
+
+          <div class="export-stage-shell">
+            <div id="export-stage" class="export-stage format-portrait" aria-label="导出画布预览">
+              <img id="export-background-image" class="export-background" src="/backgrounds/flower-arch-UgnyQu8aLwc.jpg" alt="拱门外的蓝天和粉色花田" />
+              <img id="export-background-transition-image" class="export-background export-transition-background" alt="下一张沿途照片" hidden />
+              <video id="export-background-video" class="export-background" playsinline muted preload="metadata" hidden></video>
+              <div class="export-stage-shade"></div>
+
+              <div id="export-map-overlay" class="composer-overlay map-overlay" data-overlay="map" tabindex="0" aria-label="可拖动缩放的动态路线地图">
+                <canvas id="export-route-canvas" role="img" aria-label="导出画面的动态三维路线"></canvas>
+                <button class="overlay-resize-handle" type="button" aria-label="调整地图大小"><i class="ph ph-arrows-out-simple" aria-hidden="true"></i></button>
+              </div>
+
+              <div id="export-data-overlay" class="composer-overlay export-data-card style-glass" data-overlay="data" tabindex="0" aria-label="可拖动缩放的运动数据卡片">
+                <div class="export-card-heading">
+                  <span class="export-summary-label"><i id="export-summary-icon" class="ph ph-bicycle" aria-hidden="true"></i><b id="export-summary-title">RIDE SUMMARY</b></span>
+                  <div class="export-card-meta">
+                    <span id="export-location" class="export-location" hidden><i class="ph ph-map-pin-area" aria-hidden="true"></i><span>路线地点</span></span>
+                    <small id="export-live-time">00:00</small>
+                  </div>
+                </div>
+                <strong class="export-distance"><span id="export-live-distance">0.00</span><small>KM</small></strong>
+                <div class="export-data-grid">
+                  <div id="export-speed-field"><span><i id="export-speed-icon" class="ph ph-speedometer" aria-hidden="true"></i><b id="export-speed-label">平均速度</b></span><strong><b id="export-live-speed">0.0</b> <em id="export-speed-unit">km/h</em></strong></div>
+                  <div><span><i class="ph ph-mountains" aria-hidden="true"></i>累计爬升</span><strong><b id="export-live-ascent">0</b> m</strong></div>
+                  <div id="export-max-field"><span><i id="export-max-icon" class="ph ph-gauge" aria-hidden="true"></i><b id="export-max-label">最高速度</b></span><strong><b id="export-live-max-speed">0.0</b> <em id="export-max-unit">km/h</em></strong></div>
+                  <div id="export-cadence-field"><span><i id="export-cadence-icon" class="ph ph-person-simple-bike" aria-hidden="true"></i><b id="export-cadence-label">平均踏频</b></span><strong><b id="export-live-cadence">—</b> <em id="export-cadence-unit">rpm</em></strong></div>
+                  <div id="export-calories-field"><span><i class="ph ph-fire" aria-hidden="true"></i>热量</span><strong><b id="export-live-calories">0</b> kcal</strong></div>
+                  <div id="export-temperature-field"><span><i class="ph ph-thermometer-simple" aria-hidden="true"></i>平均气温</span><strong><b id="export-live-temperature">—</b> °C</strong></div>
+                  <div id="export-heart-field" hidden><span><i class="ph ph-heartbeat" aria-hidden="true"></i>平均心率</span><strong><b id="export-live-heart">—</b> bpm</strong></div>
+                  <div id="export-power-field" hidden><span><i class="ph ph-lightning" aria-hidden="true"></i>平均功率</span><strong><b id="export-live-power">—</b> W</strong></div>
+                </div>
+                <button class="overlay-resize-handle" type="button" aria-label="调整数据卡大小"><i class="ph ph-arrows-out-simple" aria-hidden="true"></i></button>
+              </div>
+
+              <div id="export-watermark" class="export-watermark"><i class="ph ph-shield-check" aria-hidden="true"></i><span>MAGENE_C606V2.fit</span></div>
+            </div>
+          </div>
+
+          <div class="export-auto-status" aria-live="polite">
+            <i></i>
+            <strong>自动循环预览</strong>
+            <span id="export-sync-status">地图约 10 秒一圈 · 路线点循环移动</span>
+          </div>
+        </div>
+
+        <aside class="export-settings">
+          <section class="export-setting-section">
+            <div class="export-setting-heading"><span>01</span><div><h2>沿途照片</h2><p><span id="photo-count">0 张</span> · 绑定路线位置并选择封面</p></div></div>
+            <button id="photo-drop" class="photo-drop" type="button">
+              <span class="photo-drop-icon"><i class="ph ph-image-square" aria-hidden="true"></i></span>
+              <span><strong>添加沿途照片</strong><small>自动读取 GPS / 拍摄时间，也可手动选点</small></span>
+            </button>
+            <div id="photo-route-editor" class="photo-route-editor" hidden>
+              <div class="photo-route-editor-heading">
+                <span><i class="ph ph-path" aria-hidden="true"></i>2D 路线绑定</span>
+                <small id="photo-route-selection">请选择一张照片</small>
+              </div>
+              <svg id="photo-route-map" class="photo-route-map" viewBox="0 0 320 180" role="img" aria-label="点击二维路线，为选中的照片指定位置">
+                <path class="photo-route-shadow" d=""></path>
+                <path id="photo-route-path" d=""></path>
+                <g id="photo-route-markers"></g>
+              </svg>
+              <p id="photo-route-status">先选择下方照片，再点击路线上的位置；也可以使用 GPS 或拍摄时间自动匹配。</p>
+              <div class="photo-route-actions">
+                <button id="photo-auto-match" type="button"><i class="ph ph-crosshair" aria-hidden="true"></i>自动匹配</button>
+                <button id="photo-set-cover" type="button"><i class="ph ph-image" aria-hidden="true"></i>设为封面</button>
+              </div>
+            </div>
+            <div id="photo-list" class="photo-list"></div>
+            <label class="route-photo-source">
+              <span><strong><i class="ph ph-images" aria-hidden="true"></i>沿途照片故事</strong><small id="route-photo-summary">添加沿途照片后可启用</small></span>
+              <input id="route-photo-toggle" type="checkbox" disabled />
+            </label>
+            <label id="photo-duration-control" class="photo-duration-control" hidden>
+              <span><strong>每张停留</strong><small id="photo-duration-total">按照片数量计算总时长</small></span>
+              <select id="photo-seconds-input" aria-label="每张沿途照片的展示时长">
+                <option value="2">2 秒</option>
+                <option value="2.5" selected>2.5 秒</option>
+                <option value="3">3 秒</option>
+              </select>
+            </label>
+          </section>
+
+          <section class="export-setting-section">
+            <div class="export-setting-heading"><span>02</span><div><h2>背景素材</h2><p>一张照片或一段视频</p></div></div>
+            <label class="media-upload-button">
+              <input id="background-media-input" type="file" accept="image/*,video/*" />
+              <i class="ph ph-upload-simple" aria-hidden="true"></i>
+              <span><strong>上传照片或视频</strong><small>素材只在本地浏览器处理</small></span>
+            </label>
+            <div class="preset-library-heading"><span>精选背景</span><small>11 张 · 点击切换</small></div>
+            <div class="background-presets" role="group" aria-label="Unsplash 精选抽象背景">
+              <button class="background-preset is-active" type="button" data-background="/backgrounds/flower-arch-UgnyQu8aLwc.jpg" data-credit="Nelli Chaitanya" data-source="https://unsplash.com/photos/field-of-pink-flowers-under-an-archway-to-blue-sky-UgnyQu8aLwc" aria-pressed="true">
+                <img src="/backgrounds/flower-arch-UgnyQu8aLwc.jpg" alt="拱门外的蓝天和粉色花田" fetchpriority="high" /><span><strong>花野之门</strong><small>Nelli Chaitanya</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/desert-window-WFXNp8G8-7Q.jpg" data-credit="Mehrab Sium" data-source="https://unsplash.com/photos/arid-landscape-viewed-through-a-circular-window-in-a-cave-WFXNp8G8-7Q" aria-pressed="false">
+                <img src="/backgrounds/desert-window-WFXNp8G8-7Q.jpg" alt="洞穴圆窗外的荒漠景观" loading="lazy" /><span><strong>荒野圆窗</strong><small>Mehrab Sium</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/reflective-strips-nOlAc9Wyth0.jpg" data-credit="Egor Litvinov" data-source="https://unsplash.com/photos/vertical-reflective-strips-with-blurred-colorful-light-reflections-nOlAc9Wyth0" aria-pressed="false">
+                <img src="/backgrounds/reflective-strips-nOlAc9Wyth0.jpg" alt="彩色光影下的反光竖条" loading="lazy" /><span><strong>霓虹反光</strong><small>Egor Litvinov</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/iridescent-blobs-3WUiwmyoNEw.jpg" data-credit="Kir" data-source="https://unsplash.com/photos/a-close-up-of-a-cell-phone-with-a-black-background-3WUiwmyoNEw" aria-pressed="false">
+                <img src="/backgrounds/iridescent-blobs-3WUiwmyoNEw.jpg" alt="黑色背景上的虹彩流体" loading="lazy" /><span><strong>虹彩流体</strong><small>Kir</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/metal-bars-99nH7wuAMNA.jpg" data-credit="ObjectType RAW" data-source="https://unsplash.com/photos/textured-metal-bars-creating-a-diagonal-pattern-99nH7wuAMNA" aria-pressed="false">
+                <img src="/backgrounds/metal-bars-99nH7wuAMNA.jpg" alt="斜向排列的纹理金属条" loading="lazy" /><span><strong>金属斜纹</strong><small>ObjectType RAW</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/monochrome-lines-7Mj_bOnc9f8.jpg" data-credit="Resource Database" data-source="https://unsplash.com/photos/abstract-black-and-white-vertical-lines-and-blurred-shapes-7Mj_bOnc9f8" aria-pressed="false">
+                <img src="/backgrounds/monochrome-lines-7Mj_bOnc9f8.jpg" alt="黑白竖线和模糊人影" loading="lazy" /><span><strong>黑白频谱</strong><small>Resource Database</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/clear-spiral-FV8ZkyFXbzs.jpg" data-credit="Milad Fakurian" data-source="https://unsplash.com/photos/shiny-clear-spiral-abstract-object-with-reflections-FV8ZkyFXbzs" aria-pressed="false">
+                <img src="/backgrounds/clear-spiral-FV8ZkyFXbzs.jpg" alt="带反光的透明螺旋体" loading="lazy" /><span><strong>液态银环</strong><small>Milad Fakurian</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/gold-spiral-4oHNSrSSZXo.jpg" data-credit="Milad Fakurian" data-source="https://unsplash.com/photos/shiny-abstract-golden-spiral-with-bright-reflections-4oHNSrSSZXo" aria-pressed="false">
+                <img src="/backgrounds/gold-spiral-4oHNSrSSZXo.jpg" alt="明亮反光的金色螺旋体" loading="lazy" /><span><strong>液态金环</strong><small>Milad Fakurian</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/blue-panels-Epjx67LMVqY.jpg" data-credit="Egor Litvinov" data-source="https://unsplash.com/photos/vertical-blue-metallic-panels-with-light-and-shadow-Epjx67LMVqY" aria-pressed="false">
+                <img src="/backgrounds/blue-panels-Epjx67LMVqY.jpg" alt="带光影的蓝色金属板" loading="lazy" /><span><strong>深蓝面板</strong><small>Egor Litvinov</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/blue-blocks-QM6sJUVoGgI.jpg" data-credit="Pawel Czerwinski" data-source="https://unsplash.com/photos/an-abstract-blue-background-with-squares-and-rectangles-QM6sJUVoGgI" aria-pressed="false">
+                <img src="/backgrounds/blue-blocks-QM6sJUVoGgI.jpg" alt="蓝色方块构成的抽象背景" loading="lazy" /><span><strong>冰蓝方块</strong><small>Pawel Czerwinski</small></span>
+              </button>
+              <button class="background-preset" type="button" data-background="/backgrounds/pastel-curves-v9m4LaVHe7c.jpg" data-credit="Micke Lindström" data-source="https://unsplash.com/photos/abstract-pastel-curves-with-orange-and-purple-light-v9m4LaVHe7c" aria-pressed="false">
+                <img src="/backgrounds/pastel-curves-v9m4LaVHe7c.jpg" alt="粉橙和紫色的抽象曲面" loading="lazy" /><span><strong>粉橙曲面</strong><small>Micke Lindström</small></span>
+              </button>
+            </div>
+            <p id="background-credit" class="asset-credit"><span id="background-credit-text">背景：Nelli Chaitanya · Unsplash</span><a id="background-credit-link" href="https://unsplash.com/photos/field-of-pink-flowers-under-an-archway-to-blue-sky-UgnyQu8aLwc" target="_blank" rel="noreferrer">查看原图 <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></p>
+          </section>
+
+          <section class="export-setting-section">
+            <div class="export-setting-heading"><span>03</span><div><h2>图层与尺寸</h2><p>画布中可直接拖动</p></div></div>
+            <div class="layer-row"><label><input id="map-layer-toggle" type="checkbox" checked />动态地图</label><input id="map-size-input" type="range" min="28" max="92" value="90" aria-label="地图大小" /></div>
+            <div class="layer-row"><label><input id="data-layer-toggle" type="checkbox" checked />数据卡片</label><input id="data-size-input" type="range" min="32" max="88" value="87" aria-label="数据卡大小" /></div>
+            <div class="layer-row compact"><label><input id="watermark-toggle" type="checkbox" checked />显示水印</label></div>
+          </section>
+
+          <section class="export-setting-section">
+            <div class="export-setting-heading"><span>04</span><div><h2>轨迹数据模式</h2><p id="export-data-mode-copy">卡片使用整段活动汇总</p></div></div>
+            <div id="export-data-sources" class="export-data-sources" aria-label="可用轨迹数据字段">
+              <span id="speed-source-chip"><i class="ph ph-speedometer"></i><b id="speed-source-label">平均速度</b></span>
+              <span><i class="ph ph-mountains"></i>累计爬升</span>
+              <span id="max-source-chip"><i class="ph ph-gauge"></i><b id="max-source-label">最高速度</b></span>
+              <span id="cadence-source-chip"><i class="ph ph-person-simple-bike"></i><b id="cadence-source-label">平均踏频</b></span>
+              <span id="calories-source-chip"><i class="ph ph-fire"></i>热量</span>
+              <span id="temperature-source-chip"><i class="ph ph-thermometer-simple"></i>平均气温</span>
+              <span id="heart-source-chip" hidden><i class="ph ph-heartbeat"></i>平均心率</span>
+              <span id="power-source-chip" hidden><i class="ph ph-lightning"></i>平均功率</span>
+            </div>
+            <p id="export-data-summary-copy" class="sync-copy">地图约 10 秒完成一圈旋转，路线点持续移动。卡片固定展示整段活动的可用汇总指标。</p>
+          </section>
+
+          <section class="export-setting-section">
+            <div class="export-setting-heading"><span>05</span><div><h2>样式与水印</h2><p>控制信息层的视觉语气</p></div></div>
+            <div class="card-style-options" role="group" aria-label="数据卡片样式">
+              <button class="is-active" type="button" data-card-style="glass" aria-pressed="true">玻璃</button>
+              <button type="button" data-card-style="solid" aria-pressed="false">实色</button>
+              <button type="button" data-card-style="minimal" aria-pressed="false">极简</button>
+            </div>
+            <label class="watermark-field"><span>水印文字</span><input id="watermark-input" type="text" value="MAGENE_C606V2.fit" maxlength="48" /></label>
+          </section>
+
+          <section class="export-setting-section export-actions-section">
+            <div class="export-setting-heading"><span>06</span><div><h2>渲染导出</h2><p id="export-output-hint">正在读取导出参数…</p></div></div>
+            <div class="export-action-grid">
+              <button id="export-image-button" class="button button-secondary" type="button"><i class="ph ph-image" aria-hidden="true"></i>导出图片</button>
+              <button id="export-video-button" class="button button-primary" type="button"><i class="ph ph-video-camera" aria-hidden="true"></i>导出 MP4</button>
+            </div>
+            <p id="render-status" class="render-status">正在准备导出功能…</p>
+          </section>
+        </aside>
+      </section>
+    </div>
+
+    <div id="export-progress-modal" class="export-progress-modal" hidden>
+      <section
+        class="export-progress-dialog"
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+        aria-labelledby="export-progress-title"
+        aria-describedby="export-progress-detail"
+      >
+        <div class="export-progress-heading">
+          <span class="export-progress-icon" aria-hidden="true"><i class="ph ph-film-strip"></i></span>
+          <div>
+            <p id="export-progress-kicker">RENDERING</p>
+            <h2 id="export-progress-title">正在准备导出</h2>
+          </div>
+          <strong id="export-progress-percent">0%</strong>
+        </div>
+        <div
+          id="export-progress-track"
+          class="export-progress-track"
+          role="progressbar"
+          aria-label="导出进度"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span id="export-progress-bar"></span>
+        </div>
+        <p id="export-progress-detail" class="export-progress-detail">正在准备素材和路线图层…</p>
+        <button id="export-cancel-button" class="button button-secondary export-cancel-button" type="button">
+          <i class="ph ph-x-circle" aria-hidden="true"></i><span>取消导出</span>
+        </button>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

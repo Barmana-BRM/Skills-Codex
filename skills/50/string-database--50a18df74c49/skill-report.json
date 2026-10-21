@@ -1,0 +1,2393 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T16:30:27.045Z",
+    "slug": "davila7-string-database",
+    "source_url": "https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/scientific/string-database",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "50a18df74c4947d90709b1ce46b1c5f0b020682b62cb57663f523a5ef7decb26",
+    "tree_hash": "5b9a0cd32e8cdd351bb4fa1134f591d82fed432305bcaba6c0413b4d05aeb8a6",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "string-database",
+    "description": "Query the STRING database for protein identifiers, interaction networks, partners, enrichment, homology, and network images across thousands of species.",
+    "summary": "Analyze protein interactions and functional enrichment through the STRING REST API.",
+    "icon": "📦",
+    "author": "davila7",
+    "license": "MIT",
+    "tags": [
+      "bioinformatics",
+      "protein-interactions",
+      "systems-biology",
+      "functional-enrichment",
+      "STRING"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "env_access",
+      "filesystem",
+      "scripts",
+      "external_commands"
+    ],
+    "category": "research"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Nine low-severity indicators confirm the documented outbound STRING API behavior: eight executable HTTPS calls and their fixed service base URL. The other alerts are Markdown, documentation, import, or non-executed example false positives; no credential access, shell execution, prompt injection, or malicious intent was found.",
+    "remediation": [
+      {
+        "issue": "Submitted query data leaves the local environment",
+        "suggestion": "Disclose that identifiers, species, and caller identity are sent to string-db.org. Request confirmation before sending sensitive or unpublished data.",
+        "severity": "low"
+      },
+      {
+        "issue": "HTTP requests have no explicit timeout",
+        "suggestion": "Set a timeout and handle URLError for every request. This prevents indefinite waits and provides clear network failure messages.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Visualization examples write fixed PNG filenames",
+        "suggestion": "Document file creation clearly and let users choose a safe output path before writing downloaded image data.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "references/string_reference.md",
+            "line_start": 389,
+            "line_end": 389
+          },
+          {
+            "file": "references/string_reference.md",
+            "line_start": 394,
+            "line_end": 394
+          },
+          {
+            "file": "references/string_reference.md",
+            "line_start": 396,
+            "line_end": 396
+          },
+          {
+            "file": "references/string_reference.md",
+            "line_start": 387,
+            "line_end": 387
+          },
+          {
+            "file": "references/string_reference.md",
+            "line_start": 395,
+            "line_end": 395
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 119,
+            "line_end": 119
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 168,
+            "line_end": 168
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 251,
+            "line_end": 251
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 293,
+            "line_end": 293
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 331,
+            "line_end": 331
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 350,
+            "line_end": 350
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 7,
+            "line_end": 7
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 410,
+            "line_end": 410
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 511,
+            "line_end": 511
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 516,
+            "line_end": 516
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 528,
+            "line_end": 528
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/string_reference.md",
+            "line_start": 349,
+            "line_end": 349
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 148,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 293,
+            "line_end": 293
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 318,
+            "line_end": 318
+          }
+        ]
+      },
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 273,
+            "line_end": 275
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 304,
+            "line_end": 305
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 369,
+            "line_end": 370
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 52
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 52,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 56
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 56,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 92,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 129,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 149
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 152
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 152,
+            "line_end": 153
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 153,
+            "line_end": 160
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 160,
+            "line_end": 167
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 167,
+            "line_end": 178
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 190
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 190,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 192
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 192,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 207
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 207,
+            "line_end": 220
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 220,
+            "line_end": 223
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 223,
+            "line_end": 224
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 224,
+            "line_end": 225
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 225,
+            "line_end": 226
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 226,
+            "line_end": 232
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 232,
+            "line_end": 239
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 239,
+            "line_end": 245
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 245,
+            "line_end": 252
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 252,
+            "line_end": 259
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 259,
+            "line_end": 264
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 264,
+            "line_end": 272
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 272,
+            "line_end": 297
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 297,
+            "line_end": 303
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:references/string_reference.md:389:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/string_reference.md",
+        "line_start": 389,
+        "line_end": 389,
+        "snippet": "response = requests.get(url, params=params)"
+      },
+      {
+        "id": "network:references/string_reference.md:394:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/string_reference.md",
+        "line_start": 394,
+        "line_end": 394,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:references/string_reference.md:396:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/string_reference.md",
+        "line_start": 396,
+        "line_end": 396,
+        "snippet": "response = urllib.request.urlopen(url)"
+      },
+      {
+        "id": "network:references/string_reference.md:387:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/string_reference.md",
+        "line_start": 387,
+        "line_end": 387,
+        "snippet": "url = \"https://string-db.org/api/tsv/network\""
+      },
+      {
+        "id": "network:references/string_reference.md:395:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/string_reference.md",
+        "line_start": 395,
+        "line_end": 395,
+        "snippet": "url = \"https://string-db.org/api/tsv/network?identifiers=TP53&species=9606\""
+      },
+      {
+        "id": "env_access:references/string_reference.md:349:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/string_reference.md",
+        "line_start": 349,
+        "line_end": 349,
+        "snippet": "/api/json/get_api_key"
+      },
+      {
+        "id": "blocker:references/string_reference.md:26:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/string_reference.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "4. **Rate Limiting**: Wait 1 second between API calls to avoid server overload"
+      },
+      {
+        "id": "blocker:references/string_reference.md:322:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/string_reference.md",
+        "line_start": 322,
+        "line_end": 322,
+        "snippet": "- **400 Bad Request**: Invalid parameters or syntax"
+      },
+      {
+        "id": "blocker:references/string_reference.md:328:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/string_reference.md",
+        "line_start": 328,
+        "line_end": 328,
+        "snippet": "1. **\"No proteins found\"**: Invalid identifiers or species mismatch"
+      },
+      {
+        "id": "blocker:references/string_reference.md:426:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/string_reference.md",
+        "line_start": 426,
+        "line_end": 426,
+        "snippet": "- **Rate limiting**: No strict limit, but avoid rapid-fire requests"
+      },
+      {
+        "id": "blocker:references/string_reference.md:117:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "references/string_reference.md",
+        "line_start": 117,
+        "line_end": 118,
+        "snippet": "- `confidence`: Show confidence as line thickness"
+      },
+      {
+        "id": "network:scripts/string_api.py:14:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:scripts/string_api.py:66:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "with urllib.request.urlopen(url, data=data) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:119:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 119,
+        "line_end": 119,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:168:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 168,
+        "line_end": 168,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:212:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:251:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:293:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 293,
+        "line_end": 293,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:331:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 331,
+        "line_end": 331,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:350:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/string_api.py",
+        "line_start": 350,
+        "line_end": 350,
+        "snippet": "with urllib.request.urlopen(url) as response:"
+      },
+      {
+        "id": "network:scripts/string_api.py:7:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/string_api.py",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "API Base URL: https://string-db.org/api"
+      },
+      {
+        "id": "network:scripts/string_api.py:8:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/string_api.py",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "Documentation: https://string-db.org/help/api/"
+      },
+      {
+        "id": "network:scripts/string_api.py:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/string_api.py",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "STRING_BASE_URL = \"https://string-db.org/api\""
+      },
+      {
+        "id": "filesystem:scripts/string_api.py:148:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/string_api.py",
+        "line_start": 148,
+        "line_end": 148,
+        "snippet": "with open('network.png', 'wb') as f:"
+      },
+      {
+        "id": "scripts:SKILL.md:273:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "SKILL.md",
+        "line_start": 273,
+        "line_end": 275,
+        "snippet": "from scripts.string_api import (string_map_ids, string_network,"
+      },
+      {
+        "id": "scripts:SKILL.md:304:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "SKILL.md",
+        "line_start": 304,
+        "line_end": 305,
+        "snippet": "from scripts.string_api import (string_map_ids, string_interaction_partners,"
+      },
+      {
+        "id": "scripts:SKILL.md:369:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "SKILL.md",
+        "line_start": 369,
+        "line_end": 370,
+        "snippet": "from scripts.string_api import (string_interaction_partners, string_network,"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "1. Python helper functions (`scripts/string_api.py`) for all STRING REST API operations"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "2. Comprehensive reference documentation (`references/string_reference.md`) with detailed API specif"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "When users request STRING data, determine which operation is needed and use the appropriate function"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "### 1. Identifier Mapping (`string_map_ids`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 52,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 52,
+        "line_end": 55,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 56,
+        "snippet": "- `species`: NCBI taxon ID (9606 = human, 10090 = mouse, 7227 = fly)"
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 56,
+        "line_end": 57,
+        "snippet": "- `limit`: Number of matches per identifier (default: 1)"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 61,
+        "snippet": "- `echo_query`: Include query term in output (default: 1)"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 68,
+        "snippet": "### 2. Network Retrieval (`string_network`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 83,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 86,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 91,
+        "snippet": "- `required_score`: Confidence threshold (0-1000)"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "- `network_type`: `'functional'` (all evidence, default) or `'physical'` (direct binding only)"
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 92,
+        "line_end": 96,
+        "snippet": "- `add_nodes`: Add N most connected proteins (0-10)"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 103,
+        "snippet": "### 3. Network Visualization (`string_network_image`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 122,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 125,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 126,
+        "snippet": "- `'evidence'`: Colored lines show evidence types (default)"
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 127,
+        "snippet": "- `'confidence'`: Line thickness represents confidence"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 129,
+        "snippet": "- `'actions'`: Shows activating/inhibiting relationships"
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 129,
+        "line_end": 136,
+        "snippet": "### 4. Interaction Partners (`string_interaction_partners`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 149,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 152,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:152:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 152,
+        "line_end": 153,
+        "snippet": "- `limit`: Maximum number of partners to return (default: 10)"
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 153,
+        "line_end": 160,
+        "snippet": "- `required_score`: Confidence threshold (0-1000)"
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 160,
+        "line_end": 167,
+        "snippet": "### 5. Functional Enrichment (`string_enrichment`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 167,
+        "line_end": 178,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 178,
+        "line_end": 189,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 190,
+        "snippet": "- `category`: Annotation database (e.g., \"KEGG Pathways\", \"GO Biological Process\")"
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 190,
+        "line_end": 191,
+        "snippet": "- `term`: Term identifier"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 192,
+        "snippet": "- `description`: Human-readable term description"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 193,
+        "snippet": "- `number_of_genes`: Input proteins with this annotation"
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 194,
+        "snippet": "- `p_value`: Uncorrected enrichment p-value"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 200,
+        "snippet": "- `fdr`: False discovery rate (corrected p-value)"
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 207,
+        "snippet": "### 6. PPI Enrichment (`string_ppi_enrichment`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 207,
+        "line_end": 220,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 220,
+        "line_end": 223,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 223,
+        "line_end": 224,
+        "snippet": "- `number_of_nodes`: Proteins in network"
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 224,
+        "line_end": 225,
+        "snippet": "- `number_of_edges`: Observed interactions"
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 225,
+        "line_end": 226,
+        "snippet": "- `expected_number_of_edges`: Expected in random network"
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 232,
+        "snippet": "- `p_value`: Statistical significance"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 232,
+        "line_end": 239,
+        "snippet": "### 7. Homology Scores (`string_homology`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 239,
+        "line_end": 245,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 245,
+        "line_end": 252,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 252,
+        "line_end": 259,
+        "snippet": "### 8. Version Information (`string_version`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 259,
+        "line_end": 264,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 264,
+        "line_end": 272,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 272,
+        "line_end": 297,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 297,
+        "line_end": 303,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:303:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 303,
+        "line_end": 320,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:320:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 320,
+        "line_end": 326,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:326:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 326,
+        "line_end": 345,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 345,
+        "line_end": 351,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 351,
+        "line_end": 362,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 362,
+        "line_end": 368,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:368:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 368,
+        "line_end": 392,
+        "snippet": "```python"
+      },
+      {
+        "id": "external_commands:SKILL.md:392:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 392,
+        "line_end": 463,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:463:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 463,
+        "line_end": 464,
+        "snippet": "1. **Always map identifiers first**: Use `string_map_ids()` before other operations for faster queri"
+      },
+      {
+        "id": "external_commands:SKILL.md:464:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 464,
+        "line_end": 473,
+        "snippet": "2. **Use STRING IDs when possible**: Use format `9606.ENSP00000269305` instead of gene names"
+      },
+      {
+        "id": "external_commands:SKILL.md:473:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 473,
+        "line_end": 486,
+        "snippet": "For comprehensive API documentation, complete parameter lists, output formats, and advanced usage, r"
+      },
+      {
+        "id": "external_commands:SKILL.md:486:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 486,
+        "line_end": 490,
+        "snippet": "- Try mapping identifiers first with `string_map_ids()`"
+      },
+      {
+        "id": "external_commands:SKILL.md:490:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 490,
+        "line_end": 500,
+        "snippet": "- Lower confidence threshold (`required_score`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:500:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 500,
+        "line_end": 504,
+        "snippet": "- Add `species` parameter for networks with >10 proteins"
+      },
+      {
+        "id": "network:SKILL.md:410:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 410,
+        "line_end": 410,
+        "snippet": "Full list available at: https://string-db.org/cgi/input?input_page_active_form=organisms"
+      },
+      {
+        "id": "network:SKILL.md:511:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 511,
+        "line_end": 511,
+        "snippet": "- Visit https://string-db.org"
+      },
+      {
+        "id": "network:SKILL.md:516:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 516,
+        "line_end": 516,
+        "snippet": "- Download page: https://string-db.org/cgi/download"
+      },
+      {
+        "id": "network:SKILL.md:528:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 528,
+        "line_end": 528,
+        "snippet": "When using STRING in publications, cite the most recent publication from: https://string-db.org/cgi/"
+      },
+      {
+        "id": "filesystem:SKILL.md:111:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "with open('network.png', 'wb') as f:"
+      },
+      {
+        "id": "filesystem:SKILL.md:293:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "SKILL.md",
+        "line_start": 293,
+        "line_end": 293,
+        "snippet": "with open('protein_network.png', 'wb') as f:"
+      },
+      {
+        "id": "filesystem:SKILL.md:318:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "SKILL.md",
+        "line_start": 318,
+        "line_end": 318,
+        "snippet": "with open('tp53_network.png', 'wb') as f:"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:references/string_reference.md:389:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a non-executed HTTP example in the API reference. It targets the documented STRING service and does not run merely because the skill is installed."
+      },
+      {
+        "id": "network:references/string_reference.md:394:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a non-executed HTTP example in the API reference. It targets the documented STRING service and does not run merely because the skill is installed."
+      },
+      {
+        "id": "network:references/string_reference.md:396:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a non-executed HTTP example in the API reference. It targets the documented STRING service and does not run merely because the skill is installed."
+      },
+      {
+        "id": "network:references/string_reference.md:387:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a non-executed HTTP example in the API reference. It targets the documented STRING service and does not run merely because the skill is installed."
+      },
+      {
+        "id": "network:references/string_reference.md:395:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a non-executed HTTP example in the API reference. It targets the documented STRING service and does not run merely because the skill is installed."
+      },
+      {
+        "id": "env_access:references/string_reference.md:349:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The text is a documented API endpoint path for requesting an API key. It does not contain a key and does not read credentials or environment variables."
+      },
+      {
+        "id": "blocker:references/string_reference.md:26:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes API rate limits, error messages, or visualization confidence. It performs no system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/string_reference.md:322:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes API rate limits, error messages, or visualization confidence. It performs no system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/string_reference.md:328:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes API rate limits, error messages, or visualization confidence. It performs no system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/string_reference.md:426:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes API rate limits, error messages, or visualization confidence. It performs no system or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/string_reference.md:117:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text describes API rate limits, error messages, or visualization confidence. It performs no system or network reconnaissance."
+      },
+      {
+        "id": "network:scripts/string_api.py:14:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line only imports the standard urllib request module and does not initiate traffic. The actual outbound calls are adjudicated separately at their call sites."
+      },
+      {
+        "id": "network:scripts/string_api.py:66:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:119:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:168:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:212:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:251:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:293:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:331:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:350:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/string_api.py:7:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears only in the module documentation and cannot initiate a request. It identifies the expected STRING service or its documentation."
+      },
+      {
+        "id": "network:scripts/string_api.py:8:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears only in the module documentation and cannot initiate a request. It identifies the expected STRING service or its documentation."
+      },
+      {
+        "id": "network:scripts/string_api.py:21:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "This constant fixes the destination used by every helper to the documented STRING API. The destination is expected, but it confirms that skill operations rely on an external service.",
+        "severity": "low"
+      },
+      {
+        "id": "filesystem:scripts/string_api.py:148:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The file write is shown only inside the function docstring as an example. The implemented helper returns image bytes and does not write a file."
+      },
+      {
+        "id": "scripts:SKILL.md:273:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal static Python import split across lines inside a Markdown example. It is neither a dynamic import expression nor runtime code executed by the skill document."
+      },
+      {
+        "id": "scripts:SKILL.md:304:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal static Python import split across lines inside a Markdown example. It is neither a dynamic import expression nor runtime code executed by the skill document."
+      },
+      {
+        "id": "scripts:SKILL.md:369:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal static Python import split across lines inside a Markdown example. It is neither a dynamic import expression nor runtime code executed by the skill document."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:52:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:56:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:92:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:129:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:152:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:153:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:207:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:223:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:224:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:225:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:239:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:245:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:272:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:297:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:303:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:320:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:326:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:351:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:362:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:368:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:392:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:463:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:464:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:473:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:486:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:490:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:500:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown inline-code markers or fenced Python examples. No Ruby backtick operator, shell command, subprocess, or command execution is present."
+      },
+      {
+        "id": "network:SKILL.md:410:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to the official STRING website, download page, organism list, or citation page. It is not executable network behavior."
+      },
+      {
+        "id": "network:SKILL.md:511:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to the official STRING website, download page, organism list, or citation page. It is not executable network behavior."
+      },
+      {
+        "id": "network:SKILL.md:516:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to the official STRING website, download page, organism list, or citation page. It is not executable network behavior."
+      },
+      {
+        "id": "network:SKILL.md:528:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to the official STRING website, download page, organism list, or citation page. It is not executable network behavior."
+      },
+      {
+        "id": "filesystem:SKILL.md:111:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This fixed-name PNG write appears only in a Markdown usage example. The documentation itself cannot write to the filesystem."
+      },
+      {
+        "id": "filesystem:SKILL.md:293:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This fixed-name PNG write appears only in a Markdown usage example. The documentation itself cannot write to the filesystem."
+      },
+      {
+        "id": "filesystem:SKILL.md:318:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This fixed-name PNG write appears only in a Markdown usage example. The documentation itself cannot write to the filesystem."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url, data=data) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 66,
+            "line_end": 66
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 119,
+            "line_end": 119
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 168,
+            "line_end": 168
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 212,
+            "line_end": 212
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 251,
+            "line_end": 251
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 293,
+            "line_end": 293
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 331,
+            "line_end": 331
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(url) as response:",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 350,
+            "line_end": 350
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This helper performs an outbound HTTPS request to the fixed STRING service. Most calls include caller-supplied protein identifiers and related parameters, so submitted query data leaves the local environment."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "STRING_BASE_URL = \"https://string-db.org/api\"",
+        "locations": [
+          {
+            "file": "scripts/string_api.py",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This constant fixes the destination used by every helper to the documented STRING API. The destination is expected, but it confirms that skill operations rely on an external service."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 3,
+    "total_lines": 1355,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T16:30:27.045Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Analyze Protein Networks with STRING",
+    "value_statement": "Protein interaction analysis requires specialized databases and careful identifier handling. This skill queries STRING to map proteins, retrieve networks, and assess enrichment.",
+    "seo_keywords": [
+      "STRING database",
+      "protein interaction network",
+      "functional enrichment",
+      "systems biology",
+      "bioinformatics",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "GO enrichment",
+      "KEGG pathway analysis"
+    ],
+    "actual_capabilities": [
+      "Maps gene names and protein identifiers to STRING identifiers.",
+      "Retrieves functional or physical protein interaction networks with confidence thresholds.",
+      "Finds interaction partners and expands networks with additional proteins.",
+      "Runs GO, KEGG, Pfam, and related functional enrichment queries.",
+      "Tests PPI enrichment and retrieves homology scores.",
+      "Downloads STRING network visualizations as PNG image data."
+    ],
+    "limitations": [
+      "Requires internet access and availability of the STRING service.",
+      "Sends identifiers, species values, and caller identity to STRING over HTTPS.",
+      "Returns raw text or image bytes without validating response schemas.",
+      "Requests omit explicit timeouts and only handle HTTP status errors."
+    ],
+    "use_cases": [
+      {
+        "title": "Interpret proteomics results",
+        "description": "Map an experimental protein list, retrieve its interaction network, and identify enriched biological processes.",
+        "target_user": "Proteomics researcher"
+      },
+      {
+        "title": "Develop pathway hypotheses",
+        "description": "Expand seed proteins with high-confidence partners and compare functional versus physical associations.",
+        "target_user": "Systems biologist"
+      },
+      {
+        "title": "Prepare reproducible interaction reports",
+        "description": "Record STRING version, species, thresholds, network statistics, and enrichment results for a defined protein set.",
+        "target_user": "Bioinformatics analyst"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Map a protein name",
+        "prompt": "Map TP53 to a human STRING identifier and explain the returned fields.",
+        "scenario": "Beginner identifier lookup"
+      },
+      {
+        "title": "Retrieve an interaction network",
+        "prompt": "Retrieve a human interaction network for TP53, MDM2, ATM, and CHEK2 using a high-confidence threshold. Summarize the strongest associations.",
+        "scenario": "Standard network analysis"
+      },
+      {
+        "title": "Assess functional enrichment",
+        "prompt": "Analyze this protein list for GO, KEGG, and Pfam enrichment. Report significant terms, false discovery rates, and interpretation limits: [protein list].",
+        "scenario": "Intermediate pathway interpretation"
+      },
+      {
+        "title": "Design a cross-species comparison",
+        "prompt": "Compare interaction evidence for [protein] in human and mouse. Map identifiers, use matching thresholds, retrieve homology, and document STRING versions and caveats.",
+        "scenario": "Advanced comparative analysis"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Find high-confidence partners of TP53 in humans.",
+        "output": [
+          "Mapped TP53 to its human STRING identifier.",
+          "Retrieved interaction partners using a confidence threshold of 700.",
+          "Presented partner names, combined scores, and evidence limits in a table."
+        ]
+      },
+      {
+        "input": "Check whether ATM, ATR, CHEK1, and CHEK2 form an enriched network.",
+        "output": "The report summarizes observed and expected edges, the enrichment significance, and why association does not prove direct physical binding."
+      },
+      {
+        "input": "Create a network image for BRCA1, BRCA2, and RAD51.",
+        "output": "The skill retrieves PNG image data from STRING using the selected species, confidence threshold, and visualization style."
+      }
+    ],
+    "best_practices": [
+      "Confirm permission before sending protein identifiers to STRING.",
+      "Map identifiers and specify the NCBI taxon before network analysis.",
+      "Record STRING version, thresholds, species, and query date for reproducible work."
+    ],
+    "anti_patterns": [
+      "Do not treat STRING associations as proof of direct physical binding.",
+      "Do not submit confidential or unpublished identifiers without approval.",
+      "Do not use low-confidence results for confirmatory conclusions."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill require an API key?",
+        "answer": "The included helper functions use public STRING endpoints and do not read an API key."
+      },
+      {
+        "question": "Which species can it analyze?",
+        "answer": "It accepts NCBI taxon identifiers supported by STRING, including human, mouse, yeast, plants, and many other organisms."
+      },
+      {
+        "question": "What data leaves my computer?",
+        "answer": "Protein identifiers, species, query settings, and caller identity are sent to string-db.org over HTTPS."
+      },
+      {
+        "question": "Does an interaction prove physical binding?",
+        "answer": "No. Functional networks combine several evidence types. Select a physical network and validate important findings experimentally."
+      },
+      {
+        "question": "Can it create network images?",
+        "answer": "Yes. It retrieves PNG image data from STRING. Saving that data to a file is a separate user-controlled action."
+      },
+      {
+        "question": "What formats do the helpers return?",
+        "answer": "Most helpers return raw TSV or JSON text. The network image helper returns PNG bytes."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "string_reference.md",
+          "type": "file",
+          "path": "references/string_reference.md",
+          "lines": 456
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "string_api.py",
+          "type": "file",
+          "path": "scripts/string_api.py",
+          "lines": 370
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 529
+    }
+  ]
+}

@@ -1,0 +1,1096 @@
+import json
+import os
+import socket
+import sys
+import tempfile
+import time
+import unittest
+from pathlib import Path
+from unittest.mock import Mock, patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from ui_worker import (
+    ProcessBackend, UiWorkerError, WindowsDesktopBackend, expand, navigation_ref_from_uuid,
+    prepare_native_ui_scenario, redact_command,
+    isolate_test_client_startup_parameter, manager_failure_error, failed_ui_steps, normalize_1c_auth_arguments,
+    choose_free_xvfb_display,
+    resolve_native_ui_references, run_ui_worker,
+    should_recover_stalled_windows_step, suppress_1c_startup_ui, validate_worker_config,
+    windows_command_line, xvfb_process_environment,
+)
+from agent_ui import diagnose_ui_failure, normalize_ui_tree
+from uia_runner import _locate_inner_button_by_pixels
+from client import compact_ui_result
+
+
+CLIENT_CODE = """
+import socket, sys, time
+s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(('127.0.0.1', int(sys.argv[1])))
+s.listen(5)
+while True:
+    time.sleep(0.1)
+"""
+
+MANAGER_CODE = """
+import json, sys
+from pathlib import Path
+Path(sys.argv[1]).write_text(json.dumps({'ok': True, 'tests': 1}), encoding='utf-8')
+"""
+
+
+def free_port():
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        return sock.getsockname()[1]
+
+
+class UiWorkerTests(unittest.TestCase):
+    def test_manager_failure_preserves_structured_manager_error(self):
+        error = manager_failure_error(
+            {
+                "ok": False,
+                "status": "failed",
+                "error": "Отсутствует подходящий клиент тестирования.",
+            },
+            0,
+        )
+        self.assertEqual(error["type"], "ManagerFailure")
+        self.assertEqual(
+            error["message"],
+            "Отсутствует подходящий клиент тестирования.",
+        )
+
+    def test_compact_ui_result_does_not_embed_ui_tree(self):
+        compact = compact_ui_result({
+            "ok": True, "runId": "run", "status": "passed", "durationMs": 42,
+            "managerResult": {"steps": [{"status": "passed", "actual": [{"huge": "tree"}]}]},
+            "artifacts": {"summary": "summary.json"},
+        })
+        self.assertEqual(compact["steps"], 1)
+        self.assertEqual(compact["failedSteps"], 0)
+        self.assertNotIn("managerResult", compact)
+        self.assertNotIn("tree", json.dumps(compact))
+
+    def test_compact_ui_result_reports_nested_suite_failures(self):
+        compact = compact_ui_result({
+            "ok": False, "runId": "run", "status": "failed", "durationMs": 10,
+            "error": {"type": "ManagerFailure", "message": "Test manager exit code: 0"},
+            "managerResult": {
+                "ok": False,
+                "scenarios": [{
+                    "name": "Open catalogs",
+                    "steps": [
+                        {"status": "passed", "name": "Open"},
+                        {"status": "failed", "name": "Select row", "action": "selectTableRow",
+                         "error": "Table row was not found"},
+                    ],
+                }],
+            },
+        })
+        self.assertEqual(compact["steps"], 2)
+        self.assertEqual(compact["failedSteps"], 1)
+        self.assertEqual(compact["failed"][0]["scenario"], "Open catalogs")
+        self.assertIn("Table row was not found", compact["error"]["message"])
+
+    def test_manager_failure_uses_nested_suite_step_error(self):
+        error = manager_failure_error(
+            {
+                "ok": False,
+                "scenarios": [{
+                    "name": "Open catalogs",
+                    "steps": [{"status": "failed", "name": "Select row", "error": "row missing"}],
+                }],
+            },
+            0,
+        )
+        self.assertEqual(error["type"], "ScenarioFailure")
+        self.assertIn("Open catalogs", error["message"])
+        self.assertIn("row missing", error["message"])
+    def test_navigation_ref_uses_1c_group_order(self):
+        self.assertEqual(
+            navigation_ref_from_uuid("a14919f5-0dad-11e4-93f4-0050568b4127"),
+            "93f40050568b412711e40dada14919f5",
+        )
+
+    def test_navigation_uuid_shorthand_is_expanded_before_start(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "openNavigationLink", "kind": "catalog", "metadataName": "ВнутренниеДокументы",
+            "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127",
+            "targetForm": {"formName": "Справочник.ВнутренниеДокументы.Форма.ФормаЭлемента"},
+        }]})
+        self.assertEqual(
+            scenario["steps"][0]["link"],
+            "e1cib/data/Справочник.ВнутренниеДокументы?ref=93f40050568b412711e40dada14919f5",
+        )
+
+    def test_navigation_uuid_placeholder_is_kept_for_hybrid_hooks(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "openNavigationLink", "kind": "catalog", "metadataName": "Контрагенты",
+            "uuid": "${partner.result.uuid}",
+            "targetForm": {"formName": "Справочник.Контрагенты.Форма.ФормаЭлемента"},
+        }]})
+        self.assertEqual(scenario["steps"][0]["uuid"], "${partner.result.uuid}")
+        self.assertNotIn("link", scenario["steps"][0])
+        expanded = prepare_native_ui_scenario({"steps": [{
+            "action": "openNavigationLink", "kind": "catalog", "metadataName": "Контрагенты",
+            "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127",
+            "targetForm": {"formName": "Справочник.Контрагенты.Форма.ФормаЭлемента"},
+        }]})
+        self.assertEqual(
+            expanded["steps"][0]["link"],
+            "e1cib/data/Справочник.Контрагенты?ref=93f40050568b412711e40dada14919f5",
+        )
+
+    def test_navigation_requires_a_real_target_form(self):
+        with self.assertRaisesRegex(UiWorkerError, "requires targetForm"):
+            prepare_native_ui_scenario({"steps": [{"action": "openNavigationLink", "link": "e1cib/app/Обработка.Тест"}]})
+        with self.assertRaisesRegex(UiWorkerError, "requires formName, objectName, or title"):
+            prepare_native_ui_scenario({"steps": [{
+                "action": "openNavigationLink", "link": "e1cib/app/Обработка.Тест", "targetForm": {"timeout": 10},
+            }]})
+
+    def test_open_data_processor_is_validated_without_a_manual_link(self):
+        prepared = prepare_native_ui_scenario({"steps": [{
+            "action": "openDataProcessor", "metadataName": "ЕМС_РабочееМестоМенеджера", "formName": "Форма",
+            "targetForm": {"formName": "Обработка.ЕМС_РабочееМестоМенеджера.Форма.Форма"},
+        }]})
+        self.assertEqual(prepared["steps"][0]["metadataName"], "ЕМС_РабочееМестоМенеджера")
+        with self.assertRaisesRegex(UiWorkerError, "requires metadataName"):
+            prepare_native_ui_scenario({"steps": [{"action": "openDataProcessor", "targetForm": {"title": "Тест"}}]})
+
+    def test_open_task_execution_form_requires_a_task_uuid(self):
+        prepared = prepare_native_ui_scenario({"steps": [{
+            "action": "openTaskExecutionForm", "metadataName": "ЗадачаИсполнителя", "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127",
+            "targetForm": {"formName": "БизнесПроцесс.Тест.Форма.Задача"},
+        }]})
+        self.assertEqual(prepared["steps"][0]["action"], "openTaskExecutionForm")
+        explicit = prepare_native_ui_scenario({"steps": [{
+            "action": "openTaskExecutionForm", "metadataName": "ТестоваяЗадача", "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127",
+            "formName": "Задача.ТестоваяЗадача.Форма.ФормаВыполнения",
+            "targetForm": {"title": "Тест"},
+        }]})
+        self.assertEqual(
+            explicit["steps"][0]["formName"],
+            "Задача.ТестоваяЗадача.Форма.ФормаВыполнения",
+        )
+        with self.assertRaisesRegex(UiWorkerError, "requires uuid"):
+            prepare_native_ui_scenario({"steps": [{"action": "openTaskExecutionForm", "targetForm": {"title": "Тест"}}]})
+        with self.assertRaisesRegex(UiWorkerError, "requires metadataName"):
+            prepare_native_ui_scenario({"steps": [{"action": "openTaskExecutionForm", "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127", "targetForm": {"title": "Тест"}}]})
+
+    def test_task_execution_rebuilds_typed_key_in_test_client(self):
+        root = Path(__file__).resolve().parents[1]
+        client_module = (root / "src" / "Ext" / "ManagedApplicationModule.bsl").read_text(encoding="utf-8-sig")
+        server_module = (root / "src" / "CommonModules" / "CodexUIJobsServer" / "Ext" / "Module.bsl").read_text(encoding="utf-8-sig")
+        self.assertIn("persistentPayload", client_module)
+        self.assertIn("СохранитьPayload(CTB_ТекущийИдентификаторЗадания, ОписаниеФормы.parameters)", client_module)
+        self.assertIn("ПолучитьPayload(CTB_ИдентификаторЗаданияКлиентскихФорм)", client_module)
+        self.assertIn("CTB_ОтправитьКомандуОткрытияФормы(ТестКлиент, Шаг, Команда", client_module)
+        self.assertIn("ПоместитьФормуВыполненияЗадачиВоВременноеХранилище", server_module)
+        self.assertIn("Функция ПолучитьСсылкуЗадачи", server_module)
+        self.assertIn("Метаданные.Задачи.Найти(ИмяМетаданных)", server_module)
+        self.assertIn('"Задача = Задачи." + ИмяМетаданных', server_module)
+        self.assertNotIn("Задачи[ИмяМетаданных]", server_module)
+        self.assertNotIn("CodexUIFixture", server_module)
+        self.assertIn('Если Не ПустаяСтрока(ИмяФормы) Тогда', server_module)
+        self.assertIn("navigationLink", server_module)
+        special_open = client_module[client_module.index("Функция CTB_ОткрытьФормуВыполненияЗадачи"):client_module.index("Функция CTB_ОтправитьКомандуОткрытияФормы")]
+        self.assertIn("CTB_ОткрытьФормуЧерезКомандуTestClient", special_open)
+        self.assertNotIn("CTB_ОтправитьКомандуОткрытияФормы", special_open)
+
+    def test_warm_runner_uses_stable_correlated_job_without_timer_bootstrap(self):
+        root = Path(__file__).resolve().parents[1]
+        worker = (root / "ui_worker.py").read_text(encoding="utf-8")
+        self.assertIn("stable correlated job", worker)
+        self.assertIn("extension commands consume it only", worker)
+        self.assertNotIn("managed runtime is ready", worker)
+        self.assertNotIn("stage_initial_task_execution_form", worker)
+        module = (root / "src" / "Ext" / "ManagedApplicationModule.bsl").read_text(encoding="utf-8-sig")
+        self.assertIn('"e1cib/command/ОбщаяКоманда.CodexNavigate"', module)
+        command = (root / "src" / "CommonCommands" / "CodexNavigate" / "Ext" / "CommandModule.bsl").read_text(encoding="utf-8-sig")
+        self.assertIn('Задание.status <> "client-form-request"', command)
+        self.assertIn('"client-form-response"', command)
+
+    def test_click_element_accepts_a_semantic_decoration_selector(self):
+        prepared = prepare_native_ui_scenario({"steps": [{
+            "action": "clickElement",
+            "form": "taskCard",
+            "elementType": "decoration",
+            "clickMode": "activated",
+            "element": {"title": "Перейти в форму для выполнения задачи"},
+        }]})
+        self.assertEqual(prepared["steps"][0]["elementType"], "decoration")
+        self.assertEqual(prepared["steps"][0]["clickMode"], "activated")
+
+    def test_invalid_navigation_example_has_an_explicit_target(self):
+        example = Path(__file__).resolve().parents[1] / "examples" / "invalid-navigation.ui.json"
+        scenario = prepare_native_ui_scenario(json.loads(example.read_text(encoding="utf-8")))
+        self.assertEqual(scenario["steps"][0]["targetForm"]["formName"], "Обработка.__CodexBridgeMissing__.Форма.Форма")
+
+    def test_reference_uuid_is_resolved_to_choice_contract(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "selectReference", "strategy": "choiceForm",
+            "field": {"objectName": "Организация"}, "table": {"objectName": "Список"},
+            "reference": {"kind": "catalog", "metadataName": "Организации", "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127"},
+        }]})
+        resolved = resolve_native_ui_references(scenario, lambda request: {
+            "ok": True, "ref": {"uuid": request["uuid"], "presentation": "Основная организация"},
+        })
+        step = resolved["steps"][0]
+        self.assertNotIn("reference", step)
+        self.assertEqual(step["value"], "Основная организация")
+        self.assertEqual(step["row"], {"Наименование": "Основная организация"})
+        self.assertTrue(step["strict"])
+
+    def test_composite_reference_type_is_validated(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "selectReference",
+            "field": {"objectName": "CompositeValue"},
+            "referenceType": "Codex UI fixture catalog",
+            "strategy": "dropdownExact",
+            "value": "Fixture catalog Alpha",
+        }]})
+        self.assertEqual(scenario["steps"][0]["referenceType"], "Codex UI fixture catalog")
+        with self.assertRaisesRegex(UiWorkerError, "referenceType is only valid"):
+            prepare_native_ui_scenario({"steps": [{
+                "action": "assertConnected", "referenceType": "Catalog",
+            }]})
+
+    def test_plan_reference_kinds_are_validated_and_resolved(self):
+        for kind in ("chartOfCharacteristicTypes", "chartOfAccounts", "chartOfCalculationTypes"):
+            with self.subTest(kind=kind):
+                scenario = prepare_native_ui_scenario({"steps": [{
+                    "action": "selectReference", "strategy": "dropdownExact",
+                    "field": {"objectName": "ReferenceValue"},
+                    "reference": {
+                        "kind": kind,
+                        "metadataName": "Fixture",
+                        "uuid": "a14919f5-0dad-11e4-93f4-0050568b4127",
+                    },
+                }]})
+                resolved = resolve_native_ui_references(scenario, lambda request: {
+                    "ok": True, "ref": {"presentation": f"{kind} Alpha"},
+                })
+                self.assertEqual(resolved["steps"][0]["value"], f"{kind} Alpha")
+
+        module = (Path(__file__).resolve().parents[1] / "src/HTTPServices/CodexTestBridge/Ext/Module.bsl").read_text(encoding="utf-8-sig")
+        self.assertIn("ПланыВидовХарактеристик[Имя].ПолучитьСсылку(UUID)", module)
+        self.assertIn("ПланыСчетов[Имя].ПолучитьСсылку(UUID)", module)
+        self.assertIn("ПланыВидовРасчета[Имя].ПолучитьСсылку(UUID)", module)
+
+    def test_agent_ui_normalizes_tree_and_failure(self):
+        normalized = normalize_ui_tree([
+            {"level": 1, "type": "ТестируемаяТаблицаФормы", "name": "Товары", "title": "Товары"},
+            {"level": 2, "type": "ТестируемоеПолеФормы", "name": "ТоварыКоличество", "title": "Количество"},
+        ])
+        self.assertEqual(normalized["tables"][0]["selector"], {"objectName": "Товары"})
+        self.assertEqual(normalized["tables"][0]["columns"][0]["name"], "ТоварыКоличество")
+        diagnosis = diagnose_ui_failure({"ok": False, "error": {"message": "UI object was not found"}})
+        self.assertEqual(diagnosis["category"], "selector-not-found")
+
+    def test_invalid_native_scenario_is_rejected_before_start(self):
+        with self.assertRaisesRegex(UiWorkerError, "non-empty array"):
+            prepare_native_ui_scenario({"steps": []})
+        with self.assertRaisesRegex(UiWorkerError, "unsupported action"):
+            prepare_native_ui_scenario({"steps": [{"action": "magic"}]})
+        with self.assertRaisesRegex(UiWorkerError, "unknown fields: typo"):
+            prepare_native_ui_scenario({"steps": [{"action": "assertConnected", "typo": True}]})
+
+    def test_native_ui_schema_exposes_reference_actions(self):
+        schema_path = Path(__file__).resolve().parents[1] / "ui-scenario.schema.json"
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        step = schema["$defs"]["step"]
+        actions = step["properties"]["action"]["enum"]
+
+        self.assertIn("selectReference", actions)
+        self.assertIn("inspectUI", actions)
+        self.assertIn("openNavigationLink", actions)
+        self.assertIn("openDataProcessor", actions)
+
+        self.assertIn("clickElement", actions)
+        self.assertIn("clickCommandInterface", actions)
+        self.assertIn("inspectTable", actions)
+        self.assertIn("selectFromDropdown", actions)
+        self.assertIn("openChoice", actions)
+        self.assertIn("selectTableRow", actions)
+        self.assertIn("expandTreeRow", actions)
+        self.assertIn("waitElement", actions)
+        self.assertIn("assertElement", actions)
+        self.assertIn("setCheckbox", actions)
+        self.assertIn("assertTableRow", actions)
+        self.assertIn("inputTableCell", actions)
+        self.assertIn("handleDialog", actions)
+        self.assertIn("waitFormClosed", actions)
+        self.assertEqual(
+            step["properties"]["strategy"]["enum"],
+            ["auto", "dropdownExact", "typeAhead", "choiceForm"],
+        )
+        self.assertIn("formName", schema["$defs"]["selector"]["properties"])
+        self.assertIn("choiceTable", step["properties"])
+        self.assertIn("choiceRow", step["properties"])
+        self.assertIn("referenceType", step["properties"])
+        self.assertIn("onChangeWait", step["properties"])
+        self.assertIn("expandParents", step["properties"])
+        self.assertIn("replace", step["properties"])
+        self.assertIn("select", step["properties"])
+        self.assertIn("newForm", step["properties"])
+        self.assertIn("uiaBeforeSteps", schema["properties"])
+        self.assertIn("restartTestClientOnStartup", schema["properties"])
+        self.assertFalse(schema["properties"]["restartTestClientOnStartup"]["default"])
+        self.assertTrue(schema["properties"]["closeTestClientOnFinish"]["default"])
+
+    def test_tree_row_expansion_contract_is_validated(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "expandTreeRow", "table": {"objectName": "Дерево"},
+            "row": {"Group": "Parent"},
+        }, {
+            "action": "selectTableRow", "table": {"objectName": "Дерево"},
+            "expandParents": [{"Group": "Parent"}], "row": {"Item": "Child"},
+        }]})
+        self.assertEqual(scenario["steps"][1]["expandParents"][0]["Group"], "Parent")
+        with self.assertRaisesRegex(UiWorkerError, "expandTreeRow requires row"):
+            prepare_native_ui_scenario({"steps": [{"action": "expandTreeRow"}]})
+
+    def test_select_table_row_can_activate_without_choose(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "selectTableRow", "table": {"objectName": "Список"},
+            "row": {"Наименование в программе": "HybridRich Partner"}, "select": False,
+        }, {
+            "action": "waitForm", "formName": "Документ.РеализацияТоваровУслуг.Форма.ФормаДокумента",
+            "newForm": True, "saveAs": "salesDoc",
+        }, {
+            "action": "inputText", "elementType": "addition",
+            "field": {"objectName": "СписокСтрокаПоиска"}, "value": "5487612390",
+        }]})
+        self.assertFalse(scenario["steps"][0]["select"])
+        self.assertTrue(scenario["steps"][1]["newForm"])
+        self.assertEqual(scenario["steps"][2]["elementType"], "addition")
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn('CTB_Получить(Шаг, "select", Истина)', module)
+        self.assertIn("CTB_ОсмотретьТаблицу", module)
+        self.assertIn('CTB_Получить(Шаг, "newForm", Ложь)', module)
+        self.assertIn("CTB_ПоказатьДополнениеДляВвода", module)
+        self.assertIn("CTB_НайтиОбъектыПоТипу", module)
+        self.assertIn("CTB_НайтиДополнениеДляВводаТекста", module)
+        self.assertIn("CTB_ВариантыОписанияСтрокиТаблицы", module)
+        self.assertIn("CTB_ПерейтиКСтрокеОбходом", module)
+        self.assertNotIn("ДополнениеСтрокиПоиска", module)
+        self.assertNotIn("СписокУправлениеПоиском", module)
+        self.assertIn("CTB_ЗаголовкиКнопокЗакрытия", module)
+        http = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "HTTPServices" / "CodexTestBridge" / "Ext" / "Module.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("ПрочитатьJSON(Чтение, Истина)", http)
+
+    def test_command_interface_can_target_saved_form(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "clickCommandInterface",
+            "form": "workplace",
+            "button": {"title": "Refresh"},
+        }]})
+        self.assertEqual(scenario["steps"][0]["form"], "workplace")
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("CTB_ОкноКомандногоИнтерфейса", module)
+        self.assertIn("Форма.Активизировать()", module)
+
+    def test_click_prefers_semantic_command_button_with_form_fallback(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "click", "form": "review",
+            "button": {"objectName": "Approve"}, "clickMode": "auto",
+        }]})
+        self.assertEqual(scenario["steps"][0]["clickMode"], "auto")
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("CTB_НажатьКнопкуФормыИлиКомандногоИнтерфейса", module)
+        self.assertIn('"ТестируемаяКнопкаКомандногоИнтерфейса"', module)
+        self.assertIn('CTB_Получить(Шаг, "clickMode", "auto")', module)
+        self.assertIn('ОписаниеПоискаКоманды = Новый Структура("title,objectName,timeout"', module)
+        self.assertIn("CTB_ПроверитьКнопкуПередНажатием", module)
+
+    def test_invoke_form_command_uses_testable_form_button(self):
+        root = Path(__file__).resolve().parents[1]
+        module = (root / "src" / "Ext" / "ManagedApplicationModule.bsl").read_text(encoding="utf-8-sig")
+        start = module.index("Функция CTB_ВыполнитьКомандуФормыЧерезКнопку")
+        end = module.index("Процедура CTB_ПроверитьКнопкуПередНажатием", start)
+        invocation = module[start:end]
+        self.assertIn('CTB_ОбязательноеПоле(Шаг, "command")', invocation)
+        self.assertIn('"ТестируемаяКнопкаФормы"', invocation)
+        self.assertIn("КнопкаФормы.Нажать()", invocation)
+        self.assertNotIn("ТестКлиент.ВыполнитьКоманду(", invocation)
+        command = (root / "src" / "CommonCommands" / "CodexNavigate" / "Ext" / "CommandModule.bsl").read_text(encoding="utf-8-sig")
+        self.assertNotIn("client-runtime-request", command)
+        self.assertNotIn("Форма.ВыполнитьКоманду", command)
+
+    def test_group_expansion_is_idempotent(self):
+        scenario = prepare_native_ui_scenario({"steps": [{
+            "action": "setGroupExpanded", "form": "settings",
+            "element": {"objectName": "Advanced"}, "expanded": True,
+        }]})
+        self.assertTrue(scenario["steps"][0]["expanded"])
+        module = (
+            Path(__file__).resolve().parents[1] / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn('Действие = "setgroupexpanded"', module)
+        self.assertIn("Группа.Развернуть()", module)
+        self.assertIn("Группа.Свернуть()", module)
+
+    def test_hidden_designer_installer_supports_linux_xvfb(self):
+        installer = (
+            Path(__file__).resolve().parents[1]
+            / "scripts" / "install_cfe_designer_hidden.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn("create_backend", installer)
+        self.assertIn('"windowsDesktop" if os.name == "nt" else "xvfb"', installer)
+        self.assertIn("xvfb_display_candidates", installer)
+        self.assertNotIn('os.environ.get("CODEX_XVFB_DISPLAY", "98")', installer)
+        self.assertIn("password_argument = '/P\"\"'", installer)
+        self.assertIn('authentication = [f"/N{args.user}", password_argument]', installer)
+        self.assertIn("submit_linux_authentication", installer)
+        self.assertIn("type_unicode", installer)
+        self.assertIn("XChangeKeyboardMapping", installer)
+        self.assertNotIn("type_unicode(username)", installer)
+        self.assertIn("250 <= width.value <= 700", installer)
+        self.assertNotIn("supported only on Windows", installer)
+
+        bootstrap = (
+            Path(__file__).resolve().parents[1]
+            / "scripts" / "install_cfe_with_bridge_bootstrap.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn("temporary_password = uuid.uuid4().hex", bootstrap)
+        self.assertIn('u.Password=', bootstrap)
+        self.assertIn('installer_password_environment = "CODEX_CTB_BOOTSTRAP_PASSWORD"', bootstrap)
+        self.assertNotIn('"--empty-password"', bootstrap)
+
+    def test_assert_field_supports_dynamic_text_predicates(self):
+        contains = prepare_native_ui_scenario({"steps": [{
+            "action": "assertField", "field": {"objectName": "Json"}, "contains": '"write_fields"',
+        }]})
+        self.assertEqual(contains["steps"][0]["contains"], '"write_fields"')
+        non_empty = prepare_native_ui_scenario({"steps": [{
+            "action": "assertField", "field": {"objectName": "Json"}, "notEmpty": True,
+        }]})
+        self.assertTrue(non_empty["steps"][0]["notEmpty"])
+        with self.assertRaisesRegex(UiWorkerError, "exactly one"):
+            prepare_native_ui_scenario({"steps": [{
+                "action": "assertField", "field": {"objectName": "Json"},
+                "expected": "value", "notEmpty": True,
+            }]})
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn('CTB_Получить(Шаг, "notEmpty", Ложь)', module)
+        self.assertIn('CTB_Получить(Шаг, "contains", Неопределено)', module)
+        text_reader_start = module.index("Функция CTB_ПолучитьТекстПоля")
+        text_reader_end = module.index("Процедура CTB_ВвестиТекстВТабличноеПоле", text_reader_start)
+        text_reader = module[text_reader_start:text_reader_end]
+        self.assertIn("Поле.ПолучитьТекстРедактирования()", text_reader)
+        self.assertIn("Поле.НачатьРедактированиеТекущейОбласти()", text_reader)
+        self.assertIn('"field.activatedEditText: "', text_reader)
+
+    def test_native_module_has_table_cell_editing_primitives(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("Функция CTB_ПолучитьКонтекстПоля", module)
+        self.assertIn("Таблица.ИзменитьСтроку()", module)
+        self.assertIn("Поле.НачатьРедактированиеТекущейОбласти()", module)
+        self.assertIn("КонтекстПоля.Поле.Выбрать()", module)
+        self.assertIn("Таблица.ЗакончитьРедактированиеСтроки(Ложь)", module)
+        self.assertIn("Таблица.ПолучитьТекстЯчейки", module)
+        self.assertNotIn("commitActiveField", module)
+        self.assertIn("CTB_НайтиКнопкуБезопасногоПерезапуска", module)
+        self.assertIn('ЗакрытыеСтартовыеДиалоги.Найти("restartTestClient")', module)
+        self.assertIn("CTB_ЗакрытьТестКлиентШтатно", module)
+        self.assertIn("ТестКлиент.РазорватьСоединение()", module)
+        self.assertIn("CTB_ОткрытьНавигационнуюЦель", module)
+        self.assertIn("CTB_ПроверитьЧтоФормаНеОшибкаНавигации", module)
+
+    def test_input_text_checks_editability_before_interacting(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        start = module.index('ИначеЕсли Действие = "inputtext" Тогда')
+        end = module.index('ИначеЕсли Действие = "selectfromdropdown" Тогда', start)
+        input_text_branch = module[start:end]
+        self.assertLess(input_text_branch.index("CTB_ПроверитьДоступностьПоляДляВвода"), input_text_branch.index("Поле.Активизировать"))
+        self.assertIn('"enabled"', module)
+        self.assertIn('"readOnly"', module)
+        self.assertIn("InputText target is not editable", module)
+
+    def test_dialog_button_search_covers_message_box_containers(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("Функция CTB_НайтиКнопкуДиалога", module)
+        self.assertIn('Окно.ПолучитьКомандныйИнтерфейс()', module)
+        self.assertIn('"ТестируемаяКнопкаКомандногоИнтерфейса"', module)
+
+    def test_window_navigation_skips_inaccessible_testable_forms(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        start = module.index("Процедура CTB_ПерейтиКСледующемуОкну")
+        end = module.index(
+            "Процедура CTB_НажатьКнопкуФормыИлиКомандногоИнтерфейса",
+            start,
+        )
+        navigation = module[start:end]
+        self.assertIn(
+            "Для ИндексФормы = 0 По Формы.Количество() - 1 Цикл",
+            navigation,
+        )
+        self.assertIn(
+            "Кандидат = Формы[Формы.Количество() - 1 - ИндексФормы]",
+            navigation,
+        )
+        self.assertIn("Формы[ИндексФормы].Активизировать()", navigation)
+        self.assertIn("Кандидат.Активизировать()", navigation)
+        self.assertIn("Ошибки.Добавить(ОписаниеОшибки())", navigation)
+        home_start = module.index("Процедура CTB_ПерейтиКНачальнойСтранице")
+        home_end = module.index("Процедура CTB_ПерейтиКСледующемуОкну", home_start)
+        home_navigation = module[home_start:home_end]
+        self.assertIn("CTB_ГлавноеОкно(ТестКлиент, Шаг)", home_navigation)
+        self.assertIn("Окно.ПерейтиКНачальнойСтранице()", home_navigation)
+        self.assertIn("Ошибки.Добавить(ОписаниеОшибки())", home_navigation)
+        self.assertIn('ЗаголовокОкна = "начальная страница"', home_navigation)
+        self.assertIn('ЗаголовокОкна = "home page"', home_navigation)
+
+    def test_close_form_prefers_form_and_never_closes_main_window(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        start = module.index("Функция CTB_ЗапроситьЗакрытиеФормы")
+        end = module.index("Функция CTB_ОткрытьФормуВыполненияЗадачи", start)
+        close_form = module[start:end]
+
+        self.assertLess(close_form.index("Форма.Закрыть()"), close_form.index("КнопкаЗакрыть.Нажать()"))
+        self.assertLess(close_form.index("КнопкаЗакрыть.Нажать()"), close_form.index("Окно.Закрыть()"))
+        self.assertIn("CTB_ФормаОткрыта(ТестКлиент, Форма)", close_form)
+        self.assertIn('СтрРазделить("Закрыть,Close", ",")', close_form)
+        self.assertIn("Если Окно.Основное Тогда", close_form)
+        self.assertIn("Form cannot be closed without closing the main client window", close_form)
+
+    def test_open_form_recovery_reuses_already_opened_target(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("CTB_НайтиУжеОткрытуюЦелевуюФорму", module)
+        self.assertIn("Повторный менеджер должен подхватить фактически открытую форму", module)
+
+    def test_warm_suite_restores_test_client_after_server_hook(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        suite_start = module.index("Функция CTB_ВыполнитьНаборUIСценариев")
+        suite_end = module.index("Функция CTB_ЗапроситьСервернуюФазуНабора", suite_start)
+        suite = module[suite_start:suite_end]
+        self.assertIn("CTB_ПереподключитьТестКлиентПослеСервернойФазы(ТестКлиент, Хост, Порт)", suite)
+        self.assertLess(suite.index("CTB_ПереподключитьТестКлиентПослеСервернойФазы"), suite.index("CTB_ВыполнитьСценарий"))
+        self.assertIn("ТестКлиент.РазорватьСоединение()", module)
+        self.assertIn("ТестКлиент.УстановитьСоединение()", module)
+
+    def test_server_hook_wait_keeps_test_client_timer_available_for_next_ui_scenario(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+        start = module.index("Функция CTB_ЗапроситьСервернуюФазуНабора")
+        end = module.index("Процедура CTB_ЗакрытьФормыСценария", start)
+        hook = module[start:end]
+        self.assertNotIn("CTB_ТекущийТестКлиент.РазорватьСоединение()", hook)
+        self.assertNotIn("CTB_ПаузаТестКлиента(CTB_ТекущийТестКлиент)", hook)
+        self.assertIn("CTB_ПереподключитьТестКлиентПослеСервернойФазы", module)
+        self.assertIn('"opendataprocessor"', module)
+        self.assertIn("CTB_ОбработатьКомандуОткрытияФормы", module)
+        self.assertIn("ОткрытьФорму(ПолноеИмяФормы, ПараметрыОткрытия)", module)
+        self.assertIn('Новый Структура("Ключ", ПолучитьИзВременногоХранилища(АдресСсылки))', module)
+        self.assertIn("CTB_ЗапроситьUIAВызовЭлемента", module)
+        self.assertIn('НРег(Строка(ВидЭлемента)) = "decoration"', module)
+        self.assertIn("CTB_ОткрытьФормуЧерезТестКлиент", module)
+
+    def test_uia_runner_has_visual_inner_button_fallback(self):
+        runner = (Path(__file__).resolve().parents[1] / "uia_runner.py").read_text(encoding="utf-8")
+        self.assertIn("def _capture_window_image", runner)
+        self.assertIn("def _locate_inner_button_by_pixels", runner)
+        self.assertIn("tableCellVisualInnerButton", runner)
+        self.assertIn("PrintWindow", runner)
+
+    def test_visual_inner_button_detector_prefers_right_field_button(self):
+        from PIL import Image, ImageDraw
+
+        class Rect:
+            left = 10
+            top = 20
+            right = 210
+            bottom = 50
+
+        class WindowRect:
+            left = 0
+            top = 0
+
+        image = Image.new("RGB", (240, 80), "white")
+        draw = ImageDraw.Draw(image)
+        draw.rectangle((10, 20, 210, 50), outline=(170, 170, 170), fill=(250, 250, 250))
+        draw.rectangle((182, 22, 207, 48), outline=(80, 80, 80), fill=(225, 225, 225))
+        draw.ellipse((192, 33, 194, 35), fill=(30, 30, 30))
+        draw.ellipse((197, 33, 199, 35), fill=(30, 30, 30))
+        draw.ellipse((202, 33, 204, 35), fill=(30, 30, 30))
+
+        match = _locate_inner_button_by_pixels(image, Rect(), WindowRect(), "choice")
+
+        self.assertIsNotNone(match)
+        assert match is not None
+        self.assertGreaterEqual(match["screenPoint"]["x"], 180)
+        self.assertLessEqual(match["screenPoint"]["x"], 210)
+
+    def test_expand_and_unknown_placeholder(self):
+        self.assertEqual(expand(["-TPort{testPort}"], {"testPort": "1538"}), ["-TPort1538"])
+        with self.assertRaisesRegex(UiWorkerError, "Unknown command placeholder"):
+            expand("{missing}", {})
+
+    def test_config_validation(self):
+        with self.assertRaisesRegex(UiWorkerError, "clientCommand"):
+            validate_worker_config({"managerCommand": ["manager"]})
+        with self.assertRaisesRegex(UiWorkerError, "Unsupported UI backend"):
+            validate_worker_config({"backend": "screen", "clientCommand": ["a"], "managerCommand": ["b"]})
+        with self.assertRaisesRegex(UiWorkerError, "bridgeBaseUrl"):
+            validate_worker_config({"resultTransport": "bridgeJob", "clientCommand": ["a"], "managerCommand": ["b"]})
+        with self.assertRaisesRegex(UiWorkerError, "windowsRawCommandLine"):
+            validate_worker_config({"clientCommand": ["a"], "managerCommand": ["b"], "windowsRawCommandLine": "yes"})
+
+    def test_windows_raw_command_line_preserves_empty_password_token(self):
+        command = [r"C:\Program Files\1cv8\bin\1cv8.exe", "ENTERPRISE", '/P""', "/TestClient"]
+
+        quoted = windows_command_line(command)
+        raw = windows_command_line(command, raw_arguments=True)
+
+        self.assertIn('/P\\"\\"', quoted)
+        self.assertEqual(
+            raw,
+            '"C:\\Program Files\\1cv8\\bin\\1cv8.exe" ENTERPRISE /P"" /TestClient',
+        )
+
+    def test_windows_process_backend_uses_raw_command_line(self):
+        command = [r"C:\Program Files\1cv8\bin\1cv8.exe", "ENTERPRISE", '/P""', "/TestClient"]
+        process = Mock(pid=123)
+        with patch("ui_worker.os.name", "nt"), patch("ui_worker.subprocess.Popen", return_value=process) as popen:
+            ProcessBackend({}, None).start(command, raw_command_line=True)
+
+        rendered = popen.call_args.args[0]
+        self.assertIsInstance(rendered, str)
+        self.assertIn('/P""', rendered)
+        self.assertNotIn('/P\\"\\"', rendered)
+
+    def test_windows_step_recovery_is_bounded_and_respects_declared_timeout(self):
+        backend = object.__new__(WindowsDesktopBackend)
+        partial = {"status": "running", "step": {"action": "openForm"}}
+        self.assertFalse(should_recover_stalled_windows_step(backend, partial, 29, 0, {}))
+        self.assertTrue(should_recover_stalled_windows_step(backend, partial, 30, 0, {}))
+        self.assertFalse(should_recover_stalled_windows_step(backend, partial, 30, 1, {}))
+        compact_partial = {"status": "running", "currentStep": 1, "step": {"status": "running"}}
+        scenario = {"steps": [{"action": "openForm", "targetForm": {"timeout": 30}}]}
+        self.assertFalse(should_recover_stalled_windows_step(
+            backend, compact_partial, 39, 0, {}, scenario,
+        ))
+        self.assertTrue(should_recover_stalled_windows_step(
+            backend, compact_partial, 40, 0, {}, scenario,
+        ))
+        compact_partial["step"]["status"] = "passed"
+        self.assertTrue(should_recover_stalled_windows_step(
+            backend, compact_partial, 40, 0, {}, scenario,
+        ))
+        compact_partial["step"]["action"] = "platform-specific-action"
+        self.assertTrue(should_recover_stalled_windows_step(
+            backend, compact_partial, 40, 0, {}, scenario,
+        ))
+        self.assertFalse(should_recover_stalled_windows_step(
+            backend, {"status": "running", "step": {"action": "closeForm", "status": "failed"}}, 30, 0, {},
+        ))
+        self.assertFalse(should_recover_stalled_windows_step(
+            backend, {"status": "passed", "step": {"action": "closeForm"}}, 30, 0, {},
+        ))
+
+    def test_password_is_redacted_from_report_command(self):
+        command = ["1cv8c.exe", "/N", "Tester", "/P", "secret", "/TestClient"]
+        self.assertEqual(redact_command(command, ["/P"])[4], "***")
+        self.assertEqual(command[4], "secret")
+
+    def test_connection_and_login_are_always_redacted(self):
+        command = ["1cv8c", "ENTERPRISE", "/S", "server\\database", "/N", "user", "/Psecret"]
+        redacted = redact_command(command, [])
+        self.assertEqual(redacted[3], "***")
+        self.assertEqual(redacted[5], "***")
+        self.assertEqual(redacted[6], "/P***")
+        self.assertNotIn("server\\database", redacted)
+        self.assertNotIn("user", redacted)
+
+    def test_test_client_and_manager_suppress_startup_ui_by_default(self):
+        command = suppress_1c_startup_ui(["1cv8c", "ENTERPRISE", "/TestClient", "-TPort", "1538"])
+        self.assertIn("/DisableStartupDialogs", command)
+        self.assertIn("/DisableStartupMessages", command)
+        self.assertIn("/DisableSplash", command)
+        self.assertLess(command.index("/DisableSplash"), command.index("/TestClient"))
+        self.assertEqual(command.count("/DisableSplash"), 1)
+
+        unchanged = suppress_1c_startup_ui(["python", "manager.py"])
+        self.assertEqual(unchanged, ["python", "manager.py"])
+
+    def test_test_client_startup_parameter_is_isolated(self):
+        command = isolate_test_client_startup_parameter(["1cv8c", "ENTERPRISE", "/TestClient", "-TPort", "1538"])
+        self.assertEqual(command, ["1cv8c", "ENTERPRISE", "/TestClient", "-TPort", "1538"])
+        self.assertEqual(isolate_test_client_startup_parameter(command), command)
+        self.assertEqual(isolate_test_client_startup_parameter(["python", "client.py"]), ["python", "client.py"])
+
+    def test_1c_connection_arguments_are_normalized_for_linux_launcher(self):
+        self.assertEqual(
+            normalize_1c_auth_arguments(["1cv8c", "ENTERPRISE", "/S", "host\\base", "/N", "user", "/P", "", "/TestClient"]),
+            ["1cv8c", "ENTERPRISE", "/Shost\\base", "/Nuser", '/P""', "/TestClient"],
+        )
+        self.assertEqual(
+            normalize_1c_auth_arguments(["1cv8c", "ENTERPRISE", "/P", "secret", "/TestClient"]),
+            ["1cv8c", "ENTERPRISE", "/Psecret", "/TestClient"],
+        )
+        self.assertEqual(
+            normalize_1c_auth_arguments(["1cv8c", "ENTERPRISE", "/Nuser", "/P", "/TestClient"]),
+            ["1cv8c", "ENTERPRISE", "/Nuser", '/P""', "/TestClient"],
+        )
+        self.assertEqual(
+            normalize_1c_auth_arguments(["python", "runner.py", "/N", "unchanged"]),
+            ["python", "runner.py", "/N", "unchanged"],
+        )
+
+    def test_xvfb_process_environment_uses_x11(self):
+        if not sys.platform.startswith("linux"):
+            self.skipTest("GTK X11 requirement applies to Linux")
+        environment = xvfb_process_environment({"CUSTOM": "value"}, 99)
+        self.assertEqual(environment["DISPLAY"], ":99")
+        self.assertEqual(environment["CUSTOM"], "value")
+        self.assertEqual(environment["GDK_BACKEND"], "x11")
+
+    def test_xvfb_auto_display_avoids_existing_socket_and_lock(self):
+        # The chooser uses the real /tmp namespace. Reserve two high,
+        # process-local candidates and remove them in finally.
+        socket = Path("/tmp/.X11-unix/X190")
+        lock = Path("/tmp/.X191-lock")
+        socket.parent.mkdir(parents=True, exist_ok=True)
+        socket.touch()
+        lock.touch()
+        try:
+            self.assertEqual(choose_free_xvfb_display(190, 192), 192)
+        finally:
+            socket.unlink(missing_ok=True)
+            lock.unlink(missing_ok=True)
+
+    def test_redacted_command_is_safe_to_serialize_in_report(self):
+        command = ["1cv8c", "ENTERPRISE", "/F", "private-database-path", "/N", "private-login", "/P", "private-password"]
+        serialized = json.dumps({"command": redact_command(command, [])})
+        self.assertNotIn("private-database-path", serialized)
+        self.assertNotIn("private-login", serialized)
+        self.assertNotIn("private-password", serialized)
+
+    def test_environment_placeholder_is_required(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.json"
+            scenario.write_text('{"steps":[{"action":"assertConnected"}]}', encoding="utf-8")
+            config = {
+                "backend": "process",
+                "environmentPlaceholders": {"password": "MISSING_CODEX_TEST_PASSWORD"},
+                "clientCommand": ["client", "/P", "{password}"],
+                "managerCommand": ["manager"],
+            }
+            with patch.dict(os.environ, {}, clear=False):
+                os.environ.pop("MISSING_CODEX_TEST_PASSWORD", None)
+                with self.assertRaisesRegex(UiWorkerError, "MISSING_CODEX_TEST_PASSWORD"):
+                    run_ui_worker(config, scenario, root / "artifacts")
+
+    def test_process_backend_runs_client_and_manager(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.feature"
+            scenario.write_text("smoke", encoding="utf-8")
+            port = free_port()
+            config = {
+                "backend": "process",
+                "testPort": port,
+                "startupTimeoutSeconds": 5,
+                "probeTestPort": True,
+                "timeoutSeconds": 5,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", MANAGER_CODE, "{artifactDir}/manager-result.json"],
+                "resultFile": "{artifactDir}/manager-result.json",
+            }
+
+            report = run_ui_worker(config, scenario, root / "artifacts")
+
+            self.assertTrue(report["ok"])
+            self.assertEqual(report["backend"], "process")
+            self.assertEqual(report["managerResult"]["tests"], 1)
+            self.assertEqual(report["manager"]["exitCode"], 0)
+            summary = json.loads((root / "artifacts" / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary["runId"], report["runId"])
+
+    def test_worker_replaces_stale_summary_at_start(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            artifacts = root / "artifacts"
+            artifacts.mkdir()
+            (artifacts / "summary.json").write_text('{"runId":"previous"}', encoding="utf-8")
+            scenario = root / "missing.json"
+            config = {"backend": "process", "clientCommand": ["client"], "managerCommand": ["manager"]}
+            with self.assertRaisesRegex(UiWorkerError, "does not exist"):
+                run_ui_worker(config, scenario, artifacts)
+            summary = json.loads((artifacts / "summary.json").read_text(encoding="utf-8"))
+            self.assertNotEqual(summary["runId"], "previous")
+            self.assertEqual(summary["status"], "starting")
+
+    def test_bridge_job_transport_queues_and_reads_result(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.json"
+            scenario.write_text('{"$schema":"../ui-scenario.schema.json","name":"smoke","steps":[{"action":"assertConnected"}]}', encoding="utf-8")
+            port = free_port()
+            config = {
+                "backend": "process",
+                "bridgeBaseUrl": "http://bridge.invalid/hs/codex-test",
+                "resultTransport": "bridgeJob",
+                "testPort": port,
+                "probeTestPort": True,
+                "startupTimeoutSeconds": 5,
+                "timeoutSeconds": 5,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", "pass", "{jobId}"],
+            }
+            calls = []
+
+            def fake_bridge(_config, payload):
+                calls.append(payload)
+                if payload["command"] == "uiJobGet":
+                    return {"status": "passed", "result": json.dumps({"ok": True, "tests": 1})}
+                return {"ok": True}
+
+            with patch("ui_worker.bridge_command", side_effect=fake_bridge):
+                report = run_ui_worker(config, scenario, root / "artifacts")
+
+            self.assertTrue(report["ok"], report)
+            self.assertEqual(report["resultTransport"], "bridgeJob")
+            self.assertEqual(report["managerResult"]["tests"], 1)
+            commands = [call["command"] for call in calls]
+            self.assertEqual(commands[0], "uiJobCreate")
+            self.assertEqual(commands[-1], "uiJobDelete")
+            self.assertGreaterEqual(commands.count("uiJobGet"), 1)
+            self.assertEqual(calls[0]["jobId"], report["jobId"])
+            self.assertNotIn("$schema", calls[0]["scenario"])
+            self.assertTrue(Path(report["artifacts"]["progress"]).is_file())
+            self.assertTrue(Path(report["artifacts"]["summary"]).is_file())
+
+    def test_bridge_failed_step_stops_worker_before_timeout(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.json"
+            scenario.write_text(
+                '{"name":"expected failure","steps":[{"action":"assertConnected"}]}',
+                encoding="utf-8",
+            )
+            port = free_port()
+            config = {
+                "backend": "process",
+                "bridgeBaseUrl": "http://bridge.invalid/hs/codex-test",
+                "resultTransport": "bridgeJob",
+                "testPort": port,
+                "probeTestPort": True,
+                "startupTimeoutSeconds": 5,
+                "timeoutSeconds": 30,
+                "progressPollSeconds": 0.1,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", "import time; time.sleep(60)", "{jobId}"],
+            }
+            failed_step = {
+                "status": "failed",
+                "name": "Expected failure",
+                "action": "assertConnected",
+                "error": "bridge failure sentinel",
+            }
+
+            def fake_bridge(_config, payload):
+                if payload["command"] == "uiJobGet":
+                    partial = {
+                        "ok": True,
+                        "status": "running",
+                        "stage": "failed",
+                        "name": "expected failure",
+                        "currentStep": 1,
+                        "totalSteps": 1,
+                        "step": failed_step,
+                        "steps": [failed_step],
+                    }
+                    return {"status": "running", "result": json.dumps(partial)}
+                return {"ok": True}
+
+            started = time.monotonic()
+            with patch("ui_worker.bridge_command", side_effect=fake_bridge):
+                report = run_ui_worker(config, scenario, root / "artifacts")
+            elapsed = time.monotonic() - started
+
+            self.assertFalse(report["ok"])
+            self.assertLess(elapsed, 5)
+            self.assertEqual(report["error"]["type"], "ScenarioFailure")
+            self.assertIn("bridge failure sentinel", report["error"]["message"])
+            self.assertTrue(any(
+                event.get("stage") == "failed" and "stopping TestManager" in event.get("message", "")
+                for event in report["progress"]
+            ))
+
+    def test_bridge_job_queued_startup_is_bounded_and_published(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.json"
+            scenario.write_text(
+                '{"name":"queued startup","steps":[{"action":"assertConnected"}]}',
+                encoding="utf-8",
+            )
+            port = free_port()
+            config = {
+                "backend": "process",
+                "bridgeBaseUrl": "http://bridge.invalid/hs/codex-test",
+                "resultTransport": "bridgeJob",
+                "testPort": port,
+                "probeTestPort": True,
+                "startupTimeoutSeconds": 5,
+                "managerStartupTimeoutSeconds": 0.5,
+                "timeoutSeconds": 30,
+                "progressPollSeconds": 0.1,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", "import time; time.sleep(60)", "{jobId}"],
+            }
+            calls = []
+
+            def fake_bridge(_config, payload):
+                calls.append(payload)
+                if payload["command"] == "uiJobGet":
+                    return {"status": "queued", "result": ""}
+                return {"ok": True}
+
+            started = time.monotonic()
+            with patch("ui_worker.bridge_command", side_effect=fake_bridge):
+                report = run_ui_worker(config, scenario, root / "artifacts")
+            elapsed = time.monotonic() - started
+
+            self.assertFalse(report["ok"])
+            self.assertLess(elapsed, 5)
+            self.assertEqual(report["error"]["type"], "ManagerStartupTimeout")
+            self.assertIn("remained queued", report["error"]["message"])
+            published = [call for call in calls if call["command"] == "uiJobSet"]
+            self.assertEqual(len(published), 1)
+            self.assertEqual(published[0]["status"], "failed")
+            self.assertTrue(any(
+                event.get("stage") == "failed" and event.get("jobStatus") == "queued"
+                for event in report["progress"]
+            ))
+
+    def test_test_manager_intercepts_application_start_before_configuration_code(self):
+        module = (
+            Path(__file__).resolve().parents[1]
+            / "src" / "Ext" / "ManagedApplicationModule.bsl"
+        ).read_text(encoding="utf-8-sig")
+
+        self.assertIn('&Вместо("ПриНачалеРаботыСистемы")', module)
+        self.assertNotIn('&После("ПриНачалеРаботыСистемы")', module)
+        self.assertEqual(module.count("ПродолжитьВызов();"), 2)
+        self.assertIn('"ok,status,stage"', module)
+        self.assertIn('"manager-startup"', module)
+
+    def test_inline_log_transport_embeds_scenario_and_reads_marker(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.json"
+            scenario.write_text('{"name":"inline smoke","steps":[{"action":"assertConnected"}]}', encoding="utf-8")
+            port = free_port()
+            manager_code = (
+                "import base64,json,sys;"
+                "scenario=json.loads(base64.b64decode(sys.argv[2]).decode('ascii'));"
+                "open(sys.argv[1],'w',encoding='utf-8').write("
+                "'message CODEX_UI_RESULT:'+json.dumps({'ok':True,'name':scenario['name']})+' trailing')"
+            )
+            config = {
+                "backend": "process",
+                "resultTransport": "inlineLog",
+                "testPort": port,
+                "probeTestPort": True,
+                "startupTimeoutSeconds": 5,
+                "timeoutSeconds": 5,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", manager_code, "{managerLog}", "{scenarioBase64}"],
+            }
+
+            report = run_ui_worker(config, scenario, root / "artifacts")
+
+            self.assertTrue(report["ok"], report)
+            self.assertEqual(report["resultTransport"], "inlineLog")
+            self.assertEqual(report["managerResult"]["name"], "inline smoke")
+            self.assertTrue(Path(report["managerLog"]).is_file())
+
+    def test_missing_scenario_is_rejected_before_process_start(self):
+        config = {"backend": "process", "clientCommand": ["client"], "managerCommand": ["manager"]}
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with self.assertRaisesRegex(UiWorkerError, "does not exist"):
+                run_ui_worker(config, Path(temp_dir) / "missing.feature", Path(temp_dir) / "artifacts")
+
+    @unittest.skipUnless(os.name == "nt", "Windows session desktop test")
+    def test_windows_session_desktop_backend(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            scenario = root / "ui.feature"
+            scenario.write_text("smoke", encoding="utf-8")
+            config = {
+                "backend": "windowsDesktop",
+                "testPort": free_port(),
+                "startupTimeoutSeconds": 5,
+                "probeTestPort": True,
+                "timeoutSeconds": 5,
+                "clientCommand": [sys.executable, "-c", CLIENT_CODE, "{testPort}"],
+                "managerCommand": [sys.executable, "-c", MANAGER_CODE, "{artifactDir}/manager-result.json"],
+                "resultFile": "{artifactDir}/manager-result.json",
+            }
+            report = run_ui_worker(config, scenario, root / "artifacts")
+            self.assertTrue(report["ok"], report)
+            self.assertEqual(report["backend"], "windowsDesktop")
+
+    def test_windows_desktop_uses_stable_session_desktop_not_created_desktop(self):
+        worker = (Path(__file__).resolve().parents[1] / "ui_worker.py").read_text(encoding="utf-8")
+        backend = worker[worker.index("class WindowsDesktopBackend"):worker.index("def xvfb_process_environment")]
+        self.assertIn("class WindowsDesktopBackend(ProcessBackend)", backend)
+        self.assertIn('self.desktop_name = "Default"', backend)
+        self.assertIn("OpenDesktopW", backend)
+        self.assertNotIn("self.user32.CreateDesktopW", backend)
+        self.assertNotIn("self.kernel32.CreateProcessW", backend)
+        self.assertNotIn("startup.lpDesktop", backend)
+
+    def test_windows_backend_avoids_job_object_launch_path(self):
+        worker = (Path(__file__).resolve().parents[1] / "ui_worker.py").read_text(encoding="utf-8")
+        backend = worker[worker.index("class WindowsDesktopBackend"):worker.index("def xvfb_process_environment")]
+        self.assertNotIn("CreateJobObjectW", backend)
+        self.assertNotIn("AssignProcessToJobObject", backend)
+
+
+if __name__ == "__main__":
+    unittest.main()

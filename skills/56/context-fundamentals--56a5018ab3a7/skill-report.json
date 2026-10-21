@@ -1,0 +1,462 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T05:33:33.642Z",
+    "slug": "asmayaseen-context-fundamentals",
+    "source_url": "https://github.com/Asmayaseen/hackathon-2/tree/main/.claude/skills/context-fundamentals",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "56a5018ab3a72b637fe3ebf9089f73b9742c1fc22be0d13cf341a2b1fa2ba34f",
+    "tree_hash": "9ff58506858b9a24d41bbd3b1a5f8d1bb14892b91c56146e029abbac10858b25",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "context-fundamentals",
+    "description": "Understand the components, mechanics, and constraints of context in agent systems. Use when designing agent architectures, debugging context-related failures, or optimizing context usage.",
+    "summary": "Design, evaluate, and optimize context for reliable AI agent systems.",
+    "icon": "📦",
+    "author": "Asmayaseen",
+    "license": "MIT",
+    "category": "documentation",
+    "tags": [
+      "context-engineering",
+      "agent-architecture",
+      "token-budgeting",
+      "progressive-disclosure",
+      "prompt-design"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "All eight static findings are false positives caused by headings, prose, and fenced Markdown examples; no shell execution or system reconnaissance is present. Two semantic concerns remain in example code: unrestricted file reads and summaries promoted to the system role. These patterns require safeguards before production reuse.",
+    "remediation": [
+      {
+        "issue": "ProgressiveDisclosureManager opens caller-provided paths without enforcing its configured base directory.",
+        "suggestion": "Resolve each path against base_dir, reject paths outside that directory, and document that callers must not supply untrusted paths.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The summary injection example assigns generated conversation summaries the system role.",
+        "suggestion": "Store summaries as untrusted data in a dedicated message or structured field, and prevent summarized instructions from gaining system authority.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 130
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 130,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 142
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:references/context-components.md:154:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/context-components.md",
+        "line_start": 154,
+        "line_end": 154,
+        "snippet": "Avoid arbitrary character limits that split mid-sentence or mid-concept."
+      },
+      {
+        "id": "blocker:references/context-components.md:219:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/context-components.md",
+        "line_start": 219,
+        "line_end": 219,
+        "snippet": "reference_id = store_observation(output)"
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 130,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 130,
+        "line_end": 133,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 133,
+        "line_end": 142,
+        "snippet": "```markdown"
+      },
+      {
+        "id": "blocker:SKILL.md:93:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "### Hybrid Strategies"
+      },
+      {
+        "id": "blocker:SKILL.md:95:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "The most effective agents employ hybrid strategies. Pre-load some context for speed (like CLAUDE.md "
+      },
+      {
+        "id": "blocker:SKILL.md:152:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 152,
+        "line_end": 152,
+        "snippet": "7. Design for context degradation rather than hoping to avoid it"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:references/context-components.md:154:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line advises semantic document chunking and performs no host, process, credential, or environment discovery. The scanner matched benign prose."
+      },
+      {
+        "id": "blocker:references/context-components.md:219:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This pseudocode stores a verbose observation and returns its reference identifier. It does not inspect the host system or collect sensitive metadata."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text is an opening Markdown fence around a static prompt-format example. It contains no shell interpolation or executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text closes one Markdown example before the next heading. No Ruby backtick expression or shell command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:133:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text opens a fenced list of documentation paths. The example neither invokes a shell nor interpolates untrusted input."
+      },
+      {
+        "id": "blocker:SKILL.md:93:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line is only the heading Hybrid Strategies. It requests no system information and performs no reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:95:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The line discusses preloaded context and just-in-time exploration as architecture choices. It does not direct collection of host or credential data."
+      },
+      {
+        "id": "blocker:SKILL.md:152:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line recommends designing for reduced model performance as context grows. It contains no discovery operation or sensitive system query."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unrestricted File Reads",
+        "description": "ProgressiveDisclosureManager stores base_dir but opens caller-provided paths without resolving or restricting them. Untrusted paths could expose files outside the intended content directory.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/context_manager.py",
+            "line_start": 285,
+            "line_end": 310
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "The implementation directly passes summary_path and detail_path to open while base_dir remains unused. No containment or path validation is present."
+      },
+      {
+        "title": "Generated Summary Receives System Authority",
+        "description": "The example summarizes prior messages and inserts the result with the system role. Untrusted instructions preserved by summarization could gain higher apparent authority.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/context-components.md",
+            "line_start": 177,
+            "line_end": 189
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The pseudocode explicitly assigns generated summary content to the system role. Exploitation depends on how generate_summary handles adversarial conversation content."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unrestricted File Reads",
+        "description": "ProgressiveDisclosureManager stores base_dir but opens caller-provided paths without resolving or restricting them. Untrusted paths could expose files outside the intended content directory.",
+        "locations": [
+          {
+            "file": "scripts/context_manager.py",
+            "line_start": 285,
+            "line_end": 310
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "The implementation directly passes summary_path and detail_path to open while base_dir remains unused. No containment or path validation is present."
+      },
+      {
+        "title": "Generated Summary Receives System Authority",
+        "description": "The example summarizes prior messages and inserts the result with the system role. Untrusted instructions preserved by summarization could gain higher apparent authority.",
+        "locations": [
+          {
+            "file": "references/context-components.md",
+            "line_start": 177,
+            "line_end": 189
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The pseudocode explicitly assigns generated summary content to the system role. Exploitation depends on how generate_summary handles adversarial conversation content."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 870,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T05:33:33.642Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Build Efficient Agent Context",
+    "value_statement": "Agent context can become noisy, expensive, and unreliable as tasks grow. This skill explains context structure and provides utilities for budgeting, validation, truncation, and progressive loading.",
+    "seo_keywords": [
+      "Claude context engineering",
+      "Codex context management",
+      "Claude Code skills",
+      "agent context design",
+      "context window optimization",
+      "token budgeting",
+      "progressive disclosure",
+      "message history management",
+      "tool output optimization",
+      "AI agent architecture"
+    ],
+    "actual_capabilities": [
+      "Explains system prompts, tool definitions, retrieved documents, message history, and tool outputs.",
+      "Compares preloaded context with just-in-time retrieval and hybrid strategies.",
+      "Estimates text and message token usage with a documented character-based approximation.",
+      "Builds prioritized context sections within a configurable token limit.",
+      "Truncates message history while preserving the system prompt, an existing summary, and recent messages.",
+      "Checks context for empty sections, missing sections, excessive length, and duplicate content."
+    ],
+    "limitations": [
+      "Token estimates use a rough four-characters-per-token approximation instead of model-specific tokenizers.",
+      "Text truncation splits on whitespace and does not preserve exact model token boundaries.",
+      "The utilities are demonstration code and require testing, error handling, and security hardening for production.",
+      "File-loading helpers accept direct paths and need containment controls before processing untrusted references."
+    ],
+    "use_cases": [
+      {
+        "title": "Plan Agent Context Architecture",
+        "description": "Define what an agent should preload, retrieve on demand, compact, and retain across a long workflow.",
+        "target_user": "AI platform engineers"
+      },
+      {
+        "title": "Diagnose Context Failures",
+        "description": "Trace unreliable behavior to context volume, information position, stale history, or oversized tool outputs.",
+        "target_user": "Agent developers"
+      },
+      {
+        "title": "Teach Context Engineering",
+        "description": "Introduce context components, attention constraints, progressive disclosure, and practical budgeting guidelines to a technical team.",
+        "target_user": "Technical leads and educators"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Map Context Components",
+        "prompt": "Explain the five main context components for [agent]. Identify what should always load and what should load only when needed.",
+        "scenario": "Beginner review of an agent design"
+      },
+      {
+        "title": "Create a Context Budget",
+        "prompt": "Review this context plan: [plan]. Estimate major token consumers, identify low-signal content, and propose a prioritized budget with compaction thresholds.",
+        "scenario": "Intermediate context optimization"
+      },
+      {
+        "title": "Diagnose Context Degradation",
+        "prompt": "Diagnose this agent failure: [symptoms and context trace]. Separate context quality, position, history, and tool-output causes, then recommend measurable tests.",
+        "scenario": "Advanced debugging of long-running agents"
+      },
+      {
+        "title": "Design a Production Context System",
+        "prompt": "Design a production context architecture for [workflow] using [model limits and tools]. Include retrieval, caching, truncation, summary trust boundaries, path controls, and degradation tests.",
+        "scenario": "Expert architecture planning with security constraints"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Plan context for a support agent that uses policies, account data, and long ticket histories.",
+        "output": [
+          "Keep current policy and task constraints near the beginning.",
+          "Retrieve account records only for the active customer.",
+          "Compact resolved ticket details while retaining decisions and unresolved actions."
+        ]
+      },
+      {
+        "input": "Explain why an agent misses requirements in a very long prompt.",
+        "output": "The context may contain too much competing information or place key requirements in a weak attention position. Test a shorter prompt with requirements repeated near the end."
+      },
+      {
+        "input": "Review a context plan that loads every reference document at startup.",
+        "output": [
+          "Replace full startup loading with lightweight document identifiers and summaries.",
+          "Retrieve detailed sections only when the current task needs them.",
+          "Measure token use, retrieval accuracy, latency, and task quality before deployment."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Keep the smallest high-signal context that supports the current decision.",
+      "Place critical instructions near the beginning or end and measure behavior under realistic context loads.",
+      "Treat retrieved content, tool output, and generated summaries as untrusted data with explicit authority boundaries."
+    ],
+    "anti_patterns": [
+      "Do not preload every available document without evidence that the task needs it.",
+      "Do not rely on approximate token counts when enforcing a hard model limit.",
+      "Do not promote generated summaries or retrieved instructions to the system role."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill teach?",
+        "answer": "It explains context components, attention constraints, progressive disclosure, token budgeting, message truncation, and validation for AI agent systems."
+      },
+      {
+        "question": "Which tools support this skill?",
+        "answer": "The skill declares support for Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Are the token estimates exact?",
+        "answer": "No. The included estimator uses a rough character ratio and recommends model-specific tokenizers for production measurements."
+      },
+      {
+        "question": "Does the skill execute external commands?",
+        "answer": "No. The command alerts come from Markdown fences and static documentation examples, not executable shell calls."
+      },
+      {
+        "question": "Are the Python utilities production ready?",
+        "answer": "No. They are demonstration utilities that need stronger path controls, model-aware tokenization, error handling, and dedicated tests."
+      },
+      {
+        "question": "Does it prevent prompt injection?",
+        "answer": "No. It explains prompt structure but does not sanitize retrieved content or generated summaries. Production systems need explicit trust boundaries."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "context-components.md",
+          "type": "file",
+          "path": "references/context-components.md",
+          "lines": 283
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "context_manager.py",
+          "type": "file",
+          "path": "scripts/context_manager.py",
+          "lines": 370
+        },
+        {
+          "name": "verify.py",
+          "type": "file",
+          "path": "scripts/verify.py",
+          "lines": 32
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 185
+    }
+  ]
+}

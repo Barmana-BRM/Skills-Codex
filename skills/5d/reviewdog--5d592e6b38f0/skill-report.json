@@ -1,0 +1,3120 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T06:21:21.031Z",
+    "slug": "agentsecops-reviewdog",
+    "source_url": "https://github.com/AgentSecOps/SecOpsAgentKit/tree/main/skills/secsdlc/reviewdog",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "5d592e6b38f0960a50465db2c111e47ea65e9b759cd1663779d7fb6b119024ee",
+    "tree_hash": "c913e2b3a1bcd94a5a6e157282236f48f1a7cec8cf040816fb142ef4d976c490",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "reviewdog",
+    "description": "Configure reviewdog to publish security scanner and linter findings as inline CI review feedback across GitHub, GitLab, and local pre-commit workflows.",
+    "summary": "Integrate multiple security scanners with reviewdog for actionable pull request and local feedback.",
+    "icon": "📦",
+    "version": "0.1.0",
+    "author": "AgentSecOps",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "reviewdog",
+      "code-review",
+      "ci-cd",
+      "sast",
+      "devsecops"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "env_access",
+      "network",
+      "scripts",
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static alerts are false positives caused by Markdown code spans, documentation URLs, /dev/null redirection, and references to platform-managed CI tokens. The GitLab template critically downloads a mutable remote installer and pipes it directly to sh. The templates also use predictable temporary files, unpinned CI dependencies, and fail-open secret-scanning patterns.",
+    "remediation": [
+      {
+        "issue": "The GitLab template executes a mutable remote installer without integrity verification.",
+        "suggestion": "Download a pinned release artifact, verify its published checksum or signature, and execute the verified local file.",
+        "severity": "critical"
+      },
+      {
+        "issue": "CI actions, scanner releases, packages, and container images use mutable versions.",
+        "suggestion": "Pin actions to commit SHAs, containers to digests, and packages to reviewed versions. Use automated updates with review.",
+        "severity": "high"
+      },
+      {
+        "issue": "Critical Gitleaks commands suppress all nonzero exit statuses.",
+        "suggestion": "Distinguish findings from execution errors, require a valid report, and fail the job when Gitleaks cannot complete.",
+        "severity": "high"
+      },
+      {
+        "issue": "Gitleaks uses a predictable report path under /tmp.",
+        "suggestion": "Create a private temporary file with mktemp or the CI runner temporary directory, then remove it after processing.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 8,
+            "line_end": 8
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 59,
+            "line_end": 59
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 68,
+            "line_end": 68
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 142,
+            "line_end": 142
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 26,
+            "line_end": 26
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 162,
+            "line_end": 162
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 166,
+            "line_end": 166
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "references/supported_tools.md",
+            "line_start": 64,
+            "line_end": 64
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 70,
+            "line_end": 70
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 82,
+            "line_end": 82
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "references/cwe_mapping.md",
+            "line_start": 304,
+            "line_end": 304
+          },
+          {
+            "file": "references/cwe_mapping.md",
+            "line_start": 331,
+            "line_end": 331
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 62,
+            "line_end": 62
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 159,
+            "line_end": 159
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 403,
+            "line_end": 403
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 417,
+            "line_end": 417
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 313,
+            "line_end": 313
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 245,
+            "line_end": 245
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 279,
+            "line_end": 279
+          },
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 295,
+            "line_end": 295
+          },
+          {
+            "file": "references/supported_tools.md",
+            "line_start": 421,
+            "line_end": 421
+          },
+          {
+            "file": "references/supported_tools.md",
+            "line_start": 435,
+            "line_end": 435
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 6,
+            "line_end": 6
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 381,
+            "line_end": 381
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 382,
+            "line_end": 382
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 383,
+            "line_end": 383
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 384,
+            "line_end": 384
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 385,
+            "line_end": 385
+          }
+        ]
+      },
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "references/cwe_mapping.md",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 271,
+            "line_end": 271
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/reporter_formats.md",
+            "line_start": 331,
+            "line_end": 331
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 125
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 125,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 145,
+            "line_end": 157
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 157,
+            "line_end": 178
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 192
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 192,
+            "line_end": 197
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 200
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 200,
+            "line_end": 202
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 202,
+            "line_end": 204
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 204,
+            "line_end": 205
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 205,
+            "line_end": 206
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 206,
+            "line_end": 208
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 208,
+            "line_end": 210
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 211
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 211,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 213
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 213,
+            "line_end": 221
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 221,
+            "line_end": 235
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 235,
+            "line_end": 241
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 241,
+            "line_end": 251
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 251,
+            "line_end": 257
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 257,
+            "line_end": 263
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 263,
+            "line_end": 269
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 269,
+            "line_end": 277
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 277,
+            "line_end": 312
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 312,
+            "line_end": 312
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 313,
+            "line_end": 313
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 320,
+            "line_end": 321
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 321,
+            "line_end": 322
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 322,
+            "line_end": 328
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 328,
+            "line_end": 337
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 337,
+            "line_end": 339
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 339,
+            "line_end": 343
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 343,
+            "line_end": 345
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 345,
+            "line_end": 364
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 364,
+            "line_end": 370
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 370,
+            "line_end": 377
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 222,
+            "line_end": 222
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:assets/.reviewdog.yml:8:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 8,
+        "line_end": 8,
+        "snippet": "cmd: bandit -r . -f json 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:16:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "cmd: semgrep --config=auto --severity=ERROR --json --quiet 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:24:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "cmd: semgrep --config=auto --severity=WARNING --json --quiet 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:32:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "cmd: semgrep --config \"p/owasp-top-ten\" --json --quiet 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:41:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:42:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "cat /tmp/gitleaks.json 2>/dev/null || echo '{\"findings\":[]}'"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:51:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "find . -type f -name \"Dockerfile*\" -exec hadolint --format json {} \\; 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:59:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "cmd: checkov -d . --quiet --compact -o json 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:68:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 68,
+        "line_end": 68,
+        "snippet": "find . -type f -name \"*.sh\" -exec shellcheck -f json {} \\; 2>/dev/null"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:78:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "--include=\"*.py\" --include=\"*.php\" --include=\"*.js\" . 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:89:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "--exclude-dir=node_modules --exclude-dir=.git . 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:41:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:42:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "assets/.reviewdog.yml",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "cat /tmp/gitleaks.json 2>/dev/null || echo '{\"findings\":[]}'"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:45:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "bandit -r . -f json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:58:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "semgrep --config=auto --severity=ERROR --json --quiet 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:72:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "semgrep --config=auto --severity=WARNING --json --quiet 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:128:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "-o json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:142:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "shellcheck -f json \"$script\" 2>/dev/null | \\"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:43:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:56:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:70:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:82:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 82,
+        "line_end": 82,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:105:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:121:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:139:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "assets/github_actions_template.yml",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "network:assets/gitlab_ci_template.yml:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:26:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "bandit -r . -f json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:48:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "semgrep --config=auto --severity=ERROR --json --quiet 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:57:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "semgrep --config=auto --severity=WARNING --json --quiet 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:96:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "hadolint \"$dockerfile\" --format json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:117:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "checkov -d . --quiet --compact -o json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:139:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "shellcheck -f json \"$script\" 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:162:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "(bandit -r . -f json 2>/dev/null | \\"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:166:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 166,
+        "line_end": 166,
+        "snippet": "(semgrep --config=auto --json --quiet 2>/dev/null | \\"
+      },
+      {
+        "id": "blocker:assets/gitlab_ci_template.yml:14:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "assets/gitlab_ci_template.yml",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr"
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:69:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "- repo: https://github.com/pre-commit/pre-commit-hooks"
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:81:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "- repo: https://github.com/psf/black"
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:88:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "- repo: https://github.com/pycqa/isort"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:12:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "entry: bash -c 'bandit -r . -f json 2>/dev/null | reviewdog -f=bandit -reporter=local -fail-on-error"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:23:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "entry: bash -c 'semgrep --config=auto --severity=ERROR --json --quiet 2>/dev/null | reviewdog -f=sem"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:31:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "entry: bash -c 'semgrep --config=auto --severity=WARNING --json --quiet 2>/dev/null | reviewdog -f=s"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:42:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "entry: bash -c 'gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/de"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:52:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "entry: bash -c 'find . -type f -name \"Dockerfile*\" -exec hadolint --format json {} \\; 2>/dev/null | "
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:63:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "entry: bash -c 'shellcheck -f json \"$@\" 2>/dev/null | reviewdog -f=shellcheck -reporter=local || tru"
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:42:temp-directory-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Temp directory access",
+        "file": "assets/pre_commit_config.yaml",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "entry: bash -c 'gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/de"
+      },
+      {
+        "id": "scripts:references/cwe_mapping.md:83:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "references/cwe_mapping.md",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "| B307 | CWE-78  | eval() usage |"
+      },
+      {
+        "id": "env_access:references/cwe_mapping.md:304:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/cwe_mapping.md",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:references/cwe_mapping.md:331:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/cwe_mapping.md",
+        "line_start": 331,
+        "line_end": 331,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "sensitive:references/cwe_mapping.md:112:crypto-seed-private-key-mention",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Crypto seed/private key mention",
+        "file": "references/cwe_mapping.md",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "- Private keys (SSH, PGP, certificates)"
+      },
+      {
+        "id": "external_commands:references/reporter_formats.md:331:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/reporter_formats.md",
+        "line_start": 331,
+        "line_end": 331,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:references/reporter_formats.md:71:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/reporter_formats.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "Similar to `github-check` but specifically for pull requests."
+      },
+      {
+        "id": "network:references/reporter_formats.md:139:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/reporter_formats.md",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "export CI_API_V4_URL=\"https://gitlab.com/api/v4\""
+      },
+      {
+        "id": "network:references/reporter_formats.md:245:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/reporter_formats.md",
+        "line_start": 245,
+        "line_end": 245,
+        "snippet": "export GERRIT_ADDRESS=\"https://gerrit.example.com\""
+      },
+      {
+        "id": "network:references/reporter_formats.md:279:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/reporter_formats.md",
+        "line_start": 279,
+        "line_end": 279,
+        "snippet": "\"url\": \"https://github.com/example/scanner\""
+      },
+      {
+        "id": "network:references/reporter_formats.md:295:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/reporter_formats.md",
+        "line_start": 295,
+        "line_end": 295,
+        "snippet": "\"url\": \"https://cwe.mitre.org/data/definitions/89.html\""
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:46:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/reporter_formats.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "export REVIEWDOG_GITHUB_API_TOKEN=\"${GITHUB_TOKEN}\""
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:62:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/reporter_formats.md",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:159:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/reporter_formats.md",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "REVIEWDOG_GITLAB_API_TOKEN: $GITLAB_TOKEN"
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:403:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/reporter_formats.md",
+        "line_start": 403,
+        "line_end": 403,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:417:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/reporter_formats.md",
+        "line_start": 417,
+        "line_end": 417,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "blocker:references/reporter_formats.md:304:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/reporter_formats.md",
+        "line_start": 304,
+        "line_end": 304,
+        "snippet": "\"replacement\": \"cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))\""
+      },
+      {
+        "id": "network:references/supported_tools.md:421:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/supported_tools.md",
+        "line_start": 421,
+        "line_end": 421,
+        "snippet": "\"url\": \"https://example.com\""
+      },
+      {
+        "id": "network:references/supported_tools.md:435:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/supported_tools.md",
+        "line_start": 435,
+        "line_end": 435,
+        "snippet": "\"url\": \"https://cwe.mitre.org/data/definitions/89.html\""
+      },
+      {
+        "id": "filesystem:references/supported_tools.md:64:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/supported_tools.md",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "- /.venv"
+      },
+      {
+        "id": "blocker:references/supported_tools.md:134:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/supported_tools.md",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "id = \"custom-api-key\""
+      },
+      {
+        "id": "scripts:SKILL.md:271:dynamic-code-evaluation-with-eval",
+        "category": "scripts",
+        "severity": "high",
+        "pattern": "Dynamic code evaluation with eval()",
+        "file": "SKILL.md",
+        "line_start": 271,
+        "line_end": 271,
+        "snippet": "grep -nH -R \"eval(\" . --include=\"*.py\" | \\"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 54,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 58,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 66,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 74,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 83,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 101,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 125,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 128,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 139,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 145,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 145,
+        "line_end": 157,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 178,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 178,
+        "line_end": 191,
+        "snippet": "- Restrict who can modify `.reviewdog.yml` configuration"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 192,
+        "snippet": "- Use `fail-on-error` to block PRs with security findings"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 197,
+        "snippet": "- Enable `filter-mode=added` to catch new vulnerabilities"
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 197,
+        "line_end": 199,
+        "snippet": "### Scripts (`scripts/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 200,
+        "snippet": "- `setup_reviewdog.py` - Automated reviewdog installation and CI configuration generator"
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 202,
+        "snippet": "- `run_security_suite.sh` - Runs multiple security scanners through reviewdog"
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 202,
+        "line_end": 204,
+        "snippet": "### References (`references/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 204,
+        "line_end": 205,
+        "snippet": "- `supported_tools.md` - Complete list of supported security tools with configuration examples"
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 205,
+        "line_end": 206,
+        "snippet": "- `reporter_formats.md` - Available output formats and reporter configurations"
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 206,
+        "line_end": 208,
+        "snippet": "- `cwe_mapping.md` - Mapping of common tool findings to CWE categories"
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 208,
+        "line_end": 210,
+        "snippet": "### Assets (`assets/`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 211,
+        "snippet": "- `github_actions_template.yml` - GitHub Actions workflow for multi-tool security scanning"
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 211,
+        "line_end": 212,
+        "snippet": "- `gitlab_ci_template.yml` - GitLab CI configuration for reviewdog integration"
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 213,
+        "snippet": "- `.reviewdog.yml` - Sample reviewdog configuration file"
+      },
+      {
+        "id": "external_commands:SKILL.md:213:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 213,
+        "line_end": 221,
+        "snippet": "- `pre_commit_config.yaml` - Pre-commit hook integration"
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 221,
+        "line_end": 235,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 235,
+        "line_end": 241,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 241,
+        "line_end": 251,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 251,
+        "line_end": 257,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 257,
+        "line_end": 263,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 269,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 269,
+        "line_end": 277,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:277:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 277,
+        "line_end": 312,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 312,
+        "line_end": 312,
+        "snippet": "- Verify GitHub token has correct permissions (`repo` scope for private repos, `public_repo` for pub"
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 313,
+        "line_end": 313,
+        "snippet": "- Check CI environment has `REVIEWDOG_GITHUB_API_TOKEN` or `GITHUB_TOKEN` set"
+      },
+      {
+        "id": "external_commands:SKILL.md:320:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 320,
+        "line_end": 321,
+        "snippet": "- Use `filter-mode=added` to only show new issues"
+      },
+      {
+        "id": "external_commands:SKILL.md:321:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 321,
+        "line_end": 322,
+        "snippet": "- Configure tool-specific suppressions in `.reviewdog.yml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 322,
+        "line_end": 328,
+        "snippet": "- Adjust severity thresholds with `-level` flag"
+      },
+      {
+        "id": "external_commands:SKILL.md:328:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 328,
+        "line_end": 337,
+        "snippet": "- Run reviewdog only on changed files using `filter-mode=diff_context`"
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 337,
+        "line_end": 339,
+        "snippet": "- Use `-f=rdjson` for custom JSON output following reviewdog diagnostic format"
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 339,
+        "line_end": 343,
+        "snippet": "- See `references/reporter_formats.md` for format specifications"
+      },
+      {
+        "id": "external_commands:SKILL.md:343:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 343,
+        "line_end": 345,
+        "snippet": "### Custom reviewdog configuration (`.reviewdog.yml`)"
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 345,
+        "line_end": 364,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:364:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 364,
+        "line_end": 370,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:370:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 370,
+        "line_end": 377,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:222:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "SKILL.md",
+        "line_start": 222,
+        "line_end": 222,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:SKILL.md:6:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "SKILL.md",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "unified code review comments on pull requests. Use when: (1) Integrating security scanning"
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- https://github.com/reviewdog/reviewdog"
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- https://reviewdog.github.io/"
+      },
+      {
+        "id": "network:SKILL.md:381:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 381,
+        "line_end": 381,
+        "snippet": "- [Reviewdog Documentation](https://github.com/reviewdog/reviewdog)"
+      },
+      {
+        "id": "network:SKILL.md:382:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 382,
+        "line_end": 382,
+        "snippet": "- [Supported Tools and Formats](https://reviewdog.github.io/supported-tools)"
+      },
+      {
+        "id": "network:SKILL.md:383:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 383,
+        "line_end": 383,
+        "snippet": "- [GitHub Actions Integration](https://github.com/reviewdog/action-setup)"
+      },
+      {
+        "id": "network:SKILL.md:384:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 384,
+        "line_end": 384,
+        "snippet": "- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-refere"
+      },
+      {
+        "id": "network:SKILL.md:385:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 385,
+        "line_end": 385,
+        "snippet": "- [CWE Top 25](https://cwe.mitre.org/top25/)"
+      },
+      {
+        "id": "env_access:SKILL.md:63:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:SKILL.md:116:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:SKILL.md:313:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "SKILL.md",
+        "line_start": 313,
+        "line_end": 313,
+        "snippet": "- Check CI environment has `REVIEWDOG_GITHUB_API_TOKEN` or `GITHUB_TOKEN` set"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:assets/.reviewdog.yml:8:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:16:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:24:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:32:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:41:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:42:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:51:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:59:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:68:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:78:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:89:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:41:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "Gitleaks writes sensitive scan output to the predictable shared path /tmp/gitleaks.json. On a shared host, collisions or symlink attacks could overwrite another file or expose findings.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:assets/.reviewdog.yml:42:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The runner reads scan results from the predictable shared path /tmp/gitleaks.json. A colliding or attacker-controlled file could be accepted as trusted scanner output.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:45:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:58:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:72:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:128:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/github_actions_template.yml:142:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:43:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:56:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:70:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:82:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:105:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:121:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "env_access:assets/github_actions_template.yml:139:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The workflow passes GitHub's managed token to reviewdog for authenticated pull request reporting. It contains no literal credential or unrelated exfiltration destination."
+      },
+      {
+        "id": "network:assets/gitlab_ci_template.yml:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "This URL targets a mutable master-branch installer that is fetched during CI and passed directly to sh. The network dependency is not pinned or integrity-verified.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:26:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:48:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:57:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:96:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:117:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:139:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:162:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/gitlab_ci_template.yml:166:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "blocker:assets/gitlab_ci_template.yml:14:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 1,
+        "reason": "The CI template downloads an installer from the mutable master branch and immediately executes it with sh. A compromised upstream response would gain code execution in the runner.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:69:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a declared pre-commit repository source followed by an explicit revision. It is expected dependency metadata, not a hidden request or exfiltration endpoint."
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:81:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a declared pre-commit repository source followed by an explicit revision. It is expected dependency metadata, not a hidden request or exfiltration endpoint."
+      },
+      {
+        "id": "network:assets/pre_commit_config.yaml:88:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a declared pre-commit repository source followed by an explicit revision. It is expected dependency metadata, not a hidden request or exfiltration endpoint."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:12:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:23:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:31:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:42:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:52:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:63:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited device access is only stderr redirection to /dev/null while a named scanner runs. It does not read a sensitive device or write arbitrary filesystem content."
+      },
+      {
+        "id": "filesystem:assets/pre_commit_config.yaml:42:temp-directory-access",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "reason": "The pre-commit hook writes and reads Gitleaks results at the fixed shared path /tmp/gitleaks.json. This permits collisions and symlink manipulation on multi-user systems.",
+        "severity": "medium"
+      },
+      {
+        "id": "scripts:references/cwe_mapping.md:83:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The text is a documentation table mapping Bandit test B307 to eval usage. It contains no executable eval call."
+      },
+      {
+        "id": "env_access:references/cwe_mapping.md:304:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:references/cwe_mapping.md:331:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "sensitive:references/cwe_mapping.md:112:crypto-seed-private-key-mention",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The phrase identifies private keys as a secret type that Gitleaks detects. No private key, seed phrase, or credential value is present."
+      },
+      {
+        "id": "external_commands:references/reporter_formats.md:331:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The shebang belongs to a documented scanner or reporter example with fixed commands. It does not construct a command from untrusted input."
+      },
+      {
+        "id": "network:references/reporter_formats.md:71:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The scanner matched ordinary prose containing the words pull requests or GitHub check. There is no Python HTTP import, client call, or network implementation."
+      },
+      {
+        "id": "network:references/reporter_formats.md:139:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:references/reporter_formats.md:245:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:references/reporter_formats.md:279:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:references/reporter_formats.md:295:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:46:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:62:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:159:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:403:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:references/reporter_formats.md:417:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "blocker:references/reporter_formats.md:304:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited text is a parameterized SQL replacement inside a sample diagnostic. It does not inspect users, accounts, processes, or host configuration."
+      },
+      {
+        "id": "network:references/supported_tools.md:421:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:references/supported_tools.md:435:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "filesystem:references/supported_tools.md:64:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The .venv path appears in a Bandit exclusion list, so the scanner is told not to access it. This is not hidden-file collection or modification."
+      },
+      {
+        "id": "blocker:references/supported_tools.md:134:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited text defines a custom-api-key detector identifier in a Gitleaks example. It performs no system discovery."
+      },
+      {
+        "id": "scripts:SKILL.md:271:dynamic-code-evaluation-with-eval",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The text is a grep search for the literal pattern eval( so reviewdog can report dangerous code. It does not evaluate code."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:200:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:202:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:204:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:206:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:211:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:213:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:221:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:235:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:251:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:257:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:263:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:269:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:277:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:312:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:313:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:320:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:321:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:322:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:328:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:337:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:339:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:343:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:345:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:364:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:370:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The cited backticks are Markdown code fences or inline-code formatting in documentation. There is no Ruby source or backtick command expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:222:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The shebang belongs to a documented scanner or reporter example with fixed commands. It does not construct a command from untrusted input."
+      },
+      {
+        "id": "network:SKILL.md:6:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The scanner matched ordinary prose containing the words pull requests or GitHub check. There is no Python HTTP import, client call, or network implementation."
+      },
+      {
+        "id": "network:SKILL.md:20:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:381:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:382:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:383:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:384:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "network:SKILL.md:385:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears in documentation or sample metadata for an expected service. No code at this location sends data to the address."
+      },
+      {
+        "id": "env_access:SKILL.md:63:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:SKILL.md:116:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      },
+      {
+        "id": "env_access:SKILL.md:313:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is documentation showing a platform-managed token reference for reviewdog. It contains no literal credential and no instruction to transmit the token elsewhere."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Mutable CI Dependencies Execute in a Privileged Workflow",
+        "description": "The GitHub workflow uses a mutable major action tag, requests the latest reviewdog release, and installs unpinned Python packages. Upstream changes can execute before later steps receive a write-capable GitHub token.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 24,
+            "line_end": 27
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 35,
+            "line_end": 37
+          }
+        ],
+        "confidence": 0.94,
+        "confidence_reasoning": "The mutable action tag, latest version selector, and unpinned package installation are explicit. The workflow also grants pull-request and checks write permissions."
+      },
+      {
+        "title": "Critical Secret Scans Fail Open",
+        "description": "Gitleaks failures are suppressed with true, and missing reports can produce empty findings or skip reviewdog. Scanner crashes can therefore pass the critical secret gate.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 38,
+            "line_end": 46
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 79,
+            "line_end": 99
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 67,
+            "line_end": 86
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 37,
+            "line_end": 45
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "Each configuration explicitly suppresses the Gitleaks exit status. At least one path substitutes empty findings or skips review processing when output is absent."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr",
+        "locations": [
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 1,
+        "confidence_reasoning": "The CI template downloads an installer from the mutable master branch and immediately executes it with sh. A compromised upstream response would gain code execution in the runner."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr",
+        "locations": [
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "This URL targets a mutable master-branch installer that is fetched during CI and passed directly to sh. The network dependency is not pinned or integrity-verified."
+      },
+      {
+        "title": "Mutable CI Dependencies Execute in a Privileged Workflow",
+        "description": "The GitHub workflow uses a mutable major action tag, requests the latest reviewdog release, and installs unpinned Python packages. Upstream changes can execute before later steps receive a write-capable GitHub token.",
+        "locations": [
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 24,
+            "line_end": 27
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 35,
+            "line_end": 37
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The mutable action tag, latest version selector, and unpinned package installation are explicit. The workflow also grants pull-request and checks write permissions."
+      },
+      {
+        "title": "Critical Secret Scans Fail Open",
+        "description": "Gitleaks failures are suppressed with true, and missing reports can produce empty findings or skip reviewdog. Scanner crashes can therefore pass the critical secret gate.",
+        "locations": [
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 38,
+            "line_end": 46
+          },
+          {
+            "file": "assets/github_actions_template.yml",
+            "line_start": 79,
+            "line_end": 99
+          },
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 67,
+            "line_end": 86
+          },
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 37,
+            "line_end": 45
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "Each configuration explicitly suppresses the Gitleaks exit status. At least one path substitutes empty findings or skips review processing when output is absent."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Temp directory access",
+        "description": "gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/dev/null || true",
+        "locations": [
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 41,
+            "line_end": 41
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "Gitleaks writes sensitive scan output to the predictable shared path /tmp/gitleaks.json. On a shared host, collisions or symlink attacks could overwrite another file or expose findings."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "cat /tmp/gitleaks.json 2>/dev/null || echo '{\"findings\":[]}'",
+        "locations": [
+          {
+            "file": "assets/.reviewdog.yml",
+            "line_start": 42,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.88,
+        "confidence_reasoning": "The runner reads scan results from the predictable shared path /tmp/gitleaks.json. A colliding or attacker-controlled file could be accepted as trusted scanner output."
+      },
+      {
+        "title": "Temp directory access",
+        "description": "entry: bash -c 'gitleaks detect --report-format json --report-path /tmp/gitleaks.json --no-git 2>/de",
+        "locations": [
+          {
+            "file": "assets/pre_commit_config.yaml",
+            "line_start": 42,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.92,
+        "confidence_reasoning": "The pre-commit hook writes and reads Gitleaks results at the fixed shared path /tmp/gitleaks.json. This permits collisions and symlink manipulation on multi-user systems."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr",
+        "locations": [
+          {
+            "file": "assets/gitlab_ci_template.yml",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 1,
+        "confidence_reasoning": "The CI template downloads an installer from the mutable master branch and immediately executes it with sh. A compromised upstream response would gain code execution in the runner."
+      }
+    ],
+    "files_scanned": 9,
+    "total_lines": 2206,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T06:21:21.031Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Integrate Reviewdog Security Feedback into CI",
+    "value_statement": "Security scanner results are often fragmented across CI logs. This skill helps configure reviewdog to publish focused findings in pull requests and local hooks.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "reviewdog",
+      "code review automation",
+      "CI security scanning",
+      "GitHub Actions",
+      "GitLab CI",
+      "SAST integration",
+      "pull request annotations"
+    ],
+    "actual_capabilities": [
+      "Configures reviewdog runners for Bandit, Semgrep, Gitleaks, Hadolint, Checkov, and ShellCheck.",
+      "Provides templates for GitHub Actions, GitLab CI, pre-commit, and reviewdog configuration.",
+      "Selects pull request, check, merge request, or local reporters.",
+      "Applies diff filters, severity levels, and failure thresholds to scanner output.",
+      "Documents supported formats, custom scanner integration, and CWE mapping."
+    ],
+    "limitations": [
+      "Reviewdog and each selected scanner must be installed separately.",
+      "Reporter access requires correctly scoped platform tokens and repository permissions.",
+      "Scanner output compatibility can change across tool versions.",
+      "The setup and security suite scripts referenced in the guide are not included."
+    ],
+    "use_cases": [
+      {
+        "title": "Add Pull Request Security Comments",
+        "description": "Publish Bandit and Semgrep findings on changed lines in GitHub pull requests.",
+        "target_user": "DevSecOps engineer"
+      },
+      {
+        "title": "Standardize GitLab Security Gates",
+        "description": "Combine multiple scanners into consistent merge request discussions and blocking thresholds.",
+        "target_user": "CI platform maintainer"
+      },
+      {
+        "title": "Run Local Pre-Commit Reviews",
+        "description": "Surface security and lint findings before code reaches the remote repository.",
+        "target_user": "Application developer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Create a Basic Local Setup",
+        "prompt": "Configure reviewdog for [language] using [scanner]. Use the local reporter, scan changed files, and explain required dependencies.",
+        "scenario": "Beginner local integration"
+      },
+      {
+        "title": "Add a GitHub Actions Review",
+        "prompt": "Create a GitHub Actions reviewdog workflow for [scanners]. Use least-privilege permissions, pinned dependencies, and pull request annotations.",
+        "scenario": "Intermediate pull request automation"
+      },
+      {
+        "title": "Build a GitLab Security Gate",
+        "prompt": "Design a GitLab CI reviewdog pipeline for [scanners]. Block [severity] findings and report lower severities without suppressing scanner failures.",
+        "scenario": "Advanced merge request enforcement"
+      },
+      {
+        "title": "Design a Multi-Tool Policy",
+        "prompt": "Create a reviewdog policy for [repository]. Define reporters, diff filters, severity mappings, failure behavior, token permissions, and verified dependency versions.",
+        "scenario": "Advanced security governance"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Configure Bandit for local Python review.",
+        "output": [
+          "A local reporter configuration for Bandit findings.",
+          "A changed-line filter and blocking error threshold.",
+          "Required reviewdog and Bandit installation steps."
+        ]
+      },
+      {
+        "input": "Add Semgrep and Gitleaks to GitHub pull requests.",
+        "output": [
+          "A pull request workflow with minimal write permissions.",
+          "Separate critical and warning review channels.",
+          "Pinned dependencies and fail-closed scanner handling."
+        ]
+      },
+      {
+        "input": "Integrate a custom scanner with reviewdog.",
+        "output": "A format selection, field mapping, reporter choice, severity policy, and validation checklist for the custom scanner."
+      }
+    ],
+    "best_practices": [
+      "Pin actions, packages, installers, and container images to reviewed immutable versions.",
+      "Grant reporter tokens only the repository permissions required for comments and checks.",
+      "Fail closed when a critical scanner crashes or produces an invalid report."
+    ],
+    "anti_patterns": [
+      "Do not pipe remote installation scripts directly into a shell.",
+      "Do not suppress every scanner error with unconditional success handling.",
+      "Do not expose broad write tokens to unpinned tools or untrusted pull request workflows."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill run security scanners itself?",
+        "answer": "No. It provides guidance and templates for connecting installed scanners to reviewdog."
+      },
+      {
+        "question": "Which code hosting platforms are covered?",
+        "answer": "The included guidance covers GitHub and GitLab, with reference material for Bitbucket and Gerrit reporters."
+      },
+      {
+        "question": "Can reviewdog block a pull request?",
+        "answer": "Yes. Configure failure thresholds and required CI checks so selected finding levels block merging."
+      },
+      {
+        "question": "Which scanners are included in the templates?",
+        "answer": "Examples cover Bandit, Semgrep, Gitleaks, Hadolint, Checkov, and ShellCheck."
+      },
+      {
+        "question": "Does reviewdog remove scanner false positives?",
+        "answer": "No. It filters and reports findings, while scanner rules and suppressions control false positives."
+      },
+      {
+        "question": "How should CI tokens be configured?",
+        "answer": "Store tokens in platform secrets, grant minimal permissions, and avoid exposing them to untrusted or mutable dependencies."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "github_actions_template.yml",
+          "type": "file",
+          "path": "assets/github_actions_template.yml",
+          "lines": 162
+        },
+        {
+          "name": "gitlab_ci_template.yml",
+          "type": "file",
+          "path": "assets/gitlab_ci_template.yml",
+          "lines": 176
+        },
+        {
+          "name": "pre_commit_config.yaml",
+          "type": "file",
+          "path": "assets/pre_commit_config.yaml",
+          "lines": 102
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "cwe_mapping.md",
+          "type": "file",
+          "path": "references/cwe_mapping.md",
+          "lines": 349
+        },
+        {
+          "name": "reporter_formats.md",
+          "type": "file",
+          "path": "references/reporter_formats.md",
+          "lines": 458
+        },
+        {
+          "name": "supported_tools.md",
+          "type": "file",
+          "path": "references/supported_tools.md",
+          "lines": 454
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 386
+    }
+  ]
+}

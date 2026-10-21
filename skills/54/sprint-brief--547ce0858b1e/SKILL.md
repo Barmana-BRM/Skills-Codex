@@ -1,0 +1,1 @@
+../../../../skills/sprint-brief/SKILL.md

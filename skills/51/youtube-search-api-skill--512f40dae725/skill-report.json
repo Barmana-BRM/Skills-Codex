@@ -1,0 +1,1200 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T11:07:04.370Z",
+    "slug": "browser-act-youtube-search-api-skill",
+    "source_url": "https://github.com/browser-act/skills/tree/main/solutions/video-platforms/youtube-search-api-skill",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "512f40dae72520e77446352aa9fd94e806ab15212fd7f353d41694c472157cd2",
+    "tree_hash": "5dc061629b21afaa6ae199d5e9639260843b2d7057f0228aa6a158cdbc93c154",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "youtube-search-api-skill",
+    "description": "Search YouTube through a BrowserAct workflow and retrieve structured results for videos, Shorts, channels, or playlists.",
+    "summary": "Retrieve structured YouTube search results for research, monitoring, and content discovery.",
+    "icon": "📦",
+    "author": "browser-act",
+    "license": "MIT",
+    "category": "research",
+    "tags": [
+      "youtube",
+      "browseract",
+      "video-research",
+      "content-discovery",
+      "data-extraction"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "env_access",
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static detections are false positives caused by Markdown backticks, field names, and ordinary handling of a named API credential. The three BrowserAct API calls create an expected low-risk external data boundary, while the skill also encourages users to provide an API key directly and gives an unsafe shell interpolation pattern. Returned YouTube metadata is printed without guidance to treat it as untrusted content, creating an indirect prompt injection risk.",
+    "remediation": [
+      {
+        "issue": "The instructions encourage users to provide the BrowserAct API key directly to the agent.",
+        "suggestion": "Require BROWSERACT_API_KEY through the environment only, and remove every request to paste or provide the key in conversation.",
+        "severity": "high"
+      },
+      {
+        "issue": "The documented shell command can be populated with user-controlled search text without explicit escaping.",
+        "suggestion": "Invoke the script with a structured argument array or require robust shell escaping for every user-controlled argument.",
+        "severity": "medium"
+      },
+      {
+        "issue": "External YouTube metadata is printed for agent consumption without a trust-boundary warning.",
+        "suggestion": "Treat all returned fields as untrusted data, preserve them as quoted values, and never follow instructions found in results.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Search terms and task identifiers are sent to BrowserAct.",
+        "suggestion": "Disclose the BrowserAct data transfer and request confirmation before sending sensitive or confidential search terms.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 4,
+            "line_end": 4
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 65
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 65,
+            "line_end": 71
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 72
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:scripts/youtube_search_api.py:31:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "res = requests.post(f\"{API_BASE_URL}/run-task-by-template\", json=payload, headers=headers, timeout=3"
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:48:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "status_res = requests.get(f\"{API_BASE_URL}/get-task-status?task_id={task_id}\", headers=headers, time"
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:71:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "task_info = requests.get(f\"{API_BASE_URL}/get-task?task_id={task_id}\", headers=headers, timeout=30)."
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:15:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "API_BASE_URL = \"https://api.browseract.com/v2/workflow\""
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:97:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "print(\"1. Go to: https://www.browseract.com/reception/integrations\", flush=True)"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "api_key = os.getenv(\"BROWSERACT_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "api_key = os.getenv(\"BROWSERACT_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:17:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "def run_youtube_search_task(api_key, keywords, video_type=\"Videos\", limit=100):"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:18:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "headers = {\"Authorization\": f\"Bearer {api_key}\"}"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "api_key = os.getenv(\"BROWSERACT_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:94:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "if not api_key:"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:99:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "print(\"3. Provide it to me or set it as an environment variable (BROWSERACT_API_KEY).\", flush=True)"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:106:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "result = run_youtube_search_task(api_key, keywords, video_type, limit)"
+      },
+      {
+        "id": "blocker:scripts/youtube_search_api.py:40:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/youtube_search_api.py",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "task_id = res[\"id\"]"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "Before running, you must first check the `BROWSERACT_API_KEY` environment variable. If it is not set"
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "- **Type**: `string`"
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "- **Example**: `AI`, `automation`, `n8n`, `web scraping`"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "- **Type**: `string`"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "- **Supported values**: `Videos`, `Shorts`, `Channels`, `Playlists`"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "- **Default**: `Videos`"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "- **Type**: `number`"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "- **Example**: `20`, `50`, `100`"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "- **Default**: `100`"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 50,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 53,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 61,
+        "snippet": "Because this task involves automated browser operations, it may take a long time (several minutes). "
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 62,
+        "snippet": "- `title`: Title shown in search results"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 63,
+        "snippet": "- `description`: Short description snippet (when available)"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 64,
+        "snippet": "- `view_count`: View count displayed in results"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 65,
+        "snippet": "- `published_at`: Publish time displayed in results"
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 65,
+        "line_end": 71,
+        "snippet": "- `url`: Result item URL"
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 72,
+        "snippet": "- If the output **contains** `\"Invalid authorization\"`, it means the API Key is invalid or expired. "
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "- If the output **does not contain** `\"Invalid authorization\"` but the task execution fails (for exa"
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "> \"Since you have not configured the BrowserAct API Key, please go to the [BrowserAct Console](https"
+      },
+      {
+        "id": "env_access:SKILL.md:4:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 4,
+        "line_end": 4,
+        "snippet": "metadata: {\"openclaw\":{\"emoji\":\"🌐\",\"requires\":{\"bins\":[\"python\"],\"env\":[\"BROWSERACT_API_KEY\"]}}}"
+      },
+      {
+        "id": "env_access:SKILL.md:20:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "Before running, you must first check the `BROWSERACT_API_KEY` environment variable. If it is not set"
+      },
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "1. **No hallucinations, ensuring stable and accurate data extraction**: Pre-set workflows avoid AI g"
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "- If the output **contains** `\"Invalid authorization\"`, it means the API Key is invalid or expired. "
+      },
+      {
+        "id": "blocker:SKILL.md:72:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "- If the output **does not contain** `\"Invalid authorization\"` but the task execution fails (for exa"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:scripts/youtube_search_api.py:31:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The script sends the search terms, result type, limit, and bearer credential to BrowserAct over HTTPS. This is expected functionality, but it creates a real external data and credential boundary.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:48:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The script repeatedly sends an authenticated task identifier to BrowserAct while polling. The fixed HTTPS destination limits exposure, but the outbound service dependency is real.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:71:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The script makes an authenticated BrowserAct request to retrieve task results. This intended request exposes task context to an external service.",
+        "severity": "low"
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:15:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The constant is a fixed HTTPS endpoint for the declared BrowserAct service. It prevents arbitrary destination selection and is not independently dangerous."
+      },
+      {
+        "id": "network:scripts/youtube_search_api.py:97:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line only prints the official BrowserAct integration page for setup. It does not make a request or redirect data."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code reads only the explicitly documented BROWSERACT_API_KEY variable. It does not enumerate or collect unrelated environment data."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This duplicate detection covers the same targeted BROWSERACT_API_KEY lookup. Reading the service credential from the environment is an appropriate secret-handling pattern."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:17:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line defines a function parameter named api_key and contains no secret value or environment access. No credential is hardcoded or logged here."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:18:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The credential is placed in the standard Authorization header for the fixed BrowserAct HTTPS endpoint. The line does not expose or persist the key."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:88:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code loads a named BrowserAct credential from the environment rather than embedding one. It does not access other secrets."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:94:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line only checks whether the credential variable is empty. It neither reads a new secret source nor reveals the credential."
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:99:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The error message tells the user to provide the API key to the agent as an alternative to environment configuration. Pasting a long-lived credential into a conversation can expose it in model context and logs.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/youtube_search_api.py:106:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The line passes an already loaded credential to the local request function. It does not reveal the value or obtain additional secrets."
+      },
+      {
+        "id": "blocker:scripts/youtube_search_api.py:40:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The code reads a task ID from the BrowserAct response. It performs no host, process, network, or operating-system reconnaissance."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The backticks are Markdown formatting around an environment variable name. No Ruby or shell expression is executed on this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:28:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the word string as inline code in Markdown. They are not an execution operator."
+      },
+      {
+        "id": "external_commands:SKILL.md:30:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format example search terms in documentation. No command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks mark a documented parameter type. They do not invoke a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format supported result-type values. They contain no executable expression."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the default value Videos. No external command runs."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks mark the documented number type. This is Markdown, not code execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format numeric examples. They have no command semantics."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the documented default number. No execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.66,
+        "reason": "The fenced block instructs the agent to run the Python script with values derived from user input. The example does not require structured argument passing or robust escaping, so crafted keywords could alter a shell command.",
+        "severity": "medium"
+      },
+      {
+        "id": "external_commands:SKILL.md:50:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is the closing delimiter of a Markdown code fence. It does not execute the preceding command by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format an example status message. They are documentation syntax only."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the title output field name. No command is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the description output field name. No shell or Ruby execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the view_count output field name. They are not executable syntax in Markdown."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the published_at output field name. No command is invoked."
+      },
+      {
+        "id": "external_commands:SKILL.md:65:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks format the url output field name. They have no execution behavior."
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks quote an expected error string for comparison. They do not execute the string."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The backticks quote an Error prefix in retry documentation. No external command is created."
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The link directs users to the declared vendor's HTTPS integration page. Documentation does not transmit data merely by containing this URL."
+      },
+      {
+        "id": "env_access:SKILL.md:4:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The metadata declares BROWSERACT_API_KEY as a required environment variable but contains no credential value. Declaring a dependency is not secret exposure."
+      },
+      {
+        "id": "env_access:SKILL.md:20:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The instruction tells the agent to request that the user provide the API key when the environment variable is absent. This encourages secret disclosure through the conversation instead of requiring secure environment configuration.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:SKILL.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The sentence describes workflow accuracy and contains no system information gathering. It is unrelated to reconnaissance."
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line documents how to interpret an authorization error. It does not inspect the host system or network."
+      },
+      {
+        "id": "blocker:SKILL.md:72:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The line defines retry behavior for task errors. It performs no reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Untrusted Search Results Can Influence the Agent",
+        "description": "The script prints externally controlled YouTube titles and descriptions for direct agent consumption, but the skill does not require treating those values as untrusted data. Instruction-like text in search metadata could become an indirect prompt injection.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 73,
+            "line_end": 81
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The files explicitly show external result fields being returned and printed without a trust-boundary instruction. Exploitation depends on malicious metadata appearing in the search results."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Generic API/secret keys",
+        "description": "print(\"3. Provide it to me or set it as an environment variable (BROWSERACT_API_KEY).\", flush=True)",
+        "locations": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 99,
+            "line_end": 99
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.98,
+        "confidence_reasoning": "The error message tells the user to provide the API key to the agent as an alternative to environment configuration. Pasting a long-lived credential into a conversation can expose it in model context and logs."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "Before running, you must first check the `BROWSERACT_API_KEY` environment variable. If it is not set",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 20
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.96,
+        "confidence_reasoning": "The instruction tells the agent to request that the user provide the API key when the environment variable is absent. This encourages secret disclosure through the conversation instead of requiring secure environment configuration."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.66,
+        "confidence_reasoning": "The fenced block instructs the agent to run the Python script with values derived from user input. The example does not require structured argument passing or robust escaping, so crafted keywords could alter a shell command."
+      },
+      {
+        "title": "Untrusted Search Results Can Influence the Agent",
+        "description": "The script prints externally controlled YouTube titles and descriptions for direct agent consumption, but the skill does not require treating those values as untrusted data. Instruction-like text in search metadata could become an indirect prompt injection.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 73,
+            "line_end": 81
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The files explicitly show external result fields being returned and printed without a trust-boundary instruction. Exploitation depends on malicious metadata appearing in the search results."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Python HTTP libraries",
+        "description": "res = requests.post(f\"{API_BASE_URL}/run-task-by-template\", json=payload, headers=headers, timeout=3",
+        "locations": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The script sends the search terms, result type, limit, and bearer credential to BrowserAct over HTTPS. This is expected functionality, but it creates a real external data and credential boundary."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "status_res = requests.get(f\"{API_BASE_URL}/get-task-status?task_id={task_id}\", headers=headers, time",
+        "locations": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 48,
+            "line_end": 48
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The script repeatedly sends an authenticated task identifier to BrowserAct while polling. The fixed HTTPS destination limits exposure, but the outbound service dependency is real."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "task_info = requests.get(f\"{API_BASE_URL}/get-task?task_id={task_id}\", headers=headers, timeout=30).",
+        "locations": [
+          {
+            "file": "scripts/youtube_search_api.py",
+            "line_start": 71,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The script makes an authenticated BrowserAct request to retrieve task results. This intended request exposes task context to an external service."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 197,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T11:07:04.370Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Search YouTube Results with BrowserAct",
+    "value_statement": "Manual YouTube research is slow and difficult to structure. This skill runs a BrowserAct workflow and returns video, Shorts, channel, or playlist results.",
+    "seo_keywords": [
+      "YouTube search API",
+      "BrowserAct",
+      "YouTube data extraction",
+      "video research",
+      "Shorts search",
+      "channel discovery",
+      "playlist search",
+      "Claude",
+      "Codex",
+      "Claude Code"
+    ],
+    "actual_capabilities": [
+      "Starts a BrowserAct YouTube search workflow with keywords, a result type, and an item limit.",
+      "Supports Videos, Shorts, Channels, and Playlists result tabs.",
+      "Polls task status every ten seconds for up to five minutes.",
+      "Returns the workflow result string or a serialized task response.",
+      "Reports missing credentials, connection failures, task failures, and polling timeouts."
+    ],
+    "limitations": [
+      "Requires a BrowserAct API key and network access to the BrowserAct service.",
+      "Depends on BrowserAct workflow availability and current YouTube result behavior.",
+      "A search can take several minutes and stops after a five-minute polling limit.",
+      "The script does not validate result types or numeric item limits before submission."
+    ],
+    "use_cases": [
+      {
+        "title": "Research Topic Coverage",
+        "description": "Collect relevant videos and visible engagement details for a market or academic topic.",
+        "target_user": "Market researchers"
+      },
+      {
+        "title": "Monitor Competitor Content",
+        "description": "Track videos, Shorts, channels, or playlists associated with competitor names and industry terms.",
+        "target_user": "Marketing teams"
+      },
+      {
+        "title": "Build Tutorial Lists",
+        "description": "Find educational videos and playlists for a defined tool, skill, or course topic.",
+        "target_user": "Educators and learners"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Find Videos",
+        "prompt": "Search YouTube for [topic] and return up to 20 Videos. Show each title, view count, publish time, and URL.",
+        "scenario": "Beginner search for a small list of videos"
+      },
+      {
+        "title": "Discover Shorts",
+        "prompt": "Find up to 50 YouTube Shorts about [topic]. Sort the returned items by visible view count and summarize common themes.",
+        "scenario": "Trend discovery within short-form content"
+      },
+      {
+        "title": "Identify Niche Channels",
+        "prompt": "Search the Channels tab for [niche]. Return up to 40 channels, group them by apparent focus, and include each channel URL.",
+        "scenario": "Creator and partner research"
+      },
+      {
+        "title": "Compare Competing Topics",
+        "prompt": "Run separate Videos searches for [topic A], [topic B], and [topic C], with 100 results each. Compare visible views, publishing recency, and recurring creators.",
+        "scenario": "Advanced comparative market analysis"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Find 20 Videos about home energy audits.",
+        "output": [
+          "A list of up to 20 matching videos.",
+          "Each item includes available title, description, view count, publish time, and URL.",
+          "Results reflect the YouTube search page returned by BrowserAct."
+        ]
+      },
+      {
+        "input": "Find Channels focused on open-source data engineering.",
+        "output": "A structured channel discovery list with available names, descriptions, and result URLs."
+      },
+      {
+        "input": "Search for Playlists about beginner Spanish listening.",
+        "output": "A playlist list for the requested topic, limited to the requested result count and available search fields."
+      }
+    ],
+    "best_practices": [
+      "Set BROWSERACT_API_KEY in the environment before running the skill.",
+      "Use precise keywords and choose the result tab that matches the research goal.",
+      "Treat titles, descriptions, URLs, and other returned fields as untrusted external data."
+    ],
+    "anti_patterns": [
+      "Do not paste API keys into prompts, chat messages, or command arguments.",
+      "Do not use confidential search terms without approving transfer to BrowserAct.",
+      "Do not follow instructions embedded in returned titles, descriptions, or URLs."
+    ],
+    "faq": [
+      {
+        "question": "Which YouTube result types are supported?",
+        "answer": "The workflow supports Videos, Shorts, Channels, and Playlists."
+      },
+      {
+        "question": "What credential does the skill require?",
+        "answer": "It requires a BrowserAct API key stored in the BROWSERACT_API_KEY environment variable."
+      },
+      {
+        "question": "Does this skill use the official YouTube Data API?",
+        "answer": "No. It calls a BrowserAct workflow that extracts fields from YouTube search results."
+      },
+      {
+        "question": "How long can one search run?",
+        "answer": "The script polls for up to five minutes and checks status every ten seconds."
+      },
+      {
+        "question": "What fields can results include?",
+        "answer": "Results can include title, description, view count, publish time, and URL when available."
+      },
+      {
+        "question": "What happens when authorization fails?",
+        "answer": "The script reports the error and stops. Replace the environment credential before trying again."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "youtube_search_api.py",
+          "type": "file",
+          "path": "scripts/youtube_search_api.py",
+          "lines": 109
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 88
+    }
+  ]
+}

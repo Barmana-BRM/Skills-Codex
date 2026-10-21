@@ -1,0 +1,3356 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T16:47:58.673Z",
+    "slug": "regionallyfamous-dittobot",
+    "source_url": "https://github.com/RegionallyFamous/dittobot/tree/main/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "7153fe0d54801e08b15e3d65ce56de02dd00c128404a6e7b97af63d4dd435688",
+    "tree_hash": "3f838facfda2791b0af42f90a8b39b989baa2f26bfab1a724b8cb8f36631fcb6",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "dittobot",
+    "description": "Rewrite, edit, tighten, punch up, or diagnose user-provided prose while preserving the user's voice, intent, facts, stance, rhythm, humor, and formality. Use it for emails, posts, essays, internal docs, website copy, speeches, bios, captions, cover letters, and similar drafts.",
+    "summary": "Voice-preserving prose editor for rewriting drafts while protecting facts, stance, and constraints.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "RegionallyFamous",
+    "license": "MIT",
+    "tags": [
+      "writing",
+      "editing",
+      "voice-preservation",
+      "rewriting",
+      "prose"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem",
+      "env_access",
+      "scripts"
+    ],
+    "category": "writing"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The strongest confirmed issue is the documented curl-to-bash installer path, which executes remote mutable content without checksum verification. The install tooling also modifies the hidden user skills directory, and optional live evaluation can send prompts and an API key to an external endpoint. Most other static findings are false positives from Markdown examples, GPL text, regression fixtures, or defensive redaction code.",
+    "remediation": [
+      {
+        "issue": "README documents curl piped directly to bash.",
+        "suggestion": "Replace the pipe-to-shell command with a download, checksum verification, and explicit local execution step.",
+        "severity": "critical"
+      },
+      {
+        "issue": "install.sh downloads a mutable branch or environment-selected archive before running installer code.",
+        "suggestion": "Pin installs to immutable release tags and published checksums. Require explicit confirmation for any custom archive URL or repository override.",
+        "severity": "high"
+      },
+      {
+        "issue": "install.py can replace or move an existing skill under ~/.agents/skills/dittobot.",
+        "suggestion": "Add a confirmation prompt or dry-run mode before moving existing installs, creating symlinks, or replacing user skill files.",
+        "severity": "medium"
+      },
+      {
+        "issue": "live_eval.py handles OPENAI_API_KEY and can save evaluation transcripts.",
+        "suggestion": "Keep live evaluation outside the default install path, document the opt-in behavior clearly, and keep raw transcript saving disabled by default.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The JPEG banner is binary content that static analysis cannot inspect.",
+        "suggestion": "Publish a source hash or generated-source note for binary assets so reviewers can verify provenance.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "install.sh",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "install.sh",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "LICENSE",
+            "line_start": 317,
+            "line_end": 319
+          },
+          {
+            "file": "LICENSE",
+            "line_start": 321,
+            "line_end": 321
+          },
+          {
+            "file": "LICENSE",
+            "line_start": 323,
+            "line_end": 323
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "scripts/check_install.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/failure_fixture.py",
+            "line_start": 130,
+            "line_end": 132
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/redact_case.py",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "scripts/redact_case.py",
+            "line_start": 212,
+            "line_end": 214
+          },
+          {
+            "file": "scripts/regression_100.py",
+            "line_start": 176,
+            "line_end": 176
+          },
+          {
+            "file": "scripts/regression_100.py",
+            "line_start": 405,
+            "line_end": 1291
+          },
+          {
+            "file": "scripts/regression_100.py",
+            "line_start": 1291,
+            "line_end": 1291
+          },
+          {
+            "file": "scripts/scorecard.py",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 119
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 119,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 120,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 132,
+            "line_end": 134
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 134,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 138,
+            "line_end": 138
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "install.sh",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "install.sh",
+            "line_start": 12,
+            "line_end": 12
+          },
+          {
+            "file": "install.sh",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "README.md",
+            "line_start": 187,
+            "line_end": 187
+          },
+          {
+            "file": "README.md",
+            "line_start": 193,
+            "line_end": 193
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 63,
+            "line_end": 63
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 134,
+            "line_end": 134
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 143,
+            "line_end": 143
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 32,
+            "line_end": 32
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "install.sh",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "install.sh",
+            "line_start": 18,
+            "line_end": 18
+          },
+          {
+            "file": "install.sh",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "scripts/build_plugin.py",
+            "line_start": 159,
+            "line_end": 159
+          },
+          {
+            "file": "scripts/check_install.py",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/check_install.py",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/check_install.py",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 48,
+            "line_end": 48
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/install.py",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 72,
+            "line_end": 72
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 444,
+            "line_end": 444
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 445,
+            "line_end": 445
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 530,
+            "line_end": 530
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 138,
+            "line_end": 138
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 242,
+            "line_end": 242
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 496,
+            "line_end": 496
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 530,
+            "line_end": 530
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 531,
+            "line_end": 531
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 532,
+            "line_end": 532
+          },
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 560,
+            "line_end": 560
+          },
+          {
+            "file": "scripts/redact_case.py",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "scripts/redact_case.py",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "scripts/redact_case.py",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SECURITY.md",
+            "line_start": 27,
+            "line_end": 27
+          }
+        ]
+      },
+      {
+        "factor": "scripts",
+        "evidence": [
+          {
+            "file": "scripts/rewrite_report.py",
+            "line_start": 14,
+            "line_end": 23
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:CONTRIBUTING.md:46:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "CONTRIBUTING.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "python3 scripts/case_lab.py --case-id new_case_01 --source-file source.txt --rewrite-file desired.tx"
+      },
+      {
+        "id": "blocker:CONTRIBUTING.md:59:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "CONTRIBUTING.md",
+        "line_start": 59,
+        "line_end": 59,
+        "snippet": "python3 scripts/case_lab.py --case-id sample_case_01 --source \"rough but redacted source\" --rewrite "
+      },
+      {
+        "id": "external_commands:install.sh:28:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "install.sh",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "tmpdir=\"$(mktemp -d \"${TMPDIR:-/tmp}/dittobot-install.XXXXXX\")\""
+      },
+      {
+        "id": "external_commands:install.sh:50:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "install.sh",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "repo_dir=\"$(cd \"$(dirname \"$installer\")/..\" && pwd)\""
+      },
+      {
+        "id": "network:install.sh:10:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "install.sh",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/${REF}.tar.gz\""
+      },
+      {
+        "id": "network:install.sh:12:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "install.sh",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/refs/tags/${REF}.tar.gz\""
+      },
+      {
+        "id": "network:install.sh:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "install.sh",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/refs/heads/${REF}.tar.gz\""
+      },
+      {
+        "id": "filesystem:install.sh:51:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "install.sh",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "printf 'Installing Dittobot into the Codex user skills folder...\\n'"
+      },
+      {
+        "id": "filesystem:install.sh:18:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "install.sh",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "if ! command -v \"$1\" >/dev/null 2>&1; then"
+      },
+      {
+        "id": "filesystem:install.sh:28:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "install.sh",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "tmpdir=\"$(mktemp -d \"${TMPDIR:-/tmp}/dittobot-install.XXXXXX\")\""
+      },
+      {
+        "id": "external_commands:LICENSE:317:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "LICENSE",
+        "line_start": 317,
+        "line_end": 319,
+        "snippet": "Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'."
+      },
+      {
+        "id": "external_commands:LICENSE:321:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "LICENSE",
+        "line_start": 321,
+        "line_end": 321,
+        "snippet": "The hypothetical commands `show w' and `show c' should show the appropriate"
+      },
+      {
+        "id": "external_commands:LICENSE:323:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "LICENSE",
+        "line_start": 323,
+        "line_end": 323,
+        "snippet": "be called something other than `show w' and `show c'; they could even be"
+      },
+      {
+        "id": "blocker:LICENSE:29:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "LICENSE",
+        "line_start": 29,
+        "line_end": 30,
+        "snippet": "To protect your rights, we need to make restrictions that forbid"
+      },
+      {
+        "id": "blocker:LICENSE:52:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "LICENSE",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "patents.  We wish to avoid the danger that redistributors of a free"
+      },
+      {
+        "id": "blocker:LICENSE:143:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "LICENSE",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "b) Accompany it with a written offer, valid for at least three"
+      },
+      {
+        "id": "blocker:LICENSE:211:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "LICENSE",
+        "line_start": 211,
+        "line_end": 211,
+        "snippet": "If any portion of this section is held invalid or unenforceable under"
+      },
+      {
+        "id": "network:README.md:187:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 187,
+        "line_end": 187,
+        "snippet": "curl -fsSL https://raw.githubusercontent.com/RegionallyFamous/dittobot/main/install.sh | bash"
+      },
+      {
+        "id": "network:README.md:193:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "git clone https://github.com/RegionallyFamous/dittobot.git"
+      },
+      {
+        "id": "blocker:README.md:187:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "README.md",
+        "line_start": 187,
+        "line_end": 187,
+        "snippet": "curl -fsSL https://raw.githubusercontent.com/RegionallyFamous/dittobot/main/install.sh | bash"
+      },
+      {
+        "id": "blocker:README.md:56:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "README.md",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "- **\"It is too verbose.\"** Bad AI writes like it is being paid by the clause. Dittobot cuts filler a"
+      },
+      {
+        "id": "blocker:references/voice-profile-cards.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/voice-profile-cards.md",
+        "line_start": 13,
+        "line_end": 14,
+        "snippet": "## Avoid"
+      },
+      {
+        "id": "external_commands:scripts/build_plugin.py:90:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/build_plugin.py",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "return subprocess.run("
+      },
+      {
+        "id": "network:scripts/build_plugin.py:41:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "\"url\": \"https://github.com/RegionallyFamous\","
+      },
+      {
+        "id": "network:scripts/build_plugin.py:43:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "\"homepage\": \"https://github.com/RegionallyFamous/dittobot\","
+      },
+      {
+        "id": "network:scripts/build_plugin.py:44:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "\"repository\": \"https://github.com/RegionallyFamous/dittobot\","
+      },
+      {
+        "id": "network:scripts/build_plugin.py:63:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 63,
+        "line_end": 63,
+        "snippet": "\"websiteURL\": \"https://github.com/RegionallyFamous/dittobot\","
+      },
+      {
+        "id": "network:scripts/build_plugin.py:64:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "\"privacyPolicyURL\": \"https://github.com/RegionallyFamous/dittobot/blob/main/SECURITY.md\","
+      },
+      {
+        "id": "network:scripts/build_plugin.py:65:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/build_plugin.py",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "\"termsOfServiceURL\": \"https://github.com/RegionallyFamous/dittobot/blob/main/LICENSE\","
+      },
+      {
+        "id": "filesystem:scripts/build_plugin.py:80:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/build_plugin.py",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "shutil.copy2(source, destination)"
+      },
+      {
+        "id": "filesystem:scripts/build_plugin.py:159:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/build_plugin.py",
+        "line_start": 159,
+        "line_end": 159,
+        "snippet": "shutil.rmtree(output)"
+      },
+      {
+        "id": "external_commands:scripts/check_install.py:88:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check_install.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "print(f\"  mv {quoted_install_path} {quoted_install_path}.backup.$(date +%s)\")"
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:44:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "scripts/check_install.py",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),"
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:44:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/check_install.py",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),"
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:89:symlink-creation",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Symlink creation",
+        "file": "scripts/check_install.py",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "print(f\"  ln -s {shlex.quote(str(repo))} {quoted_install_path}\")"
+      },
+      {
+        "id": "blocker:scripts/check_install.py:86:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/check_install.py",
+        "line_start": 86,
+        "line_end": 86,
+        "snippet": "print(\"\\nPrefer a symlink install to avoid drift:\")"
+      },
+      {
+        "id": "external_commands:scripts/failure_fixture.py:130:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/failure_fixture.py",
+        "line_start": 130,
+        "line_end": 132,
+        "snippet": "print(\"```python\")"
+      },
+      {
+        "id": "blocker:scripts/failure_fixture.py:206:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/failure_fixture.py",
+        "line_start": 206,
+        "line_end": 206,
+        "snippet": "case_id=args.case_id + \"_failed\","
+      },
+      {
+        "id": "external_commands:scripts/install.py:97:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/install.py",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "filesystem:scripts/install.py:55:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "scripts/install.py",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),"
+      },
+      {
+        "id": "filesystem:scripts/install.py:55:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/install.py",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),"
+      },
+      {
+        "id": "filesystem:scripts/install.py:48:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/install.py",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "shutil.copy2(source, destination)"
+      },
+      {
+        "id": "filesystem:scripts/install.py:78:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/install.py",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "shutil.rmtree(temp_target)"
+      },
+      {
+        "id": "filesystem:scripts/install.py:83:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/install.py",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "shutil.move(str(target), str(backup))"
+      },
+      {
+        "id": "filesystem:scripts/install.py:88:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/install.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "shutil.move(str(temp_target), str(target))"
+      },
+      {
+        "id": "filesystem:scripts/install.py:95:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/install.py",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "shutil.rmtree(temp_target)"
+      },
+      {
+        "id": "network:scripts/live_eval.py:19:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/live_eval.py",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "import urllib.request"
+      },
+      {
+        "id": "network:scripts/live_eval.py:134:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/live_eval.py",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "request = urllib.request.Request("
+      },
+      {
+        "id": "network:scripts/live_eval.py:143:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/live_eval.py",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "with urllib.request.urlopen(request, timeout=timeout) as response:"
+      },
+      {
+        "id": "network:scripts/live_eval.py:32:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/live_eval.py",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "DEFAULT_API_URL = \"https://api.openai.com/v1/responses\""
+      },
+      {
+        "id": "filesystem:scripts/live_eval.py:73:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/live_eval.py",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "return os.fdopen(fd, \"a\", encoding=\"utf-8\")"
+      },
+      {
+        "id": "filesystem:scripts/live_eval.py:72:python-os-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python os file operations",
+        "file": "scripts/live_eval.py",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "os.chmod(target, 0o600)"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:444:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/live_eval.py",
+        "line_start": 444,
+        "line_end": 444,
+        "snippet": "parser.add_argument(\"--model\", default=os.environ.get(\"OPENAI_MODEL\", DEFAULT_MODEL))"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:445:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/live_eval.py",
+        "line_start": 445,
+        "line_end": 445,
+        "snippet": "parser.add_argument(\"--api-url\", default=os.environ.get(\"OPENAI_API_URL\", DEFAULT_API_URL))"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:530:python-environment-access",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python environment access",
+        "file": "scripts/live_eval.py",
+        "line_start": 530,
+        "line_end": 530,
+        "snippet": "api_key = os.environ.get(\"OPENAI_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:117:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "api_key: str,"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:138:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 138,
+        "line_end": 138,
+        "snippet": "\"Authorization\": f\"Bearer {api_key}\","
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:242:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 242,
+        "line_end": 242,
+        "snippet": "\"Refusing to send OPENAI_API_KEY to a custom API URL. \""
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:496:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 496,
+        "line_end": 496,
+        "snippet": "help=\"Exit nonzero instead of skipping when OPENAI_API_KEY is missing.\","
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:530:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 530,
+        "line_end": 530,
+        "snippet": "api_key = os.environ.get(\"OPENAI_API_KEY\")"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:531:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 531,
+        "line_end": 531,
+        "snippet": "if not api_key:"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:532:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 532,
+        "line_end": 532,
+        "snippet": "print(\"SKIP: OPENAI_API_KEY is not set; live eval is optional.\")"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:560:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/live_eval.py",
+        "line_start": 560,
+        "line_end": 560,
+        "snippet": "api_key=api_key,"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:97:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "lines.append(f\"- Avoid these forbidden terms: {', '.join(case.forbid)}\")"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:147:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "raise RuntimeError(f\"Response did not include output text: {body}\")"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:160:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 160,
+        "line_end": 160,
+        "snippet": "by_id = {case.id: case for case in cases}"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:161:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "missing = [case_id for case_id in case_ids if case_id not in by_id]"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:164:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "cases = [by_id[case_id] for case_id in case_ids]"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:191:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "present = {case.id for case in selected if case.prompt_mode == \"source_only\"}"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:192:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "additions = [case for case in source_only if case.id not in present][: max(0, wanted - len(present))"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:196:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 196,
+        "line_end": 196,
+        "snippet": "selected_ids = {case.id for case in selected}"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:201:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "if case.id in selected_ids:"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:334:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 334,
+        "line_end": 334,
+        "snippet": "raise SystemExit(f\"{path}:{line_number}: invalid JSON: {exc}\") from exc"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:339:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 339,
+        "line_end": 339,
+        "snippet": "by_id = case_by_id()"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:348:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 348,
+        "line_end": 348,
+        "snippet": "case_id = str(record.get(\"case\", \"\"))"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:349:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 349,
+        "line_end": 349,
+        "snippet": "if case_id not in by_id:"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:350:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 350,
+        "line_end": 350,
+        "snippet": "raise SystemExit(f\"{path}:{index}: unknown case id {case_id!r}\")"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:421:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 421,
+        "line_end": 421,
+        "snippet": "parser.add_argument(\"--case\", action=\"append\", default=[], help=\"Specific case id to run.\")"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:243:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "scripts/live_eval.py",
+        "line_start": 243,
+        "line_end": 243,
+        "snippet": "\"Pass --allow-custom-api-url if you trust this endpoint.\""
+      },
+      {
+        "id": "blocker:scripts/live_report.py:42:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_report.py",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "raise SystemExit(f\"{path}:{line_number}: invalid JSON: {exc}\") from exc"
+      },
+      {
+        "id": "blocker:scripts/live_report.py:93:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/live_report.py",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "case_id = str(record.get(\"case\", \"unknown\"))"
+      },
+      {
+        "id": "external_commands:scripts/redact_case.py:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/redact_case.py",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "return f\"## {label}\\n\\n```text\\n{text}\\n```\""
+      },
+      {
+        "id": "external_commands:scripts/redact_case.py:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/redact_case.py",
+        "line_start": 212,
+        "line_end": 214,
+        "snippet": "print(\"```bash\")"
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:25:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "scripts/redact_case.py",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "Pattern(\"github_token\", \"GITHUB_TOKEN\", re.compile(r\"\\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\\b|\\"
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:23:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/redact_case.py",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "Pattern(\"private_key\", \"PRIVATE_KEY\", re.compile(r\"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-"
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:24:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/redact_case.py",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "Pattern(\"api_key\", \"API_KEY\", re.compile(r\"\\bsk-[A-Za-z0-9_-]{16,}\\b\")),"
+      },
+      {
+        "id": "sensitive:scripts/redact_case.py:23:crypto-seed-private-key-mention",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Crypto seed/private key mention",
+        "file": "scripts/redact_case.py",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "Pattern(\"private_key\", \"PRIVATE_KEY\", re.compile(r\"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-"
+      },
+      {
+        "id": "blocker:scripts/redact_case.py:122:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/redact_case.py",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "parser.add_argument(\"--case-id\", required=True, help=\"Case id for the generated fixture command.\")"
+      },
+      {
+        "id": "blocker:scripts/redact_case.py:162:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/redact_case.py",
+        "line_start": 162,
+        "line_end": 162,
+        "snippet": "redacted_forbid = [value for value in redacted[\"forbid\"].splitlines() if value.strip()]"
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:176:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/regression_100.py",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "text = re.sub(r\"`[^`]*`\", \"\", text)"
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:405:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/regression_100.py",
+        "line_start": 405,
+        "line_end": 1291,
+        "snippet": "if \"```\" in case.rewrite and not case.allow_markdown_fence:"
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:1291:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "scripts/regression_100.py",
+        "line_start": 1291,
+        "line_end": 1291,
+        "snippet": "Case(\"self_fence\", \"A\", \"```text\\nA\\n```\", must=(\"A\",)),"
+      },
+      {
+        "id": "obfuscation:scripts/regression_100.py:179:unicode-escape-sequence",
+        "category": "obfuscation",
+        "severity": "low",
+        "pattern": "Unicode escape sequence",
+        "file": "scripts/regression_100.py",
+        "line_start": 179,
+        "line_end": 179,
+        "snippet": "text = re.sub(r\"\\u201c[^\\u201d]*\\u201d\", \"\", text)"
+      },
+      {
+        "id": "obfuscation:scripts/regression_100.py:408:unicode-escape-sequence",
+        "category": "obfuscation",
+        "severity": "low",
+        "pattern": "Unicode escape sequence",
+        "file": "scripts/regression_100.py",
+        "line_start": 408,
+        "line_end": 408,
+        "snippet": "if case.no_dash and any(mark in case.rewrite for mark in (\"-\", \"\\u2010\", \"\\u2011\", \"\\u2012\", \"\\u2013"
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:1037:at-command-scheduling",
+        "category": "blocker",
+        "severity": "medium",
+        "pattern": "at command scheduling",
+        "file": "scripts/regression_100.py",
+        "line_start": 1037,
+        "line_end": 1037,
+        "snippet": "\"status thing: cache fix is in, deploy happened at 2:15, but support \""
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:308:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/regression_100.py",
+        "line_start": 308,
+        "line_end": 308,
+        "snippet": "forbidden = [term for term in case.forbid if contains_term(unquoted, term)]"
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:998:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/regression_100.py",
+        "line_start": 998,
+        "line_end": 998,
+        "snippet": "forbid_assertions=(\"did not fix the importer bug\", \"cannot retry failed rows\"),"
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:1385:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/regression_100.py",
+        "line_start": 1385,
+        "line_end": 1385,
+        "snippet": "by_id = {case.id: case for case in make_cases()}"
+      },
+      {
+        "id": "scripts:scripts/rewrite_report.py:14:dynamic-import-expression",
+        "category": "scripts",
+        "severity": "medium",
+        "pattern": "Dynamic import() expression",
+        "file": "scripts/rewrite_report.py",
+        "line_start": 14,
+        "line_end": 23,
+        "snippet": "from regression_100 import ("
+      },
+      {
+        "id": "external_commands:scripts/scorecard.py:48:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/scorecard.py",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:64:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/scorecard.py",
+        "line_start": 64,
+        "line_end": 67,
+        "snippet": "return parts[0] if len(parts) == 2 and parts[1].isdigit() else case_id"
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:118:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/scorecard.py",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "case_id = str(record.get(\"case\", \"unknown\"))"
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:201:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/scorecard.py",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "duplicates = sorted(case_id for case_id, count in counts.items() if count > 1)"
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:202:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/scorecard.py",
+        "line_start": 202,
+        "line_end": 202,
+        "snippet": "unknown_cases = sorted(case_id for case_id in counts if case_id not in known_cases)"
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:266:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/scorecard.py",
+        "line_start": 266,
+        "line_end": 266,
+        "snippet": "case_by_id = {case.id: case for case in cases}"
+      },
+      {
+        "id": "blocker:scripts/validate_skill.py:42:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate_skill.py",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "raise ValueError(f\"invalid frontmatter line: {line!r}\")"
+      },
+      {
+        "id": "obfuscation:scripts/voice_probe.py:88:unicode-escape-sequence",
+        "category": "obfuscation",
+        "severity": "low",
+        "pattern": "Unicode escape sequence",
+        "file": "scripts/voice_probe.py",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "\"dash\": len(re.findall(r\"--|[-\\u2013\\u2014]\", text)),"
+      },
+      {
+        "id": "env_access:SECURITY.md:27:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SECURITY.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "`scripts/live_eval.py` sends selected fixture text to the configured API endpoint only when `OPENAI_"
+      },
+      {
+        "id": "blocker:SECURITY.md:17:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SECURITY.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "--case-id redacted_example_01 \\"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "If the user includes lightweight fences such as `[[keep: ...]]`, `[[claim: ...]]`, `[[voice: ...]]`,"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 80,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 119,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 119,
+        "line_end": 120,
+        "snippet": "- Normal rewrite: return the revised text directly, or use `**Rewrite**` when a label helps readabil"
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 120,
+        "line_end": 121,
+        "snippet": "- Meaningful tradeoff or requested rationale: add `**Note**` with one short explanation."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "- Tone options: provide 2-3 labeled versions such as `Cleaner`, `Warmer`, or `Sharper`."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "- Voice profile: keep it compact and reusable. Default to sections: `Use`, `Avoid`, `Rhythm/Diction`"
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 134,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 136,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "For ad hoc rewrite audits, profile contracts, release scorecards, or privacy-safe fixture scaffolds,"
+      },
+      {
+        "id": "external_commands:SKILL.md:138:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 138,
+        "line_end": 138,
+        "snippet": "For detailed reusable profile-card guidance, read `references/voice-profile-cards.md` only when the "
+      },
+      {
+        "id": "blocker:SKILL.md:66:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "- **Voice profile:** infer a compact reusable taste profile from samples: what the user tends to cho"
+      },
+      {
+        "id": "blocker:SKILL.md:77:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "Did this preserve intent, voice, facts, stance, and desired length?"
+      },
+      {
+        "id": "blocker:SKILL.md:78:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "Did it make the text clearer, tighter, more readable, or more alive?"
+      },
+      {
+        "id": "blocker:SKILL.md:91:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "10. **Actors/verbs:** put real actors near real actions; avoid passive voice when it hides responsib"
+      },
+      {
+        "id": "blocker:SKILL.md:111:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "Avoid bland-AI moves unless the user's draft clearly uses them on purpose: \"In today's landscape,\" \""
+      },
+      {
+        "id": "metadata:assets/readme-riso-banner.jpg:1:unscanned-file-binary-manual-review-required",
+        "category": "metadata",
+        "severity": "low",
+        "pattern": "Unscanned file (binary) — manual review required",
+        "file": "assets/readme-riso-banner.jpg",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "[unscanned: binary]"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:CONTRIBUTING.md:46:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is contributor documentation for creating local rewrite test cases. It is not autonomous reconnaissance or host probing."
+      },
+      {
+        "id": "blocker:CONTRIBUTING.md:59:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is contributor documentation for creating local rewrite test cases. It is not autonomous reconnaissance or host probing."
+      },
+      {
+        "id": "external_commands:install.sh:28:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution is used for mktemp or resolving the installer directory with quoted arguments. I did not find a command-injection vector in this snippet."
+      },
+      {
+        "id": "external_commands:install.sh:50:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution is used for mktemp or resolving the installer directory with quoted arguments. I did not find a command-injection vector in this snippet."
+      },
+      {
+        "id": "network:install.sh:10:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "install.sh builds a GitHub archive URL that is later downloaded and unpacked. This is real network egress used in the installer, even though the default host is GitHub.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:install.sh:12:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "install.sh builds a GitHub tag archive URL that is later downloaded and unpacked. This is legitimate installer behavior, but it depends on remote content.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:install.sh:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "install.sh builds a branch archive URL that is later downloaded and unpacked. Using a mutable branch for installation creates supply-chain exposure.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:install.sh:51:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The traversal-like parent reference is used to resolve the repository root from a discovered installer path. It is not accepting a user-supplied traversal path for arbitrary file access."
+      },
+      {
+        "id": "filesystem:install.sh:18:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The /dev/null access suppresses command -v output while checking dependencies. This is a standard shell pattern and not sensitive file access."
+      },
+      {
+        "id": "filesystem:install.sh:28:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The temporary directory is created with mktemp -d and cleaned by a trap. This is a safe temporary-file pattern, not insecure predictable file creation."
+      },
+      {
+        "id": "external_commands:LICENSE:317:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "external_commands:LICENSE:321:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "external_commands:LICENSE:323:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "blocker:LICENSE:29:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "blocker:LICENSE:52:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "blocker:LICENSE:143:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "blocker:LICENSE:211:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This is license boilerplate text, not executable code or operational instructions. The matched words and backticks are part of the GPL license language."
+      },
+      {
+        "id": "network:README.md:187:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The README URL is part of a curl-to-bash installation command. It asks users to fetch remote shell content and execute it immediately.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:README.md:193:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a documentation link for a normal git clone fallback. It does not execute the downloaded content by itself."
+      },
+      {
+        "id": "blocker:README.md:187:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The README explicitly documents curl piped directly into bash. This is a critical supply-chain pattern because remote content executes without local review or checksum verification.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:README.md:56:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This README text describes writing-quality behavior and examples. It does not direct the model to inspect system state or bypass security analysis."
+      },
+      {
+        "id": "blocker:references/voice-profile-cards.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This reference describes the shape of a voice profile card. The matched text is a Markdown heading, not system reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/build_plugin.py:90:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "subprocess.run invokes a validator path with list arguments and shell=False. This is developer packaging tooling, not command injection in normal skill use."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:41:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:43:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:44:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:63:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:64:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "network:scripts/build_plugin.py:65:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "These URLs are static plugin metadata such as homepage, repository, privacy, and terms links. They are not outbound requests or data exfiltration."
+      },
+      {
+        "id": "filesystem:scripts/build_plugin.py:80:python-shutil-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shutil operations package files into a controlled output directory and include safety checks before replacement. This is expected local build behavior."
+      },
+      {
+        "id": "filesystem:scripts/build_plugin.py:159:python-shutil-operations",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shutil operations package files into a controlled output directory and include safety checks before replacement. This is expected local build behavior."
+      },
+      {
+        "id": "external_commands:scripts/check_install.py:88:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The command substitution appears inside a printed remediation command, not executed by the script. It cannot run unless a user manually copies it."
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:44:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "check_install.py reads the expected skill install directory to compare package files. It does not write to the hidden directory at this line."
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:44:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "check_install.py reads the expected skill install directory to compare package files. It does not write to the hidden directory at this line."
+      },
+      {
+        "id": "filesystem:scripts/check_install.py:89:symlink-creation",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The symlink command is printed as user guidance and is not executed by check_install.py. No symlink is created by this line."
+      },
+      {
+        "id": "blocker:scripts/check_install.py:86:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This code reports install drift and suggested repair commands. It does not perform system reconnaissance beyond comparing the expected package files."
+      },
+      {
+        "id": "external_commands:scripts/failure_fixture.py:130:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The matched backticks are printed Markdown fences for a generated report. They are not Ruby backticks or command execution."
+      },
+      {
+        "id": "blocker:scripts/failure_fixture.py:206:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is local fixture-generation logic using a case identifier. It is not host reconnaissance."
+      },
+      {
+        "id": "external_commands:scripts/install.py:97:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.8,
+        "reason": "subprocess.run executes the bundled check_install.py with explicit list arguments and shell=False. It is an intended post-install validation step, not command injection."
+      },
+      {
+        "id": "filesystem:scripts/install.py:55:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The installer defaults to ~/.agents/skills/dittobot and can create or replace files in a hidden user skills directory. This is intended install behavior but still a real filesystem modification.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/install.py:55:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The installer expands a hidden home-directory target for the skill install. This is expected, but it touches user configuration state outside the repository.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/install.py:48:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "reason": "install.py copies packaged files into the target install directory. The operation is scoped, but running the installer modifies the user filesystem.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/install.py:78:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "install.py removes an existing temporary install path before copying files. The path is derived from the target install path, so this is a real deletion operation.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/install.py:83:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "install.py moves an existing target install to a backup path. That can alter an existing skill installation if the script is run.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/install.py:88:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "install.py moves the completed temporary copy into the hidden skill directory. This is intended but changes user agent configuration state.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/install.py:95:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "reason": "install.py removes the temporary target during cleanup. The deletion is scoped, but it is still a filesystem operation by installer code.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:scripts/live_eval.py:19:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "reason": "live_eval.py imports urllib.request for optional live model evaluation. The script can perform outbound API calls when invoked with an API key.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:scripts/live_eval.py:134:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "live_eval.py constructs an HTTP request containing the skill text and selected fixture prompt. This is opt-in, but it sends local evaluation data to an API endpoint.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:scripts/live_eval.py:143:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "live_eval.py opens the configured API URL with urllib.request.urlopen. This is real network egress during optional live evaluation.",
+        "severity": "medium"
+      },
+      {
+        "id": "network:scripts/live_eval.py:32:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "The default endpoint is https://api.openai.com/v1/responses. It is a legitimate default, but it confirms that live_eval.py can contact an external service.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/live_eval.py:73:python-file-write-append",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "reason": "live_eval.py can append transcript records to a local JSONL file. The file may contain model outputs or sources when raw save options are enabled.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:scripts/live_eval.py:72:python-os-file-operations",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "reason": "live_eval.py changes transcript file permissions to 0600. This is protective, but it confirms filesystem writes by the live evaluation tool.",
+        "severity": "medium"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:444:python-environment-access",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "OPENAI_MODEL is non-secret configuration for choosing a model. It does not expose credentials or change filesystem state."
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:445:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.58,
+        "reason": "OPENAI_API_URL can configure the outbound evaluation endpoint. The script requires HTTPS and an explicit allow flag for custom URLs, so the risk is mitigated but real.",
+        "severity": "low"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:530:python-environment-access",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "live_eval.py reads OPENAI_API_KEY from the environment. That is a legitimate opt-in secret, but the script handles a credential.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:117:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "reason": "The API key is passed as a function parameter for the outbound Responses API call. This is normal API usage but still a secret-bearing code path.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:138:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.93,
+        "reason": "The API key is placed in an Authorization bearer header. That is required for the API call, but it is a direct credential transmission path.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:242:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This line is a defensive refusal message for custom API URLs. It reduces credential-leak risk rather than creating one."
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:496:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is CLI help text for requiring a key. It does not read, store, or transmit a secret."
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:530:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "live_eval.py reads OPENAI_API_KEY from the environment before calling the API. This is opt-in, but it confirms secret access.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:531:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is missing-key control flow and a skip message. It does not expose a key value."
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:532:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This is missing-key control flow and a skip message. It does not expose a key value."
+      },
+      {
+        "id": "env_access:scripts/live_eval.py:560:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The environment-sourced API key is passed into call_responses_api. That creates a credential-bearing path to network request code.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:97:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:147:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:160:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:161:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:164:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:191:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:192:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:196:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:201:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:334:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:339:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:348:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:349:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:350:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:421:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_eval.py:243:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched text validates local regression case IDs, prompts, and transcript records. It is not reconnaissance against the host or network."
+      },
+      {
+        "id": "blocker:scripts/live_report.py:42:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This report code parses local JSONL records and labels case IDs. It does not probe system state or network services."
+      },
+      {
+        "id": "blocker:scripts/live_report.py:93:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "This report code parses local JSONL records and labels case IDs. It does not probe system state or network services."
+      },
+      {
+        "id": "external_commands:scripts/redact_case.py:117:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The matched backticks are Markdown fences emitted in a report. They are not shell execution."
+      },
+      {
+        "id": "external_commands:scripts/redact_case.py:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The matched backticks are Markdown fences emitted in a report. They are not shell execution."
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:25:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are regex patterns for detecting and redacting secrets in user-provided text. They are not embedded credentials or private keys."
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:23:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are regex patterns for detecting and redacting secrets in user-provided text. They are not embedded credentials or private keys."
+      },
+      {
+        "id": "env_access:scripts/redact_case.py:24:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are regex patterns for detecting and redacting secrets in user-provided text. They are not embedded credentials or private keys."
+      },
+      {
+        "id": "sensitive:scripts/redact_case.py:23:crypto-seed-private-key-mention",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "These are regex patterns for detecting and redacting secrets in user-provided text. They are not embedded credentials or private keys."
+      },
+      {
+        "id": "blocker:scripts/redact_case.py:122:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This line processes case fixture fields for redaction. It does not inspect host configuration or secrets."
+      },
+      {
+        "id": "blocker:scripts/redact_case.py:162:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This line processes case fixture fields for redaction. It does not inspect host configuration or secrets."
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:176:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backtick markers are treated as text inside regression validators and fixtures. They are not command execution."
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:405:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backtick markers are treated as text inside regression validators and fixtures. They are not command execution."
+      },
+      {
+        "id": "external_commands:scripts/regression_100.py:1291:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The backtick markers are treated as text inside regression validators and fixtures. They are not command execution."
+      },
+      {
+        "id": "obfuscation:scripts/regression_100.py:179:unicode-escape-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The unicode escape appears in text-normalization or dash-detection logic. It is not used to hide executable behavior."
+      },
+      {
+        "id": "obfuscation:scripts/regression_100.py:408:unicode-escape-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The unicode escape appears in text-normalization or dash-detection logic. It is not used to hide executable behavior."
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:1037:at-command-scheduling",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The word at appears in a natural-language sample about a deployment time. It is not the Unix at scheduling command."
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:308:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched identifiers belong to deterministic rewrite test cases. They are not host reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:998:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched identifiers belong to deterministic rewrite test cases. They are not host reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/regression_100.py:1385:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched identifiers belong to deterministic rewrite test cases. They are not host reconnaissance."
+      },
+      {
+        "id": "scripts:scripts/rewrite_report.py:14:dynamic-import-expression",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a normal Python import from the local regression module, not a dynamic import expression. No runtime-computed module name is used."
+      },
+      {
+        "id": "external_commands:scripts/scorecard.py:48:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "subprocess.run calls git with explicit list arguments and shell=False to read repository metadata. This is local reporting logic, not command injection."
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:64:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched code summarizes local case IDs and scorecard records. It does not probe host services or collect system inventory."
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:118:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched code summarizes local case IDs and scorecard records. It does not probe host services or collect system inventory."
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:201:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched code summarizes local case IDs and scorecard records. It does not probe host services or collect system inventory."
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:202:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched code summarizes local case IDs and scorecard records. It does not probe host services or collect system inventory."
+      },
+      {
+        "id": "blocker:scripts/scorecard.py:266:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched code summarizes local case IDs and scorecard records. It does not probe host services or collect system inventory."
+      },
+      {
+        "id": "blocker:scripts/validate_skill.py:42:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This validation error reports an invalid frontmatter line. It is not system reconnaissance."
+      },
+      {
+        "id": "obfuscation:scripts/voice_probe.py:88:unicode-escape-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The unicode escape is part of punctuation counting for prose analysis. It is not obfuscating executable code."
+      },
+      {
+        "id": "env_access:SECURITY.md:27:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is security documentation warning users about API keys and private drafts. It does not read or transmit secrets."
+      },
+      {
+        "id": "blocker:SECURITY.md:17:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is security documentation warning users about API keys and private drafts. It does not read or transmit secrets."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:120:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "external_commands:SKILL.md:138:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "This is Markdown inline formatting or a fenced example in the skill instructions. It does not execute shell, Ruby, or any other command."
+      },
+      {
+        "id": "blocker:SKILL.md:66:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is editorial guidance about preserving voice, facts, and style. It is not system reconnaissance or a request to inspect the host environment."
+      },
+      {
+        "id": "blocker:SKILL.md:77:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is editorial guidance about preserving voice, facts, and style. It is not system reconnaissance or a request to inspect the host environment."
+      },
+      {
+        "id": "blocker:SKILL.md:78:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is editorial guidance about preserving voice, facts, and style. It is not system reconnaissance or a request to inspect the host environment."
+      },
+      {
+        "id": "blocker:SKILL.md:91:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is editorial guidance about preserving voice, facts, and style. It is not system reconnaissance or a request to inspect the host environment."
+      },
+      {
+        "id": "blocker:SKILL.md:111:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This is editorial guidance about preserving voice, facts, and style. It is not system reconnaissance or a request to inspect the host environment."
+      },
+      {
+        "id": "metadata:assets/readme-riso-banner.jpg:1:unscanned-file-binary-manual-review-required",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "Manual review identified this as a JPEG banner image asset. I did not find evidence of executable code or prompt-injection text in the reviewed image asset."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Remote Installer Executes Environment-Selected Archive",
+        "description": "install.sh lets DITTOBOT_REPO, DITTOBOT_REF, or DITTOBOT_ARCHIVE_URL choose the archive source, then downloads it and runs scripts/install.py from the unpacked result. This creates supply-chain risk if the environment or archive source is attacker-controlled.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "install.sh",
+            "line_start": 4,
+            "line_end": 14
+          },
+          {
+            "file": "install.sh",
+            "line_start": 34,
+            "line_end": 52
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "The control flow is direct: environment variables can choose the archive URL, curl downloads it, tar unpacks it, and python3 runs scripts/install.py from the result. Legitimate installer customization is possible, but the environment-selected source makes this a high-confidence supply-chain risk."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -fsSL https://raw.githubusercontent.com/RegionallyFamous/dittobot/main/install.sh | bash",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 187,
+            "line_end": 187
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.95,
+        "confidence_reasoning": "The README URL is part of a curl-to-bash installation command. It asks users to fetch remote shell content and execute it immediately."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://raw.githubusercontent.com/RegionallyFamous/dittobot/main/install.sh | bash",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 187,
+            "line_end": 187
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.98,
+        "confidence_reasoning": "The README explicitly documents curl piped directly into bash. This is a critical supply-chain pattern because remote content executes without local review or checksum verification."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 55,
+            "line_end": 55
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The installer defaults to ~/.agents/skills/dittobot and can create or replace files in a hidden user skills directory. This is intended install behavior but still a real filesystem modification."
+      },
+      {
+        "title": "Python environment access",
+        "description": "api_key = os.environ.get(\"OPENAI_API_KEY\")",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 530,
+            "line_end": 530
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.9,
+        "confidence_reasoning": "live_eval.py reads OPENAI_API_KEY from the environment. That is a legitimate opt-in secret, but the script handles a credential."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "api_key: str,",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 117,
+            "line_end": 117
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The API key is passed as a function parameter for the outbound Responses API call. This is normal API usage but still a secret-bearing code path."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "\"Authorization\": f\"Bearer {api_key}\",",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 138,
+            "line_end": 138
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.93,
+        "confidence_reasoning": "The API key is placed in an Authorization bearer header. That is required for the API call, but it is a direct credential transmission path."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "api_key = os.environ.get(\"OPENAI_API_KEY\")",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 530,
+            "line_end": 530
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "live_eval.py reads OPENAI_API_KEY from the environment before calling the API. This is opt-in, but it confirms secret access."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "api_key=api_key,",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 560,
+            "line_end": 560
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The environment-sourced API key is passed into call_responses_api. That creates a credential-bearing path to network request code."
+      },
+      {
+        "title": "Remote Installer Executes Environment-Selected Archive",
+        "description": "install.sh lets DITTOBOT_REPO, DITTOBOT_REF, or DITTOBOT_ARCHIVE_URL choose the archive source, then downloads it and runs scripts/install.py from the unpacked result. This creates supply-chain risk if the environment or archive source is attacker-controlled.",
+        "locations": [
+          {
+            "file": "install.sh",
+            "line_start": 4,
+            "line_end": 14
+          },
+          {
+            "file": "install.sh",
+            "line_start": 34,
+            "line_end": 52
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The control flow is direct: environment variables can choose the archive URL, curl downloads it, tar unpacks it, and python3 runs scripts/install.py from the result. Legitimate installer customization is possible, but the environment-selected source makes this a high-confidence supply-chain risk."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/${REF}.tar.gz\"",
+        "locations": [
+          {
+            "file": "install.sh",
+            "line_start": 10,
+            "line_end": 10
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "install.sh builds a GitHub archive URL that is later downloaded and unpacked. This is real network egress used in the installer, even though the default host is GitHub."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/refs/tags/${REF}.tar.gz\"",
+        "locations": [
+          {
+            "file": "install.sh",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "install.sh builds a GitHub tag archive URL that is later downloaded and unpacked. This is legitimate installer behavior, but it depends on remote content."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "ARCHIVE_URL=\"https://github.com/${REPO}/archive/refs/heads/${REF}.tar.gz\"",
+        "locations": [
+          {
+            "file": "install.sh",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.84,
+        "confidence_reasoning": "install.sh builds a branch archive URL that is later downloaded and unpacked. Using a mutable branch for installation creates supply-chain exposure."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "default=os.path.expanduser(\"~/.agents/skills/dittobot\"),",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 55,
+            "line_end": 55
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The installer expands a hidden home-directory target for the skill install. This is expected, but it touches user configuration state outside the repository."
+      },
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.copy2(source, destination)",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 48,
+            "line_end": 48
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "install.py copies packaged files into the target install directory. The operation is scoped, but running the installer modifies the user filesystem."
+      },
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.rmtree(temp_target)",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "install.py removes an existing temporary install path before copying files. The path is derived from the target install path, so this is a real deletion operation."
+      },
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.move(str(target), str(backup))",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 83,
+            "line_end": 83
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "install.py moves an existing target install to a backup path. That can alter an existing skill installation if the script is run."
+      },
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.move(str(temp_target), str(target))",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 88,
+            "line_end": 88
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "install.py moves the completed temporary copy into the hidden skill directory. This is intended but changes user agent configuration state."
+      },
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.rmtree(temp_target)",
+        "locations": [
+          {
+            "file": "scripts/install.py",
+            "line_start": 95,
+            "line_end": 95
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "install.py removes the temporary target during cleanup. The deletion is scoped, but it is still a filesystem operation by installer code."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "import urllib.request",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 19,
+            "line_end": 19
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.8,
+        "confidence_reasoning": "live_eval.py imports urllib.request for optional live model evaluation. The script can perform outbound API calls when invoked with an API key."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "request = urllib.request.Request(",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 134,
+            "line_end": 134
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.88,
+        "confidence_reasoning": "live_eval.py constructs an HTTP request containing the skill text and selected fixture prompt. This is opt-in, but it sends local evaluation data to an API endpoint."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "with urllib.request.urlopen(request, timeout=timeout) as response:",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 143,
+            "line_end": 143
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.9,
+        "confidence_reasoning": "live_eval.py opens the configured API URL with urllib.request.urlopen. This is real network egress during optional live evaluation."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "DEFAULT_API_URL = \"https://api.openai.com/v1/responses\"",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 32,
+            "line_end": 32
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.82,
+        "confidence_reasoning": "The default endpoint is https://api.openai.com/v1/responses. It is a legitimate default, but it confirms that live_eval.py can contact an external service."
+      },
+      {
+        "title": "Python file write/append",
+        "description": "return os.fdopen(fd, \"a\", encoding=\"utf-8\")",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "live_eval.py can append transcript records to a local JSONL file. The file may contain model outputs or sources when raw save options are enabled."
+      },
+      {
+        "title": "Python os file operations",
+        "description": "os.chmod(target, 0o600)",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 72,
+            "line_end": 72
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.74,
+        "confidence_reasoning": "live_eval.py changes transcript file permissions to 0600. This is protective, but it confirms filesystem writes by the live evaluation tool."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Python environment access",
+        "description": "parser.add_argument(\"--api-url\", default=os.environ.get(\"OPENAI_API_URL\", DEFAULT_API_URL))",
+        "locations": [
+          {
+            "file": "scripts/live_eval.py",
+            "line_start": 445,
+            "line_end": 445
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "low",
+        "confidence": 0.58,
+        "confidence_reasoning": "OPENAI_API_URL can configure the outbound evaluation endpoint. The script requires HTTPS and an explicit allow flag for custom URLs, so the risk is mitigated but real."
+      },
+      {
+        "title": "Unscanned file (binary) — manual review required",
+        "description": "[unscanned: binary]",
+        "locations": [
+          {
+            "file": "assets/readme-riso-banner.jpg",
+            "line_start": 1,
+            "line_end": 1
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "metadata",
+        "source_severity": "low",
+        "confidence": 1,
+        "confidence_reasoning": "Force-confirmed metadata/low static finding; AI false-positive verdict rejected."
+      }
+    ],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://raw.githubusercontent.com/RegionallyFamous/dittobot/main/install.sh | bash",
+        "locations": [
+          {
+            "file": "README.md",
+            "line_start": 187,
+            "line_end": 187
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.98,
+        "confidence_reasoning": "The README explicitly documents curl piped directly into bash. This is a critical supply-chain pattern because remote content executes without local review or checksum verification."
+      }
+    ],
+    "files_scanned": 33,
+    "total_lines": 7114,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T16:47:58.673Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Rewrite Prose In Your Own Voice",
+    "value_statement": "Generic AI edits often flatten voice and add unsupported polish. Dittobot rewrites user-provided text while preserving facts, stance, rhythm, and constraints.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Dittobot",
+      "voice preserving editor",
+      "AI writing rewrite",
+      "prose editing skill",
+      "fact faithful rewriting",
+      "voice profile",
+      "writing assistant"
+    ],
+    "actual_capabilities": [
+      "Rewrites emails, posts, essays, internal notes, captions, bios, speeches, and cover letters from supplied text.",
+      "Preserves facts, claims, dates, names, uncertainty, emotional stance, and explicit user constraints.",
+      "Supports proofreading, light edits, tightening, rewrites, structural edits, tone options, diagnosis, and comparisons.",
+      "Builds compact voice profiles from writing samples when the user asks for reusable guidance.",
+      "Includes local regression, scorecard, redaction, and fixture tools for maintainers who validate rewrite behavior."
+    ],
+    "limitations": [
+      "It works best with source text, notes, or writing samples. It is not meant for unsupported ghostwriting.",
+      "It does not verify factual, legal, medical, financial, or academic claims independently.",
+      "It may ask a clarifying question when purpose, audience, or safety constraints are unclear.",
+      "Repository scripts are maintainer tools. Normal prose editing should not require running them."
+    ],
+    "use_cases": [
+      {
+        "title": "Polish Work Messages",
+        "target_user": "Operators and team leads",
+        "description": "Turn rough emails, updates, and announcements into clear messages that keep the original facts and stance."
+      },
+      {
+        "title": "Protect A Personal Voice",
+        "target_user": "Writers and creators",
+        "description": "Improve posts, bios, captions, and essays without sanding away humor, rhythm, or useful rough edges."
+      },
+      {
+        "title": "Validate Rewrite Quality",
+        "target_user": "Skill maintainers",
+        "description": "Use the included local tools to test fact preservation, voice fidelity, constraints, and public-safe fixtures."
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Clean Up A Draft",
+        "scenario": "Beginner rewrite request",
+        "prompt": "Use $dittobot on this. Keep my facts and voice, but make it clearer and shorter: [paste text]"
+      },
+      {
+        "title": "Create Tone Options",
+        "scenario": "Compare possible tones before choosing one",
+        "prompt": "Use $dittobot on this. Give me three versions: warmer, sharper, and concise. Preserve the claims: [paste text]"
+      },
+      {
+        "title": "Diagnose Without Rewriting",
+        "scenario": "Get focused feedback before editing",
+        "prompt": "Use $dittobot to diagnose this draft. Do not rewrite it. Give the three highest-impact notes: [paste text]"
+      },
+      {
+        "title": "Build A Voice Profile",
+        "scenario": "Advanced reusable style guidance",
+        "prompt": "Use $dittobot to infer a reusable voice profile from these samples. Include use, avoid, rhythm, protected quirks, and when not to apply: [paste samples]"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A launch note is too long and unclear, but it must mention the importer fix and retry support.",
+        "output": "A concise launch note that keeps the importer fix, retry support, and calm tone without adding new claims."
+      },
+      {
+        "input": "A post sounds generic and inflated, but the source does not include supporting details.",
+        "output": "A plainer version that removes empty claims and adds a short note asking for real specifics."
+      },
+      {
+        "input": "A personal paragraph has an odd image that carries the writer's voice.",
+        "output": "A cleaner paragraph that keeps the image intact and only fixes the framing around it."
+      }
+    ],
+    "best_practices": [
+      "Paste the source text and state the audience, purpose, and any hard constraints.",
+      "Mark facts, names, dates, claims, and phrases that must survive the edit.",
+      "Ask for options when tone is subjective or the message has social risk."
+    ],
+    "anti_patterns": [
+      "Do not ask for a new draft without source material when voice preservation matters.",
+      "Do not treat a voice profile as permission to import old facts into a new piece.",
+      "Do not run maintainer scripts for ordinary editing tasks."
+    ],
+    "faq": [
+      {
+        "question": "What does Dittobot do?",
+        "answer": "It rewrites and edits supplied prose while preserving the writer's facts, voice, stance, and constraints."
+      },
+      {
+        "question": "Does it write from scratch?",
+        "answer": "It can help with drafts in an established voice, but it is designed for text the user provides."
+      },
+      {
+        "question": "Can it handle sensitive or high-stakes writing?",
+        "answer": "It preserves uncertainty and precision, but it does not replace legal, medical, financial, or factual review."
+      },
+      {
+        "question": "Does normal use require network access?",
+        "answer": "No. The skill instructions are local, but optional live evaluation scripts can call the OpenAI API."
+      },
+      {
+        "question": "What are voice profiles?",
+        "answer": "They are compact editing rules inferred from samples. They guide style without importing old facts."
+      },
+      {
+        "question": "Which tools can use it?",
+        "answer": "The report lists support for Claude, Codex, and Claude Code."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "agents",
+      "type": "dir",
+      "path": "agents",
+      "children": [
+        {
+          "name": "openai.yaml",
+          "type": "file",
+          "path": "agents/openai.yaml",
+          "lines": 8
+        }
+      ]
+    },
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "icon-large.svg",
+          "type": "file",
+          "path": "assets/icon-large.svg",
+          "lines": 9
+        },
+        {
+          "name": "icon-small.svg",
+          "type": "file",
+          "path": "assets/icon-small.svg",
+          "lines": 8
+        },
+        {
+          "name": "readme-riso-banner.jpg",
+          "type": "file",
+          "path": "assets/readme-riso-banner.jpg"
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "fact-fences.md",
+          "type": "file",
+          "path": "references/fact-fences.md",
+          "lines": 35
+        },
+        {
+          "name": "voice-profile-cards.md",
+          "type": "file",
+          "path": "references/voice-profile-cards.md",
+          "lines": 84
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "audit.py",
+          "type": "file",
+          "path": "scripts/audit.py",
+          "lines": 162
+        },
+        {
+          "name": "build_plugin.py",
+          "type": "file",
+          "path": "scripts/build_plugin.py",
+          "lines": 175
+        },
+        {
+          "name": "case_lab.py",
+          "type": "file",
+          "path": "scripts/case_lab.py",
+          "lines": 152
+        },
+        {
+          "name": "check_install.py",
+          "type": "file",
+          "path": "scripts/check_install.py",
+          "lines": 101
+        },
+        {
+          "name": "check_plugin_package.py",
+          "type": "file",
+          "path": "scripts/check_plugin_package.py",
+          "lines": 94
+        },
+        {
+          "name": "failure_fixture.py",
+          "type": "file",
+          "path": "scripts/failure_fixture.py",
+          "lines": 273
+        },
+        {
+          "name": "failure_taxonomy.py",
+          "type": "file",
+          "path": "scripts/failure_taxonomy.py",
+          "lines": 112
+        },
+        {
+          "name": "install.py",
+          "type": "file",
+          "path": "scripts/install.py",
+          "lines": 111
+        },
+        {
+          "name": "ledger.py",
+          "type": "file",
+          "path": "scripts/ledger.py",
+          "lines": 116
+        },
+        {
+          "name": "live_eval.py",
+          "type": "file",
+          "path": "scripts/live_eval.py",
+          "lines": 672
+        },
+        {
+          "name": "live_report.py",
+          "type": "file",
+          "path": "scripts/live_report.py",
+          "lines": 280
+        },
+        {
+          "name": "package_files.py",
+          "type": "file",
+          "path": "scripts/package_files.py",
+          "lines": 32
+        },
+        {
+          "name": "public_copy_check.py",
+          "type": "file",
+          "path": "scripts/public_copy_check.py",
+          "lines": 244
+        },
+        {
+          "name": "redact_case.py",
+          "type": "file",
+          "path": "scripts/redact_case.py",
+          "lines": 229
+        },
+        {
+          "name": "regression_100.py",
+          "type": "file",
+          "path": "scripts/regression_100.py",
+          "lines": 1954
+        },
+        {
+          "name": "rewrite_report.py",
+          "type": "file",
+          "path": "scripts/rewrite_report.py",
+          "lines": 176
+        },
+        {
+          "name": "scorecard.py",
+          "type": "file",
+          "path": "scripts/scorecard.py",
+          "lines": 420
+        },
+        {
+          "name": "validate_skill.py",
+          "type": "file",
+          "path": "scripts/validate_skill.py",
+          "lines": 200
+        },
+        {
+          "name": "voice_probe.py",
+          "type": "file",
+          "path": "scripts/voice_probe.py",
+          "lines": 199
+        },
+        {
+          "name": "voice_profile.py",
+          "type": "file",
+          "path": "scripts/voice_profile.py",
+          "lines": 309
+        }
+      ]
+    },
+    {
+      "name": "CHANGELOG.md",
+      "type": "file",
+      "path": "CHANGELOG.md",
+      "lines": 45
+    },
+    {
+      "name": "CONTRIBUTING.md",
+      "type": "file",
+      "path": "CONTRIBUTING.md",
+      "lines": 73
+    },
+    {
+      "name": "install.sh",
+      "type": "file",
+      "path": "install.sh",
+      "lines": 54
+    },
+    {
+      "name": "LICENSE",
+      "type": "file",
+      "path": "LICENSE",
+      "lines": 341
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 252
+    },
+    {
+      "name": "RELEASE.md",
+      "type": "file",
+      "path": "RELEASE.md",
+      "lines": 17
+    },
+    {
+      "name": "SECURITY.md",
+      "type": "file",
+      "path": "SECURITY.md",
+      "lines": 38
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 139
+    }
+  ]
+}

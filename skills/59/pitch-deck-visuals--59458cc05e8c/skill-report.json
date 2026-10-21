@@ -1,0 +1,957 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:46:31.093Z",
+    "slug": "inference-sh-9-pitch-deck-visuals",
+    "source_url": "https://github.com/inference-sh-9/skills/tree/main/skills/pitch-deck-visuals/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "644cfdf24eaccb3824e79a3710e84e93f8f74dadf56861fe8c7d4f97bb9a5383",
+    "tree_hash": "3623d38344fa47a50ccf5ec287f6da581d96cff9c0ca37cf46085669ae5bd371",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "pitch-deck-visuals",
+    "description": "Guides users through investor pitch deck structure, slide design rules, and visual generation examples using inference.sh CLI apps.",
+    "summary": "Create structured investor pitch visuals, charts, and slide guidance for startup fundraising decks.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "inference-sh-9",
+    "license": "MIT",
+    "tags": [
+      "pitch decks",
+      "fundraising",
+      "slide design",
+      "data visualization",
+      "startup"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "design"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The audit confirmed a critical pipe-to-shell installer and several external CLI examples that execute inference.sh, Python executor, or npx commands. Several markdown fence detections and the system reconnaissance hit are false positives. The skill also lacks a clear privacy warning before sending confidential pitch content to third-party services.",
+    "remediation": [
+      {
+        "issue": "Pipe-to-shell installer in the quick start",
+        "suggestion": "Replace curl piped to sh with manual download, checksum verification, and a separate explicit install command.",
+        "severity": "critical"
+      },
+      {
+        "issue": "External service processing of pitch deck content",
+        "suggestion": "Add a clear consent step before using infsh apps and warn users not to send confidential metrics without approval.",
+        "severity": "high"
+      },
+      {
+        "issue": "Remote Python executor examples",
+        "suggestion": "Use constrained chart-generation examples and warn users to review generated Python before execution.",
+        "severity": "high"
+      },
+      {
+        "issue": "Related skill installation commands",
+        "suggestion": "Move npx install commands to a reference section and advise users to inspect third-party skills before installing.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 20
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 20,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 97
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 107
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 107,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 121
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 121,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 132
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 132,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 205
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 205,
+            "line_end": 209
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 209,
+            "line_end": 211
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 9,
+            "line_end": 9
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 20,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 22,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 87,
+        "snippet": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 91,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 97,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 101,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 107,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 107,
+        "line_end": 111,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 117,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 121,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 127,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 132,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 132,
+        "line_end": 136,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 143,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 205,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 205,
+        "line_end": 209,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 209,
+        "line_end": 211,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "Create investor-ready pitch deck visuals via [inference.sh](https://inference.sh) CLI."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh && infsh login"
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture"
+      },
+      {
+        "id": "blocker:SKILL.md:14:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "curl -fsSL https://cli.inference.sh | sh && infsh login"
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "| Avoid | Gradients on text, neon colors, more than 3 colors |"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "severity": "critical",
+        "reason": "The quick start block includes curl piped directly to sh before running the CLI. This downloads and executes remote installer code without local inspection."
+      },
+      {
+        "id": "external_commands:SKILL.md:20:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "This range is a markdown fence closure and install-note prose. It does not contain a new executable command beyond the line 14 installer."
+      },
+      {
+        "id": "external_commands:SKILL.md:22:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "The cited range is installation prose and deck guidance, not a shell invocation. Later executable examples are covered by their own findings."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "medium",
+        "reason": "The title slide example runs infsh app run with embedded HTML. This is intentional external CLI execution and may send slide content to a service."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "These lines close one code block and introduce the problem slide section. No shell command is present in this finding."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "severity": "medium",
+        "reason": "The problem slide example runs infsh app run with embedded HTML containing business claims. This is real external command execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "These lines close the previous code block and introduce market size guidance. They do not contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "severity": "high",
+        "reason": "The market size example invokes infsh/python-executor with a Python code payload. Running generated code through an external executor is a real execution risk."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "These lines close the market size code block and introduce traction guidance. They do not contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:117:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "severity": "high",
+        "reason": "The traction example invokes infsh/python-executor with Python code and revenue data. This is external execution of a supplied code payload."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "These lines close the traction code block and introduce competition guidance. They do not contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.91,
+        "severity": "high",
+        "reason": "The competition example invokes infsh/python-executor with a Python code payload. This is real external code execution for chart generation."
+      },
+      {
+        "id": "external_commands:SKILL.md:132:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "These lines close the competition code block and introduce the team slide section. They do not contain an executable command."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.89,
+        "severity": "medium",
+        "reason": "The team slide example runs infsh app run against falai/flux-dev-lora. It sends prompt data to an external image generation service."
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "This range is the closing fence and non-executable presentation guidance. The next actual command block is covered separately at line 205."
+      },
+      {
+        "id": "external_commands:SKILL.md:205:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.86,
+        "severity": "medium",
+        "reason": "The related skills block recommends npx skills add commands. These commands can fetch and install external skill content."
+      },
+      {
+        "id": "external_commands:SKILL.md:209:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.87,
+        "reason": "The finding starts on a markdown fence closure and only includes a benign inline example to list apps. It is not a command execution instruction with sensitive data."
+      },
+      {
+        "id": "network:SKILL.md:9:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 9 is an informational link to the service homepage. It does not initiate a request or transmit user data by itself."
+      },
+      {
+        "id": "network:SKILL.md:14:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "critical",
+        "reason": "The URL is used in a curl pipe-to-shell installer. This is a real remote code execution risk if the endpoint or transport is compromised."
+      },
+      {
+        "id": "network:SKILL.md:22:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.78,
+        "severity": "low",
+        "reason": "The install note documents external installer and binary distribution hosts. This is not malicious, but it is a real network trust dependency."
+      },
+      {
+        "id": "blocker:SKILL.md:14:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "critical",
+        "reason": "Line 14 pipes a remote script directly into sh. This pattern bypasses review and can execute arbitrary remote code on the user system."
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 71 is a color guideline saying to avoid gradients on text. It has no system reconnaissance behavior or instruction."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Third-Party Processing Of Confidential Pitch Content",
+        "description": "The skill sends slide HTML, revenue metrics, market data, and team image prompts through external infsh applications. Pitch decks often contain confidential fundraising data, but the skill does not require consent before third-party processing.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 138,
+            "line_end": 142
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "Multiple examples pass investor deck content and metrics to external infsh apps. The file has install notes but no privacy warning or confirmation step for sensitive deck data."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 20
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.97,
+        "confidence_reasoning": "The quick start block includes curl piped directly to sh before running the CLI. This downloads and executes remote installer code without local inspection."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The URL is used in a curl pipe-to-shell installer. This is a real remote code execution risk if the endpoint or transport is compromised."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "Line 14 pipes a remote script directly into sh. This pattern bypasses review and can execute arbitrary remote code on the user system."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 107,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.91,
+        "confidence_reasoning": "The market size example invokes infsh/python-executor with a Python code payload. Running generated code through an external executor is a real execution risk."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 121
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.91,
+        "confidence_reasoning": "The traction example invokes infsh/python-executor with Python code and revenue data. This is external execution of a supplied code payload."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 132
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.91,
+        "confidence_reasoning": "The competition example invokes infsh/python-executor with a Python code payload. This is real external code execution for chart generation."
+      },
+      {
+        "title": "Third-Party Processing Of Confidential Pitch Content",
+        "description": "The skill sends slide HTML, revenue metrics, market data, and team image prompts through external infsh applications. Pitch decks often contain confidential fundraising data, but the skill does not require consent before third-party processing.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 18
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 120
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 138,
+            "line_end": 142
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "Multiple examples pass investor deck content and metrics to external infsh apps. The file has install notes but no privacy warning or confirmation step for sensitive deck data."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 91
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The title slide example runs infsh app run with embedded HTML. This is intentional external CLI execution and may send slide content to a service."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 101
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "The problem slide example runs infsh app run with embedded HTML containing business claims. This is real external command execution."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 143
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.89,
+        "confidence_reasoning": "The team slide example runs infsh app run against falai/flux-dev-lora. It sends prompt data to an external image generation service."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 205,
+            "line_end": 209
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The related skills block recommends npx skills add commands. These commands can fetch and install external skill content."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "> **Install note:** The [install script](https://cli.inference.sh) only detects your OS/architecture",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 22,
+            "line_end": 22
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.78,
+        "confidence_reasoning": "The install note documents external installer and binary distribution hosts. This is not malicious, but it is a real network trust dependency."
+      }
+    ],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://cli.inference.sh | sh && infsh login",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "Line 14 pipes a remote script directly into sh. This pattern bypasses review and can execute arbitrary remote code on the user system."
+      }
+    ],
+    "files_scanned": 1,
+    "total_lines": 212,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:46:31.093Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Create Investor Pitch Deck Visuals",
+    "value_statement": "Fundraising decks need clear structure, credible visuals, and concise data slides. This skill provides a 12-slide framework, design rules, and visual examples for investor-ready presentations.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "investor pitch deck",
+      "startup fundraising deck",
+      "pitch deck visuals",
+      "12 slide pitch deck",
+      "market size slide",
+      "traction chart",
+      "demo day presentation"
+    ],
+    "actual_capabilities": [
+      "Explains a 12-slide investor deck sequence with target timing for each slide.",
+      "Gives typography, color, layout, and chart rules for 1920x1080 slides.",
+      "Provides example prompts and CLI commands for generating slide backgrounds and charts.",
+      "Recommends chart types for market size, traction, competition, and key metrics.",
+      "Lists common pitch deck mistakes and fixes for investor presentations."
+    ],
+    "limitations": [
+      "Requires access to inference.sh CLI for the image and chart generation examples.",
+      "Does not validate market data, financial projections, or investor claims.",
+      "Does not create a complete editable presentation file by itself.",
+      "May expose deck content to third-party services when examples are run."
+    ],
+    "use_cases": [
+      {
+        "title": "Build Seed Fundraising Decks",
+        "description": "Create a clear investor deck structure with focused visuals for problem, solution, market, traction, and ask slides.",
+        "target_user": "Startup founders"
+      },
+      {
+        "title": "Prepare Demo Day Slides",
+        "description": "Turn a short startup pitch into concise slides with consistent typography, layout, and chart guidance.",
+        "target_user": "Accelerator teams"
+      },
+      {
+        "title": "Create Grant Pitch Visuals",
+        "description": "Present problem evidence, market context, team credibility, and funding needs in a structured visual format.",
+        "target_user": "Grant applicants"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Draft A Slide Plan",
+        "scenario": "Beginner planning for a new deck.",
+        "prompt": "Create a 12-slide investor pitch deck outline for [company]. Use one idea per slide and include the key visual for each slide."
+      },
+      {
+        "title": "Design One Slide",
+        "scenario": "Focused visual guidance for one important slide.",
+        "prompt": "Design a problem slide for [company] using one key statistic, a concise headline, and a suggested visual layout."
+      },
+      {
+        "title": "Improve Existing Slides",
+        "scenario": "Review a draft before an investor meeting.",
+        "prompt": "Review this pitch deck outline and identify slides with too much text, weak data, or unclear investor logic: [outline]."
+      },
+      {
+        "title": "Create A Visual System",
+        "scenario": "Advanced deck direction for a full fundraising narrative.",
+        "prompt": "Create a complete visual direction for a seed deck, including typography, color rules, chart choices, and slide-by-slide treatments for [company]."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A founder needs a problem slide about manual reporting costs.",
+        "output": "A single-number problem slide with a bold metric, short headline, dark background, accent color, and visible source caption."
+      },
+      {
+        "input": "A startup needs a market size slide for investors.",
+        "output": "A TAM, SAM, and SOM visual using concentric circles, direct labels, restrained colors, and a clear market opportunity title."
+      },
+      {
+        "input": "A team wants to show monthly recurring revenue growth.",
+        "output": "A line chart recommendation with direct labels, subtle grid styling, a zero-based axis, and a clear growth callout."
+      }
+    ],
+    "best_practices": [
+      "Use one main message per slide and remove text that does not change the investor decision.",
+      "Cite every market, traction, and problem statistic with a visible source.",
+      "Confirm data privacy before sending confidential metrics or team details to external generation tools."
+    ],
+    "anti_patterns": [
+      "Do not use pie charts, dense feature matrices, or slides with more than six bullets.",
+      "Do not paste confidential fundraising data into external tools without approval.",
+      "Do not treat generated visuals as evidence for claims without checking the underlying data."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill create a complete deck file?",
+        "answer": "No. It provides structure, design rules, and visual generation examples, but it does not assemble an editable presentation file."
+      },
+      {
+        "question": "Which pitch stages does it support?",
+        "answer": "It is most useful for pre-seed, seed, demo day, and early Series A fundraising decks."
+      },
+      {
+        "question": "Can it help with charts?",
+        "answer": "Yes. It recommends chart types for market size, traction, competition, and key metric slides."
+      },
+      {
+        "question": "Does it verify business data?",
+        "answer": "No. Users must verify revenue, market size, customer, and source claims before presenting them."
+      },
+      {
+        "question": "Does it require external services?",
+        "answer": "The guidance can be read without services, but visual generation examples use inference.sh and related apps."
+      },
+      {
+        "question": "Is it safe for confidential decks?",
+        "answer": "Use caution. Remove confidential data or get approval before sending deck content to external generation services."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 212
+    }
+  ]
+}

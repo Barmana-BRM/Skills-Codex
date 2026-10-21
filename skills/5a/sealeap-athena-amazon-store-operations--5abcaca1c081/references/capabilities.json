@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "entrypoint": "sealeap-athena-amazon-store-operations",
+  "capabilities": [
+    {
+      "name": "sealeap-athena-amazon-account-auth",
+      "title": "Amazon 账户授权检查",
+      "description": "Amazon 账户授权检查。用于先读取既有连接的非敏感状态；需要新授权时通过官方流程绑定明确账户，再回读身份。输入需明确账户别名、地区、所需权限与目标动作；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "auth",
+          "validation": "connection_required",
+          "platform": "Amazon"
+        }
+      ],
+      "limitation": "不得靠市场数据推断已授权；多账户歧义需澄清；不输出或索取明文令牌",
+      "legacy_path": "sealeap-athena-amazon-account-auth",
+      "entrypoint": "sealeap-athena-amazon-store-operations",
+      "guide_path": "references/capabilities/amazon-account-auth/workflow.md",
+      "playbook_path": "references/capabilities/amazon-account-auth/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-account-auth/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-account-report",
+      "title": "Amazon 经营报表",
+      "description": "Amazon 经营报表。用于优先读取同口径已有报告；必要时按授权创建报表任务，追踪任务 ID 后下载并核对总量。输入需明确账户、站点、报告类型、时间窗、归因和聚合口径；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "report",
+          "validation": "connection_required",
+          "platform": "Amazon"
+        }
+      ],
+      "limitation": "报告任务成功不等于下载文件完整；只读任务不新建远程报告；多分片必须对账",
+      "legacy_path": "sealeap-athena-amazon-account-report",
+      "entrypoint": "sealeap-athena-amazon-store-operations",
+      "guide_path": "references/capabilities/amazon-account-report/workflow.md",
+      "playbook_path": "references/capabilities/amazon-account-report/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-account-report/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-account-orders",
+      "title": "Amazon 订单核对",
+      "description": "Amazon 订单核对。用于读取订单头与行项目，按订单 ID 对齐支付、费用、取消和履约状态。输入需明确账户、地区、订单 ID 或期间、订单状态；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "orders",
+          "validation": "connection_required",
+          "platform": "Amazon"
+        }
+      ],
+      "limitation": "订单金额与结算收入不同；分页完整性和时区须核对；只显示必要买家信息",
+      "legacy_path": "sealeap-athena-amazon-account-orders",
+      "entrypoint": "sealeap-athena-amazon-store-operations",
+      "guide_path": "references/capabilities/amazon-account-orders/workflow.md",
+      "playbook_path": "references/capabilities/amazon-account-orders/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-account-orders/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-account-external-fulfillment",
+      "title": "Amazon 外部履约",
+      "description": "Amazon 外部履约。用于确认当前资格、订单行和仓库映射，核对库存及履约状态后执行已授权动作。输入需明确账户、地区、订单、库存地点和履约方式；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "commerce",
+      "route": "官方账户连接或导出文件",
+      "capabilities": [
+        {
+          "provider": "official-account",
+          "tool": "external-fulfillment",
+          "validation": "connection_required",
+          "platform": "Amazon"
+        }
+      ],
+      "limitation": "备货、发货、交运和签收是不同状态；避免重复扣减库存或重复发货",
+      "legacy_path": "sealeap-athena-amazon-account-external-fulfillment",
+      "entrypoint": "sealeap-athena-amazon-store-operations",
+      "guide_path": "references/capabilities/amazon-account-external-fulfillment/workflow.md",
+      "playbook_path": "references/capabilities/amazon-account-external-fulfillment/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-account-external-fulfillment/tool-routing.md"
+    },
+    {
+      "name": "sealeap-athena-amazon-policy-monitor",
+      "title": "Amazon 政策更新核对",
+      "description": "Amazon 政策更新核对。用于查看当前官方公告并区分发布时间、生效时间及适用站点。输入需明确站点、业务领域、最近时间窗和账户适用范围；边界见执行手册。",
+      "category": "Amazon",
+      "mode": "web",
+      "route": "公开网页或授权接口",
+      "capabilities": [
+        {
+          "provider": "public-primary-sources",
+          "tool": "web",
+          "validation": "runtime_discovery"
+        }
+      ],
+      "limitation": "无更新和访问失败分别报告；转载摘要不能作为最终政策依据",
+      "legacy_path": "sealeap-athena-amazon-policy-monitor",
+      "entrypoint": "sealeap-athena-amazon-store-operations",
+      "guide_path": "references/capabilities/amazon-policy-monitor/workflow.md",
+      "playbook_path": "references/capabilities/amazon-policy-monitor/playbook.md",
+      "tool_routing_path": "references/capabilities/amazon-policy-monitor/tool-routing.md"
+    }
+  ]
+}

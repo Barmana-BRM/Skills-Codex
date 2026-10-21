@@ -1,0 +1,486 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-07T00:28:38.116Z",
+    "slug": "sickn33-performance-profiling",
+    "source_url": "https://github.com/sickn33/antigravity-awesome-skills/tree/main/skills/performance-profiling",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "49e685a8fa75c4b110926ea72a2b6033834acdba73f6960483ab85c7c09a0cf0",
+    "tree_hash": "1e173212a3a6ef6979af51025a61b310853165dc62ebaea2b1079f7f0ce0d4a5",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "performance-profiling",
+    "description": "Performance profiling principles. Measurement, analysis, and optimization techniques.",
+    "summary": "Performance profiling principles. Measurement, analysis, and optimization techniques.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "sickn33",
+    "license": "MIT",
+    "category": "devops",
+    "tags": [
+      "performance",
+      "profiling",
+      "lighthouse",
+      "web-vitals",
+      "optimization"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The Markdown examples and most filesystem patterns are safe documentation or normal temporary file handling. The script intentionally runs Lighthouse and accepts an arbitrary URL, which creates a network reachability risk in agent environments.",
+    "remediation": [
+      {
+        "issue": "Unrestricted URL input can make Lighthouse fetch internal or sensitive network targets.",
+        "suggestion": "Validate schemes, block localhost and private IP ranges, and require explicit user approval before auditing a URL.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Temporary Lighthouse reports may remain if the subprocess times out or fails before cleanup.",
+        "suggestion": "Move temp file deletion into a finally block and delete partial reports on every exit path.",
+        "severity": "low"
+      },
+      {
+        "issue": "The script resolves the lighthouse executable from PATH.",
+        "suggestion": "Document the expected Lighthouse installation and avoid running the script in directories or environments with untrusted PATH entries.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 22,
+            "line_end": 22
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 50
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 6,
+            "line_end": 6
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 39,
+            "line_end": 39
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:scripts/lighthouse_audit.py:22:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/lighthouse_audit.py",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "result = subprocess.run("
+      },
+      {
+        "id": "network:scripts/lighthouse_audit.py:6:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/lighthouse_audit.py",
+        "line_start": 6,
+        "line_end": 6,
+        "snippet": "Usage: python lighthouse_audit.py https://example.com"
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:14:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/lighthouse_audit.py",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "import tempfile"
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:19:temp-file-creation",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Temp file creation",
+        "file": "scripts/lighthouse_audit.py",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:"
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:39:python-os-file-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python os file operations",
+        "file": "scripts/lighthouse_audit.py",
+        "line_start": 39,
+        "line_end": 39,
+        "snippet": "os.unlink(output_path)"
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "| `scripts/lighthouse_audit.py` | Lighthouse performance audit | `python scripts/lighthouse_audit.py"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 50,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:17:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "| `scripts/lighthouse_audit.py` | Lighthouse performance audit | `python scripts/lighthouse_audit.py"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:scripts/lighthouse_audit.py:22:python-subprocess-run",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "subprocess.run invokes a fixed lighthouse command with a list of arguments and shell execution is not enabled. The user-provided URL is passed as a single argument, so I did not find command injection evidence."
+      },
+      {
+        "id": "network:scripts/lighthouse_audit.py:6:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The hardcoded URL is only an example in the script usage docstring. It is not contacted by the script unless a user supplies it at runtime."
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:14:temp-file-creation",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This line only imports the tempfile module. The import is expected for Lighthouse output handling and is not a filesystem operation by itself."
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:19:temp-file-creation",
+        "verdict": "confirmed",
+        "confidence": 0.62,
+        "severity": "low",
+        "reason": "The script creates a temporary JSON report with delete=False and only removes it after successful parsing. A timeout or early failure could leave a report file in the temp directory."
+      },
+      {
+        "id": "filesystem:scripts/lighthouse_audit.py:39:python-os-file-operations",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "os.unlink is used to delete the temporary Lighthouse report after it is read. This is cleanup of a file created by the same script, not destructive user file access."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks are Markdown inline code formatting around a usage example. They are not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This location begins a Markdown fenced code block that documents a profiling workflow. It contains no executable shell command or backtick substitution."
+      },
+      {
+        "id": "network:SKILL.md:17:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The URL appears inside a documented command example for running the audit script. It is not a hidden endpoint or automatic network destination."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unrestricted URL Auditing",
+        "description": "The Lighthouse script accepts a URL argument and passes it to Lighthouse for fetching. In an agent environment, this could be used to reach localhost, private networks, or metadata services unless guarded by policy.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 16,
+            "line_end": 25
+          },
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 70,
+            "line_end": 75
+          }
+        ],
+        "confidence": 0.82,
+        "confidence_reasoning": "The script takes sys.argv[1] and uses it as the Lighthouse target URL. This is intended behavior, but no validation or private-network guard is present."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unrestricted URL Auditing",
+        "description": "The Lighthouse script accepts a URL argument and passes it to Lighthouse for fetching. In an agent environment, this could be used to reach localhost, private networks, or metadata services unless guarded by policy.",
+        "locations": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 16,
+            "line_end": 25
+          },
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 70,
+            "line_end": 75
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The script takes sys.argv[1] and uses it as the Lighthouse target URL. This is intended behavior, but no validation or private-network guard is present."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Temp file creation",
+        "description": "with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:",
+        "locations": [
+          {
+            "file": "scripts/lighthouse_audit.py",
+            "line_start": 19,
+            "line_end": 19
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "low",
+        "confidence": 0.62,
+        "confidence_reasoning": "The script creates a temporary JSON report with delete=False and only removes it after successful parsing. A timeout or early failure could leave a report file in the temp directory."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 221,
+    "audit_model": "codex",
+    "audited_at": "2026-07-07T00:28:38.116Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Profile Web Performance Bottlenecks",
+    "value_statement": "Slow applications are hard to improve without reliable measurements. This skill guides profiling workflows and Lighthouse audits to identify practical optimization targets.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "performance profiling",
+      "Lighthouse audit",
+      "Core Web Vitals",
+      "web optimization",
+      "bundle analysis",
+      "runtime profiling",
+      "site speed"
+    ],
+    "actual_capabilities": [
+      "Explains Core Web Vitals targets for loading, interactivity, and visual stability.",
+      "Provides a four-step workflow for measuring, identifying, fixing, and validating bottlenecks.",
+      "Maps common performance problems to Lighthouse, bundle analyzers, and browser DevTools.",
+      "Runs a Lighthouse audit script against a supplied URL when the CLI is installed.",
+      "Summarizes Lighthouse category scores for performance, accessibility, best practices, and SEO."
+    ],
+    "limitations": [
+      "The audit script requires the Lighthouse CLI to be installed separately.",
+      "Results depend on network conditions, hardware, and browser environment.",
+      "The skill identifies likely bottlenecks but does not automatically rewrite application code.",
+      "The script can only audit URLs reachable from the current execution environment."
+    ],
+    "use_cases": [
+      {
+        "title": "Prepare a Performance Baseline",
+        "description": "Measure current page speed before starting an optimization project.",
+        "target_user": "Frontend developer"
+      },
+      {
+        "title": "Review Release Readiness",
+        "description": "Check Core Web Vitals and Lighthouse categories before shipping a web change.",
+        "target_user": "DevOps engineer"
+      },
+      {
+        "title": "Prioritize Optimization Work",
+        "description": "Translate slow page symptoms into focused actions for product planning.",
+        "target_user": "Product manager"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Explain My Scores",
+        "scenario": "Beginner review of a Lighthouse result.",
+        "prompt": "Use the performance-profiling skill to explain my Lighthouse scores in plain language and list the first three fixes to try."
+      },
+      {
+        "title": "Choose Profiling Tools",
+        "scenario": "Selecting the right tool for a symptom.",
+        "prompt": "Use the performance-profiling skill to match these symptoms to the best profiling tools: slow load, delayed clicks, memory growth, and scroll jank."
+      },
+      {
+        "title": "Build an Optimization Plan",
+        "scenario": "Planning focused performance work.",
+        "prompt": "Use the performance-profiling skill to create a prioritized plan for improving a web app with slow initial load and large JavaScript bundles."
+      },
+      {
+        "title": "Audit a Release Candidate",
+        "scenario": "Advanced validation before deployment.",
+        "prompt": "Use the performance-profiling skill to run or review a Lighthouse audit for my release URL, then identify risks, tradeoffs, and validation steps."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A dashboard has slow first load and a large main bundle.",
+        "output": [
+          "Measure a baseline with Lighthouse and browser performance tools.",
+          "Inspect bundle size for large dependencies, duplicate packages, and missing route splits.",
+          "Prioritize code splitting, dependency trimming, compression, and image optimization."
+        ]
+      },
+      {
+        "input": "A page feels delayed when users click filters.",
+        "output": [
+          "Profile the interaction in DevTools Performance.",
+          "Look for long tasks, heavy event handlers, layout work, and unnecessary rendering.",
+          "Fix the largest blocking task first and validate the interaction again."
+        ]
+      },
+      {
+        "input": "A Lighthouse run shows acceptable SEO but poor performance.",
+        "output": "Focus on loading metrics first. Check render blocking resources, image size, unused JavaScript, cache headers, and compression before changing SEO content."
+      }
+    ],
+    "best_practices": [
+      "Measure a baseline before changing code.",
+      "Fix the largest verified bottleneck before smaller issues.",
+      "Validate improvements with the same tool and comparable conditions."
+    ],
+    "anti_patterns": [
+      "Do not optimize based only on guesses or visual impressions.",
+      "Do not chase micro-optimizations before fixing major load and runtime issues.",
+      "Do not rely only on lab data when real user monitoring is available."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill run Lighthouse automatically?",
+        "answer": "It includes a Lighthouse audit script, but the Lighthouse CLI must be installed and available."
+      },
+      {
+        "question": "Can it improve Core Web Vitals?",
+        "answer": "It helps identify actions that can improve LCP, INP, and CLS, but it does not edit application code."
+      },
+      {
+        "question": "Which tools does it cover?",
+        "answer": "It covers Lighthouse, Lighthouse CI, bundle analyzers, browser performance tools, memory tools, and network inspection."
+      },
+      {
+        "question": "Can I use it in CI?",
+        "answer": "The guidance supports CI workflows, but the included script is a local helper and may need wrapping for CI."
+      },
+      {
+        "question": "What input should I provide?",
+        "answer": "Provide a URL, Lighthouse results, symptoms, bundle details, or profiling observations."
+      },
+      {
+        "question": "Does it need network access?",
+        "answer": "The guidance does not need network access, but the Lighthouse script fetches the URL being audited."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "lighthouse_audit.py",
+          "type": "file",
+          "path": "scripts/lighthouse_audit.py",
+          "lines": 77
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 144
+    }
+  ]
+}

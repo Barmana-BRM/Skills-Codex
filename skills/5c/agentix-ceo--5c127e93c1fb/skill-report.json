@@ -1,0 +1,3014 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T04:47:43.738Z",
+    "slug": "agentix-cloud-agentix-ceo",
+    "source_url": "https://github.com/agentix-cloud/skills/tree/main/skills/agentix-ceo/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "5c127e93c1fbc94de9f7c6502521d0632a914aa3c3be2cc6e9ce446f4430a73d",
+    "tree_hash": "6c8c3e34abf494a85849c4c563f475b4c7a52c7b688775d422cb56a7807c3715",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "agentix-ceo",
+    "description": "Orchestrate Agentix teams by configuring roles, creating tasks, launching workers, and monitoring progress through SaaS or self-hosted APIs.",
+    "summary": "Coordinate Agentix roles, tasks, workers, playbooks, and team progress.",
+    "icon": "📦",
+    "version": "1.2.0",
+    "author": "agentix-cloud",
+    "license": "MIT",
+    "tags": [
+      "agent-orchestration",
+      "team-management",
+      "task-automation",
+      "agentix",
+      "api-workflows"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network",
+      "filesystem",
+      "env_access"
+    ],
+    "category": "productivity"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most external-command alerts are false positives caused by Markdown backticks, while Agentix endpoint references are intentional network behavior. The skill collects high-value credentials, transmits them to Agentix, and follows remotely fetched playbooks. Unauthenticated self-hosting and autonomous worker mode add further operational risk.",
+    "remediation": [
+      {
+        "issue": "The workflow collects Anthropic and GitHub credentials for transfer to Agentix.",
+        "suggestion": "Require explicit consent that names the destination, accept only scoped short-lived tokens, and support secret-manager references instead of raw credentials.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Agentix credentials are stored in a plaintext hidden file and loaded silently.",
+        "suggestion": "Use the operating system credential store. If a file is unavoidable, require confirmation and enforce owner-only permissions before writing.",
+        "severity": "high"
+      },
+      {
+        "issue": "Remote playbook text controls agent policies and operating mode.",
+        "suggestion": "Treat playbooks as untrusted data, validate allowed directives, reject instruction overrides, and require approval before privileged actions.",
+        "severity": "high"
+      },
+      {
+        "issue": "The self-hosted API is documented as unauthenticated and open on the local network.",
+        "suggestion": "Require authentication, bind to loopback by default, and document secure network exposure with transport encryption.",
+        "severity": "high"
+      },
+      {
+        "issue": "Autopilot has no documented limits for concurrency, spending, or repository changes.",
+        "suggestion": "Add worker, cost, and time limits. Require approval for merges, credential updates, role deletion, and destructive task changes.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 93
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 93,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 114
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 114,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 139
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 139,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 150,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 163
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 163,
+            "line_end": 167
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 167,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 176
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 176,
+            "line_end": 178
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 186
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 186,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 192
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 192,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 197
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 203
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 208
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 208,
+            "line_end": 210
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 210,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 212,
+            "line_end": 212
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 218,
+            "line_end": 218
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 261,
+            "line_end": 261
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 262,
+            "line_end": 262
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 263,
+            "line_end": 263
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 264,
+            "line_end": 264
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 173
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 198,
+            "line_end": 198
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "Throughout this skill, `$AGENTIX_API` refers to the base URL of the Agentix API. Before making any A"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "1. Check the `AGENTIX_API_URL` environment variable."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "2. If not set, default to `https://agentix.cloud`."
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 25,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 27,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 31,
+        "snippet": "> **Note:** If you fetched this skill file directly from an Agentix server via `GET /skills/ceo`, al"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 37,
+        "snippet": "On every session start, check `~/.agentix/credentials`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "- **SaaS** (`$AGENTIX_API` is `https://agentix.cloud` or unset): Run the registration flow (Steps 1–"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 40,
+        "snippet": "- **Self-hosted** (`AGENTIX_API_URL` points to a custom instance): No registration needed. No API ke"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 53,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 62,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 69,
+        "snippet": "2. **Read the playbook before acting.** The playbook (`GET /teams/:id/playbook`) contains team confi"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 73,
+        "snippet": "If credentials are already loaded from `~/.agentix/credentials`, skip to [Playbook](#playbook)."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 74,
+        "snippet": "- **SaaS (default):** `https://agentix.cloud` — multi-tenant, requires registration and API key. Fol"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "- **Self-hosted:** Single team, no auth required. Set `AGENTIX_API_URL` to your instance URL (e.g., "
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 86,
+        "snippet": "These steps apply only to `https://agentix.cloud`. Self-hosted users skip this section."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 91,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 93,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 95,
+        "snippet": "Response (202): `{ \"token\": \"...\", \"confirmationUrl\": \"...\" }`"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 99,
+        "snippet": "Send the `confirmationUrl` to the user to confirm in their browser. Tokens expire in 15 minutes."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 101,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 103,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "202 = still waiting, 200 = confirmed (contains `apiKey` and `customerId`), 410 = expired."
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "Save the returned `apiKey` and `customerId` to `~/.agentix/credentials` immediately. Do not display "
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 114,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 114,
+        "line_end": 116,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "Reuse the same team across sessions. Do not create a new team each time. Save the returned `teamId` "
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 127,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 139,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 139,
+        "line_end": 141,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 143,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 143,
+        "snippet": "The playbook contains a `## Mode` section that is either `supervised` or `autopilot`. Apply the team"
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 150,
+        "line_end": 159,
+        "snippet": "If the playbook is `null`, ask the user:"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 163,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 167,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 167,
+        "line_end": 171,
+        "snippet": "If the user says \"switch to supervised/autopilot\", fetch the new template, preserve any `## Custom P"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 176,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 176,
+        "line_end": 178,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 178,
+        "line_end": 186,
+        "snippet": "Users can add custom policies under `## Custom Policies` — these survive mode switches."
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 186,
+        "line_end": 189,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 192,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 194,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 197,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 197,
+        "line_end": 199,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 203,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 208,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 208,
+        "line_end": 210,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 212,
+        "snippet": "Create/update body: `{ \"teamId\": \"...\", \"name\": \"role-name\", \"systemPrompt\": \"...\", \"timeout\": 600 }"
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 212,
+        "line_end": 212,
+        "snippet": "**Always tell the user what you're doing with roles.** When creating new roles, say which ones and w"
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 218,
+        "line_end": 218,
+        "snippet": "Statuses: `backlog` → `ready` → `in_progress` → `review` → `done` / `failed`"
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 220,
+        "line_end": 226,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 226,
+        "line_end": 228,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 228,
+        "line_end": 232,
+        "snippet": "Create body: `{ \"teamId\": \"...\", \"role\": \"...\", \"title\": \"...\", \"description\": \"...\", \"status\": \"rea"
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 232,
+        "line_end": 237,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 237,
+        "line_end": 241,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 241,
+        "line_end": 244,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:244:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 244,
+        "line_end": 248,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:248:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 248,
+        "line_end": 250,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:250:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 250,
+        "line_end": 252,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 252,
+        "line_end": 252,
+        "snippet": "Body: `{ \"name\": \"ci-key\" }`. Returns `{apiKey, customerId}` once."
+      },
+      {
+        "id": "external_commands:SKILL.md:260:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 260,
+        "line_end": 265,
+        "snippet": "```"
+      },
+      {
+        "id": "network:SKILL.md:17:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "2. If not set, default to `https://agentix.cloud`."
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "export AGENTIX_API_URL=https://agentix.cloud"
+      },
+      {
+        "id": "network:SKILL.md:24:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 24,
+        "line_end": 24,
+        "snippet": "export AGENTIX_API_URL=https://your-agentix-instance.example.com"
+      },
+      {
+        "id": "network:SKILL.md:37:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "- **SaaS** (`$AGENTIX_API` is `https://agentix.cloud` or unset): Run the registration flow (Steps 1–"
+      },
+      {
+        "id": "network:SKILL.md:50:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "AGENTIX_API_URL=http://localhost:3456"
+      },
+      {
+        "id": "network:SKILL.md:73:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "- **SaaS (default):** `https://agentix.cloud` — multi-tenant, requires registration and API key. Fol"
+      },
+      {
+        "id": "network:SKILL.md:74:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "- **Self-hosted:** Single team, no auth required. Set `AGENTIX_API_URL` to your instance URL (e.g., "
+      },
+      {
+        "id": "network:SKILL.md:80:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "These steps apply only to `https://agentix.cloud`. Self-hosted users skip this section."
+      },
+      {
+        "id": "network:SKILL.md:87:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "POST https://agentix.cloud/register"
+      },
+      {
+        "id": "network:SKILL.md:100:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "GET https://agentix.cloud/register/<token>"
+      },
+      {
+        "id": "network:SKILL.md:110:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "POST https://agentix.cloud/teams"
+      },
+      {
+        "id": "network:SKILL.md:123:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "PATCH https://agentix.cloud/teams/$TEAM_ID"
+      },
+      {
+        "id": "network:SKILL.md:193:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "{ \"config\": { \"gitRepoUrl\": \"https://github.com/org/repo\", \"githubToken\": \"$GITHUB_TOKEN\" } }"
+      },
+      {
+        "id": "network:SKILL.md:261:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 261,
+        "line_end": 261,
+        "snippet": "GET https://agentix.cloud/docs/getting-started    # human getting started guide"
+      },
+      {
+        "id": "network:SKILL.md:262:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 262,
+        "line_end": 262,
+        "snippet": "GET https://agentix.cloud/docs/api-reference      # full API reference"
+      },
+      {
+        "id": "network:SKILL.md:263:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 263,
+        "line_end": 263,
+        "snippet": "GET https://agentix.cloud/docs                    # interactive API explorer (Swagger)"
+      },
+      {
+        "id": "network:SKILL.md:264:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 264,
+        "line_end": 264,
+        "snippet": "GET https://agentix.cloud/openapi.json            # OpenAPI spec"
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "On every session start, check `~/.agentix/credentials`:"
+      },
+      {
+        "id": "filesystem:SKILL.md:42:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'"
+      },
+      {
+        "id": "filesystem:SKILL.md:49:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'"
+      },
+      {
+        "id": "filesystem:SKILL.md:69:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "If credentials are already loaded from `~/.agentix/credentials`, skip to [Playbook](#playbook)."
+      },
+      {
+        "id": "filesystem:SKILL.md:105:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "Save the returned `apiKey` and `customerId` to `~/.agentix/credentials` immediately. Do not display "
+      },
+      {
+        "id": "filesystem:SKILL.md:116:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "Reuse the same team across sessions. Do not create a new team each time. Save the returned `teamId` "
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "On every session start, check `~/.agentix/credentials`:"
+      },
+      {
+        "id": "filesystem:SKILL.md:42:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'"
+      },
+      {
+        "id": "filesystem:SKILL.md:49:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'"
+      },
+      {
+        "id": "filesystem:SKILL.md:69:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "If credentials are already loaded from `~/.agentix/credentials`, skip to [Playbook](#playbook)."
+      },
+      {
+        "id": "filesystem:SKILL.md:105:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 105,
+        "line_end": 105,
+        "snippet": "Save the returned `apiKey` and `customerId` to `~/.agentix/credentials` immediately. Do not display "
+      },
+      {
+        "id": "filesystem:SKILL.md:116:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 116,
+        "snippet": "Reuse the same team across sessions. Do not create a new team each time. Save the returned `teamId` "
+      },
+      {
+        "id": "env_access:SKILL.md:193:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "{ \"config\": { \"gitRepoUrl\": \"https://github.com/org/repo\", \"githubToken\": \"$GITHUB_TOKEN\" } }"
+      },
+      {
+        "id": "env_access:SKILL.md:43:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "API_KEY=at_live_..."
+      },
+      {
+        "id": "env_access:SKILL.md:111:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "Authorization: Bearer $API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:124:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "Authorization: Bearer $API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:126:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 126,
+        "snippet": "{ \"anthropicApiKey\": \"$ANTHROPIC_API_KEY\" }"
+      },
+      {
+        "id": "env_access:SKILL.md:173:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 173,
+        "snippet": "Authorization: Bearer $API_KEY"
+      },
+      {
+        "id": "env_access:SKILL.md:198:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 198,
+        "line_end": 198,
+        "snippet": "{ \"anthropicApiKey\": \"$ANTHROPIC_API_KEY\" }"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:14:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:17:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:80:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:105:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:139:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:163:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:186:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:208:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:210:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:212:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:218:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:220:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:226:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:232:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:237:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:241:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:244:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:248:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:250:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:252:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:260:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is Markdown prose, inline code, or a fenced example. It contains no Ruby or shell backtick execution primitive and cannot execute commands by itself."
+      },
+      {
+        "id": "network:SKILL.md:17:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill sets agentix.cloud as the default API destination, so later operations intentionally communicate with an external service.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:21:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "This example configures agentix.cloud as the API endpoint used by the skill. The network destination is intentional and externally hosted.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:24:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.92,
+        "reason": "The placeholder documents requests to a user-configured self-hosted endpoint. This is legitimate but confirms that the skill can contact non-marketplace services.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:37:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The SaaS path explicitly selects agentix.cloud and directs the agent into its remote registration flow.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:50:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The localhost URL configures a self-hosted network service used by the skill. It confirms network capability even though the example remains on the host.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:73:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The line identifies agentix.cloud as the default multi-tenant service and requires remote registration and API authentication.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:74:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "reason": "The line directs the skill to a user-selected self-hosted API. This is legitimate but confirms network access to a configurable service.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:80:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "The line scopes the following workflow to agentix.cloud, confirming intended use of that external service.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:87:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction sends a registration POST containing the user's name and email to agentix.cloud.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:100:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction polls agentix.cloud with a registration token to retrieve account credentials.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:110:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction creates team data through an external agentix.cloud API request.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:123:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction modifies a team through agentix.cloud while using an authorization credential.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:193:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The configuration includes a GitHub repository URL, confirming integration with an external platform. Token exposure is covered by separate findings.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:261:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill directs a GET request to the public agentix.cloud getting-started documentation endpoint.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:262:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill directs a GET request to the public agentix.cloud API reference endpoint.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:263:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill directs a GET request to the public agentix.cloud interactive documentation endpoint.",
+        "severity": "low"
+      },
+      {
+        "id": "network:SKILL.md:264:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The skill directs a GET request to the public agentix.cloud OpenAPI endpoint.",
+        "severity": "low"
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill explicitly checks a hidden credentials file in the user's home directory at every session start, creating persistent access outside the workspace.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:42:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The shell example creates a hidden home directory and writes an Agentix API key to a plaintext credentials file.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:49:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The shell example creates a hidden home directory and persists self-hosted connection settings outside the workspace.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:69:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction depends on loading values from the hidden home credentials file, confirming persistent filesystem access.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:105:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill directs the agent to write a newly issued API key and customer identifier into the hidden home credentials file.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:116:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill directs the agent to persist the returned team identifier in the hidden home credentials file for reuse.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:SKILL.md:31:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill explicitly checks a hidden credentials file in the user's home directory at every session start, creating persistent access outside the workspace.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:42:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The shell example creates a hidden home directory and writes an Agentix API key to a plaintext credentials file.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:49:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The shell example creates a hidden home directory and persists self-hosted connection settings outside the workspace.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:69:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction depends on loading values from the hidden home credentials file, confirming persistent filesystem access.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:105:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill directs the agent to write a newly issued API key and customer identifier into the hidden home credentials file.",
+        "severity": "medium"
+      },
+      {
+        "id": "filesystem:SKILL.md:116:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill directs the agent to persist the returned team identifier in the hidden home credentials file for reuse.",
+        "severity": "medium"
+      },
+      {
+        "id": "env_access:SKILL.md:193:git-platform-tokens",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The skill asks for a GitHub token and places it in Agentix team configuration, exposing a repository credential to another service.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:43:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "Although the displayed value is a placeholder, the example instructs the agent to persist a live Agentix API key in plaintext.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:111:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction uses the Agentix API key as a bearer credential in a request to create a remote team.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:124:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction sends the Agentix API key as bearer authorization while updating remote team configuration.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:126:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The request body transmits the user's Anthropic API key into Agentix team configuration.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:173:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The instruction sends the Agentix API key as bearer authorization while replacing the remote playbook.",
+        "severity": "high"
+      },
+      {
+        "id": "env_access:SKILL.md:198:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "reason": "The configuration example transmits the user's Anthropic API key to Agentix for worker execution.",
+        "severity": "high"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Third-Party Credential Collection",
+        "description": "The skill asks users for Anthropic and GitHub tokens, then places them in Agentix team configuration. These secrets can enable model spending and repository access.",
+        "severity": "critical",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 199
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The instructions explicitly request both credentials and show them as fields sent to Agentix API resources."
+      },
+      {
+        "title": "Untrusted Remote Playbook Controls Agent Behavior",
+        "description": "The skill fetches a remote team playbook and applies its modes, policies, and custom rules. Compromised remote content could steer privileged agent actions.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 178
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The file explicitly requires fetching, applying, preserving, and updating remotely stored operating instructions."
+      },
+      {
+        "title": "Unauthenticated Self-Hosted Control API",
+        "description": "The self-hosted path states that its API has no authentication and is open on the local network. Other local-network users could control teams and workers.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 237
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The instructions explicitly describe the self-hosted API as open on the local network with no authentication."
+      },
+      {
+        "title": "Autopilot Permits Unbounded Autonomous Changes",
+        "description": "Autopilot authorizes continuous planning, task creation, worker spawning, review, and merge activity. Missing budgets and approval gates could cause uncontrolled changes or spend.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 155
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The documented mode grants full autonomy and continuous looping without defining concurrency, cost, or merge limits."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Third-Party Credential Collection",
+        "description": "The skill asks users for Anthropic and GitHub tokens, then places them in Agentix team configuration. These secrets can enable model spending and repository access.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 129
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 199
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instructions explicitly request both credentials and show them as fields sent to Agentix API resources."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "On every session start, check `~/.agentix/credentials`:",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill explicitly checks a hidden credentials file in the user's home directory at every session start, creating persistent access outside the workspace."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The shell example creates a hidden home directory and writes an Agentix API key to a plaintext credentials file."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The shell example creates a hidden home directory and persists self-hosted connection settings outside the workspace."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "If credentials are already loaded from `~/.agentix/credentials`, skip to [Playbook](#playbook).",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction depends on loading values from the hidden home credentials file, confirming persistent filesystem access."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "Save the returned `apiKey` and `customerId` to `~/.agentix/credentials` immediately. Do not display ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directs the agent to write a newly issued API key and customer identifier into the hidden home credentials file."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "Reuse the same team across sessions. Do not create a new team each time. Save the returned `teamId` ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directs the agent to persist the returned team identifier in the hidden home credentials file for reuse."
+      },
+      {
+        "title": "Git platform tokens",
+        "description": "{ \"config\": { \"gitRepoUrl\": \"https://github.com/org/repo\", \"githubToken\": \"$GITHUB_TOKEN\" } }",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill asks for a GitHub token and places it in Agentix team configuration, exposing a repository credential to another service."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "API_KEY=at_live_...",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "Although the displayed value is a placeholder, the example instructs the agent to persist a live Agentix API key in plaintext."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "Authorization: Bearer $API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction uses the Agentix API key as a bearer credential in a request to create a remote team."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "Authorization: Bearer $API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction sends the Agentix API key as bearer authorization while updating remote team configuration."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "{ \"anthropicApiKey\": \"$ANTHROPIC_API_KEY\" }",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 126
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The request body transmits the user's Anthropic API key into Agentix team configuration."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "Authorization: Bearer $API_KEY",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 173
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction sends the Agentix API key as bearer authorization while replacing the remote playbook."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "{ \"anthropicApiKey\": \"$ANTHROPIC_API_KEY\" }",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 198,
+            "line_end": 198
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The configuration example transmits the user's Anthropic API key to Agentix for worker execution."
+      },
+      {
+        "title": "Untrusted Remote Playbook Controls Agent Behavior",
+        "description": "The skill fetches a remote team playbook and applies its modes, policies, and custom rules. Compromised remote content could steer privileged agent actions.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 133,
+            "line_end": 146
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 165,
+            "line_end": 178
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The file explicitly requires fetching, applying, preserving, and updating remotely stored operating instructions."
+      },
+      {
+        "title": "Unauthenticated Self-Hosted Control API",
+        "description": "The self-hosted path states that its API has no authentication and is open on the local network. Other local-network users could control teams and workers.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 237
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instructions explicitly describe the self-hosted API as open on the local network with no authentication."
+      },
+      {
+        "title": "Autopilot Permits Unbounded Autonomous Changes",
+        "description": "Autopilot authorizes continuous planning, task creation, worker spawning, review, and merge activity. Missing budgets and approval gates could cause uncontrolled changes or spend.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 155
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The documented mode grants full autonomy and continuous looping without defining concurrency, cost, or merge limits."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Hidden file access",
+        "description": "On every session start, check `~/.agentix/credentials`:",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 31
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill explicitly checks a hidden credentials file in the user's home directory at every session start, creating persistent access outside the workspace."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The shell example creates a hidden home directory and writes an Agentix API key to a plaintext credentials file."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "mkdir -p ~/.agentix && cat > ~/.agentix/credentials << 'EOF'",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The shell example creates a hidden home directory and persists self-hosted connection settings outside the workspace."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "If credentials are already loaded from `~/.agentix/credentials`, skip to [Playbook](#playbook).",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 69
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction depends on loading values from the hidden home credentials file, confirming persistent filesystem access."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "Save the returned `apiKey` and `customerId` to `~/.agentix/credentials` immediately. Do not display ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 105,
+            "line_end": 105
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directs the agent to write a newly issued API key and customer identifier into the hidden home credentials file."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "Reuse the same team across sessions. Do not create a new team each time. Save the returned `teamId` ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 116,
+            "line_end": 116
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The skill directs the agent to persist the returned team identifier in the hidden home credentials file for reuse."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "2. If not set, default to `https://agentix.cloud`.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 17,
+            "line_end": 17
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill sets agentix.cloud as the default API destination, so later operations intentionally communicate with an external service."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "export AGENTIX_API_URL=https://agentix.cloud",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.96,
+        "confidence_reasoning": "This example configures agentix.cloud as the API endpoint used by the skill. The network destination is intentional and externally hosted."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "export AGENTIX_API_URL=https://your-agentix-instance.example.com",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 24,
+            "line_end": 24
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.92,
+        "confidence_reasoning": "The placeholder documents requests to a user-configured self-hosted endpoint. This is legitimate but confirms that the skill can contact non-marketplace services."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "- **SaaS** (`$AGENTIX_API` is `https://agentix.cloud` or unset): Run the registration flow (Steps 1–",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 37
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The SaaS path explicitly selects agentix.cloud and directs the agent into its remote registration flow."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "AGENTIX_API_URL=http://localhost:3456",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 50,
+            "line_end": 50
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.95,
+        "confidence_reasoning": "The localhost URL configures a self-hosted network service used by the skill. It confirms network capability even though the example remains on the host."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "- **SaaS (default):** `https://agentix.cloud` — multi-tenant, requires registration and API key. Fol",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The line identifies agentix.cloud as the default multi-tenant service and requires remote registration and API authentication."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "- **Self-hosted:** Single team, no auth required. Set `AGENTIX_API_URL` to your instance URL (e.g., ",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 74
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.94,
+        "confidence_reasoning": "The line directs the skill to a user-selected self-hosted API. This is legitimate but confirms network access to a configurable service."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "These steps apply only to `https://agentix.cloud`. Self-hosted users skip this section.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 80,
+            "line_end": 80
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.96,
+        "confidence_reasoning": "The line scopes the following workflow to agentix.cloud, confirming intended use of that external service."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "POST https://agentix.cloud/register",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction sends a registration POST containing the user's name and email to agentix.cloud."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "GET https://agentix.cloud/register/<token>",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction polls agentix.cloud with a registration token to retrieve account credentials."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "POST https://agentix.cloud/teams",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 110
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction creates team data through an external agentix.cloud API request."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "PATCH https://agentix.cloud/teams/$TEAM_ID",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 123
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The instruction modifies a team through agentix.cloud while using an authorization credential."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "{ \"config\": { \"gitRepoUrl\": \"https://github.com/org/repo\", \"githubToken\": \"$GITHUB_TOKEN\" } }",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The configuration includes a GitHub repository URL, confirming integration with an external platform. Token exposure is covered by separate findings."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "GET https://agentix.cloud/docs/getting-started    # human getting started guide",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 261,
+            "line_end": 261
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill directs a GET request to the public agentix.cloud getting-started documentation endpoint."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "GET https://agentix.cloud/docs/api-reference      # full API reference",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 262,
+            "line_end": 262
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill directs a GET request to the public agentix.cloud API reference endpoint."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "GET https://agentix.cloud/docs                    # interactive API explorer (Swagger)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 263,
+            "line_end": 263
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill directs a GET request to the public agentix.cloud interactive documentation endpoint."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "GET https://agentix.cloud/openapi.json            # OpenAPI spec",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 264,
+            "line_end": 264
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "The skill directs a GET request to the public agentix.cloud OpenAPI endpoint."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 266,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T04:47:43.738Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Orchestrate Agentix AI Teams",
+    "value_statement": "Coordinating several AI workers can make roles, tasks, and progress difficult to track. This skill manages Agentix teams through a structured API workflow.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Agentix",
+      "AI team orchestration",
+      "multi-agent workflows",
+      "worker management",
+      "task automation",
+      "agent playbooks",
+      "AI role management"
+    ],
+    "actual_capabilities": [
+      "Configure an Agentix SaaS endpoint or a user-selected self-hosted endpoint.",
+      "Register SaaS users, poll confirmation status, and persist returned Agentix credentials.",
+      "Read and update team playbooks, roles, tasks, and API keys.",
+      "Launch or resume workers for assigned tasks and inspect their status.",
+      "Monitor team summaries, task progress, active workers, and recent events.",
+      "Configure repository integration and an Anthropic key for worker execution."
+    ],
+    "limitations": [
+      "The skill requires network access to Agentix SaaS or a reachable self-hosted instance.",
+      "Worker execution requires a user-provided Anthropic API key and may incur external costs.",
+      "Credentials are documented as plaintext values in a hidden home file.",
+      "Self-hosted mode assumes an unauthenticated API, which is unsafe on untrusted networks."
+    ],
+    "use_cases": [
+      {
+        "title": "Coordinate Engineering Work",
+        "description": "Create specialist roles, assign approved tasks, launch workers, and monitor delivery from one team view.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Run a Solo Project Team",
+        "description": "Delegate implementation and review tasks to temporary workers while keeping project progress visible.",
+        "target_user": "Solo developer"
+      },
+      {
+        "title": "Operate a Self-Hosted Team",
+        "description": "Connect to an internal Agentix instance, configure a stable team, and monitor worker activity.",
+        "target_user": "Platform administrator"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Review Team Status",
+        "prompt": "Show the Agentix team summary, active workers, and recent events. Do not create or update anything.",
+        "scenario": "Beginner status review"
+      },
+      {
+        "title": "Plan Roles and Assignments",
+        "prompt": "Review the current roles and ready tasks. Recommend missing roles and task assignments. Ask for approval before making changes.",
+        "scenario": "Intermediate team planning"
+      },
+      {
+        "title": "Launch Approved Workers",
+        "prompt": "In supervised mode, launch workers for the approved ready tasks. Report each worker identifier, assigned role, and task status.",
+        "scenario": "Advanced supervised execution"
+      },
+      {
+        "title": "Run a Guarded Backlog",
+        "prompt": "Run the approved backlog with at most three concurrent workers. Stop before merges or credential changes and request approval.",
+        "scenario": "Advanced autonomous orchestration"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Show my current team status without changing anything.",
+        "output": [
+          "Team summary with its goal, current playbook mode, and configured roles.",
+          "Active worker list with assigned tasks and current statuses.",
+          "Recent event summary highlighting completed, failed, and blocked work."
+        ]
+      },
+      {
+        "input": "Launch one backend worker for the approved authentication task.",
+        "output": "The approved task is assigned to the existing backend role. One worker is launched, and its current status is reported."
+      },
+      {
+        "input": "Recommend a guarded plan for the ready backlog.",
+        "output": "The response groups tasks by role, identifies dependencies, proposes a concurrency limit, and marks merges or credential changes for approval."
+      }
+    ],
+    "best_practices": [
+      "Use supervised mode until roles, permissions, budgets, and approval gates are verified.",
+      "Provide scoped, short-lived credentials and confirm the destination before any secret transfer.",
+      "Set explicit worker, cost, and time limits before launching multiple tasks."
+    ],
+    "anti_patterns": [
+      "Do not enable autopilot without concurrency, spending, and merge controls.",
+      "Do not expose an unauthenticated self-hosted API beyond a trusted local interface.",
+      "Do not place broad GitHub or Anthropic credentials in team configuration."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill require Agentix SaaS?",
+        "answer": "No. It supports a self-hosted endpoint, but the documented self-hosted path lacks authentication and requires network safeguards."
+      },
+      {
+        "question": "Is an Anthropic API key required?",
+        "answer": "Yes, worker execution requires an Anthropic API key. Team inspection and configuration may work before workers are launched."
+      },
+      {
+        "question": "Where are Agentix credentials stored?",
+        "answer": "The skill documents a hidden plaintext file in the user home directory. Protect it with strict permissions or use a credential store."
+      },
+      {
+        "question": "Can the skill create roles and tasks?",
+        "answer": "Yes. It can list, create, update, and delete roles or tasks through the Agentix API."
+      },
+      {
+        "question": "What is the difference between supervised and autopilot modes?",
+        "answer": "Supervised mode requires approval for new work. Autopilot permits continuous planning, worker launches, reviews, and merges."
+      },
+      {
+        "question": "How can I keep control of repository changes?",
+        "answer": "Use supervised mode, restrict token permissions, and require approval before merges, role deletion, or credential updates."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 266
+    }
+  ]
+}
