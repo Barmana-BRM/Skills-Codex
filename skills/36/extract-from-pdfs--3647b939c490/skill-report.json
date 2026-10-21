@@ -1,0 +1,3697 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T11:43:12.455Z",
+    "slug": "brunoasm-extract-from-pdfs",
+    "source_url": "https://github.com/brunoasm/my_claude_skills/tree/main/extract_from_pdfs",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "3647b939c490dbbbae4eeab39fa19c5d6dab4861c2d310410584082db76d2190",
+    "tree_hash": "3a2a5733a359b2489bc7a7d2b418bf58b0d8c25c515c3a1d9178dcc7d9645afc",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "extract-from-pdfs",
+    "description": "Extract structured, schema-driven records from scientific PDFs for reviews, meta-analyses, and research databases. Includes filtering, validation, enrichment, quality metrics, and multi-format export.",
+    "summary": "Build validated research datasets from collections of scientific PDFs.",
+    "icon": "📦",
+    "author": "brunoasm",
+    "license": "MIT",
+    "tags": [
+      "pdf-extraction",
+      "systematic-reviews",
+      "structured-data",
+      "research-validation",
+      "literature-analysis"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "network",
+      "env_access",
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "research"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The skill performs legitimate research processing, and most scanner hits are Markdown or ordinary local output operations. Confirmed risks include unchecked local-file uploads to Anthropic, a pipe-to-shell installer, plaintext shell-profile credential persistence, outbound scientific API requests, and unencrypted HTTP endpoints. Publication should wait until file-path validation, safer installation guidance, credential storage, transport security, and spreadsheet sanitization are addressed.",
+    "remediation": [
+      {
+        "issue": "Metadata-controlled paths can upload arbitrary local files.",
+        "suggestion": "Resolve every path under an approved PDF root, reject symlinks and traversal, verify PDF signatures, and show a confirmation list before upload.",
+        "severity": "critical"
+      },
+      {
+        "issue": "The Linux setup pipes a remote installer directly into a shell.",
+        "suggestion": "Provide a pinned download, checksum verification, and inspection step, or use a trusted package manager instead of curl piped to sh.",
+        "severity": "critical"
+      },
+      {
+        "issue": "The setup guide stores an API key in a shell profile.",
+        "suggestion": "Remove the profile append command. Recommend session-scoped variables, protected environment files, or an operating-system secret manager.",
+        "severity": "high"
+      },
+      {
+        "issue": "Some validators send data and account identifiers over plain HTTP.",
+        "suggestion": "Use verified HTTPS endpoints for WFO and GeoNames. Disable those validators when secure transport is unavailable.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Untrusted paper content can influence filtering and extraction output.",
+        "suggestion": "Mark document text as untrusted, reject embedded instructions, enforce strict schemas, and require human review before records drive later decisions.",
+        "severity": "medium"
+      },
+      {
+        "issue": "CSV and Excel exports permit formula-prefixed values.",
+        "suggestion": "Escape cells beginning with equals, plus, minus, or at signs before spreadsheet export, while preserving an unmodified archival format.",
+        "severity": "medium"
+      },
+      {
+        "issue": "External processing can disclose licensed or sensitive research content.",
+        "suggestion": "Display destination services and transmitted fields, require consent, document retention terms, and offer local processing where supported.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "README.md",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "README.md",
+            "line_start": 315,
+            "line_end": 315
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 273,
+            "line_end": 273
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 174,
+            "line_end": 174
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 200,
+            "line_end": 200
+          },
+          {
+            "file": "references/api_reference.md",
+            "line_start": 273,
+            "line_end": 273
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 203,
+            "line_end": 203
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 249,
+            "line_end": 249
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 315,
+            "line_end": 315
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 334,
+            "line_end": 334
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 283,
+            "line_end": 283
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 151,
+            "line_end": 151
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 182,
+            "line_end": 182
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 213,
+            "line_end": 213
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 244,
+            "line_end": 244
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 146,
+            "line_end": 146
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 177,
+            "line_end": 177
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 210,
+            "line_end": 210
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 221,
+            "line_end": 221
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 241,
+            "line_end": 241
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 251,
+            "line_end": 251
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "README.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 389,
+            "line_end": 389
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 389,
+            "line_end": 389
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 389,
+            "line_end": 389
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 390,
+            "line_end": 390
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 372,
+            "line_end": 372
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 372,
+            "line_end": 372
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 372,
+            "line_end": 372
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 373,
+            "line_end": 373
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 314,
+            "line_end": 314
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 317,
+            "line_end": 317
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 318,
+            "line_end": 318
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 319,
+            "line_end": 319
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 47
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/01_organize_metadata.py",
+            "line_start": 263,
+            "line_end": 263
+          },
+          {
+            "file": "scripts/01_organize_metadata.py",
+            "line_start": 238,
+            "line_end": 238
+          },
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 111,
+            "line_end": 111
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "scripts/04_repair_json.py",
+            "line_start": 64,
+            "line_end": 64
+          },
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 149,
+            "line_end": 149
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 194,
+            "line_end": 194
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 236,
+            "line_end": 236
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 299,
+            "line_end": 299
+          },
+          {
+            "file": "scripts/07_prepare_validation_set.py",
+            "line_start": 232,
+            "line_end": 232
+          },
+          {
+            "file": "scripts/08_calculate_validation_metrics.py",
+            "line_start": 443,
+            "line_end": 443
+          },
+          {
+            "file": "scripts/08_calculate_validation_metrics.py",
+            "line_start": 501,
+            "line_end": 501
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 46
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 47
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 47,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 66
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 66,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 70
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 70,
+            "line_end": 71
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 74
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 74,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 145
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 145,
+            "line_end": 151
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 151,
+            "line_end": 154
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 154,
+            "line_end": 156
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 159
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 159,
+            "line_end": 161
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 161,
+            "line_end": 164
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 164,
+            "line_end": 166
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 166,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 189
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 189,
+            "line_end": 192
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 192,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 196
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 196,
+            "line_end": 197
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 199
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 199,
+            "line_end": 203
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 227
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 227,
+            "line_end": 228
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 228,
+            "line_end": 259
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 259,
+            "line_end": 264
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 264,
+            "line_end": 267
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 267,
+            "line_end": 270
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 270,
+            "line_end": 273
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 273,
+            "line_end": 274
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 274,
+            "line_end": 275
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 275,
+            "line_end": 278
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 278,
+            "line_end": 279
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 279,
+            "line_end": 284
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 284,
+            "line_end": 285
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 285,
+            "line_end": 288
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 288,
+            "line_end": 289
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "network:README.md:95:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "# 1. Install Ollama from https://ollama.com"
+      },
+      {
+        "id": "network:README.md:315:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "README.md",
+        "line_start": 315,
+        "line_end": 315,
+        "snippet": "url = {https://github.com/your-repo}"
+      },
+      {
+        "id": "env_access:README.md:37:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "README.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "export ANTHROPIC_API_KEY='your-api-key-here'"
+      },
+      {
+        "id": "network:references/api_reference.md:273:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "references/api_reference.md",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "response = requests.get(f\"https://api.example.com/{value}\")"
+      },
+      {
+        "id": "network:references/api_reference.md:174:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/api_reference.md",
+        "line_start": 174,
+        "line_end": 174,
+        "snippet": "\"pubchem_url\": \"https://pubchem.ncbi.nlm.nih.gov/compound/2244\""
+      },
+      {
+        "id": "network:references/api_reference.md:200:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/api_reference.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "\"ncbi_url\": \"https://www.ncbi.nlm.nih.gov/gene/672\""
+      },
+      {
+        "id": "network:references/api_reference.md:273:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/api_reference.md",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "response = requests.get(f\"https://api.example.com/{value}\")"
+      },
+      {
+        "id": "blocker:references/api_reference.md:339:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/api_reference.md",
+        "line_start": 339,
+        "line_end": 339,
+        "snippet": "- Invalid API key"
+      },
+      {
+        "id": "blocker:references/api_reference.md:371:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/api_reference.md",
+        "line_start": 371,
+        "line_end": 371,
+        "snippet": "- Track request counts for paid APIs"
+      },
+      {
+        "id": "network:references/setup_guide.md:73:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/setup_guide.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "curl -fsSL https://ollama.com/install.sh | sh"
+      },
+      {
+        "id": "network:references/setup_guide.md:111:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "references/setup_guide.md",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "curl http://localhost:11434/api/tags"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:43:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/setup_guide.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "Add to your shell profile (~/.bashrc, ~/.zshrc) for persistence:"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:46:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/setup_guide.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:47:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "references/setup_guide.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "source ~/.bashrc"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:43:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/setup_guide.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "Add to your shell profile (~/.bashrc, ~/.zshrc) for persistence:"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:46:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/setup_guide.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc"
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:47:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "references/setup_guide.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "source ~/.bashrc"
+      },
+      {
+        "id": "env_access:references/setup_guide.md:40:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/setup_guide.md",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "export ANTHROPIC_API_KEY='your-api-key-here'"
+      },
+      {
+        "id": "env_access:references/setup_guide.md:46:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/setup_guide.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc"
+      },
+      {
+        "id": "blocker:references/setup_guide.md:73:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "references/setup_guide.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "curl -fsSL https://ollama.com/install.sh | sh"
+      },
+      {
+        "id": "sensitive:references/workflow_guide.md:269:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/workflow_guide.md",
+        "line_start": 269,
+        "line_end": 269,
+        "snippet": "--output results.db"
+      },
+      {
+        "id": "sensitive:references/workflow_guide.md:273:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "references/workflow_guide.md",
+        "line_start": 273,
+        "line_end": 273,
+        "snippet": "- `results.db` - SQLite database"
+      },
+      {
+        "id": "filesystem:scripts/01_organize_metadata.py:263:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/01_organize_metadata.py",
+        "line_start": 263,
+        "line_end": 263,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "filesystem:scripts/01_organize_metadata.py:238:python-shutil-operations",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python shutil operations",
+        "file": "scripts/01_organize_metadata.py",
+        "line_start": 238,
+        "line_end": 238,
+        "snippet": "shutil.copy2(source_path, dest_path)"
+      },
+      {
+        "id": "blocker:scripts/01_organize_metadata.py:127:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/01_organize_metadata.py",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "entry_id = f\"{first_author.split()[-1]}{year}_{i}\""
+      },
+      {
+        "id": "blocker:scripts/01_organize_metadata.py:172:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/01_organize_metadata.py",
+        "line_start": 172,
+        "line_end": 172,
+        "snippet": "entry_id = pdf_path.stem"
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:203:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 203,
+        "line_end": 203,
+        "snippet": "response = requests.post("
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:249:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 249,
+        "line_end": 249,
+        "snippet": "except requests.exceptions.ConnectionError:"
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:315:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 315,
+        "line_end": 315,
+        "snippet": "requests.append(Request("
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:334:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 334,
+        "line_end": 334,
+        "snippet": "print(f\"Creating batch with {len(requests)} requests...\")"
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:43:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "1. Install Ollama: https://ollama.com"
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:78:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "default='http://localhost:11434',"
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:79:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "help='Ollama server URL (default: http://localhost:11434)'"
+      },
+      {
+        "id": "filesystem:scripts/02_filter_abstracts.py:111:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 389,
+        "line_end": 389,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 389,
+        "line_end": 389,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 389,
+        "line_end": 389,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:390:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/02_filter_abstracts.py",
+        "line_start": 390,
+        "line_end": 390,
+        "snippet": "raise ValueError(\"Please set ANTHROPIC_API_KEY environment variable for Anthropic backends\")"
+      },
+      {
+        "id": "network:scripts/03_extract_from_pdfs.py:283:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 283,
+        "line_end": 283,
+        "snippet": "requests.append(Request("
+      },
+      {
+        "id": "filesystem:scripts/03_extract_from_pdfs.py:106:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 372,
+        "line_end": 372,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 372,
+        "line_end": 372,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 372,
+        "line_end": 372,
+        "snippet": "if not os.getenv('ANTHROPIC_API_KEY'):"
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:373:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 373,
+        "line_end": 373,
+        "snippet": "raise ValueError(\"Please set ANTHROPIC_API_KEY environment variable\")"
+      },
+      {
+        "id": "sensitive:scripts/03_extract_from_pdfs.py:319:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 319,
+        "line_end": 319,
+        "snippet": "window_results = wait_for_batches(client, list(active_batches.keys()), schema)"
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:313:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 313,
+        "line_end": 313,
+        "snippet": "active_batches[message_batch.id] = {r.custom_id for r in requests}"
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:338:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 338,
+        "line_end": 338,
+        "snippet": "for batch_id in list(incomplete):"
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:346:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 346,
+        "line_end": 346,
+        "snippet": "for batch_id in batch_ids:"
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:386:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/03_extract_from_pdfs.py",
+        "line_start": 386,
+        "line_end": 386,
+        "snippet": "id for id, result in filter_results.items()"
+      },
+      {
+        "id": "filesystem:scripts/04_repair_json.py:64:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/04_repair_json.py",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "blocker:scripts/04_repair_json.py:199:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/04_repair_json.py",
+        "line_start": 199,
+        "line_end": 199,
+        "snippet": "print(f\"Valid JSON: {stats['valid']}\")"
+      },
+      {
+        "id": "blocker:scripts/04_repair_json.py:201:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/04_repair_json.py",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "print(f\"Invalid JSON: {stats['invalid']}\")"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:77:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "response = requests.get(url, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:111:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 111,
+        "line_end": 111,
+        "snippet": "response = requests.get(url, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:151:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 151,
+        "line_end": 151,
+        "snippet": "response = requests.get(url, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:182:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 182,
+        "line_end": 182,
+        "snippet": "response = requests.get(url, headers=headers, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:213:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 213,
+        "line_end": 213,
+        "snippet": "response = requests.get(url, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:244:python-http-libraries",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Python HTTP libraries",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 244,
+        "line_end": 244,
+        "snippet": "response = requests.get(search_url, timeout=10)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:74:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "url = f\"https://api.gbif.org/v1/species/match?name={quote(scientific_name)}\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:108:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "url = f\"http://www.worldfloraonline.org/api/1.0/search?query={quote(scientific_name)}\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:146:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 146,
+        "line_end": 146,
+        "snippet": "url = f\"http://api.geonames.org/searchJSON?q={quote(location)}&maxRows=1&username={username}\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:177:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "url = f\"https://nominatim.openstreetmap.org/search?q={quote(address)}&format=json&limit=1\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:210:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "url = f\"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{quote(compound_name)}/JSON\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:221:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 221,
+        "line_end": 221,
+        "snippet": "'pubchem_url': f\"https://pubchem.ncbi.nlm.nih.gov/compound/{compound['id']['id']['cid']}\""
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:241:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 241,
+        "line_end": 241,
+        "snippet": "search_url = f\"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term={quote(query)"
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:251:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 251,
+        "line_end": 251,
+        "snippet": "'ncbi_url': f\"https://www.ncbi.nlm.nih.gov/gene/{gene_id}\""
+      },
+      {
+        "id": "filesystem:scripts/05_validate_with_apis.py:61:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:141:python-getenv-function",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Python getenv function",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "username = os.getenv('GEONAMES_USERNAME')"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:141:getenv-function-call",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "getenv function call",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "username = os.getenv('GEONAMES_USERNAME')"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:314:configuration-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Configuration library",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 314,
+        "line_end": 314,
+        "snippet": "field_mappings = api_config.get('field_mappings', {})"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:317:configuration-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Configuration library",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 317,
+        "line_end": 317,
+        "snippet": "api_name = field_config.get('api')"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:318:configuration-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Configuration library",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 318,
+        "line_end": 318,
+        "snippet": "output_field = field_config.get('output_field', f'validated_{field_name}')"
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:319:configuration-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "Configuration library",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 319,
+        "line_end": 319,
+        "snippet": "extra_params = field_config.get('extra_params', {})"
+      },
+      {
+        "id": "blocker:scripts/05_validate_with_apis.py:248:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/05_validate_with_apis.py",
+        "line_start": 248,
+        "line_end": 248,
+        "snippet": "gene_id = data['esearchresult']['idlist'][0]"
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:139:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/06_export_database.py",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "with open(output_path, 'w', newline='', encoding='utf-8') as f:"
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:149:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/06_export_database.py",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:194:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/06_export_database.py",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "with open(script_path, 'w') as f:"
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:236:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/06_export_database.py",
+        "line_start": 236,
+        "line_end": 236,
+        "snippet": "with open(script_path, 'w') as f:"
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:299:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/06_export_database.py",
+        "line_start": 299,
+        "line_end": 299,
+        "snippet": "with open(sql_script_path, 'w') as f:"
+      },
+      {
+        "id": "sensitive:scripts/06_export_database.py:136:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/06_export_database.py",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "fieldnames.update(record.keys())"
+      },
+      {
+        "id": "sensitive:scripts/06_export_database.py:270:sqlite-database-file",
+        "category": "sensitive",
+        "severity": "medium",
+        "pattern": "SQLite database file",
+        "file": "scripts/06_export_database.py",
+        "line_start": 270,
+        "line_end": 270,
+        "snippet": "db_path = output_path.with_suffix('.db')"
+      },
+      {
+        "id": "blocker:scripts/06_export_database.py:104:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/06_export_database.py",
+        "line_start": 104,
+        "line_end": 105,
+        "snippet": "record_dict['paper_id'] = paper_id"
+      },
+      {
+        "id": "blocker:scripts/06_export_database.py:117:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/06_export_database.py",
+        "line_start": 117,
+        "line_end": 119,
+        "snippet": "record_dict['paper_id'] = paper_id"
+      },
+      {
+        "id": "filesystem:scripts/07_prepare_validation_set.py:232:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/07_prepare_validation_set.py",
+        "line_start": 232,
+        "line_end": 232,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "sensitive:scripts/07_prepare_validation_set.py:153:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/07_prepare_validation_set.py",
+        "line_start": 153,
+        "line_end": 153,
+        "snippet": "remaining = [p for p in successful.keys() if p not in sampled]"
+      },
+      {
+        "id": "blocker:scripts/07_prepare_validation_set.py:91:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/07_prepare_validation_set.py",
+        "line_start": 91,
+        "line_end": 91,
+        "snippet": "paper_id for paper_id, result in results.items()"
+      },
+      {
+        "id": "blocker:scripts/07_prepare_validation_set.py:210:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/07_prepare_validation_set.py",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "for paper_id in sampled_ids:"
+      },
+      {
+        "id": "filesystem:scripts/08_calculate_validation_metrics.py:443:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/08_calculate_validation_metrics.py",
+        "line_start": 443,
+        "line_end": 443,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "filesystem:scripts/08_calculate_validation_metrics.py:501:python-file-write-append",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Python file write/append",
+        "file": "scripts/08_calculate_validation_metrics.py",
+        "line_start": 501,
+        "line_end": 501,
+        "snippet": "with open(output_path, 'w', encoding='utf-8') as f:"
+      },
+      {
+        "id": "sensitive:scripts/08_calculate_validation_metrics.py:243:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/08_calculate_validation_metrics.py",
+        "line_start": 243,
+        "line_end": 243,
+        "snippet": "all_fields = set(automated.keys()) | set(truth.keys())"
+      },
+      {
+        "id": "sensitive:scripts/08_calculate_validation_metrics.py:275:certificate-key-files",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Certificate/key files",
+        "file": "scripts/08_calculate_validation_metrics.py",
+        "line_start": 275,
+        "line_end": 275,
+        "snippet": "all_fields = set(automated.keys()) | set(truth.keys())"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 43,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 46,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 47,
+        "snippet": "- Install dependencies: `conda env create -f environment.yml`"
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 64,
+        "snippet": "- Set API keys: `export ANTHROPIC_API_KEY='your-key'`"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 66,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 66,
+        "line_end": 69,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 70,
+        "snippet": "- Set `objective` describing what to extract"
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 71,
+        "snippet": "- Define `output_schema` with field types and descriptions"
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 72,
+        "snippet": "- Add domain-specific `instructions` for Claude"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 74,
+        "snippet": "- Provide `output_example` showing desired format"
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 74,
+        "line_end": 82,
+        "snippet": "See `assets/example_flower_visitors_schema.json` for real-world ecology example."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 122,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 128,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 145,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 145,
+        "line_end": 151,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 151,
+        "line_end": 154,
+        "snippet": "Access comprehensive guides in the `references/` directory:"
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 154,
+        "line_end": 156,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 159,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 159,
+        "line_end": 161,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 161,
+        "line_end": 164,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:164:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 164,
+        "line_end": 166,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 169,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 171,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 177,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 189,
+        "snippet": "Modify `my_schema.json` to match the research domain:"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 192,
+        "snippet": "Configure external database validation in `my_api_config.json`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 193,
+        "snippet": "- `gbif_taxonomy` - Biological taxonomy"
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 194,
+        "snippet": "- `wfo_plants` - Plant names specifically"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 195,
+        "snippet": "- `geonames` - Geographic locations"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 196,
+        "snippet": "- `geocode` - Address to coordinates"
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 196,
+        "line_end": 197,
+        "snippet": "- `pubchem` - Chemical compounds"
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 197,
+        "line_end": 199,
+        "snippet": "- `ncbi_gene` - Gene identifiers"
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 199,
+        "line_end": 203,
+        "snippet": "See `assets/example_api_config_ecology.json` for ecology-specific example."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 227,
+        "snippet": "Edit filtering criteria in `scripts/02_filter_abstracts.py` (line 74):"
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 227,
+        "line_end": 228,
+        "snippet": "- Enable prompt caching with `--use-caching`"
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 228,
+        "line_end": 259,
+        "snippet": "- Process in batches with `--use-batches`"
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 259,
+        "line_end": 264,
+        "snippet": "See `references/validation_guide.md` for detailed guidance on interpreting metrics and improving ext"
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 264,
+        "line_end": 267,
+        "snippet": "- `scripts/01_organize_metadata.py` - Standardize PDFs and metadata"
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 267,
+        "line_end": 270,
+        "snippet": "- `scripts/02_filter_abstracts.py` - Filter by abstract (Haiku/Sonnet/Ollama)"
+      },
+      {
+        "id": "external_commands:SKILL.md:270:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 270,
+        "line_end": 273,
+        "snippet": "- `scripts/03_extract_from_pdfs.py` - Extract from PDFs with Claude vision"
+      },
+      {
+        "id": "external_commands:SKILL.md:273:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 273,
+        "line_end": 274,
+        "snippet": "- `scripts/04_repair_json.py` - Repair and validate JSON"
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 274,
+        "line_end": 275,
+        "snippet": "- `scripts/05_validate_with_apis.py` - Enrich with external databases"
+      },
+      {
+        "id": "external_commands:SKILL.md:275:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 275,
+        "line_end": 278,
+        "snippet": "- `scripts/06_export_database.py` - Export to analysis formats"
+      },
+      {
+        "id": "external_commands:SKILL.md:278:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 278,
+        "line_end": 279,
+        "snippet": "- `scripts/07_prepare_validation_set.py` - Sample papers for annotation"
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 279,
+        "line_end": 284,
+        "snippet": "- `scripts/08_calculate_validation_metrics.py` - Calculate P/R/F1 metrics"
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 284,
+        "line_end": 285,
+        "snippet": "- `assets/schema_template.json` - Blank extraction schema template"
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 285,
+        "line_end": 288,
+        "snippet": "- `assets/api_config_template.json` - API validation configuration template"
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 288,
+        "line_end": 289,
+        "snippet": "- `assets/example_flower_visitors_schema.json` - Ecology extraction example"
+      },
+      {
+        "id": "env_access:SKILL.md:47:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "SKILL.md",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "- Set API keys: `export ANTHROPIC_API_KEY='your-key'`"
+      },
+      {
+        "id": "blocker:SKILL.md:210:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 210,
+        "line_end": 210,
+        "snippet": "Use conservative criteria (when in doubt, include paper) to avoid false negatives."
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "network:README.md:95:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a documentation link to Ollama's official site inside an installation comment. Merely displaying the HTTPS URL does not make a request."
+      },
+      {
+        "id": "network:README.md:315:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a placeholder repository URL in a BibTeX citation example. It is not contacted by the skill."
+      },
+      {
+        "id": "env_access:README.md:37:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "network:references/api_reference.md:273:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This requests.get call is illustrative code for adding a custom API and uses the reserved example.com domain. It is documentation, not executed skill behavior."
+      },
+      {
+        "id": "network:references/api_reference.md:174:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is returned in documentation output or appears in a reserved example.com request example. It does not create an executable network action."
+      },
+      {
+        "id": "network:references/api_reference.md:200:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is returned in documentation output or appears in a reserved example.com request example. It does not create an executable network action."
+      },
+      {
+        "id": "network:references/api_reference.md:273:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL is returned in documentation output or appears in a reserved example.com request example. It does not create an executable network action."
+      },
+      {
+        "id": "blocker:references/api_reference.md:339:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:references/api_reference.md:371:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "network:references/setup_guide.md:73:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The HTTPS URL itself points to the documented Ollama installer. The dangerous pipe-to-shell execution on this line is separately confirmed as critical."
+      },
+      {
+        "id": "network:references/setup_guide.md:111:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This command checks a loopback Ollama service at localhost. It does not contact an external host."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:43:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "severity": "high",
+        "reason": "The guide recommends persisting credentials in executable shell profile files. This creates durable plaintext secret exposure and affects future shell sessions."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:46:hidden-file-in-home-directory",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "This command appends an Anthropic API key assignment to ~/.bashrc in plaintext. Other local processes or account users may read the persistent credential."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:47:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line only sources the shell profile after a user-directed setup change. It does not conceal a file, search the home directory, or access unrelated hidden data."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:43:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.94,
+        "severity": "high",
+        "reason": "The setup guidance directs users to modify hidden executable shell profiles for credential persistence. That is security-sensitive persistence, not ordinary project-file access."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:46:hidden-file-access",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "The command writes a plaintext API credential into ~/.bashrc. Persistent secret storage in a broadly readable shell profile creates a real credential-exposure risk."
+      },
+      {
+        "id": "filesystem:references/setup_guide.md:47:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line only sources the shell profile after a user-directed setup change. It does not conceal a file, search the home directory, or access unrelated hidden data."
+      },
+      {
+        "id": "env_access:references/setup_guide.md:40:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "env_access:references/setup_guide.md:46:generic-api-secret-keys",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "high",
+        "reason": "The documented command persists the user's Anthropic API key in plaintext in ~/.bashrc. This is insecure credential handling even though the shown value is a placeholder."
+      },
+      {
+        "id": "blocker:references/setup_guide.md:73:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "critical",
+        "reason": "The guide pipes a remote installation script directly into sh without inspection, pinning, or checksum verification. A compromised response would execute arbitrary code immediately."
+      },
+      {
+        "id": "sensitive:references/workflow_guide.md:269:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The SQLite name is a documented, user-selected export format and local output path. It is not an attempt to discover or read an existing sensitive database."
+      },
+      {
+        "id": "sensitive:references/workflow_guide.md:273:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The SQLite name is a documented, user-selected export format and local output path. It is not an attempt to discover or read an existing sensitive database."
+      },
+      {
+        "id": "filesystem:scripts/01_organize_metadata.py:263:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/01_organize_metadata.py:238:python-shutil-operations",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "severity": "medium",
+        "reason": "The copy operation uses a destination derived from an unsanitized metadata record ID. Crafted citation metadata can introduce path traversal and overwrite a PDF outside the intended output directory."
+      },
+      {
+        "id": "blocker:scripts/01_organize_metadata.py:127:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/01_organize_metadata.py:172:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:203:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "severity": "medium",
+        "reason": "This is a real POST to the user-configurable Ollama URL and includes paper titles and abstracts. A remote or misconfigured endpoint receives research content."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:249:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line catches requests.exceptions.ConnectionError; it does not initiate a network request. The actual Ollama POST is adjudicated separately."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:315:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Here requests is a local list of Anthropic batch request objects, not the Python HTTP library. Appending or counting that list does not open a connection."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:334:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Here requests is a local list of Anthropic batch request objects, not the Python HTTP library. Appending or counting that list does not open a connection."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:43:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The URL appears only in command-line help text for installing Ollama. No request is issued from this line."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:78:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a loopback default and help string for a user-configurable Ollama endpoint. The separate POST operation carries the actual network risk."
+      },
+      {
+        "id": "network:scripts/02_filter_abstracts.py:79:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a loopback default and help string for a user-configurable Ollama endpoint. The separate POST operation carries the actual network risk."
+      },
+      {
+        "id": "filesystem:scripts/02_filter_abstracts.py:111:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:389:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "env_access:scripts/02_filter_abstracts.py:390:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "network:scripts/03_extract_from_pdfs.py:283:python-http-libraries",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Here requests is a local list containing Anthropic batch request objects. The line does not call the requests HTTP library."
+      },
+      {
+        "id": "filesystem:scripts/03_extract_from_pdfs.py:106:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:372:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "env_access:scripts/03_extract_from_pdfs.py:373:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "sensitive:scripts/03_extract_from_pdfs.py:319:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The scanner matched ordinary Python keys() usage or batch identifier collections. The code does not access certificate files, private keys, or credential material."
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:313:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:338:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:346:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/03_extract_from_pdfs.py:386:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "filesystem:scripts/04_repair_json.py:64:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "blocker:scripts/04_repair_json.py:199:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/04_repair_json.py:201:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:77:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "low",
+        "reason": "The validator sends extracted scientific names to the external GBIF service. The request is intentional, but it is genuine outbound disclosure of user-derived data."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:111:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "medium",
+        "reason": "The validator sends scientific names to World Flora Online over unencrypted HTTP. Network observers can read or alter the query and response."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:151:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "medium",
+        "reason": "The validator sends locations and the GeoNames username over unencrypted HTTP. This exposes account identifiers and research-derived location data to interception."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:182:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "low",
+        "reason": "The geocoder sends extracted addresses to the external Nominatim service. HTTPS protects transit, but the request still discloses user-derived location data."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:213:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "low",
+        "reason": "The validator sends extracted compound names to PubChem. This is expected enrichment behavior but remains a real outbound data transfer."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:244:python-http-libraries",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "low",
+        "reason": "The validator sends gene symbols and optional organism names to NCBI. This is intended, but it is genuine external transmission of extracted values."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:74:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a fixed HTTPS endpoint for the named scientific validation service. The separate requests.get finding records the actual outbound data transfer."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:108:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "medium",
+        "reason": "The hardcoded World Flora Online endpoint uses plain HTTP for extracted scientific names. The lack of transport encryption creates confidentiality and integrity risk."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:146:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.99,
+        "severity": "medium",
+        "reason": "The hardcoded GeoNames endpoint uses plain HTTP and places the username and location in the query string. Those values are exposed in transit."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:177:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a fixed HTTPS endpoint for the named scientific validation service. The separate requests.get finding records the actual outbound data transfer."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:210:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a fixed HTTPS endpoint for the named scientific validation service. The separate requests.get finding records the actual outbound data transfer."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:221:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code constructs a public reference URL for inclusion in output data. It does not request that URL."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:241:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This is a fixed HTTPS endpoint for the named scientific validation service. The separate requests.get finding records the actual outbound data transfer."
+      },
+      {
+        "id": "network:scripts/05_validate_with_apis.py:251:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The code constructs a public reference URL for inclusion in output data. It does not request that URL."
+      },
+      {
+        "id": "filesystem:scripts/05_validate_with_apis.py:61:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:141:python-getenv-function",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:141:getenv-function-call",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The code reads one documented environment variable needed by the selected service. It neither enumerates the environment nor logs or transmits unrelated secrets."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:314:configuration-library",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal dictionary get() call on the user-supplied API configuration. It does not load environment configuration or access secrets."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:317:configuration-library",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal dictionary get() call on the user-supplied API configuration. It does not load environment configuration or access secrets."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:318:configuration-library",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal dictionary get() call on the user-supplied API configuration. It does not load environment configuration or access secrets."
+      },
+      {
+        "id": "env_access:scripts/05_validate_with_apis.py:319:configuration-library",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a normal dictionary get() call on the user-supplied API configuration. It does not load environment configuration or access secrets."
+      },
+      {
+        "id": "blocker:scripts/05_validate_with_apis.py:248:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:139:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:149:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:194:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:236:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/06_export_database.py:299:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "sensitive:scripts/06_export_database.py:136:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The scanner matched ordinary Python keys() usage or batch identifier collections. The code does not access certificate files, private keys, or credential material."
+      },
+      {
+        "id": "sensitive:scripts/06_export_database.py:270:sqlite-database-file",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The SQLite name is a documented, user-selected export format and local output path. It is not an attempt to discover or read an existing sensitive database."
+      },
+      {
+        "id": "blocker:scripts/06_export_database.py:104:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/06_export_database.py:117:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "filesystem:scripts/07_prepare_validation_set.py:232:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "sensitive:scripts/07_prepare_validation_set.py:153:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The scanner matched ordinary Python keys() usage or batch identifier collections. The code does not access certificate files, private keys, or credential material."
+      },
+      {
+        "id": "blocker:scripts/07_prepare_validation_set.py:91:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "blocker:scripts/07_prepare_validation_set.py:210:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      },
+      {
+        "id": "filesystem:scripts/08_calculate_validation_metrics.py:443:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "filesystem:scripts/08_calculate_validation_metrics.py:501:python-file-write-append",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The write targets the explicit command-line output path for a generated dataset, report, or helper script. It is expected local output behavior with no hidden destination."
+      },
+      {
+        "id": "sensitive:scripts/08_calculate_validation_metrics.py:243:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The scanner matched ordinary Python keys() usage or batch identifier collections. The code does not access certificate files, private keys, or credential material."
+      },
+      {
+        "id": "sensitive:scripts/08_calculate_validation_metrics.py:275:certificate-key-files",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The scanner matched ordinary Python keys() usage or batch identifier collections. The code does not access certificate files, private keys, or credential material."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:47:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:66:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:70:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:74:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:145:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:154:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:159:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:161:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:164:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:197:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:199:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:203:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:227:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:228:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:259:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:264:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:267:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:270:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:273:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:274:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:275:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:278:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:279:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:284:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:285:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "external_commands:SKILL.md:288:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The cited text is a Markdown code fence, inline code label, file path, or documented command. SKILL.md does not execute Ruby backticks or dynamically invoke a shell at this location."
+      },
+      {
+        "id": "env_access:SKILL.md:47:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The cited value is a placeholder setup example or an existence check for the documented Anthropic key. No hardcoded live credential or credential exfiltration appears here."
+      },
+      {
+        "id": "blocker:SKILL.md:210:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The matched text concerns record IDs, API result IDs, validation counts, or ordinary research guidance. It performs no host, account, process, or network reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unchecked metadata paths can upload arbitrary local files",
+        "description": "The extraction pipeline trusts each metadata pdf_path, reads any existing local file without root, extension, symlink, or PDF-signature checks, then sends those bytes through Anthropic requests. Crafted metadata can therefore disclose files outside the intended PDF collection.",
+        "severity": "critical",
+        "locations": [
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 403,
+            "line_end": 420
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 282,
+            "line_end": 311
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The code directly converts metadata-controlled paths to Path objects, reads all bytes after only exists(), and places the encoded bytes in Anthropic batch requests."
+      },
+      {
+        "title": "Untrusted document text can influence model decisions",
+        "description": "Titles, abstracts, and PDF contents are placed in model user messages without an instruction hierarchy that treats embedded document commands as untrusted. Malicious paper text can alter filtering or extracted records, although the resulting model output has no direct tool privileges.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 123,
+            "line_end": 166
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 222,
+            "line_end": 244
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "Both scripts submit untrusted research content as model input and trust structured model responses for workflow decisions. The impact is limited to data integrity because no tools execute from responses."
+      },
+      {
+        "title": "Research documents are transmitted to third-party model services",
+        "description": "Anthropic filtering sends titles and abstracts, while PDF extraction uploads complete document bytes. This behavior is central to the skill but requires clear consent and handling rules for confidential, licensed, or sensitive literature.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 274,
+            "line_end": 282
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 218,
+            "line_end": 244
+          }
+        ],
+        "confidence": 0.99,
+        "confidence_reasoning": "The Anthropic client calls visibly include abstract text or base64-encoded PDF data. The code and skill documentation explicitly describe remote Claude processing."
+      },
+      {
+        "title": "Spreadsheet exports do not neutralize formulas",
+        "description": "Extracted values are written directly to CSV and Excel without escaping leading formula characters. A malicious PDF or compromised model response can produce cells that spreadsheet software evaluates when a user opens the export.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 127,
+            "line_end": 142
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 242,
+            "line_end": 255
+          }
+        ],
+        "confidence": 0.9,
+        "confidence_reasoning": "Both export paths pass untrusted extracted strings directly to CSV or Excel writers, and no formula-prefix sanitization is present."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://ollama.com/install.sh | sh",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The guide pipes a remote installation script directly into sh without inspection, pinning, or checksum verification. A compromised response would execute arbitrary code immediately."
+      },
+      {
+        "title": "Unchecked metadata paths can upload arbitrary local files",
+        "description": "The extraction pipeline trusts each metadata pdf_path, reads any existing local file without root, extension, symlink, or PDF-signature checks, then sends those bytes through Anthropic requests. Crafted metadata can therefore disclose files outside the intended PDF collection.",
+        "locations": [
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 403,
+            "line_end": 420
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 282,
+            "line_end": 311
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "critical",
+        "confidence": 0.98,
+        "confidence_reasoning": "The code directly converts metadata-controlled paths to Path objects, reads all bytes after only exists(), and places the encoded bytes in Anthropic batch requests."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Hidden file in home directory",
+        "description": "Add to your shell profile (~/.bashrc, ~/.zshrc) for persistence:",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.94,
+        "confidence_reasoning": "The guide recommends persisting credentials in executable shell profile files. This creates durable plaintext secret exposure and affects future shell sessions."
+      },
+      {
+        "title": "Hidden file in home directory",
+        "description": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "This command appends an Anthropic API key assignment to ~/.bashrc in plaintext. Other local processes or account users may read the persistent credential."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "Add to your shell profile (~/.bashrc, ~/.zshrc) for persistence:",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 43,
+            "line_end": 43
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.94,
+        "confidence_reasoning": "The setup guidance directs users to modify hidden executable shell profiles for credential persistence. That is security-sensitive persistence, not ordinary project-file access."
+      },
+      {
+        "title": "Hidden file access",
+        "description": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The command writes a plaintext API credential into ~/.bashrc. Persistent secret storage in a broadly readable shell profile creates a real credential-exposure risk."
+      },
+      {
+        "title": "Generic API/secret keys",
+        "description": "echo 'export ANTHROPIC_API_KEY=\"your-api-key-here\"' >> ~/.bashrc",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 46,
+            "line_end": 46
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "env_access",
+        "source_severity": "high",
+        "confidence": 0.99,
+        "confidence_reasoning": "The documented command persists the user's Anthropic API key in plaintext in ~/.bashrc. This is insecure credential handling even though the shown value is a placeholder."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Python shutil operations",
+        "description": "shutil.copy2(source_path, dest_path)",
+        "locations": [
+          {
+            "file": "scripts/01_organize_metadata.py",
+            "line_start": 238,
+            "line_end": 238
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "medium",
+        "confidence": 0.95,
+        "confidence_reasoning": "The copy operation uses a destination derived from an unsanitized metadata record ID. Crafted citation metadata can introduce path traversal and overwrite a PDF outside the intended output directory."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.post(",
+        "locations": [
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 203,
+            "line_end": 203
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.98,
+        "confidence_reasoning": "This is a real POST to the user-configurable Ollama URL and includes paper titles and abstracts. A remote or misconfigured endpoint receives research content."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(url, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 111,
+            "line_end": 111
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The validator sends scientific names to World Flora Online over unencrypted HTTP. Network observers can read or alter the query and response."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(url, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 151,
+            "line_end": 151
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The validator sends locations and the GeoNames username over unencrypted HTTP. This exposes account identifiers and research-derived location data to interception."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "url = f\"http://www.worldfloraonline.org/api/1.0/search?query={quote(scientific_name)}\"",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 108,
+            "line_end": 108
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The hardcoded World Flora Online endpoint uses plain HTTP for extracted scientific names. The lack of transport encryption creates confidentiality and integrity risk."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "url = f\"http://api.geonames.org/searchJSON?q={quote(location)}&maxRows=1&username={username}\"",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 146,
+            "line_end": 146
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The hardcoded GeoNames endpoint uses plain HTTP and places the username and location in the query string. Those values are exposed in transit."
+      },
+      {
+        "title": "Untrusted document text can influence model decisions",
+        "description": "Titles, abstracts, and PDF contents are placed in model user messages without an instruction hierarchy that treats embedded document commands as untrusted. Malicious paper text can alter filtering or extracted records, although the resulting model output has no direct tool privileges.",
+        "locations": [
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 123,
+            "line_end": 166
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 222,
+            "line_end": 244
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "Both scripts submit untrusted research content as model input and trust structured model responses for workflow decisions. The impact is limited to data integrity because no tools execute from responses."
+      },
+      {
+        "title": "Research documents are transmitted to third-party model services",
+        "description": "Anthropic filtering sends titles and abstracts, while PDF extraction uploads complete document bytes. This behavior is central to the skill but requires clear consent and handling rules for confidential, licensed, or sensitive literature.",
+        "locations": [
+          {
+            "file": "scripts/02_filter_abstracts.py",
+            "line_start": 274,
+            "line_end": 282
+          },
+          {
+            "file": "scripts/03_extract_from_pdfs.py",
+            "line_start": 218,
+            "line_end": 244
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.99,
+        "confidence_reasoning": "The Anthropic client calls visibly include abstract text or base64-encoded PDF data. The code and skill documentation explicitly describe remote Claude processing."
+      },
+      {
+        "title": "Spreadsheet exports do not neutralize formulas",
+        "description": "Extracted values are written directly to CSV and Excel without escaping leading formula characters. A malicious PDF or compromised model response can produce cells that spreadsheet software evaluates when a user opens the export.",
+        "locations": [
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 127,
+            "line_end": 142
+          },
+          {
+            "file": "scripts/06_export_database.py",
+            "line_start": 242,
+            "line_end": 255
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.9,
+        "confidence_reasoning": "Both export paths pass untrusted extracted strings directly to CSV or Excel writers, and no formula-prefix sanitization is present."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(url, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 77,
+            "line_end": 77
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The validator sends extracted scientific names to the external GBIF service. The request is intentional, but it is genuine outbound disclosure of user-derived data."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(url, headers=headers, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 182,
+            "line_end": 182
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The geocoder sends extracted addresses to the external Nominatim service. HTTPS protects transit, but the request still discloses user-derived location data."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(url, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 213,
+            "line_end": 213
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The validator sends extracted compound names to PubChem. This is expected enrichment behavior but remains a real outbound data transfer."
+      },
+      {
+        "title": "Python HTTP libraries",
+        "description": "response = requests.get(search_url, timeout=10)",
+        "locations": [
+          {
+            "file": "scripts/05_validate_with_apis.py",
+            "line_start": 244,
+            "line_end": 244
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.99,
+        "confidence_reasoning": "The validator sends gene symbols and optional organism names to NCBI. This is intended, but it is genuine external transmission of extracted values."
+      }
+    ],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -fsSL https://ollama.com/install.sh | sh",
+        "locations": [
+          {
+            "file": "references/setup_guide.md",
+            "line_start": 73,
+            "line_end": 73
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.99,
+        "confidence_reasoning": "The guide pipes a remote installation script directly into sh without inspection, pinning, or checksum verification. A compromised response would execute arbitrary code immediately."
+      }
+    ],
+    "files_scanned": 20,
+    "total_lines": 5302,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T11:43:12.455Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Extract Structured Data from Scientific PDFs",
+    "value_statement": "Manual extraction from scientific literature is slow, inconsistent, and difficult to validate. This skill organizes papers, extracts schema-based records, validates values, and exports analysis-ready datasets.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "scientific PDF extraction",
+      "systematic review automation",
+      "structured literature data",
+      "research database creation",
+      "PDF schema extraction",
+      "validation metrics",
+      "meta-analysis workflow"
+    ],
+    "actual_capabilities": [
+      "Organizes metadata from BibTeX, RIS, DOI lists, or PDF directories.",
+      "Filters papers by title and abstract with Anthropic models or Ollama.",
+      "Extracts structured fields from PDF documents using customizable schemas and examples.",
+      "Repairs model-produced JSON and validates it against an output schema.",
+      "Enriches fields through GBIF, WFO, GeoNames, Nominatim, PubChem, and NCBI services.",
+      "Exports CSV, JSON, Excel, SQLite, pandas pickle, or RDS files and calculates precision, recall, and F1."
+    ],
+    "limitations": [
+      "The filtering prompt and extraction schema require domain-specific customization before production use.",
+      "Claude extraction requires an API key and sends documents to Anthropic. Ollama supports abstract filtering only.",
+      "API enrichment exposes selected values to third-party services, and two configured endpoints use unencrypted HTTP.",
+      "Extraction quality depends on PDF quality, schema design, model behavior, and manually annotated ground truth."
+    ],
+    "use_cases": [
+      {
+        "title": "Build a systematic review dataset",
+        "description": "Convert a screened scientific literature collection into consistent records for evidence synthesis and meta-analysis.",
+        "target_user": "Systematic review researchers"
+      },
+      {
+        "title": "Standardize a research archive",
+        "description": "Organize mixed metadata sources, match PDFs, validate selected fields, and export a reusable database.",
+        "target_user": "Research data managers"
+      },
+      {
+        "title": "Measure extraction quality",
+        "description": "Create annotation samples and compare automated records with ground truth using field-level precision, recall, and F1.",
+        "target_user": "Research methodologists"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Organize a PDF collection",
+        "prompt": "Organize the PDFs in [folder] using [BibTeX, RIS, directory, or DOI list]. Create metadata.json and report missing PDF links. Do not upload files.",
+        "scenario": "Begin with a local literature collection and its available metadata."
+      },
+      {
+        "title": "Design an extraction schema",
+        "prompt": "Review [example PDFs] and design a schema for extracting [research variables]. Include field types, required fields, evidence quotes, missing-value rules, and one example.",
+        "scenario": "Define consistent records before processing the full collection."
+      },
+      {
+        "title": "Run and validate extraction",
+        "prompt": "Filter [metadata file] for [criteria], extract records from approved PDFs, repair outputs, and validate against [schema]. Use test mode before full processing.",
+        "scenario": "Process a reviewed collection with a customized schema."
+      },
+      {
+        "title": "Evaluate and export a review dataset",
+        "prompt": "Create a stratified validation set from [results file]. Calculate field-level precision, recall, and F1, then export sanitized flattened records to [format].",
+        "scenario": "Assess extraction reliability and prepare data for analysis."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A BibTeX library containing 146 entries and a directory of downloaded papers.",
+        "output": [
+          "Organized 146 metadata records from the supplied BibTeX file.",
+          "Matched 132 records to PDFs and listed 14 missing files.",
+          "Saved the reviewed metadata catalog to metadata.json."
+        ]
+      },
+      {
+        "input": "Approved ecology PDFs and a schema for species, locations, methods, and measurements.",
+        "output": [
+          "Processed 40 approved PDFs and produced structured records for 36 papers.",
+          "Flagged four failed extractions for review.",
+          "Preserved evidence notes and missing values according to the schema."
+        ]
+      },
+      {
+        "input": "A manually annotated validation sample and automated extraction results.",
+        "output": [
+          "Calculated overall precision, recall, and F1.",
+          "Reported field-level scores and highlighted fields below the review threshold.",
+          "Exported sanitized analysis records and a separate validation report."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Resolve and review every PDF path before any external upload.",
+      "Start with representative PDFs and refine the schema using explicit field types, evidence requirements, and missing-value rules.",
+      "Run small tests, annotate a validation sample, and inspect field-level metrics before processing the full collection."
+    ],
+    "anti_patterns": [
+      "Do not run pipe-to-shell installers or store API keys in shell profiles.",
+      "Do not send confidential or unlicensed PDFs to external models without authorization.",
+      "Do not treat model output as ground truth or open unsanitized spreadsheet exports."
+    ],
+    "faq": [
+      {
+        "question": "Can this skill process scanned PDFs?",
+        "answer": "Claude document processing may handle image-based pages, but results depend on scan clarity, page layout, and model limits."
+      },
+      {
+        "question": "Does the skill work without an Anthropic API key?",
+        "answer": "Ollama can filter abstracts locally. Full PDF extraction in the included scripts requires an Anthropic API key."
+      },
+      {
+        "question": "Which metadata formats are supported?",
+        "answer": "The organizer accepts BibTeX, RIS, DOI lists, and directories containing PDF files."
+      },
+      {
+        "question": "How is extraction accuracy measured?",
+        "answer": "The validation workflow compares automated records with manual ground truth and calculates precision, recall, and F1 by field."
+      },
+      {
+        "question": "Which export formats are available?",
+        "answer": "The exporter supports CSV, JSON, Excel, SQLite, pandas pickle with a loader, and RDS with a loader."
+      },
+      {
+        "question": "Are PDFs or extracted values sent to external services?",
+        "answer": "Yes. Anthropic receives selected abstracts or PDFs, and optional validation services receive configured field values."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "assets",
+      "type": "dir",
+      "path": "assets",
+      "children": [
+        {
+          "name": "api_config_template.json",
+          "type": "file",
+          "path": "assets/api_config_template.json",
+          "lines": 63
+        },
+        {
+          "name": "example_api_config_ecology.json",
+          "type": "file",
+          "path": "assets/example_api_config_ecology.json",
+          "lines": 73
+        },
+        {
+          "name": "example_flower_visitors_schema.json",
+          "type": "file",
+          "path": "assets/example_flower_visitors_schema.json",
+          "lines": 170
+        },
+        {
+          "name": "schema_template.json",
+          "type": "file",
+          "path": "assets/schema_template.json",
+          "lines": 106
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "api_reference.md",
+          "type": "file",
+          "path": "references/api_reference.md",
+          "lines": 407
+        },
+        {
+          "name": "setup_guide.md",
+          "type": "file",
+          "path": "references/setup_guide.md",
+          "lines": 148
+        },
+        {
+          "name": "validation_guide.md",
+          "type": "file",
+          "path": "references/validation_guide.md",
+          "lines": 330
+        },
+        {
+          "name": "workflow_guide.md",
+          "type": "file",
+          "path": "references/workflow_guide.md",
+          "lines": 329
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "01_organize_metadata.py",
+          "type": "file",
+          "path": "scripts/01_organize_metadata.py",
+          "lines": 311
+        },
+        {
+          "name": "02_filter_abstracts.py",
+          "type": "file",
+          "path": "scripts/02_filter_abstracts.py",
+          "lines": 469
+        },
+        {
+          "name": "03_extract_from_pdfs.py",
+          "type": "file",
+          "path": "scripts/03_extract_from_pdfs.py",
+          "lines": 479
+        },
+        {
+          "name": "04_repair_json.py",
+          "type": "file",
+          "path": "scripts/04_repair_json.py",
+          "lines": 228
+        },
+        {
+          "name": "05_validate_with_apis.py",
+          "type": "file",
+          "path": "scripts/05_validate_with_apis.py",
+          "lines": 391
+        },
+        {
+          "name": "06_export_database.py",
+          "type": "file",
+          "path": "scripts/06_export_database.py",
+          "lines": 346
+        },
+        {
+          "name": "07_prepare_validation_set.py",
+          "type": "file",
+          "path": "scripts/07_prepare_validation_set.py",
+          "lines": 281
+        },
+        {
+          "name": "08_calculate_validation_metrics.py",
+          "type": "file",
+          "path": "scripts/08_calculate_validation_metrics.py",
+          "lines": 514
+        }
+      ]
+    },
+    {
+      "name": "environment.yml",
+      "type": "file",
+      "path": "environment.yml",
+      "lines": 18
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 322
+    },
+    {
+      "name": "requirements.txt",
+      "type": "file",
+      "path": "requirements.txt",
+      "lines": 27
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 290
+    }
+  ]
+}

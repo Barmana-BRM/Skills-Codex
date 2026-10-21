@@ -1,0 +1,2627 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-04T16:48:44.581Z",
+    "slug": "0xdarkmatter-claude-code-headless",
+    "source_url": "https://github.com/0xDarkMatter/claude-mods/tree/main/skills/claude-code-headless",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "b053ba205afb763ef6728c1c5b9f4f8722f8a4e0e9caa5f919c3be514ae72757",
+    "tree_hash": "3e6039c42dd4fb36b946fc0a08418a8173f726e6d12ee4dbdcdc5e430f70586f",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "claude-code-headless",
+    "description": "Run Claude Code in headless mode for scripts, CI pipelines, structured output, session reuse, and controlled tool access.",
+    "summary": "Automate Claude Code CLI workflows without the interactive interface.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "0xDarkMatter",
+    "license": "MIT",
+    "tags": [
+      "claude-code",
+      "headless",
+      "cli-automation",
+      "ci-cd",
+      "scripting"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access",
+      "filesystem",
+      "network"
+    ],
+    "category": "devops"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "The audit did not find prompt-injection language or hidden malware instructions. Most static command, environment, filesystem, and network hits are documentation examples, but web endpoint examples and permission guidance create real operational risks. Publishing should require clearer guardrails for permissions, web exposure, CI secrets, and automated edits.",
+    "remediation": [
+      {
+        "issue": "Permission bypass guidance can normalize unsafe headless runs.",
+        "suggestion": "Add warnings that bypassPermissions is only for trusted, sandboxed workflows. Prefer narrow allowedTools and explicit disallowedTools examples.",
+        "severity": "high"
+      },
+      {
+        "issue": "Web API examples accept caller-selected prompts and tools.",
+        "suggestion": "Add authentication, rate limits, prompt validation, a fixed tool allowlist, and an isolated worker process.",
+        "severity": "high"
+      },
+      {
+        "issue": "CI examples can auto-edit files while secrets are available.",
+        "suggestion": "Use read-only defaults, scoped secrets, masked logs, protected branches, and human review before merge.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Shell examples rely heavily on command substitution.",
+        "suggestion": "Show safer alternatives using stdin, files, arrays, and quoted variables. Warn against untrusted prompt files and repository content.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/cli-options.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 146,
+            "line_end": 151
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 158,
+            "line_end": 158
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 161,
+            "line_end": 161
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 261,
+            "line_end": 261
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 274,
+            "line_end": 274
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 315,
+            "line_end": 315
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 31,
+            "line_end": 38
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 115,
+            "line_end": 115
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 118,
+            "line_end": 121
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 125,
+            "line_end": 125
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 149,
+            "line_end": 151
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 153,
+            "line_end": 153
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 171,
+            "line_end": 173
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 175,
+            "line_end": 175
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 179,
+            "line_end": 181
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 202,
+            "line_end": 202
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 208,
+            "line_end": 211
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 213,
+            "line_end": 213
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 214,
+            "line_end": 214
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 234,
+            "line_end": 234
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 240,
+            "line_end": 247
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 337,
+            "line_end": 337
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 339,
+            "line_end": 339
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 346,
+            "line_end": 346
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 347,
+            "line_end": 347
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 362,
+            "line_end": 362
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 364,
+            "line_end": 364
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 139,
+            "line_end": 139
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 166,
+            "line_end": 166
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 199,
+            "line_end": 199
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 230,
+            "line_end": 230
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 329,
+            "line_end": 329
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 358,
+            "line_end": 358
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 142,
+            "line_end": 142
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 145,
+            "line_end": 145
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 168,
+            "line_end": 168
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 156,
+            "line_end": 160
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 75,
+            "line_end": 75
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 79,
+            "line_end": 79
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 80,
+            "line_end": 80
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 85,
+            "line_end": 85
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 127,
+            "line_end": 127
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 130,
+            "line_end": 130
+          },
+          {
+            "file": "references/output-formats.md",
+            "line_start": 133,
+            "line_end": 133
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 38
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 48
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 48,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 54
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 54,
+            "line_end": 57
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 57,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 73,
+            "line_end": 76
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 76,
+            "line_end": 79
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 79,
+            "line_end": 84
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 84,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 91
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 103,
+            "line_end": 107
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 107,
+            "line_end": 113
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 113,
+            "line_end": 122
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 122,
+            "line_end": 123
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 123,
+            "line_end": 124
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 103
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 107,
+            "line_end": 113
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "references/cli-options.md",
+            "line_start": 176,
+            "line_end": 176
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 211,
+            "line_end": 211
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 362,
+            "line_end": 362
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 117,
+            "line_end": 117
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 118
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:references/cli-options.md:69:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "claude -p \"$(cat prompt.txt)\""
+      },
+      {
+        "id": "external_commands:references/cli-options.md:89:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "result=$(claude -p \"Start analysis\" --output-format json)"
+      },
+      {
+        "id": "external_commands:references/cli-options.md:90:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "session_id=$(echo \"$result\" | jq -r '.session_id')"
+      },
+      {
+        "id": "external_commands:references/cli-options.md:146:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 146,
+        "line_end": 151,
+        "snippet": "claude -p \"$(cat <<EOF"
+      },
+      {
+        "id": "external_commands:references/cli-options.md:158:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 158,
+        "line_end": 158,
+        "snippet": "claude -p \"$(cat prompt.md)\""
+      },
+      {
+        "id": "external_commands:references/cli-options.md:161:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/cli-options.md",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "claude -p \"Review: $(cat src/main.ts)\""
+      },
+      {
+        "id": "env_access:references/cli-options.md:176:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/cli-options.md",
+        "line_start": 176,
+        "line_end": 176,
+        "snippet": "| `ANTHROPIC_API_KEY` | API key for Claude |"
+      },
+      {
+        "id": "blocker:references/cli-options.md:93:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/cli-options.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "claude -r \"$session_id\" \"What did you find?\""
+      },
+      {
+        "id": "blocker:references/cli-options.md:170:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/cli-options.md",
+        "line_start": 170,
+        "line_end": 170,
+        "snippet": "| 2 | Invalid arguments |"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:261:node-js-child-process-module",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Node.js child_process module",
+        "file": "references/integration-patterns.md",
+        "line_start": 261,
+        "line_end": 261,
+        "snippet": "const { spawn } = require('child_process');"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:274:process-spawn",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process spawn",
+        "file": "references/integration-patterns.md",
+        "line_start": 274,
+        "line_end": 274,
+        "snippet": "const claude = spawn('claude', args);"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:315:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "references/integration-patterns.md",
+        "line_start": 315,
+        "line_end": 315,
+        "snippet": "proc = subprocess.run(args, capture_output=True, text=True)"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:31:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 31,
+        "line_end": 38,
+        "snippet": "result=$(cat diff.txt | claude -p \"Review this PR diff for:"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:115:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 115,
+        "line_end": 115,
+        "snippet": "diff=$(gh pr diff \"$pr_number\")"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:118:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 118,
+        "line_end": 121,
+        "snippet": "result=$(echo \"$diff\" | claude -p \\"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:124:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error') == \"true\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:125:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 125,
+        "line_end": 125,
+        "snippet": "echo \"Error: $(echo \"$result\" | jq -r '.result')\" >&2"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:149:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 149,
+        "line_end": 151,
+        "snippet": "result=$(cat \"$file\" | claude -p \"$prompt\" \\"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:153:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 153,
+        "line_end": 153,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error') == \"false\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:171:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 171,
+        "line_end": 173,
+        "snippet": "result=$(claude -p \"Analyze the codebase structure\" \\"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:175:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 175,
+        "line_end": 175,
+        "snippet": "session=$(echo \"$result\" | jq -r '.session_id')"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:179:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 179,
+        "line_end": 181,
+        "snippet": "result=$(claude --resume \"$session\" \\"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:202:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 202,
+        "line_end": 202,
+        "snippet": "staged_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\\.py$' || true)"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:208:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 208,
+        "line_end": 211,
+        "snippet": "result=$(cat \"$file\" | claude -p \\"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:213:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 213,
+        "line_end": 213,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error') == \"false\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:214:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 214,
+        "line_end": 214,
+        "snippet": "review=$(echo \"$result\" | jq -r '.result')"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:234:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 234,
+        "line_end": 234,
+        "snippet": "DATE=$(date +%Y-%m-%d)"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:240:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 240,
+        "line_end": 247,
+        "snippet": "result=$(claude -p \"Generate a daily code quality report covering:"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:337:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 337,
+        "line_end": 337,
+        "snippet": "result=$(claude -p \"$1\" --output-format json 2>&1)"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:339:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 339,
+        "line_end": 339,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error // true') == \"false\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:346:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 346,
+        "line_end": 346,
+        "snippet": "attempt=$((attempt + 1))"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:347:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 347,
+        "line_end": 347,
+        "snippet": "delay=$((delay * 2))"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:362:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 362,
+        "line_end": 362,
+        "snippet": "result=$(claude -p \"$1\" --output-format json 2>/dev/null)"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:364:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/integration-patterns.md",
+        "line_start": 364,
+        "line_end": 364,
+        "snippet": "if [[ -z \"$result\" ]] || [[ $(echo \"$result\" | jq -r '.is_error') == \"true\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:108:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:139:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 139,
+        "line_end": 139,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:166:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 166,
+        "line_end": 166,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:199:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 199,
+        "line_end": 199,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:230:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 230,
+        "line_end": 230,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:329:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 329,
+        "line_end": 329,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:358:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "references/integration-patterns.md",
+        "line_start": 358,
+        "line_end": 358,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:references/integration-patterns.md:211:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "references/integration-patterns.md",
+        "line_start": 211,
+        "line_end": 211,
+        "snippet": "--allowedTools \"Read\" 2>/dev/null)"
+      },
+      {
+        "id": "filesystem:references/integration-patterns.md:362:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "references/integration-patterns.md",
+        "line_start": 362,
+        "line_end": 362,
+        "snippet": "result=$(claude -p \"$1\" --output-format json 2>/dev/null)"
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:27:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/integration-patterns.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:49:git-platform-tokens",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Git platform tokens",
+        "file": "references/integration-patterns.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:42:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/integration-patterns.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}"
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:78:generic-api-secret-keys",
+        "category": "env_access",
+        "severity": "high",
+        "pattern": "Generic API/secret keys",
+        "file": "references/integration-patterns.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "ANTHROPIC_API_KEY = credentials('anthropic-api-key')"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:142:node-js-child-process-module",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Node.js child_process module",
+        "file": "references/output-formats.md",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "const { spawn } = require('child_process');"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:145:process-spawn",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Process spawn",
+        "file": "references/output-formats.md",
+        "line_start": 145,
+        "line_end": 145,
+        "snippet": "const claude = spawn('claude', ['-p', 'Task', '--output-format', 'stream-json']);"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:168:python-subprocess-popen",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.Popen",
+        "file": "references/output-formats.md",
+        "line_start": 168,
+        "line_end": 168,
+        "snippet": "proc = subprocess.Popen("
+      },
+      {
+        "id": "external_commands:references/output-formats.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/output-formats.md",
+        "line_start": 156,
+        "line_end": 160,
+        "snippet": "console.log(`\\nCost: $${event.total_cost_usd}`);"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:75:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 75,
+        "line_end": 75,
+        "snippet": "session=$(claude -p \"Start\" --output-format json | jq -r '.session_id')"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:78:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "result=$(claude -p \"Task\" --output-format json)"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:79:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error') == \"true\" ]]; then"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:80:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "echo \"Error: $(echo \"$result\" | jq -r '.result')\""
+      },
+      {
+        "id": "external_commands:references/output-formats.md:85:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "cost=$(echo \"$result\" | jq -r '.total_cost_usd')"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:124:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "type=$(echo \"$line\" | jq -r '.type')"
+      },
+      {
+        "id": "external_commands:references/output-formats.md:127:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 127,
+        "line_end": 127,
+        "snippet": "echo \"Claude: $(echo \"$line\" | jq -r '.content')\""
+      },
+      {
+        "id": "external_commands:references/output-formats.md:130:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 130,
+        "line_end": 130,
+        "snippet": "echo \"Using: $(echo \"$line\" | jq -r '.tool')\""
+      },
+      {
+        "id": "external_commands:references/output-formats.md:133:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "references/output-formats.md",
+        "line_start": 133,
+        "line_end": 133,
+        "snippet": "echo \"Done! Cost: \\$$(echo \"$line\" | jq -r '.total_cost_usd')\""
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 27,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 33,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "| `-p`, `--print` | Non-interactive (headless) mode |"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 35,
+        "snippet": "| `--output-format` | text, json, stream-json |"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 35,
+        "snippet": "| `-r`, `--resume` | Resume by session ID |"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "| `-c`, `--continue` | Continue most recent session |"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 38,
+        "snippet": "| `--allowedTools` | Comma-separated allowed tools |"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 39,
+        "snippet": "| `--disallowedTools` | Comma-separated denied tools |"
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 40,
+        "snippet": "| `--mcp-config` | Path to MCP server config JSON |"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 41,
+        "snippet": "| `--verbose` | Enable verbose logging |"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 48,
+        "snippet": "| `--append-system-prompt` | Add to system prompt |"
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 49,
+        "snippet": "| Accept edits | `--permission-mode acceptEdits` | Auto-accept file changes |"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 54,
+        "snippet": "| Bypass | `--permission-mode bypassPermissions` | Skip all prompts |"
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 54,
+        "line_end": 57,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 57,
+        "line_end": 60,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 62,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 63,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 73,
+        "snippet": "```json"
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 73,
+        "line_end": 76,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 79,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 79,
+        "line_end": 84,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 88,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 91,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 96,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 99,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 103,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 103,
+        "line_end": 107,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 107,
+        "line_end": 113,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 113,
+        "line_end": 122,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 122,
+        "line_end": 123,
+        "snippet": "- `./references/cli-options.md` - Complete CLI flag reference"
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 123,
+        "line_end": 124,
+        "snippet": "- `./references/output-formats.md` - Output format schemas"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 128,
+        "snippet": "- `./references/integration-patterns.md` - CI/CD and scripting examples"
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "**See Also:** `claude-code-hooks` for automation events, `claude-code-debug` for troubleshooting"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "session=$(jq -r '.session_id' result.json)"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "session=$(claude -p \"Start task\" --output-format json | jq -r '.session_id')"
+      },
+      {
+        "id": "external_commands:SKILL.md:108:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "result=$(claude -p \"Task\" --output-format json)"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "if [[ $(echo \"$result\" | jq -r '.is_error') == \"true\" ]]; then"
+      },
+      {
+        "id": "external_commands:SKILL.md:110:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "echo \"Error: $(echo \"$result\" | jq -r '.result')\" >&2"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 27,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 103,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:107:template-literal-with-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Template literal with command substitution",
+        "file": "SKILL.md",
+        "line_start": 107,
+        "line_end": 113,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:117:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "- https://code.claude.com/docs/en/headless - Headless mode reference"
+      },
+      {
+        "id": "network:SKILL.md:118:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "- https://code.claude.com/docs/en/settings - Settings and permissions"
+      },
+      {
+        "id": "blocker:SKILL.md:117:network-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "Network reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 117,
+        "line_end": 117,
+        "snippet": "- https://code.claude.com/docs/en/headless - Headless mode reference"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:references/cli-options.md:69:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "external_commands:references/cli-options.md:89:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "external_commands:references/cli-options.md:90:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "external_commands:references/cli-options.md:146:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "external_commands:references/cli-options.md:158:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "external_commands:references/cli-options.md:161:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The command substitution appears in a Bash usage example for Claude Code. It is not auto-executed by the skill, and the substitutions are quoted."
+      },
+      {
+        "id": "env_access:references/cli-options.md:176:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This table names the official environment variable used by the CLI. It does not expose a secret value or read secrets in executable code."
+      },
+      {
+        "id": "blocker:references/cli-options.md:93:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The line is a normal follow-up prompt for a resumed Claude session. It is not host, network, or account reconnaissance."
+      },
+      {
+        "id": "blocker:references/cli-options.md:170:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The line is an exit-code table entry for invalid arguments. It contains no reconnaissance instruction or command."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:261:node-js-child-process-module",
+        "verdict": "confirmed",
+        "confidence": 0.8,
+        "reason": "The import is used by an Express endpoint that accepts prompt and tools from req.body before spawning Claude Code. That context makes process execution a real exposure without authentication and allowlist controls.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:274:process-spawn",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The spawned Claude Code process receives arguments built from request-controlled prompt and tool values. It avoids shell interpolation, but it still lets external callers influence agent actions.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:315:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.84,
+        "reason": "The FastAPI example passes request prompt and tool values to subprocess.run for Claude Code. Without authentication, validation, and fixed tool allowlists, this is an unsafe automation surface.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:31:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:115:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:118:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:124:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:125:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:149:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:153:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:171:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:175:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:179:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:202:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:208:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:213:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:214:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:234:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:240:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:337:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:339:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:346:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:347:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:362:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:364:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The shell syntax is in documented automation examples for the Claude CLI. It is not hidden executable skill code, and most variables are quoted."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:108:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:139:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:166:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:199:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:230:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:329:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "external_commands:references/integration-patterns.md:358:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "This is a shebang in an example shell script included for documentation. The skill does not install or execute the script automatically."
+      },
+      {
+        "id": "filesystem:references/integration-patterns.md:211:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The snippet redirects stderr to /dev/null in a shell example. It is not reading sensitive files or writing arbitrary filesystem paths."
+      },
+      {
+        "id": "filesystem:references/integration-patterns.md:362:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The snippet redirects stderr to /dev/null in a shell example. It is not reading sensitive files or writing arbitrary filesystem paths."
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:27:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "The finding references CI secret variables used for normal authentication. No literal credential is present, and the example does not print the secret."
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:49:git-platform-tokens",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "The finding references CI secret variables used for normal authentication. No literal credential is present, and the example does not print the secret."
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:42:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "The finding references CI secret variables used for normal authentication. No literal credential is present, and the example does not print the secret."
+      },
+      {
+        "id": "env_access:references/integration-patterns.md:78:generic-api-secret-keys",
+        "verdict": "false_positive",
+        "confidence": 0.78,
+        "reason": "The finding references CI secret variables used for normal authentication. No literal credential is present, and the example does not print the secret."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:142:node-js-child-process-module",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This example shows streaming Claude Code output with fixed arguments. It does not accept user-controlled shell input or execute outside the documented CLI use."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:145:process-spawn",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This example shows streaming Claude Code output with fixed arguments. It does not accept user-controlled shell input or execute outside the documented CLI use."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:168:python-subprocess-popen",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "This example shows streaming Claude Code output with fixed arguments. It does not accept user-controlled shell input or execute outside the documented CLI use."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The flagged backticks are a JavaScript template literal used for console output. They are not Ruby or shell command execution."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:75:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:78:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:79:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:80:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:85:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:124:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:127:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:130:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:references/output-formats.md:133:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "The command substitution appears in documentation for parsing Claude Code JSON output. It is not auto-executed by the skill and uses fixed parser commands."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:48:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:54:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:57:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:79:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:84:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:103:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:107:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:113:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:122:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:123:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The snippet is Markdown fencing or inline option documentation, not Ruby or shell backtick execution. It does not execute by itself."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a documented shell example for capturing Claude Code JSON output. It is not hidden skill logic, and the values are quoted rather than evaluated as code."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a documented shell example for capturing Claude Code JSON output. It is not hidden skill logic, and the values are quoted rather than evaluated as code."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a documented shell example for capturing Claude Code JSON output. It is not hidden skill logic, and the values are quoted rather than evaluated as code."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a documented shell example for capturing Claude Code JSON output. It is not hidden skill logic, and the values are quoted rather than evaluated as code."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.86,
+        "reason": "This is a documented shell example for capturing Claude Code JSON output. It is not hidden skill logic, and the values are quoted rather than evaluated as code."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The detected text is a Markdown Bash example block, not a JavaScript template literal executed by the skill. No runtime template evaluation exists."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The detected text is a Markdown Bash example block, not a JavaScript template literal executed by the skill. No runtime template evaluation exists."
+      },
+      {
+        "id": "external_commands:SKILL.md:107:template-literal-with-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The detected text is a Markdown Bash example block, not a JavaScript template literal executed by the skill. No runtime template evaluation exists."
+      },
+      {
+        "id": "network:SKILL.md:117:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The URL points to official Claude Code documentation. It is a reference link, not a network call made by the skill."
+      },
+      {
+        "id": "network:SKILL.md:118:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "The URL points to official Claude Code documentation. It is a reference link, not a network call made by the skill."
+      },
+      {
+        "id": "blocker:SKILL.md:117:network-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The cited line is an official documentation link. It does not scan networks, fetch data, or instruct reconnaissance."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unsafe Permission Bypass Guidance",
+        "description": "The skill describes bypassPermissions as a mode that skips all prompts. In headless automation this can remove the final approval step before tool use.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 49
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 46,
+            "line_end": 49
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The cited lines directly describe prompt bypass behavior. No example executes bypassPermissions, but the guidance lacks safety constraints for a risky mode."
+      },
+      {
+        "title": "Request-Controlled Claude Code Web Execution",
+        "description": "The web examples pass request-controlled prompts and tool selections into Claude Code process execution without showing authentication, validation, or fixed allowlists.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 304,
+            "line_end": 315
+          }
+        ],
+        "confidence": 0.88,
+        "confidence_reasoning": "The cited Express and FastAPI examples directly connect request body fields to spawned Claude Code arguments. The code avoids shell interpolation, but exposes agent control."
+      },
+      {
+        "title": "Automated Edits In CI Examples",
+        "description": "Several examples combine headless execution with automatic edits or write-capable tools. Without branch isolation and review gates, CI could change files unexpectedly.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 95
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 184,
+            "line_end": 188
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 202,
+            "line_end": 206
+          }
+        ],
+        "confidence": 0.78,
+        "confidence_reasoning": "The cited lines show acceptEdits or write-capable tool combinations in automation examples. The risk depends on deployment controls, so confidence is high but not absolute."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Node.js child_process module",
+        "description": "const { spawn } = require('child_process');",
+        "locations": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 261,
+            "line_end": 261
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.8,
+        "confidence_reasoning": "The import is used by an Express endpoint that accepts prompt and tools from req.body before spawning Claude Code. That context makes process execution a real exposure without authentication and allowlist controls."
+      },
+      {
+        "title": "Process spawn",
+        "description": "const claude = spawn('claude', args);",
+        "locations": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 274,
+            "line_end": 274
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The spawned Claude Code process receives arguments built from request-controlled prompt and tool values. It avoids shell interpolation, but it still lets external callers influence agent actions."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "proc = subprocess.run(args, capture_output=True, text=True)",
+        "locations": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 315,
+            "line_end": 315
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.84,
+        "confidence_reasoning": "The FastAPI example passes request prompt and tool values to subprocess.run for Claude Code. Without authentication, validation, and fixed tool allowlists, this is an unsafe automation surface."
+      },
+      {
+        "title": "Unsafe Permission Bypass Guidance",
+        "description": "The skill describes bypassPermissions as a mode that skips all prompts. In headless automation this can remove the final approval step before tool use.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 49
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 46,
+            "line_end": 49
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.86,
+        "confidence_reasoning": "The cited lines directly describe prompt bypass behavior. No example executes bypassPermissions, but the guidance lacks safety constraints for a risky mode."
+      },
+      {
+        "title": "Request-Controlled Claude Code Web Execution",
+        "description": "The web examples pass request-controlled prompts and tool selections into Claude Code process execution without showing authentication, validation, or fixed allowlists.",
+        "locations": [
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 266,
+            "line_end": 274
+          },
+          {
+            "file": "references/integration-patterns.md",
+            "line_start": 304,
+            "line_end": 315
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The cited Express and FastAPI examples directly connect request body fields to spawned Claude Code arguments. The code avoids shell interpolation, but exposes agent control."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Automated Edits In CI Examples",
+        "description": "Several examples combine headless execution with automatic edits or write-capable tools. Without branch isolation and review gates, CI could change files unexpectedly.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 90,
+            "line_end": 95
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 184,
+            "line_end": 188
+          },
+          {
+            "file": "references/cli-options.md",
+            "line_start": 202,
+            "line_end": 206
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.78,
+        "confidence_reasoning": "The cited lines show acceptEdits or write-capable tool combinations in automation examples. The risk depends on deployment controls, so confidence is high but not absolute."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 4,
+    "total_lines": 914,
+    "audit_model": "codex",
+    "audited_at": "2026-07-04T16:48:44.581Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Automate Claude Code Headless Workflows",
+    "value_statement": "Teams need repeatable Claude Code runs without an interactive terminal. This skill explains headless CLI usage, structured output, CI patterns, and tool controls.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "headless Claude Code",
+      "Claude CLI automation",
+      "CI/CD code review",
+      "stream-json output",
+      "Claude Code scripting",
+      "MCP configuration",
+      "automated code analysis"
+    ],
+    "actual_capabilities": [
+      "Explains Claude Code headless mode with the --print flag.",
+      "Shows text, JSON, and stream-json output formats for automation.",
+      "Documents session resume and continuation patterns for multi-step tasks.",
+      "Provides CI examples for GitHub Actions, GitLab CI, and Jenkins.",
+      "Shows Node.js, Python, and shell integration patterns.",
+      "Describes allowed and disallowed tool configuration for safer runs."
+    ],
+    "limitations": [
+      "It is documentation only and does not install Claude Code.",
+      "Examples require a configured Claude Code CLI and valid API credentials.",
+      "Security controls depend on the user choosing safe tools and prompts.",
+      "Some web and CI examples need production hardening before use."
+    ],
+    "use_cases": [
+      {
+        "title": "Automated Pull Request Review",
+        "description": "Run Claude Code against pull request diffs and publish structured review summaries in CI.",
+        "target_user": "DevOps engineer"
+      },
+      {
+        "title": "Scripted Codebase Analysis",
+        "description": "Build shell workflows that analyze files, capture JSON output, and continue sessions across steps.",
+        "target_user": "Backend developer"
+      },
+      {
+        "title": "Claude Code Service Integration",
+        "description": "Prototype Node.js or Python services that call Claude Code and stream results to another system.",
+        "target_user": "Platform engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Run A Read-Only Analysis",
+        "scenario": "Beginner use in a local repository.",
+        "prompt": "Show me the safest Claude Code headless command to analyze this repository without editing files or running shell commands."
+      },
+      {
+        "title": "Create A JSON Automation Flow",
+        "scenario": "Intermediate script output parsing.",
+        "prompt": "Help me design a headless Claude Code script that returns JSON, checks for errors, and saves the final result to a report file."
+      },
+      {
+        "title": "Build A CI Review Step",
+        "scenario": "CI/CD pull request review.",
+        "prompt": "Create a CI review pattern for Claude Code that reviews a pull request diff with restricted tools and avoids exposing secrets."
+      },
+      {
+        "title": "Harden A Web Integration",
+        "scenario": "Advanced production service design.",
+        "prompt": "Review a web service design that calls Claude Code headlessly. Add authentication, rate limits, prompt validation, and a strict tool allowlist."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "A developer asks for a safe command to inspect a codebase in headless mode.",
+        "output": "The skill recommends a read-only Claude Code command, explains each flag, and warns against write or shell tools."
+      },
+      {
+        "input": "A CI engineer needs structured results for a pull request review.",
+        "output": "The skill outlines a pipeline step that captures Claude Code output, checks for errors, and stores a markdown summary."
+      },
+      {
+        "input": "A platform team wants to expose Claude Code through an internal service.",
+        "output": "The skill describes process spawning patterns and highlights required safeguards for prompts, tools, and access control."
+      }
+    ],
+    "best_practices": [
+      "Default to read-only tools for analysis tasks and add write tools only when required.",
+      "Keep API keys and Git tokens in CI secret stores, never in prompts or logs.",
+      "Use JSON or stream-json output when another system must parse results."
+    ],
+    "anti_patterns": [
+      "Do not use bypassPermissions for untrusted repositories or user-submitted prompts.",
+      "Do not let external callers choose arbitrary Claude Code tools in a web service.",
+      "Do not combine sensitive source code with network tools unless policy allows it."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill help me automate?",
+        "answer": "It helps you run Claude Code from scripts, CI jobs, and services without using the interactive interface."
+      },
+      {
+        "question": "Does it install Claude Code for me?",
+        "answer": "No. It assumes Claude Code is already installed and configured in the target environment."
+      },
+      {
+        "question": "Which output formats are covered?",
+        "answer": "It covers plain text, JSON, and stream-json output for different automation needs."
+      },
+      {
+        "question": "Can I use it in CI pipelines?",
+        "answer": "Yes. It includes examples for GitHub Actions, GitLab CI, Jenkins, scheduled jobs, and pre-commit hooks."
+      },
+      {
+        "question": "Is headless mode safe for production automation?",
+        "answer": "It can be safe when tools are restricted, prompts are trusted, secrets are protected, and outputs are reviewed."
+      },
+      {
+        "question": "Why does the audit warn about this skill?",
+        "answer": "The skill teaches powerful automation patterns. Some examples need strict permissions, authentication, and secret handling."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "cli-options.md",
+          "type": "file",
+          "path": "references/cli-options.md",
+          "lines": 208
+        },
+        {
+          "name": "integration-patterns.md",
+          "type": "file",
+          "path": "references/integration-patterns.md",
+          "lines": 374
+        },
+        {
+          "name": "output-formats.md",
+          "type": "file",
+          "path": "references/output-formats.md",
+          "lines": 203
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 129
+    }
+  ]
+}

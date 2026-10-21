@@ -1,0 +1,2699 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T06:06:49.642Z",
+    "slug": "ariegoldkin-design-to-production",
+    "source_url": "https://github.com/ArieGoldkin/devPrepAi/tree/main/.claude/skills/design-to-production",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "3c152fc298313dff80f78661dfa97f77f8a9a138b096e0e3e746e477a92937c0",
+    "tree_hash": "659634c7951660e2145c789e5d16dc98bf926f624e8da750d5cb7fdd6ae82ada",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "design-to-production",
+    "description": "Converts HTML prototypes into scaffolded React and TypeScript components with guided shadcn/ui mapping, glassmorphism classes, and lightweight quality validation.",
+    "summary": "Analyze HTML prototypes, scaffold React components, and validate local frontend conventions.",
+    "icon": "📦",
+    "author": "ArieGoldkin",
+    "license": "MIT",
+    "tags": [
+      "react",
+      "typescript",
+      "html-to-react",
+      "component-scaffolding",
+      "glassmorphism"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "All 121 static matches are false positives from documentation syntax, expected hidden install paths, quoted shell substitutions, or fixed directory anchors. Semantic review found an arbitrary file-creation risk in the scaffolder and unrestricted local input paths in two scripts. No prompt injection, network activity, credential access, or exfiltration intent was found.",
+    "remediation": [
+      {
+        "issue": "Scaffold arguments can escape the intended output directory.",
+        "suggestion": "Allowlist component, module, and template names. Resolve the output path and reject any path outside the selected module components directory.",
+        "severity": "high"
+      },
+      {
+        "issue": "Prototype and component paths can reference files outside expected project directories.",
+        "suggestion": "Canonicalize each input path and require containment within approved prototype or frontend source roots before reading the file.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Scaffold values are interpolated directly into sed replacement expressions.",
+        "suggestion": "Validate identifiers before use and escape sed replacement characters, or replace placeholders with a structured template renderer.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "examples/README.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "examples/README.md",
+            "line_start": 52,
+            "line_end": 52
+          },
+          {
+            "file": "examples/README.md",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "README.md",
+            "line_start": 100,
+            "line_end": 100
+          },
+          {
+            "file": "README.md",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "README.md",
+            "line_start": 114,
+            "line_end": 114
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 17,
+            "line_end": 17
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 30,
+            "line_end": 30
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 36
+          },
+          {
+            "file": "USER-GUIDE.md",
+            "line_start": 157,
+            "line_end": 157
+          },
+          {
+            "file": "USER-GUIDE.md",
+            "line_start": 268,
+            "line_end": 268
+          },
+          {
+            "file": "USER-GUIDE.md",
+            "line_start": 339,
+            "line_end": 339
+          },
+          {
+            "file": "USER-GUIDE.md",
+            "line_start": 568,
+            "line_end": 568
+          },
+          {
+            "file": "USER-GUIDE.md",
+            "line_start": 581,
+            "line_end": 581
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 45,
+            "line_end": 45
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 46,
+            "line_end": 46
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 76,
+            "line_end": 76
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 83,
+            "line_end": 83
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 86,
+            "line_end": 86
+          },
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 56,
+            "line_end": 56
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 57,
+            "line_end": 57
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 67,
+            "line_end": 67
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 77,
+            "line_end": 77
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 43
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 43,
+            "line_end": 45
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 55
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 77
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 77,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 93,
+            "line_end": 93
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 95,
+            "line_end": 95
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 97,
+            "line_end": 100
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 100,
+            "line_end": 101
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 101,
+            "line_end": 102
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 102,
+            "line_end": 106
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 106,
+            "line_end": 108
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:examples/README.md:15:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/README.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "./.claude/skills/design-to-production/scripts/extract-structure.sh \\"
+      },
+      {
+        "id": "filesystem:examples/README.md:52:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/README.md",
+        "line_start": 52,
+        "line_end": 52,
+        "snippet": "./.claude/skills/design-to-production/scripts/scaffold-component.sh \\"
+      },
+      {
+        "id": "filesystem:examples/README.md:72:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "examples/README.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "./.claude/skills/design-to-production/scripts/validate.sh \\"
+      },
+      {
+        "id": "blocker:examples/README.md:80:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "examples/README.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "- Valid glassmorphism classes ✓"
+      },
+      {
+        "id": "filesystem:README.md:100:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 100,
+        "line_end": 100,
+        "snippet": "./.claude/skills/design-to-production/scripts/extract-structure.sh \\"
+      },
+      {
+        "id": "filesystem:README.md:106:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "./.claude/skills/design-to-production/scripts/scaffold-component.sh \\"
+      },
+      {
+        "id": "filesystem:README.md:114:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "README.md",
+        "line_start": 114,
+        "line_end": 114,
+        "snippet": "./.claude/skills/design-to-production/scripts/validate.sh \\"
+      },
+      {
+        "id": "blocker:README.md:169:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "README.md",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "- Valid glassmorphism classes only"
+      },
+      {
+        "id": "blocker:README.md:226:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "README.md",
+        "line_start": 226,
+        "line_end": 226,
+        "snippet": "| Invalid glassmorphism class | Check `references/glassmorphism-mapping.md` |"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:42:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 42,
+        "line_end": 44,
+        "snippet": "## Pattern 2: Stats Grid"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:48:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "<div class=\"grid grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:80:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 80,
+        "line_end": 80,
+        "snippet": "<div className=\"grid grid-cols-1 md:grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:216:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 216,
+        "line_end": 218,
+        "snippet": "## Pattern 5: Feature Card Grid"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:222:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 222,
+        "line_end": 222,
+        "snippet": "<div class=\"grid grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:283:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 283,
+        "line_end": 283,
+        "snippet": "<div className=\"grid grid-cols-1 md:grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "blocker:references/common-patterns.md:459:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/common-patterns.md",
+        "line_start": 459,
+        "line_end": 460,
+        "snippet": "grid"
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:18:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/glassmorphism-mapping.md",
+        "line_start": 18,
+        "line_end": 18,
+        "snippet": "- `border: 1px solid rgba(255, 255, 255, 0.1)` - Subtle border"
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:147:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/glassmorphism-mapping.md",
+        "line_start": 147,
+        "line_end": 147,
+        "snippet": "## Invalid Classes (Do Not Use)"
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:149:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/glassmorphism-mapping.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "These are NOT valid DevPrep AI glassmorphism classes:"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:15:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:16:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:37:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "FILENAME=$(basename \"$HTML_FILE\" .html)"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:38:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "COMPONENT_NAME=$(echo \"$FILENAME\" | sed 's/glassmorphism_//' | sed 's/_/ /g' | awk '{for(i=1;i<=NF;i"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:41:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "GLASS_CLASSES=$(grep -oh 'class=\"[^\"]*' \"$PROJECT_ROOT/$HTML_FILE\" | sed 's/class=\"//' | tr ' ' '\\n'"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:44:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "BUTTONS=$(grep -c '<button' \"$PROJECT_ROOT/$HTML_FILE\" || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:45:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "INPUTS=$(grep -c '<input' \"$PROJECT_ROOT/$HTML_FILE\" || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:46:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "SELECTS=$(grep -c '<select' \"$PROJECT_ROOT/$HTML_FILE\" || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:47:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "FORMS=$(grep -c '<form' \"$PROJECT_ROOT/$HTML_FILE\" || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:67:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "$(echo \"$GLASS_CLASSES\" | sed 's/^/    \"/' | sed 's/$/\",/' | sed '$ s/,$//')"
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:76:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 76,
+        "line_end": 76,
+        "snippet": "\"suggestedTemplate\": \"$([ \"$BUTTONS\" -gt 0 ] && echo \"interactive-card\" || echo \"display-card\")\""
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:83:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 83,
+        "line_end": 83,
+        "snippet": "echo \"Glassmorphism classes: $(echo \"$GLASS_CLASSES\" | wc -l | tr -d ' ')\""
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:86:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 86,
+        "line_end": 86,
+        "snippet": "echo \"Suggested template: $([ \"$BUTTONS\" -gt 0 ] && echo \"interactive-card\" || echo \"display-card\")\""
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/extract-structure.sh:16:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "filesystem:scripts/extract-structure.sh:60:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/extract-structure.sh",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "OUTPUT_FILE=\"$PROJECT_ROOT/.claude/skills/design-to-production/${COMPONENT_NAME}-structure.json\""
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:15:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:16:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:16:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:17:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 17,
+        "line_end": 17,
+        "snippet": "TEMPLATES_DIR=\"$SCRIPT_DIR/../templates\""
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:110:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/scaffold-component.sh",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "echo \"3. Run: ./.claude/skills/design-to-production/scripts/validate.sh $OUTPUT_FILE\""
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:15:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "SCRIPT_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:16:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:47:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "LINES=$(wc -l < \"$FULL_PATH\")"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:56:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 56,
+        "line_end": 56,
+        "snippet": "INTERFACE_COUNT=$(grep -h '^interface [A-Z]' \"$FULL_PATH\" | grep -v '^interface I' | wc -l || echo \""
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:57:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 57,
+        "line_end": 57,
+        "snippet": "INTERFACE_COUNT=$(echo \"$INTERFACE_COUNT\" | tr -d ' \\n')"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:66:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "ANY_COUNT=$(grep ': any' \"$FULL_PATH\" | wc -l || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:67:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 67,
+        "line_end": 67,
+        "snippet": "ANY_COUNT=$(echo \"$ANY_COUNT\" | tr -d ' \\n')"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:77:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 77,
+        "line_end": 77,
+        "snippet": "INVALID_GLASS=$(grep -o 'className=\"[^\"]*glass[^\"]*\"' \"$FULL_PATH\" | grep -Ev \"($VALID_CLASSES)\" || "
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:87:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "RELATIVE_IMPORTS=$(grep \"from ['\\\"]\\\\.\\\\./\" \"$FULL_PATH\" | wc -l || echo \"0\")"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:88:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate.sh",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "RELATIVE_IMPORTS=$(echo \"$RELATIVE_IMPORTS\" | tr -d ' \\n')"
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/validate.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/validate.sh:16:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/validate.sh",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "PROJECT_ROOT=\"$(cd \"$SCRIPT_DIR/../../../..\" && pwd)\""
+      },
+      {
+        "id": "blocker:scripts/validate.sh:79:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate.sh",
+        "line_start": 79,
+        "line_end": 79,
+        "snippet": "echo -e \"${YELLOW}⚠ Potentially invalid glassmorphism classes:${NC}\""
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 37,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 43,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 43,
+        "line_end": 45,
+        "snippet": "### Example: Implementing `glassmorphism_hints_panel_1.html`"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 51,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 55,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 58,
+        "snippet": "**User provides**: HTML file path (e.g., `.superdesign/design_iterations/glassmorphism_hints_panel_1"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 60,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 62,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 77,
+        "snippet": "**Output**: `hints-panel-structure.json` with:"
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 77,
+        "line_end": 82,
+        "snippet": "- **Example**: `HintsPanel`"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 86,
+        "snippet": "- **Example**: `practice`"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 87,
+        "snippet": "- **Detected**: `<button class=\"btn-glass\">Show Hint</button>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "- **Suggestion**: Use `Button` from `@shared/ui/button`"
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 93,
+        "line_end": 93,
+        "snippet": "| `<button class=\"btn-*\">` | `Button` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "| `<div class=\"glass-card\">` | `Card` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 95,
+        "line_end": 95,
+        "snippet": "| `<input type=\"text\">` | `Input` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 96,
+        "snippet": "| `<select>` | `Select` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 97,
+        "line_end": 100,
+        "snippet": "| Badge/chip | `Badge` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 100,
+        "line_end": 101,
+        "snippet": "- **Extracted from HTML**: `class=\"glass-card neon-glow-purple text-glow\"`"
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 101,
+        "line_end": 102,
+        "snippet": "- **Maps to React**: `className=\"glass-card neon-glow-purple text-glow\"`"
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 102,
+        "line_end": 106,
+        "snippet": "- **Validation**: Checks against approved classes in `styles/glassmorphism.css`"
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 108,
+        "snippet": "**Script generates** `.tsx` file using template:"
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 108,
+        "line_end": 114,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 114,
+        "line_end": 116,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 126,
+        "snippet": "**Output**: `modules/practice/components/HintsPanel.tsx` with:"
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 134,
+        "snippet": "- File location: `modules/practice/components/HintsPanel.tsx`"
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 134,
+        "line_end": 136,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 144,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 144,
+        "line_end": 156,
+        "snippet": "- ✅ No `any` types"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 157,
+        "snippet": "| `interactive-card` | Buttons, forms, user actions | Card, Button, Input, event handlers |"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 158,
+        "snippet": "| `display-card` | Read-only content, stats | Card, Typography, badges |"
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 158,
+        "line_end": 165,
+        "snippet": "| `layout-section` | Page sections, containers | Layout wrapper, grid/flex patterns |"
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 165,
+        "line_end": 166,
+        "snippet": "**HTML**: `<button class=\"btn-glass\">Action</button>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 169,
+        "snippet": "**React**: `<Button className=\"btn-glass\" onClick={handleAction}>Action</Button>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 170,
+        "snippet": "**HTML**: `<div class=\"glass-card neon-glow\">Content</div>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 173,
+        "snippet": "**React**: `<Card className=\"glass-card neon-glow\"><CardContent>Content</CardContent></Card>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 174,
+        "snippet": "**HTML**: `<h1 class=\"gradient-text\">Title</h1>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 189,
+        "snippet": "**React**: `<h1 className=\"gradient-text\">Title</h1>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 189,
+        "line_end": 190,
+        "snippet": "| Full glassmorphism class list | `references/glassmorphism-mapping.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 190,
+        "line_end": 191,
+        "snippet": "| shadcn component decision guide | `references/shadcn-component-guide.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 192,
+        "snippet": "| Complex layout patterns | `references/common-patterns.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 198,
+        "snippet": "| Complete worked example | `examples/hints-panel-complete/` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 198,
+        "line_end": 200,
+        "snippet": "**Script not found**: Ensure you're in project root (`frontend/`)"
+      },
+      {
+        "id": "filesystem:SKILL.md:27:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "./.claude/skills/design-to-production/scripts/extract-structure.sh <html-file-path>"
+      },
+      {
+        "id": "filesystem:SKILL.md:30:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 30,
+        "line_end": 30,
+        "snippet": "./.claude/skills/design-to-production/scripts/scaffold-component.sh \\"
+      },
+      {
+        "id": "filesystem:SKILL.md:36:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 36,
+        "snippet": "./.claude/skills/design-to-production/scripts/validate.sh <component-path>"
+      },
+      {
+        "id": "blocker:SKILL.md:200:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 200,
+        "line_end": 200,
+        "snippet": "**Invalid glassmorphism class**: Check `styles/glassmorphism.css` for approved classes"
+      },
+      {
+        "id": "blocker:templates/layout-section.tsx.template:33:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "templates/layout-section.tsx.template",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "<div className=\"grid grid-cols-1 md:grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:157:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "USER-GUIDE.md",
+        "line_start": 157,
+        "line_end": 157,
+        "snippet": "./.claude/skills/design-to-production/scripts/extract-structure.sh <html-file>"
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:268:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "USER-GUIDE.md",
+        "line_start": 268,
+        "line_end": 268,
+        "snippet": "./.claude/skills/design-to-production/scripts/scaffold-component.sh \\"
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:339:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "USER-GUIDE.md",
+        "line_start": 339,
+        "line_end": 339,
+        "snippet": "./.claude/skills/design-to-production/scripts/validate.sh <component-path>"
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:568:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "USER-GUIDE.md",
+        "line_start": 568,
+        "line_end": 568,
+        "snippet": "# Wrong: frontend/.superdesign/... (don't include frontend/)"
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:581:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "USER-GUIDE.md",
+        "line_start": 581,
+        "line_end": 581,
+        "snippet": "./.claude/skills/module-scaffolder/scripts/create-module.sh analytics"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:253:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 253,
+        "line_end": 254,
+        "snippet": "Validation: ✓ All classes valid"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:256:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 256,
+        "line_end": 256,
+        "snippet": "**If invalid classes detected**:"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:258:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 258,
+        "line_end": 258,
+        "snippet": "Warning: 'glass-effect' is not a valid class"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:346:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 346,
+        "line_end": 346,
+        "snippet": "- ✅ Valid glassmorphism classes only"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:356:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 356,
+        "line_end": 357,
+        "snippet": "✓ Glassmorphism classes valid"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:372:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 372,
+        "line_end": 373,
+        "snippet": "✓ Glassmorphism classes valid"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:439:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 439,
+        "line_end": 439,
+        "snippet": "- Invalid class detected (Claude will warn)"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:615:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 615,
+        "line_end": 615,
+        "snippet": "### Issue: \"Invalid glassmorphism class\""
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:619:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 619,
+        "line_end": 619,
+        "snippet": "⚠ Potentially invalid glassmorphism classes:"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:625:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 625,
+        "line_end": 625,
+        "snippet": "// Check valid classes in styles/glassmorphism.css"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:630:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 630,
+        "line_end": 630,
+        "snippet": "**Valid classes**: See `references/glassmorphism-mapping.md`"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:748:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 748,
+        "line_end": 750,
+        "snippet": "**Scenario**: Convert hero section with stats grid"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:755:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 755,
+        "line_end": 755,
+        "snippet": "<div class=\"grid grid-cols-3 gap-6\">"
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:765:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "USER-GUIDE.md",
+        "line_start": 765,
+        "line_end": 765,
+        "snippet": "Detected: Complex layout, grid pattern → layout-section template"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:examples/README.md:15:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:examples/README.md:52:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:examples/README.md:72:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "blocker:examples/README.md:80:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "filesystem:README.md:100:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:README.md:106:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:README.md:114:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "blocker:README.md:169:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:README.md:226:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:42:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:48:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:80:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:216:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:222:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:283:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/common-patterns.md:459:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:18:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is a CSS border declaration for visual styling. It does not inspect system configuration or resources."
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:147:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:references/glassmorphism-mapping.md:149:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:15:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:16:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:37:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "basename receives the HTML path as a quoted argument and only derives a filename. No shell evaluation or command injection occurs."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:38:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed text-processing commands with quoted file arguments or numeric values. It does not evaluate input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:41:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This quoted substitution resolves a fixed project-root anchor from the script location. It does not construct or execute a user-supplied command."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:44:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This quoted substitution resolves a fixed project-root anchor from the script location. It does not construct or execute a user-supplied command."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:45:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This quoted substitution resolves a fixed project-root anchor from the script location. It does not construct or execute a user-supplied command."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:46:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This quoted substitution resolves a fixed project-root anchor from the script location. It does not construct or execute a user-supplied command."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:47:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This quoted substitution resolves a fixed project-root anchor from the script location. It does not construct or execute a user-supplied command."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:67:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed text-processing commands with quoted file arguments or numeric values. It does not evaluate input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:76:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed text-processing commands with quoted file arguments or numeric values. It does not evaluate input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:83:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed text-processing commands with quoted file arguments or numeric values. It does not evaluate input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:86:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed text-processing commands with quoted file arguments or numeric values. It does not evaluate input as shell code."
+      },
+      {
+        "id": "external_commands:scripts/extract-structure.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The shebang declares Bash for an explicitly invoked local utility. It is not an unexpected process launch or evidence of malicious command execution."
+      },
+      {
+        "id": "filesystem:scripts/extract-structure.sh:16:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The relative segments are fixed constants used to locate the project root or bundled templates from the script directory. No user input controls these segments."
+      },
+      {
+        "id": "filesystem:scripts/extract-structure.sh:60:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The script writes a generated structure report under its installed .claude skill directory. This is an explicit local artifact, not secret-file discovery."
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:15:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:16:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/scaffold-component.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The shebang declares Bash for an explicitly invoked local utility. It is not an unexpected process launch or evidence of malicious command execution."
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:16:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The relative segments are fixed constants used to locate the project root or bundled templates from the script directory. No user input controls these segments."
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:17:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The relative segments are fixed constants used to locate the project root or bundled templates from the script directory. No user input controls these segments."
+      },
+      {
+        "id": "filesystem:scripts/scaffold-component.sh:110:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This line only prints the documented path of the bundled validation script. It performs no hidden-file access."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:15:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:16:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This standard, quoted command substitution resolves the script directory from BASH_SOURCE. It does not evaluate user-controlled shell syntax."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:47:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:56:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:57:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:66:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:67:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:77:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:87:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:88:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This substitution runs fixed validation commands against a quoted local file path. It does not evaluate file contents or path text as shell code."
+      },
+      {
+        "id": "external_commands:scripts/validate.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The shebang declares Bash for an explicitly invoked local utility. It is not an unexpected process launch or evidence of malicious command execution."
+      },
+      {
+        "id": "filesystem:scripts/validate.sh:16:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The relative segments are fixed constants used to locate the project root or bundled templates from the script directory. No user input controls these segments."
+      },
+      {
+        "id": "blocker:scripts/validate.sh:79:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:43:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:77:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:93:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:94:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:95:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:97:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:100:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:101:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:102:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:108:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:114:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:134:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:158:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:165:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:189:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:190:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:191:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:192:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:198:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This is Markdown code fencing or inline code in documentation, not Ruby backtick syntax. No shell execution occurs at this line."
+      },
+      {
+        "id": "filesystem:SKILL.md:27:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:SKILL.md:30:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:SKILL.md:36:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "blocker:SKILL.md:200:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:templates/layout-section.tsx.template:33:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:157:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:268:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:339:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:568:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation explains the expected .superdesign project-relative path. It does not access the directory or expose hidden data."
+      },
+      {
+        "id": "filesystem:USER-GUIDE.md:581:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "This documentation references a script installed in the expected .claude skill directory. The line itself does not read or discover hidden data."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:253:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:256:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:258:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:346:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:356:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:372:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:439:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:615:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:619:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:625:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:630:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line discusses validation of glassmorphism CSS classes. It does not enumerate files, processes, hardware, or system configuration."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:748:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:755:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      },
+      {
+        "id": "blocker:USER-GUIDE.md:765:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line uses grid as a CSS layout term in an HTML or React example. It does not inspect the host system."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unvalidated Scaffold Paths Permit Arbitrary File Creation",
+        "description": "Component and module arguments are inserted into output paths without allowlist validation. Traversal values can create TypeScript files outside the intended components directory.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 25,
+            "line_end": 42
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 61,
+            "line_end": 98
+          }
+        ],
+        "confidence": 0.97,
+        "confidence_reasoning": "The component name flows directly into OUTPUT_FILE, and no format or canonical containment check occurs before the redirect writes the file."
+      },
+      {
+        "title": "Input Paths Are Not Restricted to Project Directories",
+        "description": "The extraction and validation scripts accept paths without canonical containment checks. They can inspect readable files outside expected prototype and source directories.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 25,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 25,
+            "line_end": 47
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "Both scripts use caller-controlled paths in file tests and parsing commands without resolving and checking an approved root."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Unvalidated Scaffold Paths Permit Arbitrary File Creation",
+        "description": "Component and module arguments are inserted into output paths without allowlist validation. Traversal values can create TypeScript files outside the intended components directory.",
+        "locations": [
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 25,
+            "line_end": 42
+          },
+          {
+            "file": "scripts/scaffold-component.sh",
+            "line_start": 61,
+            "line_end": 98
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.97,
+        "confidence_reasoning": "The component name flows directly into OUTPUT_FILE, and no format or canonical containment check occurs before the redirect writes the file."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Input Paths Are Not Restricted to Project Directories",
+        "description": "The extraction and validation scripts accept paths without canonical containment checks. They can inspect readable files outside expected prototype and source directories.",
+        "locations": [
+          {
+            "file": "scripts/extract-structure.sh",
+            "line_start": 25,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/validate.sh",
+            "line_start": 25,
+            "line_end": 47
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "Both scripts use caller-controlled paths in file tests and parsing commands without resolving and checking an approved root."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 13,
+    "total_lines": 2857,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T06:06:49.642Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Convert HTML Prototypes into React Components",
+    "value_statement": "Hand-converting prototypes creates repetitive mapping and setup work. This skill analyzes HTML, guides component choices, scaffolds React files, and checks local conventions.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "HTML to React",
+      "React component generator",
+      "TypeScript scaffolding",
+      "shadcn/ui mapping",
+      "glassmorphism",
+      "frontend validation"
+    ],
+    "actual_capabilities": [
+      "Extracts component names, glassmorphism classes, interactive elements, and basic layout patterns from local HTML prototypes.",
+      "Guides shadcn/ui component mapping and module placement decisions.",
+      "Scaffolds React TypeScript components from three bundled templates.",
+      "Checks file length, interface prefixes, any usage, class names, and relative import counts.",
+      "Provides references for glassmorphism classes, shadcn/ui choices, and recurring layouts."
+    ],
+    "limitations": [
+      "Assumes the DevPrep AI frontend structure, module paths, aliases, and glassmorphism conventions.",
+      "The target module must already exist, and developers must implement business logic manually.",
+      "The props argument is documented but is not applied by the scaffolding script.",
+      "Validation uses text matching and does not run TypeScript, tests, accessibility checks, visual checks, or complexity analysis."
+    ],
+    "use_cases": [
+      {
+        "title": "Implement a Prototype",
+        "description": "Turn an approved HTML prototype into a typed component scaffold with mapped controls and styling classes.",
+        "target_user": "Frontend developer"
+      },
+      {
+        "title": "Standardize Design Components",
+        "description": "Map repeated prototype patterns to shared shadcn/ui components and approved glassmorphism utilities.",
+        "target_user": "Design systems engineer"
+      },
+      {
+        "title": "Review Component Conventions",
+        "description": "Check generated or edited components for selected size, typing, styling, and import conventions.",
+        "target_user": "Frontend technical lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Analyze a Prototype",
+        "prompt": "Analyze [HTML path]. Summarize its component name, interactive elements, layout pattern, and glassmorphism classes. Do not create files yet.",
+        "scenario": "Beginner analysis before implementation"
+      },
+      {
+        "title": "Map Components",
+        "prompt": "Map [HTML path] to shadcn/ui components and approved glassmorphism classes. Ask me to confirm the component name and target module.",
+        "scenario": "Guided design-system mapping"
+      },
+      {
+        "title": "Scaffold a Component",
+        "prompt": "Scaffold [ComponentName] in [module] with the [template] template. Show the target path and ask before overwriting any existing file.",
+        "scenario": "Controlled component generation"
+      },
+      {
+        "title": "Implement and Validate",
+        "prompt": "Convert [HTML path] into a production React component for [module]. Preserve behavior, implement typed props, validate it, and report remaining manual work.",
+        "scenario": "Advanced end-to-end implementation"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Analyze the hints panel prototype without creating files.",
+        "output": "A structure summary identifies the proposed component name, buttons, layout, styling classes, and a suitable interactive-card template."
+      },
+      {
+        "input": "Scaffold HintsPanel in the practice module.",
+        "output": "A typed component file is generated from the selected template, with shared imports, styling classes, and TODO markers for application logic."
+      },
+      {
+        "input": "Validate the completed HintsPanel component.",
+        "output": [
+          "Reports the file length and interface naming result.",
+          "Flags any usage, unsupported glassmorphism classes, and excessive relative imports.",
+          "Returns a pass, warning, or failure summary."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Review the extracted structure and confirm the component name, module, and shared controls before scaffolding.",
+      "Use simple allowlisted identifiers and verify every generated output path before approving file creation.",
+      "Run TypeScript, tests, accessibility checks, and visual review after the bundled validator."
+    ],
+    "anti_patterns": [
+      "Do not pass absolute paths or traversal segments to any bundled script.",
+      "Do not treat generated TODOs as completed business logic.",
+      "Do not rely on text-based validation as proof of production readiness."
+    ],
+    "faq": [
+      {
+        "question": "Which prototypes does this skill support?",
+        "answer": "It targets local HTML prototypes using the DevPrep AI glassmorphism and frontend conventions."
+      },
+      {
+        "question": "Does it fully convert HTML behavior?",
+        "answer": "No. It extracts structure and scaffolds a component, while developers implement state, handlers, data access, and business rules."
+      },
+      {
+        "question": "Which React templates are included?",
+        "answer": "It includes interactive-card, display-card, and layout-section templates."
+      },
+      {
+        "question": "Does validation run the TypeScript compiler or tests?",
+        "answer": "No. The validator uses shell text checks for selected conventions."
+      },
+      {
+        "question": "Can it create a missing module?",
+        "answer": "No. The target module must already exist before component scaffolding."
+      },
+      {
+        "question": "Is it safe to use untrusted path values?",
+        "answer": "No. Use project-relative paths and review resolved inputs and outputs until the scripts add containment checks."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "examples",
+      "type": "dir",
+      "path": "examples",
+      "children": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "path": "examples/README.md",
+          "lines": 125
+        }
+      ]
+    },
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "common-patterns.md",
+          "type": "file",
+          "path": "references/common-patterns.md",
+          "lines": 473
+        },
+        {
+          "name": "glassmorphism-mapping.md",
+          "type": "file",
+          "path": "references/glassmorphism-mapping.md",
+          "lines": 156
+        },
+        {
+          "name": "shadcn-component-guide.md",
+          "type": "file",
+          "path": "references/shadcn-component-guide.md",
+          "lines": 319
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "extract-structure.sh",
+          "type": "file",
+          "path": "scripts/extract-structure.sh",
+          "lines": 89
+        },
+        {
+          "name": "scaffold-component.sh",
+          "type": "file",
+          "path": "scripts/scaffold-component.sh",
+          "lines": 111
+        },
+        {
+          "name": "validate.sh",
+          "type": "file",
+          "path": "scripts/validate.sh",
+          "lines": 111
+        }
+      ]
+    },
+    {
+      "name": "templates",
+      "type": "dir",
+      "path": "templates",
+      "children": [
+        {
+          "name": "display-card.tsx.template",
+          "type": "file",
+          "path": "templates/display-card.tsx.template",
+          "lines": 42
+        },
+        {
+          "name": "interactive-card.tsx.template",
+          "type": "file",
+          "path": "templates/interactive-card.tsx.template",
+          "lines": 50
+        },
+        {
+          "name": "layout-section.tsx.template",
+          "type": "file",
+          "path": "templates/layout-section.tsx.template",
+          "lines": 40
+        }
+      ]
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "path": "README.md",
+      "lines": 296
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 208
+    },
+    {
+      "name": "USER-GUIDE.md",
+      "type": "file",
+      "path": "USER-GUIDE.md",
+      "lines": 837
+    }
+  ]
+}

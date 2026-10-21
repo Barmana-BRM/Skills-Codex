@@ -1,0 +1,669 @@
+---
+name: codex-windows-fast-patch
+description: Reapply and repair Windows Codex Desktop after Store upgrades, including custom provider models hidden by Statsig available_models filtering, the dependent blue-purple Power slider and its Ultra toggle, Fast Mode request/UI gates, locale i18n, plugin UI gates, Chrome/browser_use gates, Goal command gates, Windows Computer Use availability gates and plugin/runtime repair, phone remote-control pairing under third-party/API-key main app usage, Desktop dynamicTools/inputSchema thread-start schema drift, local conversation visibility recovery after model_provider switches, restored-conversation missing-cwd continuation repair, ASAR integrity repair, signing/installing patched MSIX packages, SDK cleanup, Fast Mode wire verification, local plugin marketplace registration, and optional custom model_instructions_file setup (the bundled system prompt, also called 听话水).
+---
+
+# Codex Windows Fast Patch
+
+Use this skill when the user says Codex Desktop was upgraded and the Fast Mode / Plugins / Goal patch disappeared, asks to repatch Codex on Windows, asks to verify whether Fast Mode is really being sent, asks to restore/register the local plugin marketplace, asks to enable Chrome browser use or Windows Computer Use in Codex Desktop, or asks to enable/repair phone remote control while keeping third-party/API-key model access. Also use it when a custom provider or `/v1/models` exposes a new model but Desktop still hides it, when GPT-5.6 Sol/Terra/Luna are missing from the model picker, when the compact blue-purple Power slider falls back to the legacy Model / Reasoning / Speed menu because Statsig `available_models` filtering removed the required model combinations, or when the "Ultra in model picker slider" setting is visible but disabled because a third-party provider cannot load ChatGPT account user settings. Also use it when the language/locale setting reverts after restart, browser or plugin entries are hidden by availability gates, the Computer Control settings page shows "Any App" / "任意应用" as disabled by organization or unavailable in the current region, a Computer Use task reports native pipe, bundled plugin cache, helper path, package import, or runtime initialization errors, a Computer Use conversation loses `cua.getApp` / `cua.listApps` while `cua.getState()` and the native pipe still work and the symptom returns after every Desktop restart, a Computer Use call fails with `Native app bindings are unavailable for windows.` or times out on an in-app-browser tab while `cua.computer.list_windows()` still works, phone remote-control QR pairing spins/fails, post-pairing phone-created turns hit the wrong model API endpoint, Desktop new-chat/thread start fails with `missing field inputSchema`, local conversations disappear after switching `model_provider` / API account, restored conversations are visible but cannot continue because the current working directory is missing, or the user explicitly asks to configure the bundled custom `model_instructions_file` prompt asset.
+
+## Platform Compatibility
+
+This skill is Windows-only. It depends on the Windows Store/MSIX package layout, PowerShell, `Get-AppxPackage`, `makeappx.exe`, `signtool.exe`, Windows user environment variables, and Windows Computer Use helper paths.
+
+Do not run this skill on macOS. A macOS adaptation needs a separate workflow for the Codex `.app` bundle, ASAR extraction and repacking, macOS code signing or quarantine handling, shell scripts, and macOS-specific Computer Use availability.
+
+## Skill Root
+
+Every command in this document refers to the skill directory as `$SkillRoot`. Resolve it once per session before running anything else. This skill does not care which harness loaded it, so the probe matches any agent home that follows the `~/<agent-home>/skills/<skill-name>` layout:
+
+```powershell
+$SkillRoot = $env:CODEX_WIN_FAST_PATCH_SKILL_ROOT
+if (-not $SkillRoot) {
+  $SkillRoot = (Get-ChildItem -Force -Path "$env:USERPROFILE\.*\skills\codex-windows-fast-patch\SKILL.md" -ErrorAction SilentlyContinue |
+                Select-Object -First 1).Directory.FullName
+}
+if (-not $SkillRoot) {
+  throw 'skill root not found; set CODEX_WIN_FAST_PATCH_SKILL_ROOT to the directory that holds this SKILL.md'
+}
+```
+
+If the agent already knows the directory it loaded this `SKILL.md` from, assign that path directly instead of probing. When more than one harness has the skill installed, set `CODEX_WIN_FAST_PATCH_SKILL_ROOT` to pick one explicitly; the probe otherwise takes the first match.
+
+## Self-Update Preflight
+
+The skill directory is a git working tree, so updating is `git pull`. Run the cheap check first and skip the rest when nothing changed:
+
+```powershell
+git -C "$SkillRoot" fetch --quiet origin
+git -C "$SkillRoot" rev-list --count 'HEAD..@{u}'
+```
+
+Keep `'HEAD..@{u}'` single-quoted. PowerShell parses a bare `@{u}` as a hashtable literal and fails before git runs at all. `HEAD..origin/HEAD` is equivalent here and needs no quoting.
+
+A count of `0` means the skill is current: skip the update and start the task. For a non-zero count, read what actually changed, then pull, then reload this `SKILL.md`:
+
+```powershell
+git -C "$SkillRoot" log --oneline 'HEAD..@{u}'
+git -C "$SkillRoot" pull --ff-only
+```
+
+If `@{u}` reports no upstream configured, substitute the tracking ref explicitly, for example `HEAD..origin/main`.
+
+Rules:
+
+- Never block the repair on the update. When `fetch` fails because the network is unavailable, GitHub is unreachable, or a proxy is down, continue with the installed version and state in the conclusion that the update was skipped.
+- Local edits are preserved by git, not silently discarded. Inspect with `git -C "$SkillRoot" status --short` and `git -C "$SkillRoot" diff` before pulling. Uncommitted edits to files the update does not touch survive `git pull --ff-only` untouched. Uncommitted edits to a file the update also changes make git refuse the pull, name the blocking file, and leave the edit on disk; recover with `git stash`, `git pull --ff-only`, `git stash pop`, and expect `stash pop` to leave conflict markers when the local edit and the upstream change touch the same lines. Local commits make `--ff-only` refuse because the branches diverged; `git pull --rebase` replays them on top of the update. Never use `git reset --hard` or `git checkout -- .` to force a pull through, because local helper profiles and repair guards live in those edits.
+- A fork is just a different remote. `git -C "$SkillRoot" remote set-url origin <fork-url>` pins the update source, and no extra configuration file is involved.
+- Roll back with git. `git -C "$SkillRoot" log --oneline -10`, then `git -C "$SkillRoot" checkout <sha>` returns to any earlier version.
+- When a patch step fails, check for updates again before concluding. A missing helper profile, a pattern that no longer matches, or an unrecognized Desktop build is exactly the case where upstream may already carry the fix, so repeat the fetch and log check at that point even if it already ran at the start of the task.
+- If `$SkillRoot` has no `.git` directory, the copy was installed by copying files or through a harness plugin mechanism and can never self-update. Report that, keep working with the installed version, and suggest reinstalling with `git clone` so future updates work.
+
+If the normal workflow does not explain a restriction, plugin gate, Computer Use failure, browser_use failure, or Fast Mode failure, read `references/restriction-debug-cases.md` before editing scripts or repatching.
+For browser AX `Decompression failed`, use the AX asset case in that reference. For missing CUA child proxy variables, use its read-only process probe before selecting the opt-in `-OnlyNodeReplProxyEnv` or `-OnlyComputerUseSurfaceAndProxyEnv` repair; missing root-process proxy settings alone do not justify a package patch.
+If the task is phone remote control, QR pairing, mobile setup, isolated remote OAuth, remote-control WebSocket, or post-pairing API endpoint diagnosis, read `references/remote-control-debug-cases.md` before editing scripts or repatching.
+
+## Config Backup Rule
+
+Before any action that can modify, regenerate, or overwrite `$env:USERPROFILE\.codex\config.toml`, create one timestamped backup of the current file for the task. This applies whether the agent uses bundled scripts, writes TOML manually, runs another helper, registers a marketplace, changes MCP servers, or repairs Computer Use.
+
+The bundled scripts already back up an existing `config.toml` once per script run before their first write. If not using those scripts, do the backup explicitly before touching the file:
+
+```powershell
+$config = Join-Path $env:USERPROFILE '.codex\config.toml'
+if (Test-Path -LiteralPath $config -PathType Leaf) {
+  $backupDir = Join-Path (Split-Path -Parent $config) 'backups\config'
+  New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
+  $backup = Join-Path $backupDir ('config.toml.' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '.manual.bak')
+  Copy-Item -LiteralPath $config -Destination $backup -Force
+  Write-Host "config.toml backup before overwrite: $backup"
+}
+```
+
+Do not proceed with a config write if the backup of an existing config fails. The shared TOML writer uses a basic string when a value contains an apostrophe or control character; doubled apostrophes are not valid TOML escaping. Validate the candidate content before replacing the config when `tomllib` is available, and validate again after the complete repair. Windows PowerShell 5.1 can prefix native stdin with a UTF-8 BOM even with a no-BOM `$OutputEncoding`; decode validator input with `utf-8-sig` to avoid falsely rejecting valid content. This transport handling does not change the no-BOM file writer or the malformed-TOML rejection. A missing parser is a tooling limitation, not evidence of invalid configuration.
+
+## Workflow Selection
+
+Before choosing the full MSIX repack path, identify whether the current failure is a Desktop bundle gate or a local plugin/runtime repair. Do not treat a vague "Chrome/Computer Use is unavailable" report as enough evidence to run the full repatch.
+
+- Use the Model Experience workflow for Fast Mode request/UI failures, new models hidden from the Desktop picker, the compact Power slider falling back to the legacy picker, or its Ultra setting being disabled under a custom provider. These symptoms share the same service-tier/model-picker area. Run `scripts\patch_codex_fast_mode_windows_msix.ps1 -OnlyModelExperience -DryRun` first; it checks the Fast request gate, Fast UI gate, model visibility filter, Electron Power slider `harborEnabled` gate, and Ultra setting persistence independently, then repairs only the broken parts in one MSIX repack. The Ultra fallback preserves the normal ChatGPT account API path and uses local `show-ultra-in-model-picker-slider` config only when ChatGPT user settings cannot load. `-OnlyCustomModels` remains a compatibility alias. Merge missing model metadata into `models_cache.json` only when read-only inspection proves the cache entry is absent; back up the cache first. The same area also covers the model picker offering only the Fast speed tier when the official catalog adds a second `ultrafast` tier for `gpt-5.6-sol` and a custom `model_catalog_json` predates it; that is a config-layer catalog backfill, not an ASAR repair — see the missing Ultrafast tier case in `references/restriction-debug-cases.md`.
+- Use the full repatch workflow for locale, plugin UI gates, browser_use Desktop gates, Goal gates, ASAR integrity, settings/UI availability gates, or when Model Experience repair is required together with those features.
+- Before a full repatch after a Store update, compare the current-user and `Get-AppxPackage -AllUsers` results. The patcher selects the highest-version valid current-user or SYSTEM-Staged package, plus running-process candidates; it uses WindowsApps-directory candidates only if the all-user query is unavailable. This prevents an older user-installed package from hiding a newer SYSTEM-Staged build without selecting a package registered only to another user. Check the `selected Codex app` log before proceeding. Use `-AppPath` only when an explicit source override is required.
+- Use the Computer Use Only workflow first when evidence points to a local plugin/runtime problem: `codex plugin list` marketplace errors, missing `.agents\plugins\marketplace.json`, missing or partial `openai-bundled` plugin files, `bundled_plugins_marketplace_resolve_failed`, `EBUSY` on bundled plugin files, native pipe unavailable, `missing-helper-path`, stale Chrome native messaging host paths, bundled plugin cache drift, Chrome/browser cache link drift, stale `SKY_CUA_NATIVE_PIPE` config, `@oai/sky` import errors, or `setupComputerUseRuntime` import failure. This class does not require an MSIX uninstall/reinstall unless a later check also proves a Desktop gate is still closed.
+- If a Store update breaks an already-configured MCP because its `command` points into a removed `%LOCALAPPDATA%\OpenAI\Codex\runtimes\cua_node\<old-runtime-id>` directory, use the retired CUA Node MCP case in `references/restriction-debug-cases.md`. This is a targeted `config.toml` repair, not evidence for a broad MSIX repatch or permission to install additional MCP servers.
+- If app/window enumeration works but screenshots fail with `SetIsBorderRequired failed` / `0x80004002` or `FrameArrived timed out` on Windows 10, treat it as a native CUA screenshot-helper compatibility failure, not a cache path or Desktop gate. A subsequent `coordinate input geometry is unavailable` can follow the failed capture; repair and verify capture before retesting coordinate input. Read `references/win10-computer-use-screenshot-backend.md`, then use `scripts\patch-computer-use-helper-win10.ps1` only when its read-only status reports the exact supported original or patched hash. Unknown hashes require fresh analysis and must remain untouched.
+- If `sky.list_windows()` succeeds but a later independent `sky.get_window_state()` or `sky.activate_window()` call fails with `node_repl exec context not found`, read the cross-call approval case in `references/restriction-debug-cases.md`. On the exact documented `@oai/sky 0.6.2` helper transport, the persistent helper's approval callback can inherit the previous JavaScript call's `AsyncLocalStorage` store. `install-computer-use-local.ps1 -VerifyOnly` applies the hash-guarded request-context patch; `-StrictVerifyOnly` only verifies it. Reset the current JavaScript kernel after repair, then prove the fix with real captures in later independent calls.
+- Use the Custom Provider Tool Exposure triage when MCP tools or Computer Use are unavailable only under a custom `model_provider`: the agent reports zero MCP tool names, while the same machine and config expose every MCP tool with `-c model_provider=openai`. Capture the real provider request body through a local logging reverse proxy and check the `/models` response shape before touching Desktop: a gateway that answers the OpenAI list-models shape (`{"data":[...]}`) fails catalog decoding (`missing field \`models\``) and forces fallback model metadata with `supports_search_tool: false`, pinning the wire shape to `namespace` entries; both the `namespace` and `tool_search` shapes were ineffective despite HTTP 200 on the observed chain - an outcome that does not by itself distinguish gateway filtering from upstream or model-side ignoring. Treat the dropping hop (gateway filter versus model-side rejection of these shapes) as unverified unless a controlled raw-request probe or a gateway inbound/outbound comparison proves it, and never use the model's verbal tool report as evidence. The documented MSIX repatch and Computer Use local repair do not target this failure class — see the custom provider chain case in `references/restriction-debug-cases.md`.
+- Use the CUA surface lock case when `cua.getState()` works but `Object.keys(cua)` has no `computer`/`getApp`/`listApps`/`listWindows` while `install-computer-use-local.ps1 -StrictVerifyOnly` passes. Inspect the plugin layout first: a script-based `unified-computer-use/scripts/launch.mjs` can use `repair-cua-surface-lock.ps1`; a descriptor-only 26.908+ plugin has no such target and requires the Desktop `-OnlyComputerUseSurface` ASAR workflow after a successful DryRun. Editing the materialized `.mcp.json` is temporary because Desktop reconcile can rewrite it. See both surface cases in `references/restriction-debug-cases.md`.
+- Use the Windows app-binding case only when the installed `@oai/cua` runtime actually throws `Native app bindings are unavailable for windows.` after the surface is exposed. The recorded legacy runtime had that boundary; `@oai/cua` 0.2.5 instead provides Windows `cua.listWindows()` and `cua.getApp({ windowId })`. Check the installed runtime and its injected documentation before choosing the legacy repair, and verify native capture in a fresh conversation.
+- Use the config-rewriter case when a provider switcher rewrites `config.toml` and `codex mcp list` loses `cua_repl`: restore the missing `[plugins."unified-computer-use@openai-bundled"]` table from a backup, preserving current provider settings. Evaluate feature keys with the running CLI's `codex features list` before restoring them. On CLI 0.155.0-alpha.16.4, `computer_use` is stable and on by default, `js_repl` is removed, and native CUA works with no explicit `computer_use` entry and `js_repl = false`; those values alone are not a defect. See the historical config-rewriter case in `references/restriction-debug-cases.md`.
+- Use the Phone Remote Control workflow when the user needs mobile pairing/control, the Connections page hides the phone setup card, the QR dialog spins, remote-control setup jumps to ChatGPT auth, the Allow dialog fails, the phone says the Codex environment version expired, or phone-created turns reach Desktop but send model requests to the wrong API endpoint.
+- Use the Missing inputSchema decision workflow when Codex Desktop cannot create a new conversation or local task and the newest Desktop log reports `method=thread/start` with the phrase `missing field inputSchema`. Do not assume this is always MCP. First compare CLI/app-server smoke tests against Desktop logs and inspect whether Desktop is sending non-null app dynamic tools. If the failure follows a suspect MCP server, isolate MCP. If CLI thread start succeeds while Desktop UI fails and extracted ASAR has `webview\assets\app-server-dynamic-tools-*.js` returning a namespace-wrapped `dynamicTools` object, use the Dynamic Tools Schema workflow. Do not run Phone Remote Control or Computer Use repair for this symptom unless separate evidence points there.
+- Use the Provider History Sync workflow when old conversations disappear from the official Desktop sidebar after the user changes `model_provider`, API account, or provider config, but local `sessions`, `archived_sessions`, or `state_5.sqlite` data still exists. Also use it when the conversations reappear but opening/continuing one fails with `当前工作目录缺失`, `current working directory missing`, or `invalid codex request` caused by a missing historical `cwd`. This workflow is data-layer repair; it does not require third-party recovery tools, does not patch ASAR, and must not modify `config.toml`.
+- Use the targeted bundled marketplace repair when the newest Desktop logs show fewer descriptors than the current package marketplace, or show `not_in_bundled_marketplace_plugin_names` removing a plugin the user had already installed. Descriptor presence means a plugin is available; it does not authorize installing or enabling optional plugins such as `sites`, `latex`, `deep-research`, or `visualize`. This should not trigger a broad repatch or Phone Remote Control workflow. Inspect the complete missing-descriptor predicates and platform support first. The recorded `26.825.6671.0` macOS-only unified CUA and account-authenticated `user-writing` gaps are expected; preserve those boundaries. Supported `26.1007` Code Review and unified CUA discovery predicates instead use the newer optional-entry case in `references/restriction-debug-cases.md`, with `installWhenMissing:false`. Unknown account predicates remain unsupported.
+- If the user asks for Phone Remote Control and ordinary Desktop features in the same repair, patch Phone Remote Control first, then verify Fast Mode/browser/Chrome/Computer Use. If the remote-control MSIX install disturbs Computer Use or Chrome native-host state, immediately run the Computer Use Only workflow and re-run `-StrictVerifyOnly`.
+- Do not infer that a new `resources\codex.exe` PE file means `app.asar` is gone or that Computer Use needs binary patching. Inspect the current package resources first. If `app.asar` still exists and the symptom is a plugin/runtime import or cache failure, run `scripts\install-computer-use-local.ps1` before considering MSIX or binary changes.
+- After a Computer Use-only repair, always run `scripts\install-computer-use-local.ps1 -StrictVerifyOnly`. Legacy layouts pass with `client import ok` plus `helper transport ok`; descriptor-only layouts pass with `runtime import ok` after importing the official `sky` export and calling `list_windows`. For a recognized cross-call request-context profile, strict verification must also report the exact patched helper-transport hash. These checks still do not replace a real screenshot in a later JavaScript call.
+- Do not put Phone Remote Control into the default full repatch path unless the user asked for it. It is an opt-in workflow because it can require isolated remote-control OAuth, ASAR changes, a native app-server replacement binary, SQLite enrollment cleanup, and post-pairing API endpoint diagnosis.
+- If evidence is mixed, use the lowest-disruption path first: run read-only triage, then `scripts\install-computer-use-local.ps1 -VerifyOnly` for local plugin evidence, restart Codex Desktop only if needed, and escalate to MSIX only when logs or extracted ASAR checks still show a closed gate.
+
+The normal `scripts\repatch-codex-windows.ps1` preflight recognizes one package-gated Computer Use case: `installed app.asar does not preserve external NODE_REPL_TRUSTED_CODE_PATHS across Desktop config regeneration`. This means the installed app must be repatched before external D: marketplace/cache roots can survive Desktop config regeneration. For this exact message only, the wrapper records the fallback and continues into its MSIX dry run or install; unrelated Computer Use failures still stop the workflow. After installation, the wrapper runs the normal Computer Use refresh and strict verification. During a dry run, post-dry-run local verification is skipped only for this recognized case because the currently installed package is intentionally still unpatched.
+
+When Chrome session/tab commands or the browser portion of `cua.getState()` report `Codex auth token is unavailable` under an explicitly non-OpenAI-auth custom provider, read the Chrome custom-provider request-header case in `references/restriction-debug-cases.md`. The supported local service overlay keeps agent request headers ON; it does not forge a login, change provider/auth files, disable other policies, or modify trusted browser-client bytes. The local installer reapplies the hash-guarded overlay after cache refresh. Both repair and strict verification include browser/chrome plugin copies and the current `cua_node` runtime's `@oai/browser-desktop/service`, each checked against its own installed-package source. Unknown official source hashes explicitly skip only this overlay without claiming the auth error is repaired; missing current runtime services and unknown, mixed-version, or partial files under a supported source fail before any overlay write. After applying it, reset only the current JavaScript kernel and verify real Chrome navigation and input; do not reinstall Desktop for this error.
+
+## External Executor For Desktop-Restarting Repairs
+
+MSIX deployment must be an in-place update, never an uninstall followed by an install. All three patchers increment the package revision and use `scripts/lib/msix-safe-install.ps1`. It checks the manifest, publisher, architecture, signature, version, administrator requirement for packaged services, and installer ancestry before deployment. Permission or same-version failures must stop without closing or removing the working app. Do not restore a `Remove-AppxPackage` fallback to work around a failed update.
+
+`Start-Process` from Desktop can still belong to Desktop's job/process tree and terminate with it. Verify an external executor's ancestry and user session before releasing installation. Packages declaring `windows.service`, `packagedServices`, or `localSystemServices` require an elevated executor; a valid signature does not establish deployment permission. Obtain normal Windows UAC consent and verify the elevated token before any app shutdown. Keep a separately signed recovery package containing the original program files, with a revision higher than the intended update, until real launch and runtime acceptance pass. The normal patcher entrypoints do not create that recovery package automatically; `Invoke-RecoverableMsixInstall` is available for an external executor that has prepared it and supplies real launch validation. See the deployment failure case in `references/restriction-debug-cases.md`.
+
+The current Codex Desktop conversation may initiate, diagnose, prepare, and coordinate its own repair. The actual deployment that closes or updates Desktop must run in an independent installer whose ancestry and user session have been verified to survive Desktop shutdown. This is an installer-lifetime requirement, not a requirement for the user to leave the current conversation. External Windows PowerShell or the VS Code Codex extension are also valid starting points.
+
+Before releasing installation, explain which requested fixes require a client reinstall and that the window may close and interrupt the conversation. Back up state and save a handoff containing the validated artifact and backup paths, installer PID/status-file location, and remaining acceptance steps. Tell the user to reopen Codex after installation and send "continue" in the original repair conversation. On resume, inspect the existing installer and saved result first: wait if it is still running, diagnose if it failed, or continue acceptance and cleanup if installation succeeded. Do not start a duplicate installer or repeat a completed deployment merely because the conversation was interrupted. A reported installation error or an app still missing/unstartable after completion is not normal waiting.
+
+The target state is the Desktop Codex home: normally `$env:USERPROFILE\.codex`. Do not use an isolated CLI entrypoint for Desktop repair decisions; if that wrapper sets `CODEX_HOME` to `$env:USERPROFILE\.codex-cli` or another isolated directory, it is not the Desktop plugin, marketplace, MCP, remote-control, or login state.
+
+Before starting from VS Code Codex or external PowerShell, confirm no User-level or Machine-level `CODEX_HOME` is set. Do not set global `CODEX_HOME`, do not copy `.codex` into `.codex-cli`, and do not expose or commit `auth.json`, API keys, OAuth tokens, MCP credentials, browser profiles, or local credential stores. Start with a Desktop-state backup, run read-only package/config/log checks, then run the relevant `-DryRun`. Only use `-Install`, full `repatch-codex-windows.ps1`, or targeted `*-windows-msix.ps1 -Install -Launch -InstallPrerequisites` after the dry run finds and validates the intended targets.
+
+Use the background verification below after relaunch. Actual native screenshot/input testing is an optional, separately authorized diagnostic; its absence must not block completion of an ordinary repair. An external executor can use the official runtime for read-only enumeration, but it cannot replace Desktop's trusted Chrome/browser channel. Report each layer according to the evidence actually collected. For explicitly requested native interaction diagnostics outside Desktop, see the external-executor case in `references/restriction-debug-cases.md`.
+
+## Default Verification Without Desktop Input
+
+Ordinary repair, upgrade, and "verify all features" requests use background checks by default. Do not open Calculator, Notepad, Task Manager, or another test app; activate, restore, move, or close native windows; or send clicks, scrolling, drags, or keyboard input just to demonstrate that the repair worked. Do not substitute another app or an external-process input driver for the same intrusive test.
+
+- Run `scripts\install-computer-use-local.ps1 -StrictVerifyOnly -VerifyAllBundledPluginsAvailable`. It checks current package/cache/runtime contracts, browser AX assets, native-host configuration, trusted paths, and the real helper's `list_windows` response without selecting an app or injecting input.
+- When checking a fresh Desktop CUA surface is relevant, use its documented API to inspect available members and enumerate windows/apps only. Report counts and API availability without exposing unrelated window titles. Enumeration success establishes transport availability; an empty window list alone does not prove a failure.
+- Continue package integrity, plugin discovery, sandbox, and Fast request-wire checks as appropriate. Requested browser checks can use temporary background tabs through Browser Use; browser input success does not establish native Windows input success.
+- Report native results as `runtime/transport verified; native screenshot/input not exercised` unless those operations were actually tested. Do not automatically escalate to an interactive test to turn this limitation into a broader success claim.
+
+If a screenshot or input defect specifically needs reproduction, first explain the intended window, actions, and possible focus changes, then obtain explicit authorization for that diagnostic. An existing explicit request to perform those same actions is sufficient; do not ask again. Prefer a disposable VM/test desktop or a user-chosen idle period when available, and never assume that a hidden/off-screen window makes Windows input injection non-disruptive. Optional live checks described elsewhere in this skill and its references follow this boundary.
+
+If the user presses Escape, stops Computer Use, closes the test window, or resumes work in the target, stop the interactive test and report its last completed step. Do not automatically reopen the test app, retry input, or switch to another control mechanism. Background checks and the repair report can still be completed without further desktop input.
+
+For Windows 10 screenshot issues investigated from a Windows 11 host, follow `references/win10-validation-on-win11.md`. `scripts\diagnose-win10-helper-capture.ps1` is read-only by default; `-BuildTargetOnly` compiles a dedicated target without launching it. An explicitly authorized `-RunCapture` uses a Windows 10 guest/test console, isolated helper copies and disposable Codex homes. `-TestInput` separately opts into clicks/text confined to that target. The script rejects Windows 11/Server capture and never installs a patch into the active helper. Compilation, candidate hashes and diagnostic guard tests do not establish Windows 10 capture acceptance.
+
+## Default Workflow
+
+1. If the task may modify `config.toml`, skills, marketplaces, or MCP server settings, create a state snapshot first:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\manage-codex-backups.ps1" -Action Backup
+```
+
+2. Inspect current-user and all-user package status so a newer SYSTEM-Staged Store build is visible:
+
+```powershell
+Get-AppxPackage -Name OpenAI.Codex | Select-Object Name,PackageFullName,Version,SignatureKind,InstallLocation
+Get-AppxPackage -Name OpenAI.Codex -AllUsers |
+  Select-Object Name,PackageFullName,Version,SignatureKind,InstallLocation,PackageUserInformation
+```
+
+The MSIX patcher automatically chooses the highest-version candidate whose `app` layout is complete, even when the current-user query returns an older installed build. Confirm its `selected Codex app` and `source package` log lines before installation. An explicit `-AppPath` remains authoritative.
+
+3. Run read-only feature triage before any package reinstall. Capture the decision evidence, especially for Chrome/Computer Use:
+
+```powershell
+codex plugin list
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-computer-use-local.ps1" -StrictVerifyOnly
+```
+
+If `-StrictVerifyOnly` fails on a missing marketplace manifest, missing plugin files, stale `latest` link, stale Chrome native messaging manifest path, `allowed_origins`, registry value, or `extension-host-config.json` runtime path, missing helper path, or `@oai/sky` import/runtime issue, run the Computer Use Only repair first:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-computer-use-local.ps1" -VerifyOnly
+```
+
+This local repair may update config, plugin cache, Chrome native host paths and origins, user environment, and helper runtime files, but it does not uninstall or reinstall the Codex MSIX package. It invokes the current Chrome plugin's official `scripts\installManifest.mjs` with a user-local Codex CLI whose hash matches the installed package and with matching current `cua_node` `node.exe` / `node_repl.exe` paths. That official installer writes the outer native-host manifest, registry value, and required `extension-host-config.json`. The repair also synchronizes the current schema-2 app-server entry into both `%LOCALAPPDATA%\OpenAI\Codex\chrome-native-hosts-v2.json` and `$env:USERPROFILE\.codex\chrome-native-hosts-v2.json` using the current plugin's NUL-separated SHA-256 identity contract. Strict verification requires the exact current origin set from `scripts\extension-ids.json`, a stable current-version Chrome cache, existing current runtime paths in the host config, and a valid current entry in both v2 state files. On `26.814`-style builds, that entry must include both `browserClientPath` and `browserServicePath` in the same stable cache; omitting the service path passes byte checks but fails the trusted RPC dependency gate. When the stable cache resolves through a junction outside `CODEX_HOME`, the repair also writes its physical marketplace/cache roots to the user-level `NODE_REPL_TRUSTED_CODE_PATHS`. A full MSIX patch is still required so Desktop appends that parent environment value when regenerating the Node REPL config; strict verification requires `CODEX_NODE_REPL_TRUSTED_PATHS_V1` in the installed ASAR for this external-root layout.
+
+The repair must preserve the installed package's `plugins\chrome\scripts\browser-client.mjs` bytes exactly. Earlier Node REPL builds expose privileged browser capabilities only when the imported browser-client SHA-256 matches the trust list embedded in the installed `app.asar`; rewriting a `node:process` import or process shim changes the hash and causes `Browser use requires privileged node_repl capabilities` before Chrome discovery. Codex Desktop `26.814` instead delivers `browserClientPath` through the official native-host configuration and no longer embeds the client hash as ASCII in `app.asar`. Normal repair restores the packaged bytes to both the stable marketplace and versioned cache. Strict verification requires both copies to match the packaged SHA-256 and then requires either the legacy ASAR hash or the complete native-host path contract; an unknown or partial shape remains unsupported.
+
+4. Before choosing a full MSIX repack, check whether this is the bundled marketplace fast path. Compare the package's `.agents\plugins\marketplace.json` names with the Desktop reconcile log. If descriptors are missing, or `not_in_bundled_marketplace_plugin_names` removes a plugin the user had already installed, run only the targeted bundled marketplace patch on a large local drive:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyBundledMarketplaceCopy -DryRun -OutputRoot "<large-local-build-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyBundledMarketplaceCopy -Install -Launch -InstallPrerequisites -CleanupAfter -CleanupWindowsSdkAfterInstall -OutputRoot "<large-local-build-root>"
+```
+
+After relaunch, run `scripts\install-computer-use-local.ps1 -VerifyOnly` and `scripts\install-computer-use-local.ps1 -StrictVerifyOnly -VerifyAllBundledPluginsAvailable`. The local repair preserves each unrelated optional plugin's installed/enabled state and refreshes an optional cache only when that plugin was already installed. The availability check requires every current descriptor name and version to match the installed package and to appear with that version in the CLI's installed-or-available JSON without calling `plugin add`.
+
+5. Escalate to MSIX only when the evidence points to package-gated Desktop code: Fast Mode request/UI gates, locale gate, Goal/plugin UI gate, browser_use availability with `reason=statsig-disabled`, Computer Use/Any App disabled by settings/UI availability gates after local repair, ASAR integrity failure, a stable Browser cache junction whose physical target is rejected by the trusted RPC dependency gate after local repair, or Phone Remote Control package patches. For the junction case, require the full patcher's `Node REPL trusted-paths patch result`, restart Desktop, and confirm the regenerated config retains the resolved external roots. Otherwise do not run the full repatch just because a plugin is unavailable.
+
+Run a dry run first after every Codex upgrade when MSIX escalation is justified:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\repatch-codex-windows.ps1" -DryRun
+```
+
+6. If the dry run finds all patch targets, run the full repatch:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\repatch-codex-windows.ps1"
+```
+
+The wrapper calls the bundled patch script at `scripts\patch_codex_fast_mode_windows_msix.ps1` with these defaults:
+
+- `-InstallPrerequisites`
+- `-Install`
+- `-Launch`
+- `-CleanupWindowsSdkAfterInstall`
+- `-CleanupAfter`
+- `-VerifyFastModeRequest`
+
+It also verifies and writes the local marketplace config at `$env:USERPROFILE\.codex\marketplaces\openai-curated-local`, including `source_type = "local"` and the exact `source` path.
+It also syncs the installed `openai-bundled` marketplace from the current Codex package into a stable local root, overlays a local `computer-use@openai-bundled` compatibility plugin, writes that marketplace into config, and registers `browser@openai-bundled` through the user-accessible Codex CLI. Pass `-VerifyAllBundledPluginsAvailable` to add an availability assertion for every complete descriptor currently offered by the installed package, including version-dependent plugins such as `deep-research` and `visualize`. The assertion itself uses `plugin list --available --json`; it does not download from the network, call `plugin add`, or change unrelated optional plugin state. The surrounding wrapper still performs its requested repair or DryRun behavior. When `.codex\.tmp` is a junction, the stable root is created beside the junction target so an existing non-system-drive layout stays off C:; otherwise it uses `.codex\marketplaces\openai-bundled-local`. It also repairs stable `browser` / `chrome` plugin cache copies so their `latest` junctions do not point at the mutable `.tmp` marketplace mirror, and enables `CODEX_ELECTRON_ENABLE_WINDOWS_COMPUTER_USE=1` for the current user so the Desktop app can expose Windows Computer Use after restart.
+It patches Fast Mode in both the request path and the settings UI path. The request patch removes the ChatGPT-only branch while still reading host/model feature requirements; the UI patch removes the matching ChatGPT-only availability check in service-tier settings.
+It also forces the configured custom model IDs through the Desktop model visibility filter. By default these are `gpt-6-astra`, `gpt-6-sol`, `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. This patch only unhides catalog entries that already exist for the current build; it never creates one. A slug the active catalog does not contain stays absent from the picker no matter how often the bundle is repatched, so confirm the entry exists before reading a missing model as a patch failure. The CLI builtin catalog is embedded in `codex.exe` and can ship not-yet-rolled-out models with `"visibility": "hide"`, which is one shape this patch handles; a user `model_catalog_json` replaces that builtin catalog instead of extending it, so it must carry the new entry itself. When a provider advertises a new slug such as `gpt-6-sol`, back up the active catalog and import its complete matching builtin entry if present; preserve unrelated model settings and verify `model/list` before claiming catalog repair. Do not infer another model's capabilities or advertise a builtin model as provider-supported without checking the provider. On builds containing the compact Power slider, the patch also opens the Electron-specific `harborEnabled` gate so the matching model and reasoning combinations use that slider instead of the legacy model/effort/speed-only menu.
+On builds where the Ultra slider setting reads only ChatGPT account user settings, it adds a local fallback for third-party providers. The toggle then reads and writes `show-ultra-in-model-picker-slider` locally, survives restart, and feeds the same Ultra inclusion value used by the actual model picker. Normal ChatGPT-authenticated users retain the official account setting path.
+It patches the locale i18n gate that can force the Desktop UI back to English after restart when `enable_i18n` is disabled in the shipped webview bundle.
+It patches Chrome/browser_use gates in both the webview assets and the main Electron feature sender/receiver path, covering in-app browser, browser pane, and external browser availability. This only unlocks the local Desktop gates; Chrome extension and native messaging files still need to exist and should be verified separately.
+It also patches the Desktop webview gates that otherwise hide or disable Windows Computer Use behind the `computer_use` feature and Statsig gate `1506311413`, and it writes `features.computer_use = true` into `$env:USERPROFILE\.codex\config.toml` without replacing the rest of the `[features]` table.
+It also writes `[windows] sandbox = "unelevated"` into `$env:USERPROFILE\.codex\config.toml`. On Windows, this avoids the elevated sandbox setup refresh path that can fail with `spawn setup refresh` / OS error 740 and break Computer Use startup.
+It also repairs local marketplace manifest layout when a local root has only a legacy root `marketplace.json`; the current Codex CLI expects `.agents\plugins\marketplace.json`, and missing that file can make `codex plugin list` fail for all configured marketplaces.
+It does not install the bundled custom `model_instructions_file` prompt by default. Only install it when the user explicitly requests that optional configuration.
+Any bundled script write to an existing `config.toml` first creates one timestamped backup for that script run under `.codex\backups\config\`.
+
+## Phone Remote Control
+
+Before repairing phone remote control, read `references/remote-control-debug-cases.md`. Keep these boundaries explicit:
+
+- Remote-control pairing/control transport can legitimately call `https://chatgpt.com/backend-api/wham/remote/control/...`. Do not rewrite that transport to a third-party model API endpoint.
+- After phone pairing works, verify the actual model sampling request URL. If it goes to the wrong model API endpoint, treat that as a post-pairing configuration diagnosis, not as part of the remote-control pairing implementation.
+- Remote-control OAuth is isolated: use `.codex\remote-control-oauth.json` and `.codex\remote.json`; never use `.codex\auth.json` for the remote-control bearer injection path.
+- An alternate build root is mandatory when the user says not to consume the system drive. Pass `-WorkRoot` / `-OutputRoot` on the requested large local drive and keep Cargo, Rustup, temp, target, MSIX, and source checkout under that root. Do not hard-code a drive letter into the workflow.
+
+If `Settings -> Connections -> Control this computer` is visible but the device list says to sign in to ChatGPT again, verify the normal remote-control bearer before repatching MSIX again:
+
+```powershell
+python "$SkillRoot\scripts\refresh-remote-control-auth.py" --verify-only
+```
+
+If that reports `remote_json_disabled`, `access_token_expired`, `endpoint_http_error`, HTTP 401/403, or a token-refresh diagnosis such as `refresh_token_reused`, regenerate only `.codex\remote.json` with the same script. It uses the official Codex OAuth client, requests `openid profile email offline_access api.connectors.read api.connectors.invoke`, backs up the old `remote.json` under `.codex\backups\remote-control-auth`, defaults to proxy `http://127.0.0.1:10808`, and must not write `.codex\auth.json` or `config.toml`.
+
+If `remote.json` verifies successfully but clicking `Add` or opening `Control this computer` falls back to a new conversation/main chat page, inspect `$env:USERPROFILE\.codex\remote-control-flow.log` and direct endpoint results for an expired `remote-control-oauth.json` enroll token shadowing the normal bearer. The ASAR patcher must skip expired JWTs before returning an isolated bearer and should verify `remote_control_auth_token_expired_skipped` in the patched ASAR. Do not delete `.codex\remote-control-oauth.json` blindly; keep it for fresh step-up/enroll flows and let valid `.codex\remote.json` satisfy read/MFA endpoints.
+
+If the Allow dialog fails and the newest native app-server logs show `remote control requires ChatGPT authentication; API key auth is not supported`, ASAR patches and `.codex\remote.json` refresh are not enough. Build a patched native `app\resources\codex.exe` from the Codex Rust source with the reference native patch, using a large non-system work root when requested:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\build-remote-control-native-replacement.ps1" -WorkRoot "<large-local-build-root>\native-remote"
+```
+
+If the phone reports the Codex environment is expired after a native replacement, inspect the original installed native version before building. Use only an exact mapped Desktop/native/source-tag combination. For example, Desktop `26.715.2305.0` ships `codex-cli 0.145.0-alpha.18` and Desktop `26.707.3748.0` ships `codex-cli 0.144.0-alpha.4`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\build-remote-control-native-replacement.ps1" -WorkRoot "D:\CodexData\rc145" -CodexSourceRef "rust-v0.145.0-alpha.18" -AppServerVersion "0.145.0-alpha.18"
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\build-remote-control-native-replacement.ps1" -WorkRoot "D:\CodexWork\phone-remote-26.707\native-remote-0.144.0-alpha.4" -CodexSourceRef "rust-v0.144.0-alpha.4" -AppServerVersion "0.144.0-alpha.4"
+```
+
+The build helper keeps the clone, Cargo cache, Rustup cache, temp directory, target directory, and any bootstrapped Windows SDK packages under `-WorkRoot`. When `-CodexSourceRef` and `-AppServerVersion` are omitted together, it copies the installed WindowsApps `app\resources\codex.exe` into `WorkRoot\tmp`, runs `--version` only on that copy, and selects a bundled version mapping; it never executes the WindowsApps binary in place. Desktop `26.715.2305.0` maps to `rust-v0.145.0-alpha.18`, `references\remote-control-native-replacement-0.145.0-alpha.18.patch`, and workspace version `0.145.0-alpha.18`. Desktop `26.707.3748.0` maps to `rust-v0.144.0-alpha.4`, `references\remote-control-native-replacement.patch`, and workspace version `0.144.0-alpha.4`. For historical `rust-v0.142.4`, matching parameters select `references\remote-control-native-replacement-0.142.4.patch`; that patch has passed clean patch-apply validation, but has not yet completed the same end-to-end native compilation validation as the newer mappings. Other source versions require matching explicit version parameters plus a validated `-PatchPathOverride`. Do not use GNU toolchain output for Windows MSIX replacement; use the MSVC target.
+
+If MSVC is present but `kernel32.lib` is missing, the helper first searches for one coherent existing Windows SDK root/version containing matching x64 `kernel32.lib`, `ucrt.lib`, and headers; it does not mix independently discovered installed SDK versions. Only when no usable SDK exists, it downloads `Microsoft.Windows.SDK.CPP` and `Microsoft.Windows.SDK.CPP.x64` version `10.0.26100.4188` into `<WorkRoot>\cache\windows-sdk-cpp`. Downloads use `.partial` files, validate the archive and expected payloads, and replace the cache only after validation; corrupt cached packages are deleted and downloaded again. On Windows PowerShell 5.1, extract NuGet packages with checked `tar.exe`; `Expand-Archive` can fail while cleaning a deep `_rels\.rels` tree. The two packages use a split layout, so accept the matching NuGet roots `c\um\x64\kernel32.lib`, `c\ucrt\x64\ucrt.lib`, `c\Include\<version>\um\Windows.h`, and optionally `c\bin\<version>\x64\rc.exe` instead of requiring one traditional installed-Kits tree. Downloads honor existing `HTTPS_PROXY` / `HTTP_PROXY`; when neither is set, the helper uses `http://127.0.0.1:10808` only if that port is listening, otherwise it downloads directly.
+
+Keep `-WorkRoot` short as well as off the system drive. A deeply nested D-drive root can still fail while Cargo checks out Git dependencies with `path too long`; the validated `0.145.0-alpha.18` build succeeded under `D:\CodexData\rc145`. When retrying after an interrupted or timed-out external run, first confirm the child PowerShell process has exited and use a unique `WorkRoot` / `OutputRoot`; a timed-out parent can leave a child cleaning the previous root.
+
+Run a dry run first. Do not pass `-KeepWorkDir` unless you need to inspect failed patch artifacts; successful dry-runs should clean generated package and ASAR extraction output:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-remote-control-windows-msix.ps1" -DryRun
+```
+
+If the machine needs a larger temporary build location, pass it explicitly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-remote-control-windows-msix.ps1" -DryRun -OutputRoot "<large-local-build-root>"
+```
+
+If a patched native `app\resources\codex.exe` was built from the Codex Rust source, pass it explicitly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-remote-control-windows-msix.ps1" -DryRun -ReplacementResourceCodexExe "<path-to-built-codex.exe>"
+```
+
+Only after dry-run markers pass, install and relaunch:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-remote-control-windows-msix.ps1" -Install -Launch -InstallPrerequisites -ReplacementResourceCodexExe "<path-to-built-codex.exe>"
+```
+
+When `makeappx.exe` / `signtool.exe` are missing, the install path downloads Windows SDK BuildTools from NuGet under `-OutputRoot\.remote-control-temp`, not `%TEMP%`. Do not hard-code a local proxy for this download. Use the default direct/env-proxy path first; only pass `-BuildToolsProxy "http://127.0.0.1:10808"` or set `CODEX_WINDOWS_SDK_BUILDTOOLS_PROXY` when that proxy is known to be listening. Proxy URIs and credentials are never printed. `curl download failed with exit code 7` usually means the selected proxy endpoint refused the connection.
+
+Run disruptive install commands from an external PowerShell process and judge the child's actual exit code. Under Windows PowerShell 5.1, do not pipe `*>&1` through `Tee-Object` when `$ErrorActionPreference = 'Stop'`; npm warnings written to stderr can become terminating `RemoteException` records. Do not redirect child stdout and stderr to the same file. Use `Start-Process powershell.exe -Wait -PassThru -RedirectStandardOutput <stdout-file> -RedirectStandardError <stderr-file>`, check `ExitCode`, then merge or summarize the two logs after the process exits.
+
+If an install attempt is interrupted after uninstall/signing and `Get-AppxPackage -Name OpenAI.Codex` returns no package, do not rebuild first. Install the existing patched MSIX from the selected `-OutputRoot` if it exists:
+
+```powershell
+Add-AppxPackage -Path "<large-local-build-root>\OpenAI.Codex_<version>_remote-control-patched.msix" -ForceApplicationShutdown -Verbose
+```
+
+Cleanup policy: successful remote-control script runs delete generated MSIX staging directories, ASAR extracts, script-local `npx` cache, installed patched `.msix` artifacts, and temporary Windows SDK BuildTools. If the user only asked for the repair and did not ask to keep reusable build outputs, also remove the native source checkout, Cargo/Rustup caches, target directory, temp directory, and generated patch/MSIX files created only for this repair. Keep the installed patched package, `.codex\remote.json`, `.codex\remote-control-oauth.json`, auth/config/sqlite state, logs, and explicit backups.
+
+After installing Phone Remote Control, verify that ordinary features survived the remote-control repack. At minimum check live ASAR markers for remote control and browser local-patched availability, live native markers when a replacement binary was used, run `scripts\install-computer-use-local.ps1 -StrictVerifyOnly`, run `codex plugin list`, run the Windows sandbox smoke test, and verify the Chrome native messaging manifest points at a stable versioned cache path or at a `chrome\latest` junction that resolves to a versioned cache directory, never at `.tmp` or another mutable marketplace mirror. If the strict check reports a stale Chrome native-host manifest or missing bundled cache, run `scripts\install-computer-use-local.ps1 -VerifyOnly`, then rerun `-StrictVerifyOnly`.
+
+When reading shared log databases, distinguish the running WindowsApps app-server process from old extension app-server processes. A stale Antigravity/VS Code extension `codex.exe` can continue logging `API key auth is not supported` after the WindowsApps package is fixed; filter by process path or `pid` before declaring the repair failed.
+
+If phone-created turns reach Desktop but fail against the wrong model API endpoint, inspect the concrete request URL, `config.toml`, and the affected thread/session metadata before changing anything. Treat this as a post-pairing configuration diagnosis, not as part of remote-control pairing. Preserve conversation history and do not change `model_provider` ids just to change a URL.
+
+## Dynamic Tools Schema
+
+Use this targeted MSIX/ASAR path only for the Desktop dynamicTools variant of `missing field inputSchema`. Required evidence:
+
+- Newest Desktop log shows `method=thread/start` with `missing field inputSchema`.
+- CLI/app-server smoke tests can start a thread when they do not send Desktop app dynamic tools, for example `codex debug app-server send-message-v2 "只输出 OK"` or an equivalent `thread/start` path with `dynamicTools:null`.
+- The Desktop log or extracted bundle shows the failure happens after Desktop app dynamic tools are assembled, not after MCP server startup.
+- Extracted `webview\assets\app-server-dynamic-tools-*.js` returns the old namespace wrapper shape: `[{type:\`namespace\`, name, description, tools:[...]}]`.
+
+When those conditions hold, patch the Desktop asset to return flat `DynamicToolSpec[]` entries with `namespace`, `name`, `description`, `inputSchema`, and optional `deferLoading`. Do not disable MCP servers for this variant unless a separate MCP-specific failure remains.
+
+Run a dry run first. Use `-OutputRoot` on a large local drive when the system drive is low:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-dynamic-tools-windows-msix.ps1" -DryRun -OutputRoot "<large-local-build-root>"
+```
+
+If the dry run passes, install and relaunch:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch-dynamic-tools-windows-msix.ps1" -Install -Launch -InstallPrerequisites -OutputRoot "<large-local-build-root>"
+```
+
+After installation, verify with the actual Desktop UI or newest Desktop logs. A CLI-only smoke test is not sufficient because it can bypass Desktop `dynamicTools`. Confirm the latest `thread/start` entries do not report `missing field inputSchema`, then run `scripts\install-computer-use-local.ps1 -StrictVerifyOnly` and `codex plugin list` if Computer Use, Chrome, or browser use are in scope.
+
+Cleanup policy: successful dynamic-tools script runs delete generated MSIX staging directories, ASAR extracts, script-local `npx` cache, temporary SDK cache under `-OutputRoot`, and installed patched `.msix` artifacts. Use `-KeepWorkDir` only for failed or actively debugged runs.
+
+## Provider History Sync
+
+Use this targeted workflow when Codex Desktop local conversations disappear after switching `model_provider`, API account, or provider config, while the actual local history files still exist. The root cause is usually that Codex filters the official sidebar by the active provider bucket; older thread rows and rollout metadata remain under a previous provider.
+
+Also use this workflow for the second-stage failure where recovered conversations are visible in the official sidebar but cannot be continued because Desktop reports the working directory is missing. In that case the provider bucket may already be correct; the durable source of truth can still point at an old `session_meta.payload.cwd` directory that no longer exists.
+
+This workflow uses the verified local-history mechanism directly; it does not install or require external recovery tools. It reads the current provider from `config.toml`, then aligns provider metadata in local history stores:
+
+- `sessions` and `archived_sessions` rollout JSONL first line: `session_meta.payload.model_provider`
+- App SQLite store: `$env:USERPROFILE\.codex\sqlite\state_5.sqlite`
+- Legacy CLI SQLite store: `$env:USERPROFILE\.codex\state_5.sqlite`
+- Missing thread rows from the legacy CLI store into the newer App store when the App store is missing rows that still exist in the legacy store.
+- Missing historical `cwd` directories referenced by rollout first lines, when explicitly requested with `-RepairMissingCwdDirs`.
+
+Important source-of-truth details:
+
+- Codex 26.609+ can rebuild `state_5.sqlite` from rollout JSONL on startup. Treat rollout first-line `session_meta.payload` as durable metadata, not the App SQLite row alone.
+- Do not repair `当前工作目录缺失` by changing only one SQLite store. That can make the UI look fixed until restart, then backfill or rollout reads can reintroduce the old value.
+- Prefer recreating the original missing `cwd` directory as an empty directory before rewriting historical metadata. This keeps the rollout history intact and was verified to fix visible-but-uncontinuable restored conversations.
+
+Before changing anything, run a dry run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\sync-codex-provider-history.ps1" -DryRun
+```
+
+Read the dry-run output before selecting the write path:
+
+- If it shows mismatched provider buckets, close or stop Codex Desktop and run the sync.
+- If the sidebar already shows recovered conversations but continuing a thread fails with missing working directory, look at `missing rollout cwd dirs before`. If missing cwd entries are listed, use `-RepairMissingCwdDirs`.
+- If the missing cwd paths are outside the current user profile, do not create them by default. Review the paths first; pass `-AllowCwdOutsideUserProfile` only when they are expected local paths.
+
+Provider sync write path:
+
+```powershell
+Get-Process Codex,ChatGPT -ErrorAction SilentlyContinue | Where-Object { $_.Path -like 'C:\Program Files\WindowsApps\OpenAI.Codex_*\app\Codex.exe' -or $_.Path -like 'C:\Program Files\WindowsApps\OpenAI.Codex_*\app\ChatGPT.exe' } | Stop-Process -Force
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\sync-codex-provider-history.ps1"
+```
+
+Missing cwd repair path:
+
+```powershell
+Get-Process Codex,ChatGPT -ErrorAction SilentlyContinue | Where-Object { $_.Path -like 'C:\Program Files\WindowsApps\OpenAI.Codex_*\app\Codex.exe' -or $_.Path -like 'C:\Program Files\WindowsApps\OpenAI.Codex_*\app\ChatGPT.exe' } | Stop-Process -Force
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\sync-codex-provider-history.ps1" -RepairMissingCwdDirs
+```
+
+This creates only the missing directories referenced by rollout first lines. It does not rewrite those `cwd` values, and it still verifies that `config.toml` is unchanged. By default it skips cwd paths outside `$env:USERPROFILE` to avoid creating unexpected roots on other drives or network shares.
+
+Guardrails:
+
+- Do not modify `config.toml`; the script checks the file hash before and after each run and fails if it changes.
+- Do not install or launch external recovery tools for this workflow. The script implements the required local metadata repair directly.
+- Do not patch ASAR or inject a floating session list for this symptom. A separate floating panel can show sessions but is not the official sidebar recovery mechanism and can introduce UI/encoding bugs.
+- Do not sync `.codex-global-state.json` workspace/project roots by default. Doing so can expose many historical `cwd` values as empty project groups in the Desktop sidebar.
+- Do not default to rewriting rollout `cwd` or forcing all missing cwd values to a fallback directory such as `Documents\Codex`. First try restoring the original missing directory path. Rewrite historical `cwd` only as a separately backed-up last resort after directory restoration fails.
+- Backups are written under `$env:USERPROFILE\.codex\backups_state\history-sync-agent\<timestamp>` before SQLite or rollout writes.
+- One unreadable or empty rollout first line may be skipped; treat that as a residual data issue, not a failure if SQLite and readable rollout counts align and the official sidebar shows the expected conversations.
+
+Success criteria:
+
+- The script logs the target provider from the current config.
+- Both App and legacy SQLite stores, when present, report active and archived thread rows under that target provider.
+- Rollout first-line provider counts under `sessions` and `archived_sessions` match the target provider for readable rollouts.
+- `config.toml sha256 unchanged` is logged.
+- Codex Desktop's official sidebar shows the recovered historical conversations after restart.
+- If the symptom was a visible restored conversation that could not continue, `missing rollout cwd dirs after` reports zero or only reviewed/skipped paths, and the affected conversation can send a new turn after Desktop restart.
+- The Projects/workspace area does not gain new empty project groups as a side effect.
+
+## Important Guardrails
+
+- The main full-repair installer validates every uncompressed MSIX payload block before calling the shared guarded installer. Deployment increments the package revision and uses `Add-AppxPackage -ForceApplicationShutdown` in place after all preflight checks. A failed deployment leaves the existing package registered; do not add an automatic uninstall fallback. A valid Authenticode signature alone does not prove payload/block-map consistency. Use this path only for package-gated Desktop code; local Chrome/Computer Use failures use the Computer Use Only workflow.
+- The full wrapper verifies that the final package still matches the package version it patched and has `SignatureKind = Developer`. If Store replaces the package during repair, it retries once against the current package instead of reporting a false success; a second replacement fails with an actionable error.
+- Do not modify `C:\Program Files\WindowsApps` in place. Use the MSIX repack script.
+- Do not solve a Windows 10 `SetIsBorderRequired` / `0x80004002` screenshot failure by restoring an older Codex Desktop package or copying a helper from another runtime. Each bundled helper patch profile is limited to its documented exact input/output hash pair, backs up the original, and refuses unknown binaries.
+- Do not treat `list_windows`, `runtime import ok`, a returned screenshot count, or a written PNG as proof that Computer Use capture is correct. For `node_repl exec context not found`, require later independent calls to pass after the request-context patch. Activate and revalidate the target immediately before capture, then inspect that the image content matches the target instead of an occluding foreground window.
+- Do not run the phone remote-control MSIX patch as a default repatch side effect. Use it only for phone remote-control tasks or when the user explicitly asks for that workflow.
+- Do not treat every `missing field inputSchema` as an MCP problem. If CLI smoke tests pass while Desktop UI fails and the dynamic-tools ASAR asset still returns a namespace wrapper, use the Dynamic Tools Schema workflow instead of disabling unrelated MCP servers.
+- Do not trust a response like `FAST_CHECK_OK` as proof of Fast Mode. Trust only the wrapper/script wire verification, which runs with an isolated temporary `CODEX_HOME`, serves the CLI's `/v1/models` probe, then captures a `/v1/responses` HTTP body or WebSocket frame and checks `service_tier=priority`. A models-only request is not proof. If `codex exec` exits or crashes before sending that request, the verifier falls back to `codex debug app-server send-message-v2` and must also observe `thread/start serviceTier=priority`; the wire capture remains mandatory. If `PATH` resolves only to the protected WindowsApps CLI, the patcher must use the copied work-package CLI; an explicit verification request must fail instead of silently skipping when no runnable CLI exists.
+- Do not use keyword hits in `%USERPROFILE%\.codex\logs_2.sqlite` as proof that the current installed package is patched. Task prompts and recorded tool calls can persist strings such as `local-patched`, `already-patched`, and patch marker names, creating false positives. Use the current patcher DryRun, direct evidence from the live package/ASAR, and real wire, UI, browser, or runtime smoke tests for patch-state decisions. This does not invalidate timestamped Desktop runtime logs when they are correlated with the current package, process, and test run; do not delete or modify `logs_2.sqlite` for this check.
+- If the app launches then immediately exits, run Electron logging and check for ASAR integrity failures:
+
+```powershell
+$pkg = Get-AppxPackage -Name OpenAI.Codex | Select-Object -First 1
+$manifest = [xml](Get-Content -Raw -LiteralPath (Join-Path $pkg.InstallLocation 'AppxManifest.xml'))
+$desktopExecutable = [string](($manifest.Package.Applications.Application | Select-Object -First 1).Executable)
+$exe = Join-Path $pkg.InstallLocation $desktopExecutable
+$env:ELECTRON_ENABLE_LOGGING='1'
+Push-Location (Split-Path -Parent $exe)
+& $exe --enable-logging=stderr --v=1 2>&1 | Select-String -Pattern 'FATAL|Integrity|asar|ERROR'
+Pop-Location
+Remove-Item Env:ELECTRON_ENABLE_LOGGING -ErrorAction SilentlyContinue
+```
+
+- If `makeappx.exe` or `signtool.exe` is missing, run the wrapper normally; it installs Windows SDK temporarily and removes it afterward.
+- If the dry run or repack fails early with `robocopy failed with exit code 16`, inspect the configured `-OutputRoot` before changing patch targets. A common Windows failure is a broken junction such as `Downloads\codex-msix-repack` pointing at a deleted build directory. The patch script now recreates a missing reparse target when possible and otherwise fails early with an actionable `OutputRoot is a broken reparse point` message. Pass a valid `-OutputRoot` on a large local drive if the default cannot be repaired.
+- If the local marketplace directory is missing, do not invent a marketplace. Report the missing path and ask whether to restore it from backup or re-extract it from a known source.
+- For user-level Codex state backup or migration, use `scripts\manage-codex-backups.ps1`. It backs up `config.toml`, extracted `mcp_servers.json`, custom skills, marketplaces, and `chrome-native-hosts.json`. It excludes `.git`, `node_modules`, build output, and virtual environments by default; use `-IncludeDependencyDirs` only when an exact offline dependency copy is needed. Plugin cache and `.tmp\bundled-marketplaces` are also opt-in because they can be large.
+- If `codex plugin list` fails with `failed to load configured marketplace snapshot(s)` and a local marketplace root contains only `marketplace.json`, copy that manifest to `.agents\plugins\marketplace.json` and re-run `codex plugin list` before diagnosing individual plugins.
+- Do not depend on `Downloads\patch_codex_fast_mode_windows_msix.ps1`; the skill is intended to be self-contained. Use `scripts\patch_codex_fast_mode_windows_msix.ps1` unless the user explicitly passes `-PatchScript`.
+- Do not enable the bundled custom `model_instructions_file` prompt unless the user explicitly asks for it. Treat `assets\system-prompt.md` as an opaque asset; copy/configure it, but do not inspect or summarize its content unless the user separately asks to review the prompt.
+- In Codex 26.601.2237+, Fast Mode may be gated in `webview\assets\read-service-tier-for-request-*.js` as an async helper shaped like `return authMethod===\`chatgpt\` ? featureRequirements?.fast_mode !== false : false`. The patch should remove the `chatgpt`-only branch while still reading the model/host feature requirement, then verify with the wire capture.
+- In Codex 26.601.2237+, Fast Mode may also stay invisible or disabled in the settings UI through `webview\assets\use-service-tier-settings-*.js`. The patch should connect the Fast UI patcher and log `fast-mode UI patch result`, not only patch the request helper.
+- If the language selection reverts to English after restart, inspect the extracted webview assets for `enable_i18n`, `locale_source`, and `localeOverride`. The locale patch should log `locale i18n patch result`; do not treat a config-only language write as sufficient.
+- If browser, Chrome, browser pane, or `browser_use` remains unavailable, inspect the Desktop log for `browser_use_availability_resolved`. `reason=statsig-disabled` means the local gate patch did not apply or the Store build introduced a new target shape; `reason=local-patched` means the availability gate is open and the next checks are the Chrome extension, native messaging host, and bundled plugin state.
+- In Codex 26.601.2237+, the old plugin UI gate targets `533078438` and `pluginDeepLinkAuthBlocked` may be absent. Inspect `webview\assets\plugins-page-*.js` for `openPluginInstall`, `authMethod:`, and a compact assignment shaped like `{authMethod:x}=..., y=authBlocked(x),`; patch the auth-blocked variable to `false` instead of failing on missing old sidebar/skills/detail chunks.
+- In Codex 26.616.3767+, `plugins-page-*.js` may insert an account-data hook between `authMethod` and the auth-blocked variable, shaped like `{authMethod:x}=authHook(),{data:y}=accountHook(),z=authBlocked(x),`. Preserve the inserted hook and patch only the auth-blocked variable to `false`.
+- In Codex 26.616.3767+, the Goal slash command may no longer contain the old `3074100722` / `goals` config gate or `threadGoalObjective` anchor. If the composer computes goal availability from non-cloud/local state, for example `isGoalActionAvailable` passed through to `enabled`, treat that shape as already open instead of failing the MSIX dry run.
+- In Codex 26.616.3767+, `use-is-plugins-enabled-*.js` may keep the same `featureName:\`browser_use\`` and `featureName:\`browser_use_external\`` semantics but use different minified helper names for the feature hook, statsig, and `runCodexInWsl` reads. Match the gate by shape around `featureName`, `enabled`, `isLoading`, `410262010`, and `runCodexInWsl`; do not depend on a fixed helper identifier such as `x`, `g`, or `u`.
+- In Codex 26.707.3748.0, the Desktop feature sender can insert `findShortcuts` between `externalBrowserUseAllowed` and `computerUse`. Preserve that field while forcing the browser-use availability fields; do not require `computerUse` to immediately follow `externalBrowserUseAllowed`.
+- In Codex 26.707.8479.0, the Electron feature receiver uses parameterized minified variables such as `o=r===\`win32\`&&n.CODEX_ELECTRON_ENABLE_WINDOWS_COMPUTER_USE...` instead of the older fixed `i` platform variable. Match the assignment, platform variable, environment object, and base feature object structurally; do not hard-code minified identifiers.
+- In Codex 26.707.8479.0, `plugins-page-*.js` can place workspace/account derivations between `{authMethod:x}=...()` and the auth-blocked assignment. Locate the blocked assignment by the later `route.kind===\`manage\`` boundary and patch only that variable; preserve all intervening hooks and derived state.
+- In Codex 26.519.11010+, `use-plugin-install-flow-*.js` may no longer contain `featureName:\`computer_use\``. For the Computer Use install-flow gate, locate the file with `installPlugin:async` and `openPluginInstall`, then patch the imported availability tuple so the first `.available` value for Computer Use is forced true.
+- In Codex 26.707.8479.0, the Computer Use install flow can migrate into `plugin-detail-page-utils-*.js` and replace the literal `installPlugin:async` property with an `install-plugin` RPC inside a minified async mutation. Accept either anchor, require `openPluginInstall`, and patch only the first value in the three-entry availability tuple.
+- In Codex 26.707.8479.0, the bundled marketplace copier can already route Windows through `copyDirectoryAllowDecryptedDestinationOnEncryptionFailure` from `windows-file-copy-*.js`. Treat that native Windows fallback as already repaired instead of replacing it with the older byte-stream fallback; still apply the independent bundled `sites` availability patch when needed.
+- Do not modify `C:\Program Files\WindowsApps` in place to enable Computer Use. The Windows gate is controlled by `CODEX_ELECTRON_ENABLE_WINDOWS_COMPUTER_USE=1`, and the helper paths are supplied through the local `computer-use@openai-bundled` plugin.
+- If Computer Use or a `node_repl` Computer Use plugin fails on Windows with `windows sandbox failed: spawn setup refresh`, inspect `$env:USERPROFILE\.codex\.sandbox\sandbox.<date>.log`. If it shows `codex-windows-sandbox-setup.exe` failing with OS error 740, set `[windows] sandbox = "unelevated"`. Check `codex sandbox --help` before verification: if the help lists a `windows` command, verify with `codex sandbox windows "C:\Windows\System32\cmd.exe" /c echo OK`; only builds whose help accepts a direct command form should use `codex sandbox "C:\Windows\System32\cmd.exe" /c echo OK`.
+- If a Computer Use task fails before app interaction with `Package subpath ... is not defined by "exports"`, `Module not found: @oai/sky`, missing `setupComputerUseRuntime`, or an internal `@oai/sky` / `computer_use_client_base` import path error, treat it as local bundled plugin/runtime drift. Run `scripts\install-computer-use-local.ps1 -VerifyOnly`, then `-StrictVerifyOnly`. Do not patch `app.asar` or `resources\codex.exe` for this class unless Desktop logs also prove a UI availability gate is still closed.
+- If "任意应用" is visible but disabled as organization/region unavailable, inspect `webview\assets\use-is-plugins-enabled-*.js` in the extracted ASAR. The relevant local gates are `featureName:\`computer_use\`` and Statsig `1506311413`; reapply the MSIX patch rather than editing WindowsApps in place.
+- If the Computer Control page says `Computer Use 插件不可用`, check the Desktop log for `computer-use native pipe startup failed` with `missing-helper-path`, then inspect the `source` configured under `[marketplaces.openai-bundled]` and its `.agents\plugins\marketplace.json` plus `plugins\computer-use`. If they are missing or partial, stop bundled `extension-host` processes under `$env:USERPROFILE\.codex\plugins\cache\openai-bundled`, rerun `scripts\install-computer-use-local.ps1`, restart Codex Desktop, and confirm the log ends with `computer-use native pipe startup ready`.
+- Current Codex builds can use a lightweight versioned Computer Use cache with no usable `latest` junction and no plugin-local `node_modules`; `@oai/sky` lives under `%LOCALAPPDATA%\OpenAI\Codex\runtimes\cua_node`. Some builds are descriptor-only and omit `scripts\computer-use-client.mjs`. Treat that layout as healthy when the versioned descriptor matches the installed package and importing the independent runtime exposes `sky.list_windows`, which returns an array. For the recognized `@oai/sky` 0.6.2 Window2 profile, do not rely on a bundled runtime-documentation call; repair applies a guarded local skill overlay that uses `list_windows`, `get_window_state({ window, ... })`, and `activate_window({ window })`. Builds that still ship the client script retain the legacy client-import and helper-transport checks.
+- If the failure reappears after fully quitting and reopening Codex Desktop, inspect `$env:USERPROFILE\.codex\chrome-native-hosts.json`, both `%LOCALAPPDATA%\OpenAI\Codex\chrome-native-hosts-v2.json` and `$env:USERPROFILE\.codex\chrome-native-hosts-v2.json`, and the real targets of `$env:USERPROFILE\.codex\plugins\cache\openai-bundled\chrome\latest` and `browser\latest`. A side-panel error such as `Codex app-server manifest entry is missing required path nodePath` can persist even when the outer manifest and `extension-host-config.json` are correct if both v2 state files still contain only old package/runtime paths or a wrongly hashed current entry. Newer Chrome plugin builds may canonicalize a versioned cache path to `chrome\latest`; that is acceptable only when the junction resolves to a versioned cache directory. Stale Chrome native-host entries, or a `chrome\latest` junction that points at `$env:USERPROFILE\.codex\.tmp\bundled-marketplaces\openai-bundled\plugins\chrome`, can also let Chrome native messaging lock the mutable marketplace mirror. Rerun `scripts\install-computer-use-local.ps1` to stop the lock holder, rebuild stable browser/chrome cache copies, repoint the outer manifest, and atomically synchronize both v2 state files.
+- Do not build stable `browser`, `chrome`, `sites`, or base `computer-use` caches from the mutable `.tmp\bundled-marketplaces` mirror. Desktop can reconcile that mirror while files are being copied. Use the installed package marketplace as the stable source, then overlay the local Computer Use runtime directly into its versioned cache.
+- If the failure reappears after restart with `plugin_marketplace_folder_write_failed` during `copy_plugins`, `bundled_plugins_marketplace_resolve_failed`, or `not_in_bundled_marketplace_plugin_names` removing a previously installed bundled plugin, patch only the bundled marketplace copy helper instead of running the full Fast/browser/Computer Use gate repatch. The targeted patch keeps the package descriptor set locally available but must not install or enable optional plugins the user did not select.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyBundledMarketplaceCopy -DryRun -OutputRoot "<large-local-build-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyBundledMarketplaceCopy -Install -Launch -InstallPrerequisites -OutputRoot "<large-local-build-root>"
+```
+
+If the local Computer Use runtime has passed `install-computer-use-local.ps1 -StrictVerifyOnly` but the Desktop still exposes no `cua.computer.*` surface, first inspect the current ASAR for both supported Darwin-only gates. Only when both are present, use the targeted main-ASAR mode below. It is intentionally separate from the broader Fast Mode/browser/plugin patch set:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyComputerUseSurface -DryRun -OutputRoot "<large-local-build-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\patch_codex_fast_mode_windows_msix.ps1" -OnlyComputerUseSurface -Install -Launch -InstallPrerequisites -OutputRoot "<large-local-build-root>"
+```
+
+The mode requires exactly one content-matched `.vite\build` target and one occurrence of each original gate. Idempotency requires both complete patched gates, one `CODEX_CUA_WINDOWS_SURFACE_V1` marker, and no original gates; a marker alone, mixed state, or duplicate candidate fails closed. Legacy Windows layouts retain both `computerUse` and `computerUseNodeRepl`. Desktop 26.917 layouts without the latter flag must match the complete unified-CUA readiness predicate once, allowing renamed import/export symbols such as `n.Gu` and `n.Wu`. Complete earlier patches are migrated to the correct expression for the host layout; a dependency inserted by an earlier patch does not establish that the host still supports that flag. Darwin behavior remains unchanged. The patched asset must pass `node --check`. This mode skips the unrelated Chrome registry patch and rejects combinations with other targeted modes, marketplace registration, Fast Mode verification, or screenshot-helper patching. It does not edit plugin cache files, `.mcp.json`, or user configuration. Normal repacking still updates the copied package's ASAR integrity metadata and signature; installation/relaunch must run from an external executor.
+
+Fixture success and an installed-package dry run do not establish real Desktop interaction. After relaunch, inspect `Object.keys(cua)` in a fresh conversation and enumerate windows for the default background check. On `@oai/cua` 0.2.5, `cua.listWindows()` supports this check. Only for an explicitly authorized capture/input diagnostic, use `cua.getApp({ windowId: <real id> })` or the lower-level window API; a string argument to `getApp` is the macOS form. Record approval UI, screenshot content, accessibility, and input separately, marking unexercised items as such.
+
+On Windows, the high-level bound `getScreenshot()` can reject a window with `multiple screenshot regions; a single screenshot is unavailable`. Desktop 26.917.9434.0 returned two regions for an Explorer window while the lower-level `cua.computer.get_window_state()` returned both visible screenshots and accessibility state. Inspect the `screenshots[]` regions and the intended window content rather than treating the high-level single-image error as native Computer Use failure. If Sky reports concurrent user input in the window, stop input instead of overriding the user.
+
+## Useful Wrapper Options
+
+- `-PatchWindowsStoreUpdateFallback`: opt in only when Desktop logs show a newer official manifest but Store reports `NoUpdates`. The supported 26.928 branch then invokes the existing official MSIX fallback instead of reporting up to date. Run a full DryRun first; this option changes Codex's updater, not Windows Store tasks or policy. See [Windows Store download fallback](references/windows-store-update-fallback.md).
+
+- `-DryRun`: verify bundle targets only; no install. Unless `-KeepBuild` is supplied, the wrapper asks the patcher to clean its copied build root after a successful patch stage. Cleanup is best-effort, so inspect the reported path when zero residual data is required; a later wrapper verification can still fail after the patcher has already cleaned its own build root.
+- `-NoLaunch`: install but do not start Codex Desktop.
+- `-SkipFastVerify`: skip the local HTTP/WebSocket `service_tier` capture.
+- `-CustomModels <id1,id2,...>`: custom model IDs forced through the Desktop model visibility filter; defaults to `gpt-6-astra`, `gpt-6-sol`, `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`. Both the wrapper and main patcher accept comma-separated IDs or a PowerShell string array. Passing this parameter replaces the default list, including on a complete earlier patch, so repeat the models you still want alongside the new one. Empty entries are removed and duplicate IDs are deduplicated.
+- `-KeepBuild`: keep the wrapper's MSIX build root and retained artifacts for debugging after either DryRun or installation. The patcher's internal temporary ASAR work directory still follows its own cleanup policy.
+- `-OutputRoot <path>`: optional large local build root; use it when the default output root is short on space, points at a broken junction, or should be kept off the system drive.
+- `-OnlyBundledMarketplaceCopy`: patch only the Desktop bundled marketplace copy/helper availability path so Windows falls back to byte-stream copying when `fs.cp()` cannot copy bundled plugin files from WindowsApps-protected package paths. It also restores the supported optional marketplace entries for `sites`, `deep-research`, Code Review and unified Computer Use when their feature predicates would filter them out. Publishing these entries does not install them or switch browser engines. Use this for proven bundled marketplace sync or discovery failures, not for general Fast Mode or UI gates.
+- `-OnlyComputerUseSurface`: patch only the current main-ASAR Darwin-only Windows Computer Use surface gate. Use `-DryRun` first; it fails closed when the bundle anchors are missing or ambiguous.
+- `-OnlyModelExperience`: inspect and selectively repair the Fast Mode request gate, Fast Mode UI gate, custom model visibility filter, compact Power slider gate, and Ultra setting persistence together. Use this for Fast Mode, hidden custom models, the dependent compact Power slider, and a disabled Ultra toggle under custom providers. The legacy `-OnlyCustomModels` name is retained as an alias.
+- If a 26.1007 dry run reports `fastModeTarget` missing, read the service-tier access object case in `references/restriction-debug-cases.md`; that version delegates both speed modes to a shared converter instead of the older inline boolean gate.
+- `-SkipSdkCleanup`: leave Windows SDK installed.
+- `-RegisterMarketplaceOnly`: only register `openai-curated-local`; do not patch Codex.
+- `-PatchScript <path>`: override the bundled patch script only when testing a newer patcher.
+- `-SkipComputerUse`: skip installing/verifying the local Computer Use compatibility plugin.
+- `-PatchWindows10ScreenshotHelper`: explicitly patch the staged native helper during a full MSIX repair, only after reproducing `SetIsBorderRequired / 0x80004002` or `FrameArrived timed out` on Windows 10. Available on both the wrapper and main patcher. The default leaves the helper unchanged; an explicit request rejects unknown hashes and cannot be combined with a targeted mode.
+- The wrapper may continue past Computer Use preflight only for the exact package-gated trusted-paths error documented above; use `-SkipComputerUse` only when intentionally separating local runtime repair from package patching.
+- `-VerifyAllBundledPluginsAvailable`: add an assertion that the stable `openai-bundled` descriptor names and versions exactly match the installed package and every entry appears with that version in structured CLI output as installed or available with an existing local source. The assertion never calls `plugin add`, but the main wrapper still performs its normal repair or DryRun behavior. For a fully read-only check, run `install-computer-use-local.ps1 -StrictVerifyOnly -VerifyAllBundledPluginsAvailable` directly.
+- `-InstallModelInstructionsFile`: optional; copy the bundled prompt asset to `$env:USERPROFILE\.codex\prompts\system-prompt.md` and set top-level `model_instructions_file` in `$env:USERPROFILE\.codex\config.toml`.
+- `-ModelInstructionsSource <path>`: optional source override for `-InstallModelInstructionsFile`; defaults to `assets\system-prompt.md`.
+- `-ModelInstructionsDestination <path>`: optional destination override for `-InstallModelInstructionsFile`; defaults to `$env:USERPROFILE\.codex\prompts\system-prompt.md`.
+
+Phone remote-control script options:
+
+- `scripts\build-remote-control-native-replacement.ps1 -WorkRoot <path>`: clone/patch/build the native replacement under the selected work root, keeping Cargo/Rustup/temp/target/source artifacts and the fallback Windows SDK C++ NuGet cache off the system drive. With both version parameters omitted, it auto-detects the installed native version from a temporary WorkRoot copy; if the detected version has no mapping, it requires explicit parameters instead of assuming 0.144.
+- `-CodexSourceRef <rust-vX> -AppServerVersion <X>`: always supply these as an exact matching pair when overriding auto-detection. `0.145.0-alpha.18` is exact-tag build/install/phone end-to-end validated with Desktop `26.715.2305.0`; `0.144.0-alpha.4` has the same validation scope with Desktop `26.707.3748.0`; the dedicated `0.142.4` patch is patch-apply validated but not yet fully compiled in this workflow.
+- `-PatchPathOverride <path>`: use only with an exact matching source-ref/app-server version pair, after validating that the supplied patch targets that exact source; patch apply is still checked before compilation.
+- `-SkipBuild`: reuse only a previously generated binary accompanied by `codex.remote-control-build.json`. The helper verifies the exact Git commit, source ref, app-server version, patch SHA-256, Rust toolchain, target, profile, binary `--version`, and native markers; marker-only or unstamped stale binaries are rejected. It does not initialize or download the Windows SDK in this mode.
+- `scripts\patch-remote-control-windows-msix.ps1 -DryRun`: patch and validate extracted package without installing, then clean successful generated artifacts.
+- `-KeepWorkDir`: keep MSIX staging, ASAR extract, and script-local `npx` cache for debugging; avoid this on routine repairs because each kept run can consume multiple GB.
+- `-OutputRoot <path>`: optional large local build root; use it when the default temp/output drive is short on space.
+- `-ReplacementResourceCodexExe <path>`: copy in a patched native app-server binary and verify remote-control markers before packaging.
+- `-Install -Launch -InstallPrerequisites`: sign, install, and relaunch the patched package after dry-run passes.
+
+Dynamic tools schema script options:
+
+- `scripts\patch-dynamic-tools-windows-msix.ps1 -DryRun`: extract current package, patch/verify `app-server-dynamic-tools-*.js`, run `node --check`, then clean successful generated artifacts without installing.
+- `-OutputRoot <path>`: optional large local build root; use it when the system drive is short on space.
+- `-Install -Launch -InstallPrerequisites`: sign, install, and relaunch the targeted dynamicTools patched package after dry-run passes.
+- `-KeepWorkDir`: keep MSIX staging, ASAR extract, and script-local `npx` cache for debugging only.
+
+## Optional Model Instructions File
+
+This workflow has an optional custom model instructions installer. It is not part of the default repatch flow and should only run when the user asks for that extra configuration.
+
+The user-facing name "听话水" (Tinghuashui) means this existing bundled system-prompt configuration. Requests such as "配置听话水" or "帮我进行听话水相关的配置" select this workflow. For this request alone, use the standalone installer below with `assets/system-prompt.md`; do not generate a replacement prompt or run the Desktop repatch. Keep the bundled prompt content unchanged.
+
+To install only the bundled prompt asset and configure Codex:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-model-instructions-file.ps1"
+```
+
+The installer copies `assets\system-prompt.md` to `$env:USERPROFILE\.codex\prompts\system-prompt.md`, writes this top-level TOML entry, validates TOML syntax when Python is available, and logs a timestamped backup of any existing `config.toml`:
+
+```toml
+model_instructions_file = 'C:\Users\<user>\.codex\prompts\system-prompt.md'
+```
+
+To combine it with the main wrapper, add `-InstallModelInstructionsFile` explicitly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\repatch-codex-windows.ps1" -InstallModelInstructionsFile
+```
+
+To verify the current machine without changing files:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-model-instructions-file.ps1" -VerifyOnly
+```
+
+After configuring `model_instructions_file`, restart Codex CLI/Desktop or start a new session so the new model instructions file is loaded.
+
+## Computer Use Only
+
+Use this path for local Computer Use plugin/runtime repair without repacking the MSIX. It rebuilds the local `openai-bundled` marketplace mirror, repairs stable `computer-use` / `browser` / `chrome` / `sites` cache links from one pinned installed-package source, overlays the installed CUA `@oai/sky` runtime into the local Computer Use plugin, patches localized/default-value Chrome registry parsing and the Computer Use client import shape when needed, preserves a live `SKY_CUA_NATIVE_PIPE` configuration while removing stale overrides, updates the Chrome native messaging host and both schema-2 app-server state files to current stable cache/runtime paths, and verifies the client import or independent runtime transport.
+
+If the runtime responds, the `codex-computer-use-*` pipe exists, and `-StrictVerifyOnly` passes, but `Object.keys(cua)` still has no native members, inspect the current plugin layout. Run the following plugin-level repair only when `unified-computer-use/scripts/launch.mjs` exists; descriptor-only 26.908+ builds require the targeted ASAR workflow above:
+
+```powershell
+$surfaceRepair = "$SkillRoot\scripts\repair-cua-surface-lock.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File $surfaceRepair -VerifyOnly
+powershell -NoProfile -ExecutionPolicy Bypass -File $surfaceRepair -Install
+```
+
+`-VerifyOnly` fails while any required target is missing, unsupported, or unpatched; a marker alone is never accepted as a complete patch. The default report and `-Json` alone are read-only; `-Json` can also format an explicit install/rollback report. `-VerifyOnly` cannot be combined with a write mode. `-Rollback` restores adjacent `<file>.bak-*` backups only when they match the installed patch, refusing to overwrite later edits. The repair forces the `computer` surface inside `scripts\launch.mjs` and adds Windows guidance in `resources\computer-description.md`, across the cache and supported marketplace source copies. It never modifies the generated `.mcp.json`: a new server reads the forced surface from the launcher even when that environment value remains `browser`.
+
+This workflow requires the script-based plugin layout. Descriptor-only builds without `scripts\launch.mjs` or the required description are unsupported; do not install extra plugins or broaden the patch just to make the check pass. `scripts\test-cua-surface-lock-patterns.ps1` covers the repair against isolated fixtures, and `python "$SkillRoot\scripts\test-probe-cua-surface.py"` checks probe result validation without launching a server. The live `probe-cua-surface.py` requires the guidance, API members, and nonempty window/application results; it is not evidence of a real Desktop restart or screenshot capture.
+
+Both patches survive a same-version Desktop restart and reset only when the plugin cache is re-materialized, which in practice means a Desktop upgrade that moves the plugin version directory. After any Desktop update, re-apply rather than re-analyze: run `-VerifyOnly` and run `-Install` only if it fails. The script globs every plugin version directory, so a version bump needs no edit. See the re-application case in `references/restriction-debug-cases.md` for what to do when the report says `unsupported` instead.
+
+If enumeration works but a later Computer Use call returns `node_repl exec context not found`, inspect the source profile before repair:
+
+```powershell
+$contextPatcher = "$SkillRoot\scripts\patch-computer-use-node-repl-context.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File $contextPatcher
+```
+
+The documented `@oai/sky 0.6.2` profile is `6423BA83...702B7C` -> `3600AC24...5BB60A`. Prefer the normal `install-computer-use-local.ps1 -VerifyOnly` path to install it, then reset the current `node_repl` JavaScript kernel and rerun `-StrictVerifyOnly`. The patcher backs up the exact original under `.codex\backups\computer-use-node-repl-context` and supports `-Rollback`; it rejects unknown hashes. End-to-end validation must start the helper in one JavaScript call and capture a controlled, freshly activated window in later calls so the test exercises the stale-context boundary.
+
+If Windows 10 reaches the native helper but screenshot capture fails at `SetIsBorderRequired` with `0x80004002` or reports `FrameArrived timed out` after successful enumeration, inspect the helper profile before rerunning the general local repair:
+
+```powershell
+$helperPatcher = "$SkillRoot\scripts\patch-computer-use-helper-win10.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File $helperPatcher
+```
+
+Only an `original-patchable` result for one of the documented complete helper SHA-256 profiles authorizes further evaluation. A real write additionally requires Windows 10 and the documented border-interface or frame-callback screenshot failure; a matching hash on Windows 11 is not authorization. Profiles include the older border-interface builds and newer callback-timeout builds through `@oai/sky 0.7.6-F78948E6` and `0.7.6-63C98C4D` from issue #93. Both have independent binary/candidate/unwind verification; Windows 10 capture/input acceptance remains pending. The helper hash, not the Desktop version, is the binary compatibility boundary, and identical reported versions can still cover different binaries:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File $helperPatcher -Install
+```
+
+The patcher verifies the complete output hash, stores the original under `.codex\backups\computer-use-helper`, and supports `-Rollback`. After installation, continue with `-VerifyOnly` and `-StrictVerifyOnly`. Actual screenshot-defect resolution remains unverified until a separately authorized capture test or user-provided runtime evidence confirms it; do not automatically open Explorer/Task Manager for this test. Do not apply the profile to an unknown helper hash.
+
+To refresh only the local Windows Computer Use files and environment gate:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-computer-use-local.ps1"
+```
+
+To verify and automatically repair missing local Computer Use files:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-computer-use-local.ps1" -VerifyOnly
+```
+
+To verify without changing files:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\install-computer-use-local.ps1" -StrictVerifyOnly
+```
+
+If `-StrictVerifyOnly` fails because a cache path is missing or stale, run `-VerifyOnly` once, then rerun `-StrictVerifyOnly`. If `-VerifyOnly` succeeds but Desktop still reports native pipe unavailable, restart Codex Desktop and inspect the newest Desktop log for `computer-use native pipe startup ready`.
+
+## Backup Management
+
+To back up local Codex config, MCP server entries, custom skills, marketplaces, and Chrome native-host state:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\manage-codex-backups.ps1" -Action Backup
+```
+
+To list or restore snapshots:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\manage-codex-backups.ps1" -Action List
+powershell -NoProfile -ExecutionPolicy Bypass -File "$SkillRoot\scripts\manage-codex-backups.ps1" -Action Restore -BackupPath "<backup path>"
+```
+
+## Success Criteria
+
+- If an existing `config.toml` was modified, the log shows a timestamped backup under `.codex\backups\config\`.
+- The patch log's `selected Codex app` and `source package` lines identify the intended highest-version package, including a newer SYSTEM-Staged Store package when present.
+- `Get-AppxPackage -Name OpenAI.Codex` shows `SignatureKind = Developer`.
+- The install log launches the patched Desktop package through its AppUserModelId, avoiding direct-executable access failures under `WindowsApps`.
+- The manifest-declared Codex Desktop process stays alive from the installed package, currently `...\app\ChatGPT.exe` on newer builds and `...\app\Codex.exe` on older builds.
+- Fast Mode verification reaches `/v1/responses` and logs `request wire service_tier=priority`; `/v1/models` probes alone do not pass verification. When the app-server fallback is used, it also logs `thread/start serviceTier=priority`.
+- The patch log includes `fast-mode UI patch result` and `locale i18n patch result`, each either `patched` or `already-patched`.
+- The patch log includes `custom models patch result`, and the patched model filter contains all configured custom model IDs.
+- The patch log includes `browser-use gate patch result`, either `patched` or `already-patched`.
+- Desktop logs show `browser_use_availability_resolved` with `available=true` and `reason=local-patched` after the patched app starts.
+- `$env:USERPROFILE\.codex\config.toml` contains `[marketplaces.openai-curated-local]`.
+- `$env:USERPROFILE\.codex\config.toml` contains `[marketplaces.openai-bundled]` pointing at the marketplace root `install-computer-use-local.ps1` selected, and that marketplace contains the installed bundled plugins plus the local Computer Use overlay. On codex-cli 0.149+ `openai-bundled` is a reserved marketplace name, so the accepted source is the Desktop-materialized `.tmp\bundled-marketplaces\openai-bundled` reserved root; the script's fallback to that root is correct behavior, not drift, and it logs `codex-cli refused the local bundled marketplace source; repointing marketplaces.openai-bundled at the reserved root`. A stable non-reserved root is only expected on older CLI versions that still accept it. Do not "fix" a reserved-root source back to a stable root: doing so makes the CLI drop the marketplace entirely, so `codex plugin marketplace list --json` no longer reports `openai-bundled` and Desktop logs ``marketplace `openai-bundled` is reserved and cannot be added from this source``. Keeping the reserved root does not violate a no-C-drive constraint when `.codex\.tmp` is a junction to another volume, because the reserved path resolves to that volume.
+- Any configured local marketplace used for personal plugins has a supported `.agents\plugins\marketplace.json`; root-level `marketplace.json` alone is not enough for the current plugin CLI.
+- `codex plugin list` shows the plugins required by the requested repair, including `browser@openai-bundled`, `chrome@openai-bundled`, and `computer-use@openai-bundled` for Browser/Chrome/Computer Use work, as `installed, enabled`. Optional plugins retain their prior state.
+- When `-VerifyAllBundledPluginsAvailable` is requested, every complete descriptor in the stable `openai-bundled` marketplace has the same name and version as the installed package and appears with that version in the union of CLI `installed` and `available` JSON entries with an existing local source; no optional plugin becomes installed or enabled as a side effect. This switch compares the marketplace against the package's own `app\resources\plugins\openai-bundled` manifest. Diagnose a descriptor-set mismatch from the current complete predicates: the recorded `26.825.6671.0` platform/account gaps remain expected, while supported `26.1007` optional-entry discovery repairs require all nine publishable descriptors after deployment. See both bundled descriptor cases in `references/restriction-debug-cases.md`; a mismatch alone does not authorize an unknown gate override.
+- Recent Desktop logs retain the current package's bundled descriptor names and do not show `not_in_bundled_marketplace_plugin_names` removing a plugin that was already installed.
+- `$env:USERPROFILE\.codex\config.toml` contains `[plugins."computer-use@openai-bundled"]` with `enabled = true`.
+- `codex plugin list` shows `computer-use@openai-bundled` as `installed, enabled`.
+- If Chrome/browser use is required, `codex plugin list` shows `chrome@openai-bundled` and `browser@openai-bundled` as `installed, enabled`, the Chrome native messaging host manifest points to a stable current-version cache rather than `.tmp\bundled-marketplaces`, and its origins exactly match the current `extension-ids.json`. The `extension-host.exe` directory contains `extension-host-config.json` with schema 1, the current package-matching user-local `codex.exe`, and current same-runtime `node.exe` / `node_repl.exe` paths. Both `%LOCALAPPDATA%\OpenAI\Codex\chrome-native-hosts-v2.json` and `$env:USERPROFILE\.codex\chrome-native-hosts-v2.json` contain the same current schema-2 entry, official NUL-separated SHA-256 identity, installed-package `resourcesPath`, and existing runtime/cache paths. The active marketplace and versioned-cache `browser-client.mjs` hashes match the installed package. Legacy builds also require that hash in the installed `app.asar`; `26.814`-style builds instead require the complete native-host path contract and same-root stable `browserClientPath` / `browserServicePath` values in both v2 state files. `setupBrowserRuntime()` succeeds, `agent.browsers.get("chrome")` returns the Chrome extension backend, `chrome\latest` and `browser\latest` (when present) resolve to stable version directories, and a real smoke test reads the requested public HTTPS page through the Desktop browser channel, confirming its final URL, observed title and meaningful visible content.
+- When Chrome/browser smoke validation is in scope and Chrome is not running, launch Chrome automatically without requesting additional user authorization. Use a task-relevant public HTTPS page and verify its final URL, observed title and meaningful AX/DOM content. Do not require a fixed third-party DOM such as the historical `example.com` heading. For a failed target or changed page, use the "Browser Smoke Target Changes or Fails Independently" case in `references/restriction-debug-cases.md`.
+- `CODEX_ELECTRON_ENABLE_WINDOWS_COMPUTER_USE` is set to `1` for the current user.
+- A full repatch may write `[features] computer_use = true` for compatibility, but the targeted `-OnlyComputerUseSurface` mode does not edit config. On CLI 0.155.0-alpha.16.4, `codex features list` reports `computer_use` as stable and on by default; an absent explicit key passes the background check when a fresh Desktop session exposes native CUA and successfully enumerates windows. Capture/input remain separate optional evidence.
+- `$env:USERPROFILE\.codex\config.toml` contains `[windows]` with `sandbox = "unelevated"`, and the sandbox command syntax shown by `codex sandbox --help` succeeds.
+- The Computer Use plugin cache matches the installed package. Support both legacy `computer-use\latest\node_modules\@oai\sky` and the current lightweight versioned or descriptor-only cache plus `%LOCALAPPDATA%\OpenAI\Codex\runtimes\cua_node`; validation reaches `list_windows` either through the helper transport or the official independent runtime export.
+- `scripts\install-computer-use-local.ps1 -StrictVerifyOnly` logs `client import ok` and `helper transport ok` for legacy layouts, or `runtime import ok` with `method=list_windows` for descriptor-only layouts.
+- For a script-based CUA surface lock, `scripts\repair-cua-surface-lock.ps1 -VerifyOnly` requires complete `surface` and `description` patches on every discovered copy; do not run this test as a gate for descriptor-only 26.908+ plugins. On the recorded `26.903.61454` profile the patched hashes are `4312E22A...419175` and `C72E08A0...FB9291`; different complete files require their own evidence rather than those historical hash prefixes. Both fixture suites must pass. The live probe must report Windows guidance, all three API members, `windows/<n>` with `n > 0`, and a positive application count under the forced `browser` environment. Record real Desktop restart, approval UI, and screenshot results separately; the external probe does not establish them.
+- Windows native Computer Use uses window IDs. On `@oai/cua` 0.2.5, the shipped `tinysky_alt` code and documentation expose `cua.listWindows()`, `cua.listApps()`, and `cua.getApp({ windowId })` for Windows; the lower-level `cua.computer.*` window API is also available. The older `Native app bindings are unavailable for windows.` case applies only to the recorded legacy runtime, not every Windows build. A successful runtime import or source inspection is not a substitute for a fresh Desktop capture after the ASAR gate is restored.
+- For the supported `@oai/sky 0.6.2` cross-call approval profile, `scripts\patch-computer-use-node-repl-context.ps1` reports `patched` with SHA-256 `3600AC240CD6CB7029F1E489DF990CAE22D72177350B8084412DF1F3FA5BB60A`, and its original backup matches `6423BA834F18139D55CDAC2290C91CD9B24B568332B07CDDD2A7EDA043702B7C`.
+- Default native Computer Use verification passes when the applicable package/runtime contracts and real helper enumeration pass without launching or activating a target or sending input. Record native screenshot/input as not exercised; these optional checks are not required to finish an ordinary repair.
+- When the user explicitly authorizes native capture/input diagnostics, start the persistent helper in one call, then exercise later independent calls against the agreed target. Inspect screenshot content and record the effect of each authorized action. A screenshot count or PNG file alone is not capture proof. Stop on user interruption instead of reopening or reactivating the target.
+- An external executor can run the official runtime's read-only enumeration for default verification. Capture or input through external processes requires the same explicit authorization as Desktop interaction; it is not a way around that boundary. Keep capture and `element_index` input in one process when that test is authorized. Chrome/browser smoke validation still requires Desktop's trusted browser channel; see `references/restriction-debug-cases.md` for environment prerequisites.
+- For the supported Windows 10 screenshot-helper profiles, `scripts\patch-computer-use-helper-win10.ps1` reports `patched` with the selected profile's complete output SHA-256 and an original backup matching the profile's complete input SHA-256. Each documented profile has repeated-static resource checks and dynamic-capture image-change checks. Their pairs are `0.4.20`: `F2B2F56F...` -> `71A13CBC...`, `0.5.2`: `2C4CAC16...` -> `D816B14A...`, `0.6.6`: `BE488E66...` -> `34D6EB4F...`, `0.6.11`: `DE07F17A...` -> `40530E62...`, `0.6.11`: `7A95D14E...` -> `E84A4ECB...`, `0.6.16`: `E40BE614...` -> `F35CA6D8...`, and `0.6.17`: `29D5E113...` -> `DC83663F...`. One `@oai/sky` version can ship more than one helper binary, so select a profile by the complete hash and never by the version string. The `0.6.6` baseline includes a cold Explorer capture, two batches of ten unchanged static captures, twenty-capture post-warm-up resource counts, and three distinct Task Manager performance frames; the `0.6.16` baseline includes ten identical static frames, eight distinct Performance-tab frames, accessibility text, and a twenty-capture resource-stability sample. The `0.6.17` baseline reuses the same five guarded regions and adds eight unique static frames, twenty unique dynamic frames, and a threads/handles/working-set stability sample. A dynamic-capture check must activate the target and select a continuously animating view, because a backgrounded Task Manager Processes tab does not repaint and would yield identical frames for reasons unrelated to the patch. The target must also be a non-browser window owned by a real executable: Computer Use ends a turn against a browser window with `could not determine the current browser URL on Windows with enough confidence to enforce policy`, and `list_windows` does not enumerate a window hosted by `powershell.exe`.
+- The patched ASAR has the Computer Use availability and install gates forced local-available. On newer builds these targets can be merged into `webview\assets\app-initial-*.js` instead of the older `use-is-plugins-enabled-*` and `use-plugin-install-flow-*` chunks.
+- The patched ASAR has the Fast Mode UI gate unblocked, the locale chunk with `enable_i18n` forced enabled, and browser_use feature chunks/main feature dispatch patched to report in-app and external browser availability locally. Codex Desktop `26.721.3996.0` can merge the Fast UI, model visibility, and Browser sidebar targets into `webview\assets\app-initial-*.js`.
+- For phone remote-control repair, the patched ASAR contains `remote_control_desktop_fetch_override_used`, `remote_control_auth_token_expired_skipped`, `remote_control_mobile_setup_no_auth_redirect`, `remote_control_mobile_setup_authorize_before_enable`, `remote_control_mfa_info_403_nonblocking`, `remote_control_client_list_partial_failure_nonblocking`, `remote_control_settings_force_control_this_pc_visible`, `remote_control_settings_force_remote_control_section_visible`, and `remote_control_qm_start`.
+- For phone remote-control repair with a native replacement, live `app\resources\codex.exe` contains `remote_control_app_server_isolated_oauth_used`, `remote_control_native_remote_json_first`, `remote_control_websocket_proxy_attempt`, `remote_control_websocket_proxy_connected`, `remote-control-oauth.json`, `remote.json`, and `codex.remote_control.enroll`.
+- For phone remote-control device-list login errors, `scripts\refresh-remote-control-auth.py --verify-only` reports `ok: true` against `/backend-api/wham/remote/control/clients`; if the script regenerated auth, the previous `.codex\remote.json` was backed up and `.codex\auth.json` plus `config.toml` were not modified.
+- For phone remote-control repair, `Settings -> Connections` shows the mobile/phone setup path, the QR code appears, phone scan no longer reports an expired Codex environment, PID/path-correlated native logs show `remote_control_websocket_proxy_connected` and status `Connected` without repeated Windows `os error 10060`, and phone-sent turns reach Desktop. Ping/Pong frame text is optional because some native versions handle those frames without logging them. If a phone-sent turn then targets the wrong model API endpoint, handle it as the post-pairing configuration case.
+- For Dynamic Tools Schema repair, the patched ASAR has `webview\assets\app-server-dynamic-tools-*.js` returning flat entries containing `namespace`, `name`, `description`, and `inputSchema` instead of a namespace wrapper object, `node --check` passes for that asset, and actual Desktop new-chat/thread creation no longer logs `missing field inputSchema`.
+- For Provider History Sync, both App and legacy SQLite stores report thread rows under the current provider, readable rollout first lines use the current provider, `config.toml sha256 unchanged` is logged, official Desktop conversations reappear, and no new empty project groups are introduced.
+- `makeappx.exe` and `signtool.exe` are missing again if SDK cleanup was enabled.

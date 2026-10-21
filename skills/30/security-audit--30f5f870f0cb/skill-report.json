@@ -1,0 +1,385 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T05:19:58.310Z",
+    "slug": "applelamps-security-audit",
+    "source_url": "https://github.com/AppleLamps/web-term/tree/main/.claude/skills/security-audit",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "30f5f870f0cb53655c1d498d174e34085039053a9977407949e2fb07a06d216a",
+    "tree_hash": "3c2ebb7485ecbbd34976f8c4b5e33e463e65493f78cff37315aa4807e662ea02",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "security-audit",
+    "description": "Review command execution, tool permissions, secrets management, WebSocket security, and frontend risks before production deployment.",
+    "summary": "Perform a read-only security review and organize findings by urgency.",
+    "icon": "📦",
+    "author": "AppleLamps",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "security-audit",
+      "vulnerability-review",
+      "secrets-management",
+      "websocket-security",
+      "frontend-security"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "env_access"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "All eight static findings are false positives caused by Markdown code spans describing audit checks; none executes commands or accesses secrets. SKILL.md defines a read-only review workflow and contains no prompt injection or other semantic security issue.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 10,
+            "line_end": 10
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 11,
+            "line_end": 11
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 16,
+            "line_end": 16
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 21
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 26,
+            "line_end": 26
+          }
+        ]
+      },
+      {
+        "factor": "env_access",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 23,
+            "line_end": 23
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:10:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "1. **Command Execution Review** (`backend/main.py`):"
+      },
+      {
+        "id": "external_commands:SKILL.md:11:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 11,
+        "line_end": 11,
+        "snippet": "- Check `run_terminal_command()` for shell injection vulnerabilities"
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "- Verify Chat mode only allows: `read_file`, `web_search`"
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- Ensure `.env` is in `.gitignore`"
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- Verify `python-dotenv` usage for environment variables"
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "- Check for authentication on `/ws` endpoint"
+      },
+      {
+        "id": "env_access:SKILL.md:23:dotenv-library",
+        "category": "env_access",
+        "severity": "low",
+        "pattern": "dotenv library",
+        "file": "SKILL.md",
+        "line_start": 23,
+        "line_end": 23,
+        "snippet": "- Verify `python-dotenv` usage for environment variables"
+      },
+      {
+        "id": "sensitive:SKILL.md:21:environment-file-access",
+        "category": "sensitive",
+        "severity": "high",
+        "pattern": "Environment file access",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "- Ensure `.env` is in `.gitignore`"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:10:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 10 uses Markdown backticks to format a file path in an audit checklist; it contains no Ruby or shell execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:11:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 11 formats a function name while instructing the reviewer to check for shell injection; it does not invoke the function or a command."
+      },
+      {
+        "id": "external_commands:SKILL.md:16:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 16 formats allowed tool names as Markdown code and describes a permission review; no command execution occurs."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 21 formats .env and .gitignore filenames in a defensive checklist item; it does not execute shell syntax."
+      },
+      {
+        "id": "external_commands:SKILL.md:23:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 23 formats the python-dotenv package name in Markdown and only asks the reviewer to verify its usage."
+      },
+      {
+        "id": "external_commands:SKILL.md:26:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "Line 26 formats a WebSocket endpoint path in an authentication checklist item; it contains no executable command."
+      },
+      {
+        "id": "env_access:SKILL.md:23:dotenv-library",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The skill mentions python-dotenv as a subject for review but includes no import, environment lookup, or secret access."
+      },
+      {
+        "id": "sensitive:SKILL.md:21:environment-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The checklist recommends ensuring .env is ignored by version control; it neither reads the file nor exposes its contents."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 50,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T05:19:58.310Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Audit Application Security Before Deployment",
+    "value_statement": "Production reviews can miss command injection, excessive permissions, exposed secrets, and unsafe input handling. This skill provides a structured, read-only audit across backend and frontend controls.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "security audit",
+      "command injection review",
+      "API key security",
+      "WebSocket authentication",
+      "frontend XSS",
+      "tool permission review",
+      "production security checklist"
+    ],
+    "actual_capabilities": [
+      "Reviews command execution for shell injection, dangerous patterns, and a 15-second timeout.",
+      "Checks Chat and Agent mode tool permissions for excessive access or bypass risks.",
+      "Reviews environment file handling, hardcoded API keys, and python-dotenv usage.",
+      "Checks WebSocket authentication, message validation, and user input injection risks.",
+      "Reviews markdown rendering, image upload handling, and sensitive client-side data.",
+      "Organizes results into critical issues, warnings, and recommendations."
+    ],
+    "limitations": [
+      "The audit is read-only and does not modify vulnerable files.",
+      "The checklist assumes the repository contains the named backend, modes, and WebSocket endpoint.",
+      "It does not run automated scanners, tests, or vulnerability exploits.",
+      "Findings depend on the source files available during review and require developer verification."
+    ],
+    "use_cases": [
+      {
+        "title": "Predeployment Review",
+        "description": "Assess command execution, secrets, permissions, WebSockets, and frontend controls before a production release.",
+        "target_user": "Release engineer"
+      },
+      {
+        "title": "Backend Risk Assessment",
+        "description": "Review terminal command handling, timeouts, tool restrictions, authentication, and input validation.",
+        "target_user": "Backend developer"
+      },
+      {
+        "title": "Security Triage",
+        "description": "Create an urgency-based report that separates immediate issues, warnings, and recommended improvements.",
+        "target_user": "Security reviewer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Basic Security Audit",
+        "prompt": "Run a read-only security audit of this repository and group findings into critical issues, warnings, and recommendations.",
+        "scenario": "Use for an initial repository review."
+      },
+      {
+        "title": "Command and Permission Review",
+        "prompt": "Review command execution and tool permissions. Check shell injection, dangerous commands, timeout enforcement, allowed tools, and permission bypass risks.",
+        "scenario": "Use when backend commands or agent tools changed."
+      },
+      {
+        "title": "Secrets and WebSocket Review",
+        "prompt": "Audit secrets management and WebSocket security. Check ignored environment files, hardcoded keys, authentication, message validation, and user input injection.",
+        "scenario": "Use before exposing a WebSocket service."
+      },
+      {
+        "title": "Full Production Readiness Audit",
+        "prompt": "Perform the complete read-only audit. Cite evidence, explain impact, prioritize remediation, and include command, permission, secret, WebSocket, and frontend risks.",
+        "scenario": "Use for a detailed production readiness assessment."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Review command execution before production.",
+        "output": [
+          "Warning: Confirm that untrusted input cannot reach shell parsing in the terminal command handler.",
+          "Recommendation: Verify that every command execution path enforces the expected 15-second timeout."
+        ]
+      },
+      {
+        "input": "Audit secrets and WebSocket security.",
+        "output": [
+          "Secrets: Check that environment files are ignored and no API keys are stored in source.",
+          "WebSocket: Verify authentication, validate message structure, and reject unsafe user input."
+        ]
+      },
+      {
+        "input": "Check frontend security risks.",
+        "output": [
+          "Review markdown rendering for cross-site scripting exposure.",
+          "Validate image upload size and format handling.",
+          "Confirm that client-side bundles contain no sensitive data."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Provide the complete relevant repository so findings can cite implementation evidence.",
+      "Run the audit after changes to commands, permissions, authentication, uploads, or secret handling.",
+      "Verify each reported issue and prioritize fixes by impact before deployment."
+    ],
+    "anti_patterns": [
+      "Do not treat checklist coverage as proof that the application is secure.",
+      "Do not expose discovered API keys or environment values in the report.",
+      "Do not exploit a suspected vulnerability while gathering evidence."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill modify source files?",
+        "answer": "No. It performs a read-only review and recommends fixes for approval."
+      },
+      {
+        "question": "Which security areas does it review?",
+        "answer": "It covers command execution, tool permissions, secrets, WebSockets, frontend rendering, uploads, and client-side data."
+      },
+      {
+        "question": "Does it run vulnerability scanners?",
+        "answer": "No. It reviews available source code using a defined checklist."
+      },
+      {
+        "question": "Can it prove that an application is secure?",
+        "answer": "No. Its findings support review but do not replace testing, threat modeling, or professional assessment."
+      },
+      {
+        "question": "How are results prioritized?",
+        "answer": "The report separates critical issues, warnings, and recommendations according to urgency."
+      },
+      {
+        "question": "When should I run this audit?",
+        "answer": "Run it before production and after changes to commands, permissions, authentication, secrets, WebSockets, or frontend input handling."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 50
+    }
+  ]
+}

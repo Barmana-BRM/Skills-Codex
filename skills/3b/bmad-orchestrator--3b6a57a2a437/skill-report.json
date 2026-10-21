@@ -1,0 +1,2892 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T08:52:16.457Z",
+    "slug": "supercent-io-bmad-orchestrator",
+    "source_url": "https://github.com/supercent-io/skills-template/tree/main/.agent-skills/bmad-orchestrator/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "43172e9e5ff1234b433e6de38d0ac3008dd21b65fdd9cccb9f77fd8dc0ded6b4",
+    "tree_hash": "6bbff52d08e1b31b7d77db4c803a4adf2ddcaaa4e5113d37ec83d335e809643f",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "bmad-orchestrator",
+    "description": "Coordinates BMAD project workflows, initializes configuration, tracks phase status, and submits phase documents to plannotator review gates.",
+    "summary": "Guides AI-assisted projects through BMAD phases with setup scripts, status tracking, and review gates.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "supercent-io",
+    "license": "MIT",
+    "tags": [
+      "bmad",
+      "workflow",
+      "planning",
+      "phase-gates",
+      "ai-development"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "filesystem",
+      "external_commands",
+      "network"
+    ],
+    "category": "coding"
+  },
+  "security_audit": {
+    "risk_level": "critical",
+    "is_blocked": true,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "Most static findings are Markdown examples, shell helper boilerplate, or benign YAML parsing. Confirmed risks include remote curl-to-shell installation, cross-skill hook execution, unsafe Python fallback argument interpolation, and possible document disclosure through plannotator review.",
+    "remediation": [
+      {
+        "issue": "Remote installer is piped directly to a shell.",
+        "suggestion": "Replace curl-to-shell with a pinned package, checksum verification, and explicit user confirmation before execution.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Installer executes a sibling plannotator hook script.",
+        "suggestion": "Avoid cross-skill script execution, or require a verified absolute path and explicit user approval before running the hook.",
+        "severity": "high"
+      },
+      {
+        "issue": "Python fallback interpolates shell arguments into python -c source.",
+        "suggestion": "Pass DOC_FILE and TITLE through argv or environment variables, then call subprocess.run with fixed argument lists.",
+        "severity": "high"
+      },
+      {
+        "issue": "Phase documents can be sent to plannotator without a separate privacy checkpoint.",
+        "suggestion": "Ask for confirmation before submission and document whether content leaves the local machine.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Phase gate succeeds when plannotator is missing.",
+        "suggestion": "Fail closed by default, or require an explicit recorded override before continuing without review.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "REFERENCE.md",
+            "line_start": 268,
+            "line_end": 268
+          },
+          {
+            "file": "REFERENCE.md",
+            "line_start": 300,
+            "line_end": 300
+          },
+          {
+            "file": "REFERENCE.md",
+            "line_start": 318,
+            "line_end": 318
+          },
+          {
+            "file": "REFERENCE.md",
+            "line_start": 268,
+            "line_end": 268
+          },
+          {
+            "file": "REFERENCE.md",
+            "line_start": 300,
+            "line_end": 300
+          },
+          {
+            "file": "REFERENCE.md",
+            "line_start": 318,
+            "line_end": 318
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 27,
+            "line_end": 27
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 47,
+            "line_end": 47
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 177,
+            "line_end": 177
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 103,
+            "line_end": 103
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 84,
+            "line_end": 84
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 65,
+            "line_end": 65
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 40,
+            "line_end": 40
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 108,
+            "line_end": 108
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 132,
+            "line_end": 132
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 134,
+            "line_end": 134
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 142,
+            "line_end": 142
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 180,
+            "line_end": 180
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 181,
+            "line_end": 181
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 183,
+            "line_end": 183
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 185,
+            "line_end": 185
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 61,
+            "line_end": 61
+          }
+        ]
+      },
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 31,
+            "line_end": 31
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 49,
+            "line_end": 49
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 50,
+            "line_end": 50
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 51,
+            "line_end": 51
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 55,
+            "line_end": 55
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "scripts/check-status.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/init-project.sh",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "scripts/init-project.sh",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "scripts/init-project.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 66,
+            "line_end": 66
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 97,
+            "line_end": 97
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 192,
+            "line_end": 192
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 196,
+            "line_end": 196
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 201,
+            "line_end": 201
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 102,
+            "line_end": 102
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 41,
+            "line_end": 41
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 43,
+            "line_end": 43
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 92,
+            "line_end": 92
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 161,
+            "line_end": 161
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 165,
+            "line_end": 165
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 170,
+            "line_end": 170
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 177,
+            "line_end": 177
+          },
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 94,
+            "line_end": 94
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 106,
+            "line_end": 106
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 123,
+            "line_end": 123
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 145,
+            "line_end": 145
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 153,
+            "line_end": 153
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 164,
+            "line_end": 164
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 29
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 29,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 41
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 41,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 58,
+            "line_end": 58
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 60,
+            "line_end": 60
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 61,
+            "line_end": 61
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 69
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 69,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 76
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "scripts/install.sh",
+            "line_start": 74,
+            "line_end": 74
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 78,
+            "line_end": 78
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 88,
+            "line_end": 88
+          },
+          {
+            "file": "scripts/install.sh",
+            "line_start": 110,
+            "line_end": 110
+          },
+          {
+            "file": "scripts/validate-config.sh",
+            "line_start": 54,
+            "line_end": 54
+          },
+          {
+            "file": "SETUP.md",
+            "line_start": 300,
+            "line_end": 300
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          },
+          {
+            "file": "templates/config.template.yaml",
+            "line_start": 38,
+            "line_end": 38
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "filesystem:REFERENCE.md:268:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "REFERENCE.md",
+        "line_start": 268,
+        "line_end": 268,
+        "snippet": "### Global Config (~/.claude/config/bmad/config.yaml)"
+      },
+      {
+        "id": "filesystem:REFERENCE.md:300:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "REFERENCE.md",
+        "line_start": 300,
+        "line_end": 300,
+        "snippet": "2. Global config (~/.claude/config/bmad/config.yaml) - default values"
+      },
+      {
+        "id": "filesystem:REFERENCE.md:318:hidden-file-in-home-directory",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Hidden file in home directory",
+        "file": "REFERENCE.md",
+        "line_start": 318,
+        "line_end": 318,
+        "snippet": "Path: ~/.claude/config/bmad/config.yaml"
+      },
+      {
+        "id": "filesystem:REFERENCE.md:268:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "REFERENCE.md",
+        "line_start": 268,
+        "line_end": 268,
+        "snippet": "### Global Config (~/.claude/config/bmad/config.yaml)"
+      },
+      {
+        "id": "filesystem:REFERENCE.md:300:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "REFERENCE.md",
+        "line_start": 300,
+        "line_end": 300,
+        "snippet": "2. Global config (~/.claude/config/bmad/config.yaml) - default values"
+      },
+      {
+        "id": "filesystem:REFERENCE.md:318:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "REFERENCE.md",
+        "line_start": 318,
+        "line_end": 318,
+        "snippet": "Path: ~/.claude/config/bmad/config.yaml"
+      },
+      {
+        "id": "blocker:REFERENCE.md:461:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "REFERENCE.md",
+        "line_start": 461,
+        "line_end": 461,
+        "snippet": "### Invalid YAML"
+      },
+      {
+        "id": "blocker:resources/workflow-phases.md:420:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "resources/workflow-phases.md",
+        "line_start": 420,
+        "line_end": 422,
+        "snippet": "- Planning document incomplete or invalid"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:28:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "OUTPUT_FOLDER=$(yq eval '.output_folder' \"$CONFIG_FILE\" 2>/dev/null || echo \"docs\")"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:31:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "OUTPUT_FOLDER=$(grep \"output_folder:\" \"$CONFIG_FILE\" | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr -d '\"')"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:49:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "PROJECT_NAME=$(yq eval '.project_name' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:50:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "PROJECT_TYPE=$(yq eval '.project_type' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:51:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "PROJECT_LEVEL=$(yq eval '.project_level' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:55:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 55,
+        "line_end": 55,
+        "snippet": "PROJECT_NAME=$(grep \"project_name:\" \"$STATUS_FILE\" | head -1 | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:58:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "PROJECT_TYPE=$(grep \"project_type:\" \"$STATUS_FILE\" | head -1 | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:61:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/check-status.sh",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "PROJECT_LEVEL=$(grep \"project_level:\" \"$STATUS_FILE\" | head -1 | sed 's/.*: *//;s/ *#.*//')"
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/check-status.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:27:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 27,
+        "line_end": 27,
+        "snippet": "if command -v yq &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:28:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "OUTPUT_FOLDER=$(yq eval '.output_folder' \"$CONFIG_FILE\" 2>/dev/null || echo \"docs\")"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:47:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 47,
+        "line_end": 47,
+        "snippet": "if command -v yq &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:49:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "PROJECT_NAME=$(yq eval '.project_name' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:50:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 50,
+        "line_end": 50,
+        "snippet": "PROJECT_TYPE=$(yq eval '.project_type' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:51:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 51,
+        "line_end": 51,
+        "snippet": "PROJECT_LEVEL=$(yq eval '.project_level' \"$STATUS_FILE\" 2>/dev/null || echo \"Unknown\")"
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:177:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/check-status.sh",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "\" \"$STATUS_FILE\" 2>/dev/null)"
+      },
+      {
+        "id": "blocker:scripts/check-status.sh:89:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/check-status.sh",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "# Parse workflows using python3 to avoid nested while loop stdin consumption bug"
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:19:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/init-project.sh",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "SKILL_PATH=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")/..\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:137:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/init-project.sh",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "TIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")"
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/init-project.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "blocker:scripts/init-project.sh:97:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/init-project.sh",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "echo -e \"${YELLOW}Warning: Unknown project type '${PROJECT_TYPE}'. Valid types: ${valid_types[*]}${N"
+      },
+      {
+        "id": "external_commands:scripts/install.sh:66:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install.sh",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "PLANNOTATOR_VERSION=$(plannotator --version 2>/dev/null || echo \"installed\")"
+      },
+      {
+        "id": "external_commands:scripts/install.sh:97:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install.sh",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "SKILL_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")/..\" && pwd)\""
+      },
+      {
+        "id": "external_commands:scripts/install.sh:192:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install.sh",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "echo -e \"  ${BLUE}$([ \"$INIT_PROJECT\" = true ] && echo 1 || echo 2). Start your first phase:${NC}\""
+      },
+      {
+        "id": "external_commands:scripts/install.sh:196:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install.sh",
+        "line_start": 196,
+        "line_end": 196,
+        "snippet": "echo -e \"  ${BLUE}$([ \"$INIT_PROJECT\" = true ] && echo 2 || echo 3). Review each phase document befo"
+      },
+      {
+        "id": "external_commands:scripts/install.sh:201:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/install.sh",
+        "line_start": 201,
+        "line_end": 201,
+        "snippet": "echo -e \"  ${BLUE}$([ \"$INIT_PROJECT\" = true ] && echo 3 || echo 4). Restart Claude Code${NC} so the"
+      },
+      {
+        "id": "external_commands:scripts/install.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/install.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:scripts/install.sh:74:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/install.sh",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "echo -e \"  ${GRAY}[DRY RUN] Would run: curl -sSfL https://plannotator.ai/install.sh | sh${NC}\""
+      },
+      {
+        "id": "network:scripts/install.sh:78:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/install.sh",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "if curl -sSfL https://plannotator.ai/install.sh | sh; then"
+      },
+      {
+        "id": "network:scripts/install.sh:88:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/install.sh",
+        "line_start": 88,
+        "line_end": 88,
+        "snippet": "echo -e \"  ${GRAY}  Manual install: https://plannotator.ai${NC}\""
+      },
+      {
+        "id": "network:scripts/install.sh:110:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/install.sh",
+        "line_start": 110,
+        "line_end": 110,
+        "snippet": "echo -e \"  ${GRAY}  npx skills add https://github.com/supercent-io/skills-template --skill plannotat"
+      },
+      {
+        "id": "filesystem:scripts/install.sh:103:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "scripts/install.sh",
+        "line_start": 103,
+        "line_end": 103,
+        "snippet": "HOOK_SCRIPT=\"${SKILL_DIR}/../plannotator/scripts/setup-hook.sh\""
+      },
+      {
+        "id": "filesystem:scripts/install.sh:84:hidden-file-access",
+        "category": "filesystem",
+        "severity": "medium",
+        "pattern": "Hidden file access",
+        "file": "scripts/install.sh",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "export PATH=\"$HOME/.local/bin:$HOME/bin:$PATH\""
+      },
+      {
+        "id": "filesystem:scripts/install.sh:65:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/install.sh",
+        "line_start": 65,
+        "line_end": 65,
+        "snippet": "elif command -v plannotator &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/install.sh:66:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/install.sh",
+        "line_start": 66,
+        "line_end": 66,
+        "snippet": "PLANNOTATOR_VERSION=$(plannotator --version 2>/dev/null || echo \"installed\")"
+      },
+      {
+        "id": "blocker:scripts/install.sh:74:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "scripts/install.sh",
+        "line_start": 74,
+        "line_end": 74,
+        "snippet": "echo -e \"  ${GRAY}[DRY RUN] Would run: curl -sSfL https://plannotator.ai/install.sh | sh${NC}\""
+      },
+      {
+        "id": "blocker:scripts/install.sh:78:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "scripts/install.sh",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "if curl -sSfL https://plannotator.ai/install.sh | sh; then"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:102:python-subprocess-run",
+        "category": "external_commands",
+        "severity": "high",
+        "pattern": "Python subprocess.run",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "proc = subprocess.run("
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:34:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "BASENAME=$(basename \"$DOC_FILE\" .md)"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:41:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "PROJECT_NAME=$(yq eval '.project_name' bmad/config.yaml 2>/dev/null || echo \"project\")"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:43:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "PROJECT_NAME=$(grep \"project_name:\" bmad/config.yaml 2>/dev/null | head -1 | sed 's/.*: *\"\\?\\([^\"]*\\"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:92:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 92,
+        "line_end": 92,
+        "snippet": "DOC_CONTENT=$(cat \"$DOC_FILE\")"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:124:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "doc_basename=$(basename \"$DOC_FILE\" .md)"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:161:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 161,
+        "line_end": 161,
+        "snippet": "WORKFLOW_NAME=$(find_workflow_name)"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:165:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 165,
+        "line_end": 165,
+        "snippet": "WORKFLOW_NAME=$(echo \"$BASENAME\" | sed 's/-[0-9]\\{4\\}[^-]*$//' | sed 's/-[a-zA-Z0-9]*$//')"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:170:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 170,
+        "line_end": 170,
+        "snippet": "WORKFLOW_NAME=$(echo \"$BASENAME\" | cut -d'-' -f1)"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:177:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "TIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:40:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 40,
+        "line_end": 40,
+        "snippet": "if command -v yq &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:41:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 41,
+        "line_end": 41,
+        "snippet": "PROJECT_NAME=$(yq eval '.project_name' bmad/config.yaml 2>/dev/null || echo \"project\")"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:43:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "PROJECT_NAME=$(grep \"project_name:\" bmad/config.yaml 2>/dev/null | head -1 | sed 's/.*: *\"\\?\\([^\"]*\\"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:78:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 78,
+        "line_end": 78,
+        "snippet": "if ! command -v plannotator &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:97:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 97,
+        "line_end": 97,
+        "snippet": "--stdin 2>/dev/null || {"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:108:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 108,
+        "line_end": 108,
+        "snippet": "\" 2>/dev/null || {"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:132:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 132,
+        "line_end": 132,
+        "snippet": "if command -v yq &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:134:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 134,
+        "line_end": 134,
+        "snippet": "yq eval '.workflow_status[].name' \"$status_yaml\" 2>/dev/null | while IFS= read -r name; do"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:142:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 142,
+        "line_end": 142,
+        "snippet": "python3 - <<PYEOF 2>/dev/null"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:180:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 180,
+        "line_end": 180,
+        "snippet": "if command -v yq &>/dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:181:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 181,
+        "line_end": 181,
+        "snippet": "yq eval \".last_updated = \\\"$TIMESTAMP\\\"\" -i \"$STATUS_FILE\" 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:183:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 183,
+        "line_end": 183,
+        "snippet": "-i \"$STATUS_FILE\" 2>/dev/null || true"
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:185:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/phase-gate-review.sh",
+        "line_start": 185,
+        "line_end": 185,
+        "snippet": "-i \"$STATUS_FILE\" 2>/dev/null || true"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:94:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 94,
+        "line_end": 94,
+        "snippet": "PROJECT_NAME=$(grep \"^project_name:\" \"$CONFIG_FILE\" | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr -d '\"')"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:106:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 106,
+        "line_end": 106,
+        "snippet": "PROJECT_TYPE=$(grep \"^project_type:\" \"$CONFIG_FILE\" | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr -d '\"')"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:123:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 123,
+        "line_end": 123,
+        "snippet": "PROJECT_LEVEL=$(grep \"^project_level:\" \"$CONFIG_FILE\" | sed 's/.*: *//;s/ *#.*//')"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:145:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 145,
+        "line_end": 145,
+        "snippet": "OUTPUT_FOLDER=$(grep \"^output_folder:\" \"$CONFIG_FILE\" | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr -d '\"'"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:153:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 153,
+        "line_end": 153,
+        "snippet": "COMM_LANG=$(grep \"^communication_language:\" \"$CONFIG_FILE\" | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/\\1/' | tr -"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:164:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/validate-config.sh",
+        "line_start": 164,
+        "line_end": 164,
+        "snippet": "VERSION=$(grep -E \"^(bmad_version|version):\" \"$CONFIG_FILE\" | head -1 | sed 's/.*: *\"\\?\\([^\"]*\\)\"\\?/"
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/validate-config.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "network:scripts/validate-config.sh:54:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "scripts/validate-config.sh",
+        "line_start": 54,
+        "line_end": 54,
+        "snippet": "echo -e \"${GRAY}  Install yq for better validation: https://github.com/mikefarah/yq${NC}\""
+      },
+      {
+        "id": "filesystem:scripts/validate-config.sh:49:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/validate-config.sh",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "if command -v yq &> /dev/null; then"
+      },
+      {
+        "id": "filesystem:scripts/validate-config.sh:61:standard-device-file-access",
+        "category": "filesystem",
+        "severity": "low",
+        "pattern": "Standard device file access",
+        "file": "scripts/validate-config.sh",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "if yq eval '.' \"$CONFIG_FILE\" > /dev/null 2>&1; then"
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:62:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate-config.sh",
+        "line_start": 62,
+        "line_end": 62,
+        "snippet": "success \"Valid YAML syntax\""
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:64:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate-config.sh",
+        "line_start": 64,
+        "line_end": 64,
+        "snippet": "error \"Invalid YAML syntax\""
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:237:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "scripts/validate-config.sh",
+        "line_start": 237,
+        "line_end": 237,
+        "snippet": "echo -e \"${GRAY}  Configuration is valid but has recommendations${NC}\""
+      },
+      {
+        "id": "network:SETUP.md:300:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SETUP.md",
+        "line_start": 300,
+        "line_end": 300,
+        "snippet": "curl -sSfL https://plannotator.ai/install.sh | sh"
+      },
+      {
+        "id": "blocker:SETUP.md:300:pipe-to-shell-pattern",
+        "category": "blocker",
+        "severity": "critical",
+        "pattern": "Pipe to shell pattern",
+        "file": "SETUP.md",
+        "line_start": 300,
+        "line_end": 300,
+        "snippet": "curl -sSfL https://plannotator.ai/install.sh | sh"
+      },
+      {
+        "id": "blocker:SETUP.md:33:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SETUP.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "Use the same cross-platform control model as JEO: `settings` configure the platform, `rules` prevent"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 29,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 29,
+        "line_end": 33,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 34,
+        "snippet": "`bmad-orchestrator`'s default execution path is Claude Code."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "To run the same flow directly in Codex, we recommend operating BMAD stages via a higher-level orches"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 41,
+        "snippet": "- `settings`: platform-specific runtime configuration such as Claude hooks, Codex/Gemini instruction"
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 41,
+        "line_end": 42,
+        "snippet": "- `rules`: phase constraints such as \"do not advance before the current phase document is approved\" "
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 42,
+        "snippet": "- `hooks`: platform callbacks such as Claude `ExitPlanMode`, Codex `notify`, or Gemini `AfterAgent`"
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 58,
+        "line_end": 58,
+        "snippet": "| Gemini CLI | Native (recommended) | Register the `bmad` keyword, then run `/workflow-init` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 60,
+        "snippet": "| Claude Code | Native (recommended) | Install skill + `remember` pattern |"
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "| OpenCode | Orchestration integration | Use an `omx`/`ohmg`/`omx`-style bridge |"
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 61,
+        "snippet": "| Codex | Orchestration integration | Use an `omx`/`ohmg`-style bridge |"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 69,
+        "snippet": "Possible with `this skill alone`:"
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 69,
+        "line_end": 72,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 76,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 76,
+        "line_end": 78,
+        "snippet": "1. Run `/workflow-init` to bootstrap BMAD config."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 86,
+        "snippet": "3. Run `/workflow-status` any time to inspect current phase and progress."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 87,
+        "snippet": "| Initialize BMAD | `/workflow-init` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 87,
+        "line_end": 99,
+        "snippet": "| Check BMAD status | `/workflow-status` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 106,
+        "snippet": "- **Obsidian archive**: Every approved phase document auto-saves with YAML frontmatter and `[[BMAD P"
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 106,
+        "line_end": 112,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 116,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 116,
+        "line_end": 119,
+        "snippet": "```text"
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 119,
+        "line_end": 121,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "The agent will open the plannotator UI for review. In Claude Code: call `EnterPlanMode` → write plan"
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 125,
+        "line_end": 143,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 149,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 160,
+        "snippet": "```yaml"
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 160,
+        "line_end": 166,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 167,
+        "snippet": "| Phase 1 → 2 | Product Brief | `bash scripts/phase-gate-review.sh docs/product-brief-*.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 167,
+        "line_end": 168,
+        "snippet": "| Phase 2 → 3 | PRD / Tech Spec | `bash scripts/phase-gate-review.sh docs/prd-*.md` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 168,
+        "line_end": 169,
+        "snippet": "| Phase 3 → 4 | Architecture | `bash scripts/phase-gate-review.sh docs/architecture-*.md` |"
+      },
+      {
+        "id": "network:SKILL.md:28:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "npx skills add https://github.com/supercent-io/skills-template --skill bmad-orchestrator"
+      },
+      {
+        "id": "network:templates/config.template.yaml:38:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "templates/config.template.yaml",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "# repository_url: \"https://github.com/user/repo\""
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "filesystem:REFERENCE.md:268:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "filesystem:REFERENCE.md:300:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "filesystem:REFERENCE.md:318:hidden-file-in-home-directory",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "filesystem:REFERENCE.md:268:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "filesystem:REFERENCE.md:300:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "filesystem:REFERENCE.md:318:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.89,
+        "reason": "This is reference documentation for an optional Claude config path. No code reads, writes, or exfiltrates the hidden home file here."
+      },
+      {
+        "id": "blocker:REFERENCE.md:461:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "blocker:resources/workflow-phases.md:420:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:28:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:31:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:49:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:50:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:51:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:55:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:58:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:61:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/check-status.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shebang declares the interpreter for a user-run helper script. The interpreter declaration is not itself a command injection or hidden execution path."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:27:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:28:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:47:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:49:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:50:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:51:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/check-status.sh:177:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "blocker:scripts/check-status.sh:89:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:19:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:137:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/init-project.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shebang declares the interpreter for a user-run helper script. The interpreter declaration is not itself a command injection or hidden execution path."
+      },
+      {
+        "id": "blocker:scripts/init-project.sh:97:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:66:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:97:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:192:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:196:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:201:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/install.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shebang declares the interpreter for a user-run helper script. The interpreter declaration is not itself a command injection or hidden execution path."
+      },
+      {
+        "id": "network:scripts/install.sh:74:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "The URL appears only in a dry-run echo message. The executable network path is adjudicated separately at line 78."
+      },
+      {
+        "id": "network:scripts/install.sh:78:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.96,
+        "reason": "This URL is used in a curl pipeline that downloads and executes a remote installer. That is a real supply-chain risk because network code runs locally without pinning or checksum verification.",
+        "severity": "critical"
+      },
+      {
+        "id": "network:scripts/install.sh:88:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a manual help URL printed after install failure. It is not fetched or executed by the script."
+      },
+      {
+        "id": "network:scripts/install.sh:110:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.88,
+        "reason": "This is a displayed npx install suggestion for a related skill. The script does not fetch this URL automatically."
+      },
+      {
+        "id": "filesystem:scripts/install.sh:103:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.88,
+        "reason": "The installer resolves a sibling ../plannotator setup-hook.sh and later executes it if present. This crosses the skill boundary and can run adjacent skill code without strong validation.",
+        "severity": "high"
+      },
+      {
+        "id": "filesystem:scripts/install.sh:84:hidden-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The script prepends standard user bin directories to PATH after installation. It does not read hidden files or access secrets."
+      },
+      {
+        "id": "filesystem:scripts/install.sh:65:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/install.sh:66:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "blocker:scripts/install.sh:74:pipe-to-shell-pattern",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line only prints the curl-to-shell command during dry-run mode. It does not execute the remote installer at this location."
+      },
+      {
+        "id": "blocker:scripts/install.sh:78:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.98,
+        "reason": "The script executes curl -sSfL https://plannotator.ai/install.sh | sh. Piping an unauthenticated remote installer directly to a shell is a critical execution risk.",
+        "severity": "critical"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:102:python-subprocess-run",
+        "verdict": "confirmed",
+        "confidence": 0.9,
+        "reason": "The Python fallback is built from shell-interpolated DOC_FILE and TITLE values before running subprocess.run. Crafted arguments can break Python string quoting or alter the call path.",
+        "severity": "high"
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:34:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:41:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:43:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:92:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.74,
+        "reason": "This command substitution reads the document path supplied to the review script as intended. The broader disclosure concern is captured as a separate semantic finding."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:124:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:161:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:165:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:170:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:177:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/phase-gate-review.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shebang declares the interpreter for a user-run helper script. The interpreter declaration is not itself a command injection or hidden execution path."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:40:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:41:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:43:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:78:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:97:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:108:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:132:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:134:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:142:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:180:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:181:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:183:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/phase-gate-review.sh:185:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:94:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:106:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:123:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:145:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:153:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:164:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.82,
+        "reason": "The substitution captures output from fixed local utilities with quoted arguments and is not passed to eval or a shell command builder. This is routine script parsing logic."
+      },
+      {
+        "id": "external_commands:scripts/validate-config.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.84,
+        "reason": "The shebang declares the interpreter for a user-run helper script. The interpreter declaration is not itself a command injection or hidden execution path."
+      },
+      {
+        "id": "network:scripts/validate-config.sh:54:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This line prints a documentation link for installing yq. The script does not request the URL or execute downloaded code."
+      },
+      {
+        "id": "filesystem:scripts/validate-config.sh:49:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "filesystem:scripts/validate-config.sh:61:standard-device-file-access",
+        "verdict": "false_positive",
+        "confidence": 0.92,
+        "reason": "The finding is caused by normal redirection to /dev/null or a command existence check. It does not access device data or sensitive files."
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:62:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:64:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "blocker:scripts/validate-config.sh:237:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "network:SETUP.md:300:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.95,
+        "reason": "The setup guide tells users to download a remote installer and pipe it to sh. Documentation that directs this execution pattern can lead users to run unverified network code.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:SETUP.md:300:pipe-to-shell-pattern",
+        "verdict": "confirmed",
+        "confidence": 0.97,
+        "reason": "The troubleshooting instructions explicitly use curl -sSfL https://plannotator.ai/install.sh | sh. This is a critical unsafe installation pattern even when presented as documentation.",
+        "severity": "critical"
+      },
+      {
+        "id": "blocker:SETUP.md:33:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "The matched text describes workflow validation or error handling, not host discovery. No system inventory, secret lookup, or environment probing occurs at this line."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:29:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:41:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:58:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:60:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:61:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:76:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:87:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:106:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:116:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:119:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:121:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:125:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:160:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:166:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "external_commands:SKILL.md:168:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.91,
+        "reason": "The matched backticks are Markdown code fences or inline command examples. They are documentation text, not Ruby or shell backtick execution."
+      },
+      {
+        "id": "network:SKILL.md:28:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is an installation command in Markdown documentation. It is not executed by the skill at this location."
+      },
+      {
+        "id": "network:templates/config.template.yaml:38:hardcoded-url",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The URL is a commented placeholder for a repository field in a template. It is not active network behavior."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Potential External Document Disclosure",
+        "description": "The phase gate script reads a full project document and submits it to plannotator. Sensitive PRDs or architecture notes may leave the repository without a clear consent checkpoint.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 92,
+            "line_end": 103
+          },
+          {
+            "file": "SETUP.md",
+            "line_start": 124,
+            "line_end": 136
+          }
+        ],
+        "confidence": 0.8,
+        "confidence_reasoning": "The script pipes document content into plannotator submit, and the setup guide describes a browser review workflow. I cannot confirm the service transport details, so severity is medium."
+      },
+      {
+        "title": "Phase Gate Bypass When Review Tool Is Missing",
+        "description": "When plannotator is not installed, the review script prints that it is proceeding without review and exits successfully. This weakens the stated strict phase gate rule.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 78,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 48
+          }
+        ],
+        "confidence": 0.84,
+        "confidence_reasoning": "The code exits 0 after announcing review is skipped, while the skill documentation says phase gates should be strict. This is clear business-logic risk rather than a pattern match."
+      }
+    ],
+    "critical_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "if curl -sSfL https://plannotator.ai/install.sh | sh; then",
+        "locations": [
+          {
+            "file": "scripts/install.sh",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.96,
+        "confidence_reasoning": "This URL is used in a curl pipeline that downloads and executes a remote installer. That is a real supply-chain risk because network code runs locally without pinning or checksum verification."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "if curl -sSfL https://plannotator.ai/install.sh | sh; then",
+        "locations": [
+          {
+            "file": "scripts/install.sh",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script executes curl -sSfL https://plannotator.ai/install.sh | sh. Piping an unauthenticated remote installer directly to a shell is a critical execution risk."
+      },
+      {
+        "title": "Hardcoded URL",
+        "description": "curl -sSfL https://plannotator.ai/install.sh | sh",
+        "locations": [
+          {
+            "file": "SETUP.md",
+            "line_start": 300,
+            "line_end": 300
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.95,
+        "confidence_reasoning": "The setup guide tells users to download a remote installer and pipe it to sh. Documentation that directs this execution pattern can lead users to run unverified network code."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://plannotator.ai/install.sh | sh",
+        "locations": [
+          {
+            "file": "SETUP.md",
+            "line_start": 300,
+            "line_end": 300
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.97,
+        "confidence_reasoning": "The troubleshooting instructions explicitly use curl -sSfL https://plannotator.ai/install.sh | sh. This is a critical unsafe installation pattern even when presented as documentation."
+      }
+    ],
+    "high_findings": [
+      {
+        "title": "Path traversal sequence",
+        "description": "HOOK_SCRIPT=\"${SKILL_DIR}/../plannotator/scripts/setup-hook.sh\"",
+        "locations": [
+          {
+            "file": "scripts/install.sh",
+            "line_start": 103,
+            "line_end": 103
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.88,
+        "confidence_reasoning": "The installer resolves a sibling ../plannotator setup-hook.sh and later executes it if present. This crosses the skill boundary and can run adjacent skill code without strong validation."
+      },
+      {
+        "title": "Python subprocess.run",
+        "description": "proc = subprocess.run(",
+        "locations": [
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 102,
+            "line_end": 102
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "high",
+        "confidence": 0.9,
+        "confidence_reasoning": "The Python fallback is built from shell-interpolated DOC_FILE and TITLE values before running subprocess.run. Crafted arguments can break Python string quoting or alter the call path."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Potential External Document Disclosure",
+        "description": "The phase gate script reads a full project document and submits it to plannotator. Sensitive PRDs or architecture notes may leave the repository without a clear consent checkpoint.",
+        "locations": [
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 92,
+            "line_end": 103
+          },
+          {
+            "file": "SETUP.md",
+            "line_start": 124,
+            "line_end": 136
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.8,
+        "confidence_reasoning": "The script pipes document content into plannotator submit, and the setup guide describes a browser review workflow. I cannot confirm the service transport details, so severity is medium."
+      },
+      {
+        "title": "Phase Gate Bypass When Review Tool Is Missing",
+        "description": "When plannotator is not installed, the review script prints that it is proceeding without review and exits successfully. This weakens the stated strict phase gate rule.",
+        "locations": [
+          {
+            "file": "scripts/phase-gate-review.sh",
+            "line_start": 78,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 48
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.84,
+        "confidence_reasoning": "The code exits 0 after announcing review is skipped, while the skill documentation says phase gates should be strict. This is clear business-logic risk rather than a pattern match."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [
+      {
+        "title": "Pipe to shell pattern",
+        "description": "if curl -sSfL https://plannotator.ai/install.sh | sh; then",
+        "locations": [
+          {
+            "file": "scripts/install.sh",
+            "line_start": 78,
+            "line_end": 78
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.98,
+        "confidence_reasoning": "The script executes curl -sSfL https://plannotator.ai/install.sh | sh. Piping an unauthenticated remote installer directly to a shell is a critical execution risk."
+      },
+      {
+        "title": "Pipe to shell pattern",
+        "description": "curl -sSfL https://plannotator.ai/install.sh | sh",
+        "locations": [
+          {
+            "file": "SETUP.md",
+            "line_start": 300,
+            "line_end": 300
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "blocker",
+        "source_severity": "critical",
+        "confidence": 0.97,
+        "confidence_reasoning": "The troubleshooting instructions explicitly use curl -sSfL https://plannotator.ai/install.sh | sh. This is a critical unsafe installation pattern even when presented as documentation."
+      }
+    ],
+    "files_scanned": 12,
+    "total_lines": 2992,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T08:52:16.457Z",
+    "agent_auto_install_policy": "blocked",
+    "manual_install_policy": "allowed_with_warning"
+  },
+  "content": {
+    "user_title": "Orchestrate BMAD Development Workflows",
+    "value_statement": "AI-assisted projects often lose phase context and skip review checkpoints. This skill initializes BMAD workflow files, shows current status, and routes teams through phase-based planning.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "BMAD workflow",
+      "AI development planning",
+      "phase gate review",
+      "plannotator",
+      "workflow orchestration",
+      "project status tracking",
+      "software planning skill"
+    ],
+    "actual_capabilities": [
+      "Initializes BMAD project config and workflow status files from templates.",
+      "Displays phase progress and recommends the next BMAD command.",
+      "Validates BMAD YAML configuration files and required fields.",
+      "Submits phase documents to plannotator for approval review.",
+      "Documents setup patterns for Claude Code, Gemini CLI, Codex, and OpenCode.",
+      "Supports project levels 0 through 4 with different required deliverables."
+    ],
+    "limitations": [
+      "Requires local shell script execution for setup, status checks, and validation.",
+      "plannotator integration can send document content to an external review workflow.",
+      "Codex and OpenCode usage depends on external orchestration bridges.",
+      "It does not implement BMAD agents or generate phase documents by itself."
+    ],
+    "use_cases": [
+      {
+        "title": "Standardize feature planning",
+        "description": "Define a shared BMAD phase path before engineers and agents start implementation work.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Resume a BMAD project",
+        "description": "Inspect workflow status and identify the next required planning or implementation step.",
+        "target_user": "AI developer"
+      },
+      {
+        "title": "Review phase deliverables",
+        "description": "Send PRDs, architecture notes, or sprint plans through a structured review gate.",
+        "target_user": "Product manager"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Initialize a Project",
+        "scenario": "Beginner setup for a new repository",
+        "prompt": "Initialize BMAD in this repository for a web app named <project>. Ask me for any missing level or output folder choices."
+      },
+      {
+        "title": "Check Current Status",
+        "scenario": "Intermediate workflow continuation",
+        "prompt": "Check the BMAD workflow status and tell me the next required phase, blocked items, and the command I should run."
+      },
+      {
+        "title": "Review a Phase Document",
+        "scenario": "Advanced phase gate review",
+        "prompt": "Review the current PRD with the phase gate process, then summarize required changes before moving to architecture."
+      },
+      {
+        "title": "Plan Cross-Tool Orchestration",
+        "scenario": "Advanced Codex or OpenCode orchestration",
+        "prompt": "Adapt the BMAD phase plan for a level 3 integration project with Codex orchestration, plannotator review, and sprint handoff checkpoints."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Check the workflow status for my level 2 project.",
+        "output": "The skill reports the project name, current phase, completed documents, required work, and recommended next BMAD command."
+      },
+      {
+        "input": "Initialize BMAD for a new web application.",
+        "output": "The skill creates BMAD config, workflow status tracking, and a stories folder, then recommends product brief and PRD steps."
+      },
+      {
+        "input": "Run a gate review for the architecture document.",
+        "output": "The skill prepares the document for plannotator review, records approval status when available, and explains whether to revise or continue."
+      }
+    ],
+    "best_practices": [
+      "Review installer and network actions before running setup scripts.",
+      "Run workflow status before generating new BMAD artifacts.",
+      "Keep each phase document under version control before gate review."
+    ],
+    "anti_patterns": [
+      "Running remote installers in unattended environments.",
+      "Skipping phase review because a tool is missing.",
+      "Editing workflow status manually without reconciling config and deliverables."
+    ],
+    "faq": [
+      {
+        "question": "What is this skill for?",
+        "answer": "It coordinates BMAD workflow setup, status checks, phase routing, and review gates for AI-assisted software projects."
+      },
+      {
+        "question": "Does it work with Codex?",
+        "answer": "Yes, but Codex usage is documented as an orchestration integration rather than the default native path."
+      },
+      {
+        "question": "Does it create project documents?",
+        "answer": "No. It tracks workflow status and routes phases, but BMAD document generation happens through related commands or agents."
+      },
+      {
+        "question": "Why does it use plannotator?",
+        "answer": "plannotator provides a visual review gate for PRDs, architecture notes, and other phase deliverables."
+      },
+      {
+        "question": "Is shell access required?",
+        "answer": "Yes. The included setup, validation, status, and review helpers are shell scripts."
+      },
+      {
+        "question": "What should teams review before installing?",
+        "answer": "Teams should review remote installer commands, plannotator data handling, and hook setup before running scripts."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "resources",
+      "type": "dir",
+      "path": "resources",
+      "children": [
+        {
+          "name": "workflow-phases.md",
+          "type": "file",
+          "path": "resources/workflow-phases.md",
+          "lines": 594
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "check-status.sh",
+          "type": "file",
+          "path": "scripts/check-status.sh",
+          "lines": 207
+        },
+        {
+          "name": "init-project.sh",
+          "type": "file",
+          "path": "scripts/init-project.sh",
+          "lines": 253
+        },
+        {
+          "name": "install.sh",
+          "type": "file",
+          "path": "scripts/install.sh",
+          "lines": 207
+        },
+        {
+          "name": "phase-gate-review.sh",
+          "type": "file",
+          "path": "scripts/phase-gate-review.sh",
+          "lines": 205
+        },
+        {
+          "name": "validate-config.sh",
+          "type": "file",
+          "path": "scripts/validate-config.sh",
+          "lines": 244
+        }
+      ]
+    },
+    {
+      "name": "templates",
+      "type": "dir",
+      "path": "templates",
+      "children": [
+        {
+          "name": "config.template.yaml",
+          "type": "file",
+          "path": "templates/config.template.yaml",
+          "lines": 48
+        },
+        {
+          "name": "workflow-status.template.yaml",
+          "type": "file",
+          "path": "templates/workflow-status.template.yaml",
+          "lines": 135
+        }
+      ]
+    },
+    {
+      "name": "REFERENCE.md",
+      "type": "file",
+      "path": "REFERENCE.md",
+      "lines": 570
+    },
+    {
+      "name": "SETUP.md",
+      "type": "file",
+      "path": "SETUP.md",
+      "lines": 334
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 170
+    },
+    {
+      "name": "SKILL.toon",
+      "type": "file",
+      "path": "SKILL.toon",
+      "lines": 25
+    }
+  ]
+}

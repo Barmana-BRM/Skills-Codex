@@ -1,0 +1,2689 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T15:58:38.527Z",
+    "slug": "larksuite-lark-calendar",
+    "source_url": "https://github.com/larksuite/cli/tree/main/skills/lark-calendar/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "355b07f024fb3f31fb07fadb8ab14b2eb1e7a62725e1139277aa420084c7d513",
+    "tree_hash": "1d66db42dc45d7445efe8bd9582449fe727faa8769c32ebdbd5cfea424dea118",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "lark-calendar",
+    "description": "Manage Lark calendar events and meeting rooms, including schedules, availability, attendees, recurring events, and time recommendations.",
+    "summary": "Coordinate Lark events, attendees, availability, and meeting rooms through guided calendar workflows.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "larksuite",
+    "license": "MIT",
+    "tags": [
+      "lark",
+      "calendar",
+      "scheduling",
+      "meeting-rooms",
+      "productivity"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ],
+    "category": "productivity"
+  },
+  "security_audit": {
+    "risk_level": "high",
+    "is_blocked": false,
+    "safe_to_publish": false,
+    "analysis_status": "ok",
+    "summary": "All 120 static alerts are false positives caused by Markdown formatting, relative documentation links, CLI identifiers, and UTF-8 Chinese text entropy. Semantic review found indirect prompt injection through tool output, plus privacy and integrity risks from unconsented memory, unrestricted date tooling, and broad attendee permissions. These issues should be fixed before publication.",
+    "remediation": [
+      {
+        "issue": "The agent is told to follow ai_action_guidance returned by the calendar service.",
+        "suggestion": "Treat the field as untrusted data. Accept only allowlisted scheduling hints, ignore embedded instructions, and never let tool output override system or user intent.",
+        "severity": "high"
+      },
+      {
+        "issue": "User clarifications are stored as long-term memory without consent or retention controls.",
+        "suggestion": "Keep clarifications session-only by default. Obtain explicit consent before persistence and provide clear scope, retention, review, and deletion controls.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Date conversion requires unspecified system commands or scripts.",
+        "suggestion": "Use an approved date library or fixed utility with structured arguments. Never interpolate user-provided date text into a shell command.",
+        "severity": "medium"
+      },
+      {
+        "issue": "New events grant all attendees permission to edit by default.",
+        "suggestion": "Use organizer-only editing by default. Disclose the permission change and require explicit confirmation before granting attendee edit access.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 69,
+            "line_end": 69
+          },
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 71,
+            "line_end": 71
+          },
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 72,
+            "line_end": 72
+          },
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 73,
+            "line_end": 73
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 15,
+            "line_end": 15
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 19,
+            "line_end": 19
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 21,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 33
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 33,
+            "line_end": 34
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 34,
+            "line_end": 35
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 35,
+            "line_end": 36
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 37,
+            "line_end": 37
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 38,
+            "line_end": 39
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 39,
+            "line_end": 40
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 40,
+            "line_end": 42
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 42,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 46,
+            "line_end": 49
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 49,
+            "line_end": 51
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 51,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 53,
+            "line_end": 53
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 55,
+            "line_end": 62
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 62,
+            "line_end": 64
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 64,
+            "line_end": 68
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 68,
+            "line_end": 72
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 72,
+            "line_end": 78
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 78,
+            "line_end": 82
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 82,
+            "line_end": 86
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 86,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 89,
+            "line_end": 89
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 91,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 98,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 99,
+            "line_end": 99
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 110,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 112,
+            "line_end": 112
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 126
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 126,
+            "line_end": 127
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 127,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 130,
+            "line_end": 137
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 137,
+            "line_end": 137
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 150
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 155,
+            "line_end": 167
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 167,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 173,
+            "line_end": 174
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 81,
+            "line_end": 81
+          },
+          {
+            "file": "references/lark-calendar-recurring.md",
+            "line_start": 87,
+            "line_end": 87
+          },
+          {
+            "file": "references/lark-calendar-recurring.md",
+            "line_start": 90,
+            "line_end": 90
+          },
+          {
+            "file": "references/lark-calendar-room-find.md",
+            "line_start": 109,
+            "line_end": 109
+          },
+          {
+            "file": "references/lark-calendar-rsvp.md",
+            "line_start": 38,
+            "line_end": 38
+          },
+          {
+            "file": "references/lark-calendar-schedule-meeting.md",
+            "line_start": 122,
+            "line_end": 122
+          },
+          {
+            "file": "references/lark-calendar-suggestion.md",
+            "line_start": 121,
+            "line_end": 121
+          },
+          {
+            "file": "references/lark-calendar-update.md",
+            "line_start": 98,
+            "line_end": 98
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 13,
+            "line_end": 13
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 124,
+            "line_end": 124
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 128,
+            "line_end": 128
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 191,
+            "line_end": 191
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 192,
+            "line_end": 192
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 194
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:references/lark-calendar-create.md:69:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 69,
+        "line_end": 69,
+        "snippet": "| `type` | `user_id` 格式 | 说明 |"
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "| `user` | `ou_xxx`(open_id) | 飞书用户 |"
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 72,
+        "line_end": 72,
+        "snippet": "| `group` | `oc_xxx` | 飞书群组 |"
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:73:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "| `resource` | `omm_xxx` | 会议室 |"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-create.md:81:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": "- [lark-calendar](../SKILL.md) -- skill 入口与路由"
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:25:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "--calendar-id cal_xxx"
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:37:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "| `--calendar-id <id>` | 否 | 日历 ID(省略则使用主日历) |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:46:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 46,
+        "line_end": 46,
+        "snippet": "> 失败保护:若添加参会人失败(如 open_id 错误),CLI 会自动删除刚创建的空日程(回滚,不通知参会人)。"
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:12:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-meeting.md",
+        "line_start": 12,
+        "line_end": 13,
+        "snippet": "# 默认使用主日历,需要时显式传 --calendar-id"
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-meeting.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "lark-cli calendar +meeting --event-ids <event_id> --calendar-id <calendar_id>"
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:29:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-meeting.md",
+        "line_start": 29,
+        "line_end": 29,
+        "snippet": "# 1. meeting_id → note_id + minute_token(同一会议两份产物,可能各自为空)"
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:32:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-meeting.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "# 2a. note_id → 纪要文档 token(note_doc_token / verbatim_doc_token / shared_doc_tokens)"
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:33:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-meeting.md",
+        "line_start": 33,
+        "line_end": 33,
+        "snippet": "lark-cli note +detail --note-id <note_id>"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-recurring.md:87:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 87,
+        "line_end": 87,
+        "snippet": "- [lark-calendar](../SKILL.md) — 日历全部命令"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-recurring.md:90:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 90,
+        "line_end": 90,
+        "snippet": "- [lark-shared](../../lark-shared/SKILL.md) — 认证和全局参数"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:7:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 7,
+        "line_end": 7,
+        "snippet": "- **event_id 结构**:`event_id` 的格式为 `{event_uid}_{originalTime}`。普通日程或重复性日程本体的 `originalTime` 为 `0`;例外"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:22:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 22,
+        "line_end": 22,
+        "snippet": "| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --start ... --end ...` | 更新原重复性日程的时间 |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:31:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --summary ... --description ...` | 更新原重复性日程的标题"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:32:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "| 2 | `lark-cli calendar +update --event-id <例外ID> --summary ... --description ...` (逐个) | 同步更新例外日程的"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:49:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 49,
+        "line_end": 49,
+        "snippet": "| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --rrule \"FREQ=...;UNTIL=<截止日期>\"` | 截短原重复性日程(UN"
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:60:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 60,
+        "line_end": 60,
+        "snippet": "| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --rrule \"FREQ=...;UNTIL=<截止日期>\"` | 截短原重复性日程(UN"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-room-find.md:109:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-room-find.md",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "- [lark-calendar](../SKILL.md) — skill 入口与路由"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-rsvp.md:38:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 38,
+        "line_end": 38,
+        "snippet": "- [lark-calendar](../SKILL.md) -- skill 入口与路由"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:10:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 10,
+        "line_end": 10,
+        "snippet": "lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status accept"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status decline"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:16:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 16,
+        "line_end": 16,
+        "snippet": "lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status tentative"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:19:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "lark-cli calendar +rsvp --calendar-id cal_xxx --event-id evt_xxx --rsvp-status accept"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:26:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "| `--event-id <id>` | **是** | 日程 ID |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:28:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-rsvp.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "| `--calendar-id <id>` | 否 | 日历 ID(省略则使用主日历) |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-clear-time.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-schedule-clear-time.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "- 编辑流:目标 event_id 已定位"
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-fuzzy-time.md:9:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-schedule-fuzzy-time.md",
+        "line_start": 9,
+        "line_end": 9,
+        "snippet": "- 编辑流:目标 event_id 已定位"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-schedule-meeting.md:122:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-schedule-meeting.md",
+        "line_start": 122,
+        "line_end": 122,
+        "snippet": "- [SKILL.md](../SKILL.md)"
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-meeting.md:102:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-schedule-meeting.md",
+        "line_start": 102,
+        "line_end": 102,
+        "snippet": "--event-id \"<event_id>\" \\"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-suggestion.md:121:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-suggestion.md",
+        "line_start": 121,
+        "line_end": 121,
+        "snippet": "- [lark-calendar](../SKILL.md) — skill 入口与路由"
+      },
+      {
+        "id": "filesystem:references/lark-calendar-update.md:98:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 98,
+        "line_end": 98,
+        "snippet": "- [lark-calendar](../SKILL.md) -- skill 入口与路由"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:13:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "--event-id \"<EVENT_ID>\" \\"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:21:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 21,
+        "line_end": 21,
+        "snippet": "--event-id \"<EVENT_ID>\" \\"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:26:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 26,
+        "line_end": 26,
+        "snippet": "--event-id \"<EVENT_ID>\" \\"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:31:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 31,
+        "line_end": 31,
+        "snippet": "--event-id \"<EVENT_ID>\" \\"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:43:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 43,
+        "line_end": 43,
+        "snippet": "| `--event-id <id>` | 是 | 要更新的日程 ID。重复性日程请根据操作范围选择 ID,详见 [重复性日程操作规范](lark-calendar-recurring.md) |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:44:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "| `--calendar-id <id>` | 否 | 日历 ID(省略则使用 `primary`) |"
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:89:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "| `ou_` | user | 飞书用户 open_id |"
+      },
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "开始前先读 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)(认证、权限处理)。"
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "**CRITICAL — 凡涉及预约日程/会议室、调整时间或查询/搜索会议室,第一步 MUST 读 [`references/lark-calendar-schedule-meeting.md`](r"
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 19,
+        "line_end": 19,
+        "snippet": "日程操作默认使用 `--as user`(查看和管理当前用户的日程)。`--as bot` 只能访问 bot 自己的(空)日历,会拿到空结果——不要用 bot 身份查用户日程。"
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 21,
+        "line_end": 27,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 33,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 33,
+        "line_end": 34,
+        "snippet": "| `+agenda` | 查看日程安排(默认今天) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 35,
+        "snippet": "| [`+meeting`](references/lark-calendar-meeting.md) | 通过日程事件 ID 获取关联的视频会议信息(meeting_id、meeting_note)"
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 35,
+        "line_end": 36,
+        "snippet": "| [`+create`](references/lark-calendar-create.md) | 创建日程并邀请参会人(ISO 8601 时间) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 37,
+        "snippet": "| [`+update`](references/lark-calendar-update.md) | 更新既有日程字段,或独立增量添加/移除参会人和会议室 |"
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 37,
+        "line_end": 37,
+        "snippet": "| `+freebusy` | 查询用户主日历的忙闲信息和 RSVP 状态(纯查询场景;预约场景走 `+suggestion`) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 38,
+        "line_end": 39,
+        "snippet": "| [`+room-find`](references/lark-calendar-room-find.md) | 针对一个或多个**明确的**时间块查找可用会议室(无明确时间时禁止直接调用,需先走 "
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 39,
+        "line_end": 40,
+        "snippet": "| [`+rsvp`](references/lark-calendar-rsvp.md) | 回复日程(接受/拒绝/待定) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 40,
+        "line_end": 42,
+        "snippet": "| [`+suggestion`](references/lark-calendar-suggestion.md) | 根据非明确时间或一段时间范围,推荐多个可用时间块方案 |"
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 42,
+        "line_end": 44,
+        "snippet": "### `+get` — 单日程详情"
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "通过 `calendar_id` + `event_id` 获取**单个日程**详情。"
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 46,
+        "line_end": 49,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 49,
+        "line_end": 51,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 51,
+        "line_end": 53,
+        "snippet": "### `+search-event` — 按关键词、时间范围和参会人搜索日程"
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 53,
+        "line_end": 53,
+        "snippet": "仅返回基础字段(`event_id`/`summary`/`start`/`end` 等),需要详情请走 `+get`。"
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 55,
+        "line_end": 62,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 62,
+        "line_end": 64,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 64,
+        "line_end": 68,
+        "snippet": "### `+agenda` — 查看近期日程安排"
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 68,
+        "line_end": 72,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 72,
+        "line_end": 78,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 78,
+        "line_end": 82,
+        "snippet": "### `+freebusy` — 查询主日历忙闲时段和 RSVP 状态"
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 82,
+        "line_end": 86,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 86,
+        "line_end": 89,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 89,
+        "line_end": 89,
+        "snippet": "- **仅判断是否有空** → `+freebusy`;**需要日程详情** → `+agenda`。"
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 91,
+        "line_end": 98,
+        "snippet": "- 预约/改约场景下,调用规则(参与人过多、含群组、来自 `+suggestion` 等)详见 [schedule-clear-time.md § 查询忙闲](references/lark-cale"
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 98,
+        "line_end": 99,
+        "snippet": "| 仅编辑字段(标题/描述)或增删参会人 | 先定位 `event_id`,再读 [lark-calendar-update.md](references/lark-calendar-update.m"
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 99,
+        "line_end": 99,
+        "snippet": "| 编辑已有日程(涉及时间或会议室) | 先定位目标日程 `event_id`;若是重复性日程,必须定位到具体实例的 `event_id`(禁止使用原重复日程 ID) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 109,
+        "line_end": 109,
+        "snippet": "- **日程实例(Instance)**:重复性日程展开后的具体时间实例。「仅此次」操作时使用具体实例的 `event_id`;「全部」或「此次及后续」操作时需对原重复性日程操作(使用原日程 `eve"
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 110,
+        "line_end": 112,
+        "snippet": "- **重复性日程例外(Exception)**:对重复性日程某次实例做过「仅此次」编辑后产生的独立日程(拥有独立 `event_id`)。删除/更新「全部」时必须同时处理例外,否则例外会残留。"
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 112,
+        "line_end": 112,
+        "snippet": "- **时间块 vs 时间范围**:时间块是具体确定的连续时间段(如 `14:00~15:00`),时间范围是泛指(如\"今天下午\")。`+room-find` 必须基于确定时间块,不能基于模糊范围。"
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 126,
+        "snippet": "| 查询过去的会议(\"昨天的会议\"\"上周的会\") | [`../lark-vc/SKILL.md`](../lark-vc/SKILL.md)(会议数据含即时会议,仅查日程会遗漏) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 126,
+        "line_end": 127,
+        "snippet": "| 按关键词搜索日程 | 本 skill(`+search-event`) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 127,
+        "line_end": 128,
+        "snippet": "| 从日程获取关联的视频会议 ID 或用户绑定的会议纪要文档 | 本 skill(`+meeting`) |"
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "| 从日程进一步拿 AI 智能纪要 / 逐字稿 / 妙记产物 | 先 `+meeting` 取 `meeting_id`,再 [`vc +detail`](../lark-vc/references/"
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 130,
+        "line_end": 137,
+        "snippet": "| 仅编辑日程字段(标题/描述)或增删参会人(不涉及时间和会议室) | 先定位 `event_id`,再读 [+update](references/lark-calendar-update.md) "
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 137,
+        "line_end": 137,
+        "snippet": "- **编辑已有日程的强信号**:用户提到已存在的日程锚点(标题、时间段、`这个日程`、`这场会`)并表达修改动作(添加、移除、改到、换会议室、调整时间)。默认走编辑流,绝不能按新建处理。"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 150,
+        "snippet": "- `+room-find` 的时间输入必须是确定时间块,不能是时间区间搜索。"
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "- 用户仅要求\"查会议室\"但未提供明确时间时,必须先调用 `+suggestion` 获取可用时间块,再将时间块交给 `+room-find`。严禁猜测时间盲目调用。"
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 155,
+        "line_end": 167,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 167,
+        "line_end": 169,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 169,
+        "snippet": "> `calendar_id` 可以直接传 `primary`,代表当前调用身份的主日历 ID。"
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 173,
+        "line_end": 174,
+        "snippet": "- 列出某资源下的方法:`lark-cli calendar <resource> -h`"
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 174,
+        "line_end": 175,
+        "snippet": "- 查看方法的cli flag:`lark-cli calendar <resource> <method> -h`"
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 175,
+        "line_end": 177,
+        "snippet": "- 查看方法API参数:`lark-cli schema calendar.<resource>.<method>`"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 177,
+        "snippet": "`<resource>` 为 `calendars`(日历本身)/ `events`(日程)/ `event.attendees`(参与人)/ `freebusys`(忙闲)。例:`lark-cli "
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 181,
+        "line_end": 187,
+        "snippet": "```bash"
+      },
+      {
+        "id": "filesystem:SKILL.md:13:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 13,
+        "line_end": 13,
+        "snippet": "开始前先读 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)(认证、权限处理)。"
+      },
+      {
+        "id": "filesystem:SKILL.md:124:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 124,
+        "line_end": 124,
+        "snippet": "| 查询过去的会议(\"昨天的会议\"\"上周的会\") | [`../lark-vc/SKILL.md`](../lark-vc/SKILL.md)(会议数据含即时会议,仅查日程会遗漏) |"
+      },
+      {
+        "id": "filesystem:SKILL.md:128:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 128,
+        "line_end": 128,
+        "snippet": "| 从日程进一步拿 AI 智能纪要 / 逐字稿 / 妙记产物 | 先 `+meeting` 取 `meeting_id`,再 [`vc +detail`](../lark-vc/references/"
+      },
+      {
+        "id": "filesystem:SKILL.md:191:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 191,
+        "line_end": 191,
+        "snippet": "- 查询过去的视频会议记录 → [lark-vc](../lark-vc/SKILL.md)"
+      },
+      {
+        "id": "filesystem:SKILL.md:192:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 192,
+        "line_end": 192,
+        "snippet": "- 待办任务管理 → [lark-task](../lark-task/SKILL.md)"
+      },
+      {
+        "id": "filesystem:SKILL.md:193:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 193,
+        "snippet": "- 通讯录 → [lark-contact](../lark-contact/SKILL.md)"
+      },
+      {
+        "id": "filesystem:SKILL.md:194:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 194,
+        "snippet": "- 即时通讯 → [lark-im](../lark-im/SKILL.md)"
+      },
+      {
+        "id": "blocker:SKILL.md:34:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 34,
+        "line_end": 34,
+        "snippet": "| [`+meeting`](references/lark-calendar-meeting.md) | 通过日程事件 ID 获取关联的视频会议信息(meeting_id、meeting_note)"
+      },
+      {
+        "id": "blocker:SKILL.md:48:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 48,
+        "line_end": 48,
+        "snippet": "lark-cli calendar +get --calendar-id <calendar_id> --event-id <event_id>"
+      },
+      {
+        "id": "blocker:SKILL.md:70:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 70,
+        "line_end": 70,
+        "snippet": "# calendar-id 日历 ID(默认primary)可选"
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 71,
+        "snippet": "lark-cli calendar +agenda --start 2026-03-10 --end 2026-03-17 --calendar-id <calendar_id>"
+      },
+      {
+        "id": "blocker:SKILL.md:84:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 84,
+        "line_end": 84,
+        "snippet": "# user-id 目标用户 open_id(ou_ 前缀)可选;默认当前登录用户,bot 身份必须显式指定"
+      },
+      {
+        "id": "blocker:SKILL.md:85:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 85,
+        "line_end": 85,
+        "snippet": "lark-cli calendar +freebusy --start 2026-03-11 --end 2026-03-12 --user-id ou_xxx"
+      },
+      {
+        "id": "blocker:SKILL.md:163:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 163,
+        "line_end": 163,
+        "snippet": "lark-cli calendar events share_info --calendar-id <calendar_id> --event-id <event_id>"
+      },
+      {
+        "id": "blocker:SKILL.md:166:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 166,
+        "line_end": 166,
+        "snippet": "lark-cli calendar events delete --calendar-id <calendar_id> --event-id <event_id>"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-create.md:1:heuristic-high-file-entropy-6-76-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.76 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-create.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-create.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-recurring.md:1:heuristic-high-file-entropy-6-54-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.54 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-recurring.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-recurring.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-room-find.md:1:heuristic-high-file-entropy-7-28-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (7.28 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-room-find.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-room-find.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-clear-time.md:1:heuristic-high-file-entropy-6-37-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.37 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-schedule-clear-time.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-schedule-clear-time.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-fuzzy-time.md:1:heuristic-high-file-entropy-7-06-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (7.06 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-schedule-fuzzy-time.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-schedule-fuzzy-time.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-meeting.md:1:heuristic-high-file-entropy-6-93-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.93 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-schedule-meeting.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-schedule-meeting.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-suggestion.md:81:heuristic-very-high-entropy-string-5-50-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.50 bits) - likely encoded/encrypted payload",
+        "file": "references/lark-calendar-suggestion.md",
+        "line_start": 81,
+        "line_end": 81,
+        "snippet": " 字段内容；2. 用户要求找个空闲时间，但所有推荐方案都不是完全空闲的），你**必须**主动提供优化建议。若存在 "
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-suggestion.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.12 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-suggestion.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-suggestion.md"
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-update.md:73:heuristic-very-high-entropy-string-5-60-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.60 bits) - likely encoded/encrypted payload",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 73,
+        "line_end": 73,
+        "snippet": "（颜色）、附件、视频会议信息、全天日程，或在新增参会人时配置可选参加状态 等高级参数，请改用完整的 API 命令。建议先通过 "
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-update.md:1:heuristic-high-file-entropy-6-76-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.76 bits) - possible binary/encrypted content",
+        "file": "references/lark-calendar-update.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: references/lark-calendar-update.md"
+      },
+      {
+        "id": "obfuscation:SKILL.md:4:heuristic-very-high-entropy-string-5-85-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.85 bits) - likely encoded/encrypted payload",
+        "file": "SKILL.md",
+        "line_start": 4,
+        "line_end": 4,
+        "snippet": "飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会..."
+      },
+      {
+        "id": "obfuscation:SKILL.md:15:heuristic-very-high-entropy-string-5-56-bits-lik",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] Very high entropy string (5.56 bits) - likely encoded/encrypted payload",
+        "file": "SKILL.md",
+        "line_start": 15,
+        "line_end": 15,
+        "snippet": "](references/lark-calendar-schedule-meeting.md)。仅编辑字段（改标题/描述）或增删参会人（不涉及时间和会议室）时可..."
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-94-bits-possible-b",
+        "category": "obfuscation",
+        "severity": "high",
+        "pattern": "[HEURISTIC] High file entropy (6.94 bits) - possible binary/encrypted content",
+        "file": "SKILL.md",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "File: SKILL.md"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:references/lark-calendar-create.md:69:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:69, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:71, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:72, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:references/lark-calendar-create.md:73:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:73, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-create.md:81:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:81, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:25:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:25, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:37:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:37, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-create.md:46:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:46, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:12:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-meeting.md:12, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-meeting.md:13, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:29:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-meeting.md:29, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:32:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-meeting.md:32, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-meeting.md:33:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-meeting.md:33, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-recurring.md:87:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:87, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-recurring.md:90:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:90, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:7:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:7, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:22:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:22, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:31:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:31, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:32:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:32, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:49:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:49, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-recurring.md:60:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:60, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-room-find.md:109:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-room-find.md:109, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-rsvp.md:38:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:38, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:10:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:10, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:13, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:16:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:16, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:19:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:19, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:26:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:26, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-rsvp.md:28:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-rsvp.md:28, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-clear-time.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-clear-time.md:9, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-fuzzy-time.md:9:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-fuzzy-time.md:9, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-schedule-meeting.md:122:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-meeting.md:122, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:references/lark-calendar-schedule-meeting.md:102:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-meeting.md:102, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-suggestion.md:121:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-suggestion.md:121, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:references/lark-calendar-update.md:98:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:98, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:13:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:13, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:21:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:21, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:26:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:26, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:31:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:31, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:43:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:43, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:44:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:44, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:references/lark-calendar-update.md:89:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:89, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "external_commands:SKILL.md:13:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:13, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:15:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:15, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:19:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:19, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:21:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:21, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:27, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:33:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:33, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:34:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:34, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:35:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:35, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:36, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:37:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:37, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:38:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:38, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:39:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:39, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:40:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:40, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:42:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:42, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:44, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:46:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:46, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:49:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:49, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:51:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:51, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:53:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:53, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:55:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:55, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:62:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:62, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:64:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:64, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:68:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:68, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:72:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:72, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:78:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:78, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:82:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:82, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:86:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:86, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:89:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:89, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:91:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:91, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:98:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:98, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:99:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:99, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:109:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:109, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:110:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:110, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:112:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:112, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:124:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:124, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:126:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:126, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:127:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:127, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:128:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:128, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:130:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:130, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:137:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:137, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:149, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:150, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:155:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:155, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:167:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:167, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:169, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:173:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:173, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:174:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:174, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:175, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:177, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "external_commands:SKILL.md:181:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:181, the text is Markdown code formatting or a documented lark-cli invocation, not Ruby backtick execution. No executable script or shell command substitution is present."
+      },
+      {
+        "id": "filesystem:SKILL.md:13:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:13, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:124:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:124, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:128:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:128, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:191:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:191, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:192:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:192, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:193:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:193, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "filesystem:SKILL.md:194:path-traversal-sequence",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:194, the traversal token appears only in a Markdown link to related documentation. It is not passed to a filesystem API, and no user-controlled path resolution occurs."
+      },
+      {
+        "id": "blocker:SKILL.md:34:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:34, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:48:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:48, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:70:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:70, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:71:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:71, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:84:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:84, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:85:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:85, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:163:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:163, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "blocker:SKILL.md:166:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:166, the line documents a Lark CLI flag, resource identifier, or workflow note. It does not inspect host details, users, processes, or network configuration."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-create.md:1:heuristic-high-file-entropy-6-76-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-create.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-recurring.md:1:heuristic-high-file-entropy-6-54-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-recurring.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-room-find.md:1:heuristic-high-file-entropy-7-28-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-room-find.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-clear-time.md:1:heuristic-high-file-entropy-6-37-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-clear-time.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-fuzzy-time.md:1:heuristic-high-file-entropy-7-06-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-fuzzy-time.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-schedule-meeting.md:1:heuristic-high-file-entropy-6-93-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-schedule-meeting.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-suggestion.md:81:heuristic-very-high-entropy-string-5-50-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-suggestion.md:81, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-suggestion.md:1:heuristic-high-file-entropy-6-12-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-suggestion.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-update.md:73:heuristic-very-high-entropy-string-5-60-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:73, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:references/lark-calendar-update.md:1:heuristic-high-file-entropy-6-76-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At references/lark-calendar-update.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:SKILL.md:4:heuristic-very-high-entropy-string-5-85-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:4, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:SKILL.md:15:heuristic-very-high-entropy-string-5-56-bits-lik",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:15, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      },
+      {
+        "id": "obfuscation:SKILL.md:1:heuristic-high-file-entropy-6-94-bits-possible-b",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "At SKILL.md:1, the content is readable UTF-8 Chinese Markdown with tables, identifiers, and CLI examples. No encoded blob, binary data, decoder, or encrypted payload is present."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Indirect Prompt Injection Through Tool Output",
+        "description": "The instruction \"若存在 `ai_action_guidance` 字段，需严格依据其核心意图生成引导话术\" tells the agent to follow intent from a tool-returned field. Untrusted or compromised API output could redirect the agent or manipulate user-facing advice without validation.",
+        "severity": "high",
+        "locations": [
+          {
+            "file": "references/lark-calendar-suggestion.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ],
+        "confidence": 0.92,
+        "confidence_reasoning": "The file explicitly requires strict adherence to an API-returned guidance field and defines no trust boundary or instruction filtering."
+      },
+      {
+        "title": "Unconsented Long-Term Preference Storage",
+        "description": "The workflows require storing clarified time meanings and participant disambiguation in long-term memory. They provide no consent, retention, scope, or deletion controls, creating privacy and cross-session leakage risks.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/lark-calendar-schedule-fuzzy-time.md",
+            "line_start": 52,
+            "line_end": 60
+          },
+          {
+            "file": "references/lark-calendar-schedule-meeting.md",
+            "line_start": 64,
+            "line_end": 71
+          }
+        ],
+        "confidence": 0.96,
+        "confidence_reasoning": "Both workflows explicitly instruct the agent to record user clarifications as long-term memory, without any consent or lifecycle safeguards."
+      },
+      {
+        "title": "Unrestricted External Date Tooling",
+        "description": "The skill mandates system commands or scripts for date conversion without naming an approved tool or safe argument interface. User-supplied date text could reach an unsafe shell construction.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 198
+          },
+          {
+            "file": "references/lark-calendar-recurring.md",
+            "line_start": 81,
+            "line_end": 83
+          }
+        ],
+        "confidence": 0.86,
+        "confidence_reasoning": "The execution requirement is explicit, but the documents do not show a concrete shell command or direct interpolation of user input."
+      },
+      {
+        "title": "Overbroad Default Attendee Permissions",
+        "description": "New events automatically grant attendees permission to edit the event. This can expose calendar integrity to all invitees without an explicit user choice.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 41,
+            "line_end": 45
+          }
+        ],
+        "confidence": 0.95,
+        "confidence_reasoning": "The create workflow explicitly sets attendee_ability to can_modify_event for every new event and does not request confirmation for that permission."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Indirect Prompt Injection Through Tool Output",
+        "description": "The instruction \"若存在 `ai_action_guidance` 字段，需严格依据其核心意图生成引导话术\" tells the agent to follow intent from a tool-returned field. Untrusted or compromised API output could redirect the agent or manipulate user-facing advice without validation.",
+        "locations": [
+          {
+            "file": "references/lark-calendar-suggestion.md",
+            "line_start": 81,
+            "line_end": 81
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "high",
+        "confidence": 0.92,
+        "confidence_reasoning": "The file explicitly requires strict adherence to an API-returned guidance field and defines no trust boundary or instruction filtering."
+      }
+    ],
+    "medium_findings": [
+      {
+        "title": "Unconsented Long-Term Preference Storage",
+        "description": "The workflows require storing clarified time meanings and participant disambiguation in long-term memory. They provide no consent, retention, scope, or deletion controls, creating privacy and cross-session leakage risks.",
+        "locations": [
+          {
+            "file": "references/lark-calendar-schedule-fuzzy-time.md",
+            "line_start": 52,
+            "line_end": 60
+          },
+          {
+            "file": "references/lark-calendar-schedule-meeting.md",
+            "line_start": 64,
+            "line_end": 71
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.96,
+        "confidence_reasoning": "Both workflows explicitly instruct the agent to record user clarifications as long-term memory, without any consent or lifecycle safeguards."
+      },
+      {
+        "title": "Unrestricted External Date Tooling",
+        "description": "The skill mandates system commands or scripts for date conversion without naming an approved tool or safe argument interface. User-supplied date text could reach an unsafe shell construction.",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 197,
+            "line_end": 198
+          },
+          {
+            "file": "references/lark-calendar-recurring.md",
+            "line_start": 81,
+            "line_end": 83
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.86,
+        "confidence_reasoning": "The execution requirement is explicit, but the documents do not show a concrete shell command or direct interpolation of user input."
+      },
+      {
+        "title": "Overbroad Default Attendee Permissions",
+        "description": "New events automatically grant attendees permission to edit the event. This can expose calendar integrity to all invitees without an explicit user choice.",
+        "locations": [
+          {
+            "file": "references/lark-calendar-create.md",
+            "line_start": 41,
+            "line_end": 45
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.95,
+        "confidence_reasoning": "The create workflow explicitly sets attendee_ability to can_modify_event for every new event and does not request confirmation for that permission."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 11,
+    "total_lines": 1057,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T15:58:38.527Z",
+    "agent_auto_install_policy": "confirmation_required",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Manage Lark Calendars and Meeting Rooms",
+    "value_statement": "Scheduling across calendars, attendees, and meeting rooms requires several coordinated steps. This skill guides Claude, Codex, and Claude Code through Lark calendar workflows.",
+    "seo_keywords": [
+      "Lark calendar",
+      "Lark scheduling",
+      "meeting room booking",
+      "calendar automation",
+      "availability planning",
+      "recurring events",
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Lark CLI"
+    ],
+    "actual_capabilities": [
+      "View daily or date-range agendas and search events by keyword, time, or attendee.",
+      "Retrieve event details and linked video meeting identifiers or notes.",
+      "Create and update events, attendees, meeting rooms, recurring rules, and RSVP status.",
+      "Query free and busy periods and recommend suitable meeting times.",
+      "Find rooms by city, building, floor, name, capacity, and availability.",
+      "Handle one occurrence, all occurrences, or future occurrences of recurring events."
+    ],
+    "limitations": [
+      "Requires an installed and authenticated lark-cli with appropriate Lark permissions.",
+      "Free and busy queries cover the main calendar and omit event titles.",
+      "Past video meeting records and task management require separate skills.",
+      "Combined update operations can partially succeed and do not always roll back."
+    ],
+    "use_cases": [
+      {
+        "title": "Coordinate Team Meetings",
+        "description": "Compare attendee availability, present suitable times, and add a selected meeting room after confirmation.",
+        "target_user": "Team coordinators"
+      },
+      {
+        "title": "Manage Executive Calendars",
+        "description": "Find existing events, reschedule them, update attendees, and preserve event duration.",
+        "target_user": "Executive assistants"
+      },
+      {
+        "title": "Plan Personal Work",
+        "description": "Review an agenda, find open periods, and respond to invitations from one workflow.",
+        "target_user": "Individual contributors"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Show My Agenda",
+        "prompt": "Show my Lark calendar agenda for [date]. Group events by date and start time.",
+        "scenario": "Beginner agenda review"
+      },
+      {
+        "title": "Find a Meeting Time",
+        "prompt": "Find three [duration]-minute slots for [attendees] during [date range]. Explain conflicts and wait for my selection.",
+        "scenario": "Intermediate availability planning"
+      },
+      {
+        "title": "Find and Book a Room",
+        "prompt": "Find available rooms in [building] for [attendees] during [time range]. Show time and room options before booking.",
+        "scenario": "Coordinated room scheduling"
+      },
+      {
+        "title": "Reschedule a Recurring Meeting",
+        "prompt": "Move [meeting name] from [occurrence] onward to [new time]. Preserve duration, explain scope, check conflicts, and request confirmation before changes.",
+        "scenario": "Advanced recurring event update"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "What is on my calendar tomorrow?",
+        "output": "Tomorrow\n- 09:00-09:30 Product sync\n- 11:00-12:00 Design review\n- 15:30-16:00 Weekly planning"
+      },
+      {
+        "input": "Find a 45-minute slot for Alex and Priya on Thursday afternoon.",
+        "output": "Option 1: 14:00-14:45. Both attendees are available.\nOption 2: 16:00-16:45. Priya has a tentative response nearby.\nPlease choose an option."
+      },
+      {
+        "input": "Find a room for six people in Building B tomorrow at 10:00.",
+        "output": "10:00-11:00\n1. Building B - F2 - Cedar, capacity 8\n2. Building B - F3 - Maple, capacity 10\nPlease select a room."
+      }
+    ],
+    "best_practices": [
+      "Confirm the event identity and recurring scope before any update or deletion.",
+      "Show time and room candidates, then wait for user selection before writing changes.",
+      "Use dry-run for complex changes and review time zone, duration, attendees, and room."
+    ],
+    "anti_patterns": [
+      "Do not guess event identifiers, attendees, meeting rooms, or ambiguous times.",
+      "Do not create or update events while time or room choices remain unresolved.",
+      "Do not use this skill for past video meetings, tasks, or physical room administration."
+    ],
+    "faq": [
+      {
+        "question": "What setup does this skill require?",
+        "answer": "It requires lark-cli, an authenticated Lark account, and permissions for the requested calendar operations."
+      },
+      {
+        "question": "Can it create and update events?",
+        "answer": "Yes. It can create events and update fields, times, attendees, rooms, and recurrence after confirming user intent."
+      },
+      {
+        "question": "Can it manage recurring events?",
+        "answer": "Yes. It distinguishes one occurrence, all occurrences, and the selected occurrence plus future events."
+      },
+      {
+        "question": "Can it reserve meeting rooms?",
+        "answer": "Yes. It finds available rooms for confirmed time blocks and adds the selected room to an event."
+      },
+      {
+        "question": "Can it retrieve past video meeting records?",
+        "answer": "No. Past video meeting records require the separate lark-vc skill."
+      },
+      {
+        "question": "What calendar data does availability search expose?",
+        "answer": "Free and busy search returns occupied time ranges and RSVP status from the main calendar, without event titles."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "lark-calendar-create.md",
+          "type": "file",
+          "path": "references/lark-calendar-create.md",
+          "lines": 83
+        },
+        {
+          "name": "lark-calendar-meeting.md",
+          "type": "file",
+          "path": "references/lark-calendar-meeting.md",
+          "lines": 40
+        },
+        {
+          "name": "lark-calendar-recurring.md",
+          "type": "file",
+          "path": "references/lark-calendar-recurring.md",
+          "lines": 91
+        },
+        {
+          "name": "lark-calendar-room-find.md",
+          "type": "file",
+          "path": "references/lark-calendar-room-find.md",
+          "lines": 110
+        },
+        {
+          "name": "lark-calendar-rsvp.md",
+          "type": "file",
+          "path": "references/lark-calendar-rsvp.md",
+          "lines": 39
+        },
+        {
+          "name": "lark-calendar-schedule-clear-time.md",
+          "type": "file",
+          "path": "references/lark-calendar-schedule-clear-time.md",
+          "lines": 60
+        },
+        {
+          "name": "lark-calendar-schedule-fuzzy-time.md",
+          "type": "file",
+          "path": "references/lark-calendar-schedule-fuzzy-time.md",
+          "lines": 89
+        },
+        {
+          "name": "lark-calendar-schedule-meeting.md",
+          "type": "file",
+          "path": "references/lark-calendar-schedule-meeting.md",
+          "lines": 123
+        },
+        {
+          "name": "lark-calendar-suggestion.md",
+          "type": "file",
+          "path": "references/lark-calendar-suggestion.md",
+          "lines": 122
+        },
+        {
+          "name": "lark-calendar-update.md",
+          "type": "file",
+          "path": "references/lark-calendar-update.md",
+          "lines": 101
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 199
+    }
+  ]
+}

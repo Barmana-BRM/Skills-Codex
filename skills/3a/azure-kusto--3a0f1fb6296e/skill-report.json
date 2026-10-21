@@ -1,0 +1,1198 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T09:34:02.103Z",
+    "slug": "microsoft-azure-kusto",
+    "source_url": "https://github.com/microsoft/github-copilot-for-azure/tree/main/plugin/skills/azure-kusto/",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "560fac92e9cb451432a6784d5c84e2670526a90750484abe9575a06cb4de93f0",
+    "tree_hash": "c6d2274347b20346a37b5b6cbf79452456ea7e6ad7d629d9329eff3a9cd4cc4d",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "azure-kusto",
+    "description": "Query Azure Data Explorer with KQL for log analytics, telemetry exploration, schema discovery, and time series analysis.",
+    "summary": "Build, run, and troubleshoot KQL workflows for Azure Data Explorer.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "microsoft",
+    "license": "MIT",
+    "tags": [
+      "azure",
+      "kusto",
+      "kql",
+      "adx",
+      "log-analytics"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "network"
+    ],
+    "category": "data"
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Most static findings are false positives caused by Markdown backticks around KQL examples, KQL functions, parameter names, and MCP tool names. The documented Azure CLI and REST fallbacks are retained as medium and low operational risks because they can run external commands and send KQL query content to Azure Data Explorer. No evidence of prompt injection, malicious exfiltration, or hidden destructive behavior was found.",
+    "remediation": [
+      {
+        "issue": "Azure CLI fallback can run external commands against a user tenant.",
+        "suggestion": "Require explicit user confirmation before CLI fallback, prefer MCP tools when available, and quote or validate every substituted argument.",
+        "severity": "medium"
+      },
+      {
+        "issue": "REST fallback sends query text and results through an Azure Data Explorer endpoint.",
+        "suggestion": "Document that queries may contain sensitive telemetry and restrict use to approved clusters, scoped credentials, and authorized data.",
+        "severity": "low"
+      },
+      {
+        "issue": "Examples do not state safety limits for broad or sensitive queries.",
+        "suggestion": "Add guidance to use time filters, result limits, and least-privilege database roles before running exploratory queries.",
+        "severity": "low"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 59,
+            "line_end": 63
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 63,
+            "line_end": 71
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 71,
+            "line_end": 75
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 75,
+            "line_end": 83
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 83,
+            "line_end": 88
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 88,
+            "line_end": 96
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 96,
+            "line_end": 104
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 104,
+            "line_end": 111
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 111,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 118,
+            "line_end": 118
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 135,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 136,
+            "line_end": 136
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 141,
+            "line_end": 141
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 142,
+            "line_end": 143
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 143,
+            "line_end": 144
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 144,
+            "line_end": 147
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 147,
+            "line_end": 148
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 148,
+            "line_end": 149
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 149,
+            "line_end": 149
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 150,
+            "line_end": 150
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 151,
+            "line_end": 151
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 156,
+            "line_end": 156
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 157,
+            "line_end": 169
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 169,
+            "line_end": 170
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 170,
+            "line_end": 171
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 171,
+            "line_end": 172
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 172,
+            "line_end": 175
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 175,
+            "line_end": 176
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 176,
+            "line_end": 177
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 177,
+            "line_end": 178
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 178,
+            "line_end": 179
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 179,
+            "line_end": 182
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 182,
+            "line_end": 183
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 183,
+            "line_end": 193
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 194
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 195
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 196
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 196,
+            "line_end": 201
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 201,
+            "line_end": 205
+          }
+        ]
+      },
+      {
+        "factor": "network",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 203
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 59,
+        "line_end": 63,
+        "snippet": "```kql"
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 63,
+        "line_end": 71,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 71,
+        "line_end": 75,
+        "snippet": "```kql"
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 75,
+        "line_end": 83,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 83,
+        "line_end": 88,
+        "snippet": "```kql"
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 88,
+        "line_end": 96,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 96,
+        "line_end": 104,
+        "snippet": "```kql"
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 104,
+        "line_end": 111,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 111,
+        "line_end": 118,
+        "snippet": "**Tools**: `kusto_table_schema_get`"
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 118,
+        "line_end": 118,
+        "snippet": "- **Timestamp**: Time of event (datetime) - use `ago()`, `between()`, `bin()` for time filtering"
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 135,
+        "line_end": 136,
+        "snippet": "- Filter early: Use `where` before joins and aggregations"
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "- Limit result size: Use `take` or `limit` to reduce data transfer"
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 141,
+        "line_end": 141,
+        "snippet": "- Use `summarize` for aggregations instead of `count()` alone"
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 142,
+        "line_end": 143,
+        "snippet": "- Use `bin()` for time bucketing in time series"
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 143,
+        "line_end": 144,
+        "snippet": "- Use `project` to select only needed columns"
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 144,
+        "line_end": 147,
+        "snippet": "- Use `extend` to add calculated fields"
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 147,
+        "line_end": 148,
+        "snippet": "- `ago(timespan)`: Relative time (ago(1h), ago(7d))"
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 148,
+        "line_end": 149,
+        "snippet": "- `between(start .. end)`: Range filtering"
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 149,
+        "line_end": 149,
+        "snippet": "- `startswith()`, `contains()`, `matches regex`: String filtering"
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 150,
+        "line_end": 150,
+        "snippet": "- `parse`, `extract`: Extract values from strings"
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 151,
+        "line_end": 151,
+        "snippet": "- `percentiles()`, `avg()`, `sum()`, `max()`, `min()`: Aggregations"
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "- Use `take` or `limit` for exploratory queries to avoid large result sets"
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 157,
+        "line_end": 169,
+        "snippet": "- Leverage `summarize` for aggregations instead of client-side processing"
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 169,
+        "line_end": 170,
+        "snippet": "| `kusto_cluster_list` | List all Azure Data Explorer clusters in a subscription |"
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 170,
+        "line_end": 171,
+        "snippet": "| `kusto_database_list` | List all databases in a specific Kusto cluster |"
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 171,
+        "line_end": 172,
+        "snippet": "| `kusto_query` | Execute KQL queries against a Kusto database |"
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 172,
+        "line_end": 175,
+        "snippet": "| `kusto_table_schema_get` | Retrieve schema information for a specific table |"
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 175,
+        "line_end": 176,
+        "snippet": "- `subscription`: Azure subscription ID or display name"
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 176,
+        "line_end": 177,
+        "snippet": "- `cluster`: Kusto cluster name (e.g., \"mycluster\")"
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 177,
+        "line_end": 178,
+        "snippet": "- `database`: Database name"
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 178,
+        "line_end": 179,
+        "snippet": "- `query`: KQL query string (for query operations)"
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 179,
+        "line_end": 182,
+        "snippet": "- `table`: Table name (for schema operations)"
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 182,
+        "line_end": 183,
+        "snippet": "- `resource-group`: Resource group name (for listing operations)"
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 183,
+        "line_end": 193,
+        "snippet": "- `tenant`: Azure AD tenant ID"
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 193,
+        "line_end": 194,
+        "snippet": "| List clusters | `az kusto cluster list --resource-group <rg-name>` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 194,
+        "line_end": 195,
+        "snippet": "| List databases | `az kusto database list --cluster-name <cluster> --resource-group <rg-name>` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 195,
+        "line_end": 196,
+        "snippet": "| Show cluster | `az kusto cluster show --name <cluster> --resource-group <rg-name>` |"
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 196,
+        "line_end": 201,
+        "snippet": "| Show database | `az kusto database show --cluster-name <cluster> --database-name <db> --resource-g"
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 201,
+        "line_end": 205,
+        "snippet": "```bash"
+      },
+      {
+        "id": "network:SKILL.md:203:hardcoded-url",
+        "category": "network",
+        "severity": "low",
+        "pattern": "Hardcoded URL",
+        "file": "SKILL.md",
+        "line_start": 203,
+        "line_end": 203,
+        "snippet": "--url \"https://<cluster>.<region>.kusto.windows.net/v1/rest/query\" \\"
+      },
+      {
+        "id": "blocker:SKILL.md:156:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 156,
+        "line_end": 156,
+        "snippet": "- Use `take` or `limit` for exploratory queries to avoid large result sets"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:59:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:63:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:71:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:75:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:83:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:88:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:96:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:104:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The match is a Markdown code fence around KQL examples. It is documentation text, not Ruby backtick execution or shell execution in the skill runtime."
+      },
+      {
+        "id": "external_commands:SKILL.md:111:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify Azure Kusto MCP tool names in documentation. These are not shell commands or Ruby backtick execution paths."
+      },
+      {
+        "id": "external_commands:SKILL.md:118:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:135:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:136:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:141:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:142:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:143:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:144:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:147:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:148:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:149:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:150:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:151:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:156:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:157:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.98,
+        "reason": "The backticks mark KQL operators, functions, or query guidance in Markdown. No command interpreter is invoked and no local code is executed."
+      },
+      {
+        "id": "external_commands:SKILL.md:169:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify Azure Kusto MCP tool names in documentation. These are not shell commands or Ruby backtick execution paths."
+      },
+      {
+        "id": "external_commands:SKILL.md:170:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify Azure Kusto MCP tool names in documentation. These are not shell commands or Ruby backtick execution paths."
+      },
+      {
+        "id": "external_commands:SKILL.md:171:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify Azure Kusto MCP tool names in documentation. These are not shell commands or Ruby backtick execution paths."
+      },
+      {
+        "id": "external_commands:SKILL.md:172:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "The backticks identify Azure Kusto MCP tool names in documentation. These are not shell commands or Ruby backtick execution paths."
+      },
+      {
+        "id": "external_commands:SKILL.md:175:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:176:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:177:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:178:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:179:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:182:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:183:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "The backticks format parameter names such as subscription, cluster, database, query, table, resource group, or tenant. They do not create an executable command path."
+      },
+      {
+        "id": "external_commands:SKILL.md:193:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "id": "external_commands:SKILL.md:194:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "id": "external_commands:SKILL.md:195:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "id": "external_commands:SKILL.md:196:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.76,
+        "severity": "medium",
+        "reason": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "id": "external_commands:SKILL.md:201:ruby-shell-backtick-execution",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "severity": "medium",
+        "reason": "The bash fallback uses az rest to submit a Kusto query with user-supplied database and query values. This is legitimate, but it is external command execution plus network access and needs confirmation and escaping."
+      },
+      {
+        "id": "network:SKILL.md:203:hardcoded-url",
+        "verdict": "confirmed",
+        "confidence": 0.74,
+        "severity": "low",
+        "reason": "The fallback example posts KQL query content to an Azure Data Explorer REST endpoint. This is expected for the skill, but it is still network egress of potentially sensitive telemetry queries and results."
+      },
+      {
+        "id": "blocker:SKILL.md:156:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "The line recommends limiting exploratory KQL query results with take or limit. It does not perform host reconnaissance or instruct collection of local system details."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "| List clusters | `az kusto cluster list --resource-group <rg-name>` |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 193,
+            "line_end": 194
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "| List databases | `az kusto database list --cluster-name <cluster> --resource-group <rg-name>` |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 194,
+            "line_end": 195
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "| Show cluster | `az kusto cluster show --name <cluster> --resource-group <rg-name>` |",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 195,
+            "line_end": 196
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "| Show database | `az kusto database show --cluster-name <cluster> --database-name <db> --resource-g",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 196,
+            "line_end": 201
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.76,
+        "confidence_reasoning": "The line documents Azure CLI fallback commands that enumerate or show Azure Data Explorer resources. The operations are read-only, but they still run external commands against a user tenant with user-supplied parameters."
+      },
+      {
+        "title": "Ruby/shell backtick execution",
+        "description": "```bash",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 201,
+            "line_end": 205
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "external_commands",
+        "source_severity": "medium",
+        "confidence": 0.82,
+        "confidence_reasoning": "The bash fallback uses az rest to submit a Kusto query with user-supplied database and query values. This is legitimate, but it is external command execution plus network access and needs confirmation and escaping."
+      }
+    ],
+    "low_findings": [
+      {
+        "title": "Hardcoded URL",
+        "description": "--url \"https://<cluster>.<region>.kusto.windows.net/v1/rest/query\" \\",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 203,
+            "line_end": 203
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "network",
+        "source_severity": "low",
+        "confidence": 0.74,
+        "confidence_reasoning": "The fallback example posts KQL query content to an Azure Data Explorer REST endpoint. This is expected for the skill, but it is still network egress of potentially sensitive telemetry queries and results."
+      }
+    ],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 238,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T09:34:02.103Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Analyze Azure Data Explorer with KQL",
+    "value_statement": "Azure Data Explorer data can be hard to inspect without the right KQL structure and schema context. This skill helps Claude, Codex, and Claude Code build focused KQL queries, explore schemas, and troubleshoot ADX results.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Azure Data Explorer",
+      "Kusto",
+      "KQL",
+      "ADX",
+      "log analytics",
+      "telemetry analysis",
+      "Azure Monitor"
+    ],
+    "actual_capabilities": [
+      "Builds KQL queries for filtering, aggregation, joins, and time series analysis.",
+      "Uses Kusto schema context to identify tables, columns, and data types.",
+      "Lists Azure Data Explorer clusters and databases through configured Kusto tools.",
+      "Runs KQL queries against an authorized Azure Data Explorer database.",
+      "Explains common Kusto query errors, empty results, and timeout causes.",
+      "Provides Azure CLI and REST fallback guidance when MCP tools are unavailable."
+    ],
+    "limitations": [
+      "Requires configured Azure access and permissions for the target subscription, cluster, and database.",
+      "Does not create, update, or delete Azure Data Explorer resources.",
+      "Query quality depends on accurate table names, schema details, and available data retention.",
+      "Large or broad queries can time out, cost more, or return excessive data."
+    ],
+    "use_cases": [
+      {
+        "title": "Investigate Production Logs",
+        "description": "Create focused KQL queries for recent errors, grouped events, and correlated log messages.",
+        "target_user": "Site reliability engineer"
+      },
+      {
+        "title": "Explore Telemetry Schemas",
+        "description": "List available Kusto databases and inspect table schemas before writing analysis queries.",
+        "target_user": "Data engineer"
+      },
+      {
+        "title": "Analyze Security Events",
+        "description": "Aggregate security telemetry by time, severity, source, and correlation identifiers.",
+        "target_user": "Security analyst"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Find Recent Events",
+        "scenario": "Beginner query for recent records.",
+        "prompt": "Query my Azure Data Explorer database for the last 100 events from [table] during the past hour. Use a time filter and return the most useful columns."
+      },
+      {
+        "title": "Summarize Event Volume",
+        "scenario": "Intermediate aggregation by time and category.",
+        "prompt": "Create a KQL query that counts events in [table] by [category column] and 15 minute time bins for the last 24 hours."
+      },
+      {
+        "title": "Troubleshoot Slow Queries",
+        "scenario": "Advanced optimization review.",
+        "prompt": "Review this KQL query for performance issues. Add early filters, reduce projected columns, and explain each change before running it."
+      },
+      {
+        "title": "Correlate Incident Signals",
+        "scenario": "Advanced cross-table investigation.",
+        "prompt": "Use schema discovery, then build a KQL query that joins [events table] and [logs table] on a correlation identifier for critical errors in the last 6 hours."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Show failed login events from the past day and group them by account.",
+        "output": "A time-bounded KQL query with account grouping, a summary of expected columns, and guidance to limit returned rows."
+      },
+      {
+        "input": "Why is my Kusto query returning no rows?",
+        "output": "A troubleshooting checklist covering time ranges, table names, filter values, permissions, and data ingestion delay."
+      },
+      {
+        "input": "Find latency spikes in telemetry for the last 12 hours.",
+        "output": "A percentile-based time series query plan and an explanation of how to interpret the latency trend."
+      }
+    ],
+    "best_practices": [
+      "Start with schema discovery before writing queries for unfamiliar tables.",
+      "Use time filters and result limits for every exploratory query.",
+      "Project only required columns before sharing or exporting results."
+    ],
+    "anti_patterns": [
+      "Running broad queries without a time range or row limit.",
+      "Using production credentials without confirming the target subscription and database.",
+      "Pasting sensitive KQL results into unrelated tickets or prompts."
+    ],
+    "faq": [
+      {
+        "question": "What is Azure Data Explorer?",
+        "answer": "Azure Data Explorer is a managed analytics service for logs, telemetry, time series data, and large event datasets."
+      },
+      {
+        "question": "Does this skill require Azure credentials?",
+        "answer": "Yes. It needs authorized Azure access through configured Kusto tools or Azure CLI authentication."
+      },
+      {
+        "question": "Can it modify my Kusto database?",
+        "answer": "The documented workflow focuses on listing resources, reading schemas, and running queries. It does not describe write or delete actions."
+      },
+      {
+        "question": "Can I use it for security investigations?",
+        "answer": "Yes. It can help aggregate and correlate security telemetry when you have permission to query the source tables."
+      },
+      {
+        "question": "What happens if an MCP Kusto tool is unavailable?",
+        "answer": "The skill includes Azure CLI and REST fallback guidance, which should be used only after confirmation."
+      },
+      {
+        "question": "How should I control query cost and size?",
+        "answer": "Use time filters, row limits, early where clauses, and projected columns before running broad analysis."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 231
+    },
+    {
+      "name": "version.json",
+      "type": "file",
+      "path": "version.json",
+      "lines": 7
+    }
+  ]
+}

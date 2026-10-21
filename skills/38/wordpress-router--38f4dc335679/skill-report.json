@@ -1,0 +1,305 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T04:20:36.244Z",
+    "slug": "automattic-wordpress-router",
+    "source_url": "https://github.com/Automattic/agent-skills/tree/trunk/skills/wordpress-router",
+    "source_ref": "trunk",
+    "model": "claude",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "667546ceeaade98be4a9429cfbde74707f7f33d3572d1c5dcb27e3117c589a0b",
+    "tree_hash": "fac42ae1580e8be8066366e29e65567fd0b472d5696d60cd464d254d7f9a72e2",
+    "provenance": {
+      "model_requested": "claude-sonnet-4.6",
+      "model_effective": "claude:claude-sonnet-4.6",
+      "fallback_chain": [
+        {
+          "agent": "claude",
+          "model": "claude-sonnet-4.6",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "wordpress-router",
+    "description": "Classify WordPress repositories and route tasks to the right WordPress workflow, guardrails, and specialist skill.",
+    "summary": "Routes WordPress repo work by project type, user intent, tooling, and verification needs.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "Automattic",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "wordpress",
+      "routing",
+      "triage",
+      "plugins",
+      "themes"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The static findings are false positives caused by markdown inline code and command examples in SKILL.md. No prompt injection, data exfiltration intent, or unsafe semantic behavior was found in the reviewed files.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 25
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 32,
+            "line_end": 32
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 44,
+            "line_end": 44
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 45,
+            "line_end": 45
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 25,
+        "snippet": "- `node skills/wp-project-triage/scripts/detect_wp_project.mjs`"
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 32,
+        "line_end": 32,
+        "snippet": "- For the decision tree, read: `skills/wordpress-router/references/decision-tree.md`."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 44,
+        "line_end": 44,
+        "snippet": "- If triage reports `kind: unknown`, inspect:"
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 45,
+        "line_end": 45,
+        "snippet": "- root `composer.json`, `package.json`, `style.css`, `block.json`, `theme.json`, `wp-content/`."
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "This is a markdown command example instructing the agent to run a bundled project triage script. It is not Ruby backtick execution or dynamic shell evaluation inside executable code."
+      },
+      {
+        "id": "external_commands:SKILL.md:32:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This line uses markdown inline code to name a reference file path. There is no command execution or user-controlled shell input."
+      },
+      {
+        "id": "external_commands:SKILL.md:44:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.96,
+        "reason": "This is a markdown inline code reference to a triage output value. It does not execute code or invoke a shell."
+      },
+      {
+        "id": "external_commands:SKILL.md:45:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "This line lists filenames and directories in markdown inline code. It is documentation, not an executable command or shell backtick pattern."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 108,
+    "audit_model": "claude",
+    "audited_at": "2026-07-09T04:20:36.244Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Route WordPress Tasks to the Right Workflow",
+    "value_statement": "WordPress repositories can mix plugins, themes, blocks, and site code. This skill classifies the project and guides Claude or Codex toward the correct workflow.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "WordPress router",
+      "WordPress plugin workflow",
+      "WordPress theme workflow",
+      "Gutenberg blocks",
+      "WP-CLI",
+      "WordPress triage",
+      "theme.json"
+    ],
+    "actual_capabilities": [
+      "Classifies WordPress repositories as plugins, themes, block themes, full sites, core checkouts, or Gutenberg workspaces.",
+      "Routes tasks to specialized WordPress workflows based on user intent and repository signals.",
+      "Identifies available tooling such as Composer, Node, WP-CLI, PHPUnit, Playwright, and wp-env.",
+      "Applies WordPress-specific guardrails before code changes or verification steps.",
+      "Prompts for clarification when project type or version targets are ambiguous."
+    ],
+    "limitations": [
+      "It is a routing skill, not a full implementation workflow for every WordPress domain.",
+      "Some downstream workflows listed in the decision tree are planned rather than complete.",
+      "It depends on repository files and triage output to classify the project accurately.",
+      "Commands that require WP-CLI or local tooling may fail if those tools are not installed."
+    ],
+    "use_cases": [
+      {
+        "title": "Classify a mixed WordPress repository",
+        "description": "Identify whether a repository is a plugin, theme, block theme, site, WordPress core checkout, or Gutenberg workspace.",
+        "target_user": "WordPress developer"
+      },
+      {
+        "title": "Choose the right specialist workflow",
+        "description": "Route work on blocks, REST endpoints, theme.json, WP-CLI, performance, security, or testing to a focused process.",
+        "target_user": "AI coding assistant user"
+      },
+      {
+        "title": "Plan safe verification steps",
+        "description": "Use detected tooling and project constraints to choose appropriate lint, build, and test commands.",
+        "target_user": "Release engineer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Classify this WordPress project",
+        "scenario": "Beginner triage before making changes",
+        "prompt": "Use the WordPress router to classify this repository and tell me what kind of WordPress project it is."
+      },
+      {
+        "title": "Route a plugin task",
+        "scenario": "Plugin maintenance or feature work",
+        "prompt": "Use the WordPress router for this plugin task. Identify the project type, the right workflow, and the checks I should run."
+      },
+      {
+        "title": "Plan a block theme change",
+        "scenario": "Theme.json, templates, or pattern work",
+        "prompt": "Use the WordPress router to inspect this repository and route my block theme request to the correct workflow. Include guardrails for verification."
+      },
+      {
+        "title": "Handle ambiguous WordPress scope",
+        "scenario": "Advanced routing across a large or mixed repository",
+        "prompt": "Use the WordPress router to classify all relevant WordPress signals in this repository, resolve ambiguous project types, and recommend the most specific workflow for my task."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Classify this repo before changing the editor block.",
+        "output": "The repository appears to be a block plugin. Route the task to block development, then verify with the existing build and test scripts."
+      },
+      {
+        "input": "I need to update global styles in this theme.",
+        "output": "This should use the block theme workflow because the task mentions global styles and theme configuration files. Confirm target WordPress versions first."
+      },
+      {
+        "input": "The triage result is unknown. What should I inspect next?",
+        "output": "Inspect the root package, theme, block, and WordPress content indicators. If signals conflict, ask whether the project is a plugin, theme, or full site."
+      }
+    ],
+    "best_practices": [
+      "Run project triage before choosing a WordPress workflow.",
+      "Prefer the repository's existing lint, build, and test tooling over generic commands.",
+      "Ask one clear question when project type or version constraints are ambiguous."
+    ],
+    "anti_patterns": [
+      "Do not assume every WordPress repository is a plugin.",
+      "Do not skip tooling detection before recommending verification commands.",
+      "Do not route broad site repositories without considering the user's specific intent."
+    ],
+    "faq": [
+      {
+        "question": "What does this skill do?",
+        "answer": "It classifies a WordPress repository and routes the task to the most relevant WordPress workflow or specialist skill."
+      },
+      {
+        "question": "Does it edit WordPress code by itself?",
+        "answer": "No. It prepares routing, guardrails, and verification guidance before another workflow or agent performs the implementation."
+      },
+      {
+        "question": "Which WordPress project types can it recognize?",
+        "answer": "It covers plugins, must-use plugins, classic themes, block themes, full site repositories, WordPress core, and Gutenberg workspaces."
+      },
+      {
+        "question": "Can it help with REST API or security work?",
+        "answer": "Yes. It can route REST endpoint, capability, nonce, sanitization, escaping, and upload tasks to the appropriate workflow."
+      },
+      {
+        "question": "What tools does it expect?",
+        "answer": "It can use filesystem inspection, Node-based triage, and repository tooling such as Composer, npm scripts, WP-CLI, PHPUnit, Playwright, or wp-env."
+      },
+      {
+        "question": "What happens when the project type is unclear?",
+        "answer": "It inspects common WordPress indicators and asks a focused clarification question when routing remains ambiguous."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "references",
+      "type": "dir",
+      "path": "references",
+      "children": [
+        {
+          "name": "decision-tree.md",
+          "type": "file",
+          "path": "references/decision-tree.md",
+          "lines": 56
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 52
+    }
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-06T11:40:03.473Z",
+    "slug": "diegopherlt-subagent-orchestration",
+    "source_url": "https://github.com/DieGopherLT/claude-kit/tree/main/skills/subagent-orchestration",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "a72a9cee4cbd779fac722daa4b7206f8e1f346c9580fb62a57240bf414cf7de3",
+    "tree_hash": "ae039415f38d48be77c2b9815eb2ab0493b8baff7f42089a7805e846ba4d1d4e",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "subagent-orchestration",
+    "description": "Guides users in planning multiple independent subagent tasks with clear scope, file boundaries, and coordination rules.",
+    "summary": "Coordinate independent subagent work with explicit boundaries and safer parallel planning.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DieGopherLT",
+    "license": "MIT",
+    "category": "coding",
+    "tags": [
+      "subagents",
+      "multi-agent",
+      "orchestration",
+      "parallel-workflows",
+      "scope-management"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "All three static findings are false positives caused by documentation language, code fences, and the phrase 'Files NOT to touch.' The skill provides workflow guidance only and does not execute commands, access networks, or request secrets. No prompt injection or malicious intent was found in the reviewed files.",
+    "remediation": [],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 36,
+            "line_end": 49
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "blocker:output.json:136:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "output.json",
+        "line_start": 136,
+        "line_end": 136,
+        "snippet": "\"answer\": \"Avoid overlapping scopes. Define exclusive file lists for each subagent. Use 'Files NOT t"
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 36,
+        "line_end": 49,
+        "snippet": "```"
+      },
+      {
+        "id": "blocker:SKILL.md:61:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 61,
+        "line_end": 63,
+        "snippet": "## Anti-patterns to Avoid"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "blocker:output.json:136:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.93,
+        "reason": "Line 136 is marketplace FAQ text about avoiding overlapping subagent scopes. It does not perform reconnaissance or instruct collection of system information."
+      },
+      {
+        "id": "external_commands:SKILL.md:36:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.95,
+        "reason": "Lines 36-49 are a Markdown code fence containing a plain task template. There is no Ruby interpolation, shell execution, or command invocation."
+      },
+      {
+        "id": "blocker:SKILL.md:61:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.9,
+        "reason": "Lines 61-63 list workflow anti-patterns, including vague file specifications and missing exclusions. The text limits subagent scope instead of gathering system details."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 212,
+    "audit_model": "codex",
+    "audited_at": "2026-07-06T11:40:03.473Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Coordinate Parallel Subagent Workflows",
+    "value_statement": "Multi-agent work can fail when tasks overlap or depend on hidden context. This skill helps Claude, Codex, and Claude Code plan bounded subagent assignments.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "subagent orchestration",
+      "multi-agent workflow",
+      "parallel agents",
+      "agent delegation",
+      "scope boundaries",
+      "coding agents",
+      "workflow planning"
+    ],
+    "actual_capabilities": [
+      "Defines when independent subagent tasks can run in parallel.",
+      "Provides a reusable scope template for delegated work.",
+      "Encourages explicit file lists and exclusion lists.",
+      "Separates parallel work from sequential work with dependency checks.",
+      "Guides users to include reference documents for subagents."
+    ],
+    "limitations": [
+      "Does not launch or manage subagents by itself.",
+      "Does not inspect repositories or verify task independence automatically.",
+      "Requires the user to provide accurate file paths and boundaries.",
+      "Cannot resolve conflicts after subagents modify the same files."
+    ],
+    "use_cases": [
+      {
+        "title": "Split independent code reviews",
+        "description": "Assign separate subagents to review unrelated modules with clear files to inspect and exclude.",
+        "target_user": "Engineering lead"
+      },
+      {
+        "title": "Plan parallel implementation tasks",
+        "description": "Define non-overlapping feature work before asking agents to edit different areas of a repository.",
+        "target_user": "Software developer"
+      },
+      {
+        "title": "Control delegated research",
+        "description": "Give each research agent a bounded question, required references, and clear limits on what to ignore.",
+        "target_user": "Technical researcher"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Identify safe delegation",
+        "scenario": "Beginner planning before using subagents",
+        "prompt": "Review this task and tell me whether it should use one agent or multiple subagents. Explain any dependencies and scope risks."
+      },
+      {
+        "title": "Create bounded subagent tasks",
+        "scenario": "Prepare clear instructions for parallel work",
+        "prompt": "Break this work into independent subagent tasks. For each task, list files to modify, files not to touch, constraints, and reference documents."
+      },
+      {
+        "title": "Validate parallel readiness",
+        "scenario": "Check whether proposed assignments can run together",
+        "prompt": "Evaluate these proposed subagent assignments for overlap, missing exclusions, shared dependencies, and unclear ownership. Revise them for safe parallel execution."
+      },
+      {
+        "title": "Design an orchestration plan",
+        "scenario": "Advanced coordination across a larger project",
+        "prompt": "Create a multi-stage orchestration plan for this project. Separate parallel phases from sequential phases and define merge checks after each phase."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "I need to review authentication and billing changes at the same time.",
+        "output": "The skill would separate the work into two independent review assignments with explicit file boundaries and shared exclusions."
+      },
+      {
+        "input": "I want agents to refactor an API after another agent studies current behavior.",
+        "output": "The skill would mark this as sequential because the refactor depends on the investigation results."
+      },
+      {
+        "input": "Two subagents might edit the same configuration files.",
+        "output": "The skill would require tighter ownership rules or a single agent workflow to avoid conflicting edits."
+      }
+    ],
+    "best_practices": [
+      "Use parallel subagents only when tasks are independent and bounded.",
+      "Name exact files to modify and exact files to avoid.",
+      "Include reference documents so each subagent has enough context."
+    ],
+    "anti_patterns": [
+      "Do not assign vague work such as updating related files.",
+      "Do not run dependent tasks in parallel.",
+      "Do not omit exclusions when multiple agents work in one repository."
+    ],
+    "faq": [
+      {
+        "question": "Does this skill run subagents automatically?",
+        "answer": "No. It provides planning guidance for users who choose to delegate work to subagents."
+      },
+      {
+        "question": "When should I use parallel subagents?",
+        "answer": "Use them when tasks are independent, clearly scoped, and do not need each other's results."
+      },
+      {
+        "question": "What information should each subagent receive?",
+        "answer": "Each subagent should receive a clear task, file boundaries, exclusions, constraints, and relevant reference documents."
+      },
+      {
+        "question": "Can this skill prevent merge conflicts?",
+        "answer": "It can reduce conflict risk by defining ownership, but it cannot guarantee conflict-free changes."
+      },
+      {
+        "question": "Is this skill only for coding tasks?",
+        "answer": "No. It can also organize bounded research or documentation tasks, but its examples focus on code work."
+      },
+      {
+        "question": "Does it require Claude Code?",
+        "answer": "No. It supports Claude, Codex, and Claude Code workflows that use delegated agents."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "output.json",
+      "type": "file",
+      "path": "output.json",
+      "lines": 144
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 68
+    }
+  ]
+}

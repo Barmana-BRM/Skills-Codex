@@ -1,0 +1,444 @@
+[CmdletBinding()]
+param(
+  [string]$HelperPath,
+  # Profile labels, not raw @oai/sky versions: one sky version can ship more than one
+  # helper binary across Desktop builds, so each label pins its own hash pair.
+  [ValidateSet('0.4.20-F2B2F56F', '0.5.2-2C4CAC16', '0.6.6', '0.6.11', '0.6.11-7A95D14E', '0.6.16', '0.6.16-BEB498C2', '0.6.17-29D5E113', '0.6.17-DB8F4486', '0.6.17-4250FF66', '0.6.17-4319D3A2', '0.6.17-D967386B', '0.6.23-8423CA8C', '0.6.24-DE3696C0', '0.6.24-4DB7B670', '0.6.24-9BAB6E1B', '0.6.24-3B60A7E0', '0.6.26-7D9EB53D', '0.6.26-52928CCC', '0.6.26-71BAEAFD', '0.6.26-243F203E', '0.6.26-06EBD6D6', '0.6.26-6DDFB6A8', '0.6.26-7A2C7F70', '0.6.26-935D23E1', '0.6.32-BAD605EF', '0.7.1-B49B8682', '0.6.26-4A87D459', '0.6.26-84B38D77', '0.7.1-D09A2F3F', '0.7.1-9493AF2C', '0.7.1-2AA2A7A9', '0.7.4-219BFB75', '0.7.4-8010E5ED', '0.7.5-ABDD75DF', '0.7.5-6EEAF314', '0.7.5-25D792D0', '0.7.6-F78948E6', '0.7.6-63C98C4D')]
+  [string]$SkyVersion = '0.6.16'
+)
+
+$ErrorActionPreference = 'Stop'
+$Profiles = @{
+  '0.7.6-63C98C4D' = [ordered]@{
+    SkyVersion = '0.7.6'
+    OriginalHash = '63C98C4DD5D707DF3240A04DA1FBF7FE47FF0622CF757EE886EEE96434D4E17A'
+    PatchedHash = '5BAE07883BA804D9EB23BFBFFBC99FD83247896F6CFE66109A8F6C4C5EE13B94'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.6-F78948E6' = [ordered]@{
+    SkyVersion = '0.7.6'
+    OriginalHash = 'F78948E680EB005AEC483269AC19B7139C30685E07A2C18CB2AC5EF651B0F0FD'
+    PatchedHash = '202FC10AF903D0CB8277EFB6EA36733F78BB5CB698F0C164A4536042629E8291'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.5-25D792D0' = [ordered]@{
+    SkyVersion = '0.7.5'
+    OriginalHash = '25D792D0661D0E10D04D2CA3AABAE491FAE69F045CF27CF3AB9E906D7AD82910'
+    PatchedHash = '28A3B973239DA2BAAAB220BC083FBBFFE960E5EC8BECF4B49F7B3E3DF625CA48'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.5-6EEAF314' = [ordered]@{
+    SkyVersion = '0.7.5'
+    OriginalHash = '6EEAF314A15936E549E47532E8DC62A01920BD38D65E7797E1C812E62199A741'
+    PatchedHash = '2683A00FAFA247DCD1EDBD0DFF994360D09D2269DC7E8904AB83DE1F34051598'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.4-219BFB75' = [ordered]@{
+    SkyVersion = '0.7.4'
+    OriginalHash = '219BFB756D96BCE3EA6C0FFBEFB690C7FE3682E12117D330F46BC21BD1E2C576'
+    PatchedHash = 'FFA903091DA4FA9A8ABC13C632ECBA6529D9908ABA6D3F28A4E369E61F8DA814'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.4-8010E5ED' = [ordered]@{
+    SkyVersion = '0.7.4'
+    OriginalHash = '8010E5ED48DFD9C06B73B564E020ED1CCE5914071A46725C8702360E4C71DD9C'
+    PatchedHash = '057170CDC8F87B005B66BF90AC9E14BB9CA644FAC7621110B1147138DB7C0D19'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.5-ABDD75DF' = [ordered]@{
+    SkyVersion = '0.7.5'
+    OriginalHash = 'ABDD75DF576B3CBCC7ED170DE1B4F27A65C81E25768A9B0B46D682FB586FB483'
+    PatchedHash = '13C46D415AC4E69AA0E27F0B9DE3A18057ED16FFBC791E4D3B1DF65935DFFA65'
+    EndToEndValidatedDesktopVersion = '26.928.1915.3'
+  }
+  '0.4.20-F2B2F56F' = [ordered]@{
+    SkyVersion = '0.4.20'
+    OriginalHash = 'F2B2F56FCD1699B0FA32DEC3214A56A1D36B937A2ECF58CC822AB4A904551E03'
+    PatchedHash = '71A13CBC4BB333F0707D2311C99DBA54D8B24D1BBB9F7CE25C3B9386577FFDDA'
+  }
+  '0.5.2-2C4CAC16' = [ordered]@{
+    SkyVersion = '0.5.2'
+    OriginalHash = '2C4CAC168200520C2752058177EA9FE7D1CCF9A26B7287DDDFF669D41CA9AF16'
+    PatchedHash = 'D816B14A80370697380BA702863DA9528AA5B73ED34C2B189ACE2BF9E103BEFF'
+  }
+  '0.6.6' = [ordered]@{
+    SkyVersion = '0.6.6'
+    OriginalHash = 'BE488E66C38E12FA46850EE48C1F5E44ECDB0A3A64042E064E3A1A1DA286AC42'
+    PatchedHash = '34D6EB4F23630AD6E7211898AA7678472C9ED7ACFD972C78B7D9E575A1C5C640'
+  }
+  '0.6.11' = [ordered]@{
+    SkyVersion = '0.6.11'
+    OriginalHash = 'DE07F17A7206588687A8F722E4EBFC5A4FB1BD87F91DF2C60BB5C777C6D5CDCD'
+    PatchedHash = '40530E628C91EF510F81A02FD3394C18E0D322C3D68D4A0277F0B0C56A2D43CC'
+  }
+  '0.6.11-7A95D14E' = [ordered]@{
+    SkyVersion = '0.6.11'
+    OriginalHash = '7A95D14EBF992955D8AB8E6C57A75545ED7D18E864B0F5C1B9FE7F47685BD897'
+    PatchedHash = 'E84A4ECB473CF9D3B4B65BB27A298DE6602AD8A1A11B21EE0BA7BC9209FE4DA9'
+  }
+  '0.6.16' = [ordered]@{
+    SkyVersion = '0.6.16'
+    OriginalHash = 'E40BE6145157885F0E155A4247DF3B64BD5D3455A04E276503B0E2821B3EA39E'
+    PatchedHash = 'F35CA6D89959EDEFB4DF46A5ECC6202091AB3C63E885E6CD6CF9824D92B66EB7'
+  }
+  '0.6.16-BEB498C2' = [ordered]@{
+    SkyVersion = '0.6.16-202608171739-pr-1311460-c66628846294'
+    OriginalHash = 'BEB498C287889D807DCCB0E1FAD8A39ED9BE6BDF084D10313B5D52BA26C1E370'
+    PatchedHash = 'AF7D14EE6E2B850E06798EC14117D29F1C839DB5C135A7F515DE37074DB66A23'
+  }
+  '0.6.17-29D5E113' = [ordered]@{
+    SkyVersion = '0.6.17-202608171537-pr-1300023-7efba775c041'
+    OriginalHash = '29D5E113A5D24A1DD3F3CCA4245CE5AE82A56E88AF5AFCD8E0AE4CC2E5C94992'
+    PatchedHash = 'DC83663FBF8DEF6749296B84EAE66054D2C07530CC42A87CA4503ECF86AD3767'
+  }
+  '0.6.17-DB8F4486' = [ordered]@{
+    SkyVersion = '0.6.17-202608171537-pr-1300023-7efba775c041'
+    OriginalHash = 'DB8F4486D527C91B80266FAF77FDC38266B1D3960EFBBA35D0A6AAB4CAAF6AEE'
+    PatchedHash = '6495168DC16A35CDC33230E6512D64E660B56D13E99FE239426D228B9F86E157'
+  }
+  '0.6.17-4250FF66' = [ordered]@{
+    SkyVersion = '0.6.17-202608171537-pr-1300023-7efba775c041'
+    OriginalHash = '4250FF66B8EE598931DBE782E1CC76133FBE7650CCE225C4FC232155F7054350'
+    PatchedHash = 'F4408E2C59F037D8B96ADAF3DE48846DB2921A9F007BC3CCAE34C1407A609ACC'
+  }
+  '0.6.17-4319D3A2' = [ordered]@{
+    SkyVersion = '0.6.17-202608171537-pr-1300023-7efba775c041'
+    OriginalHash = '4319D3A23F6B21370205425203BD46E76E7F3BB7EA5AC263851DCC5B8727AAE5'
+    PatchedHash = '338D32A33BB7C034FEBCA79D23EF2337BCCE1CC9741784C1C11CE64F3A508368'
+  }
+  '0.6.17-D967386B' = [ordered]@{
+    SkyVersion = '0.6.17-202608171537-pr-1300023-7efba775c041'
+    OriginalHash = 'D967386B8943355017B7CFC1044A6F39AF41A38A3731088C4191123CE7F86018'
+    PatchedHash = 'B43B12A8A23BE7CED3CCB64C56CC6885A483DBD482891116AB78C35CC3ACFB30'
+  }
+  '0.6.23-8423CA8C' = [ordered]@{
+    SkyVersion = '0.6.23-202608251207-pr-1350514-1bc5ee2d44ce'
+    OriginalHash = '8423CA8C5B75BD2ADCDC0E0BB0242A8F5422D16E12505753E84728D4A112458F'
+    PatchedHash = 'E7C020B3451F6F2EF300D725A6B2AFC45A223A07C87D6D053B93BF3B28F0B661'
+  }
+  '0.6.24-DE3696C0' = [ordered]@{
+    SkyVersion = '0.6.24-premerge-pr-1369830-395ab116910c'
+    OriginalHash = 'DE3696C0E35CB4A00A77F284779E03FBED6B46D9EE00CA261D2B467064A3D149'
+    PatchedHash = '1AB5261A714BDD10BCE038319A4668E366B679691A746B569731ED994FAC80E3'
+  }
+  # Same sky version string as DE3696C0, different binary: keyed on hash, not version.
+  '0.6.24-4DB7B670' = [ordered]@{
+    SkyVersion = '0.6.24-premerge-pr-1369830-395ab116910c'
+    OriginalHash = '4DB7B6709F5B6DB2AE6DF60A1BDE026CF8A3582EEB616AF6B6529150E11B5CE1'
+    PatchedHash = '986AA8DC4F6B2DC0A9551617120AF82915EC42C9F745BDE5F474EEB44A6ACCBD'
+  }
+  # Third binary on the same sky version string, shipped by Desktop 26.825.5331.0.
+  '0.6.24-9BAB6E1B' = [ordered]@{
+    SkyVersion = '0.6.24-premerge-pr-1369830-395ab116910c'
+    OriginalHash = '9BAB6E1B59D31D97530F2F6681DAEF76E39C7AD0836147C6E0B55A9B47A33EBF'
+    PatchedHash = 'B86B1FCB9EBD7184526AF49D40333FDA02F774FA62E0E9A3528BA5F87EB68AB7'
+  }
+  # Fourth binary on the same 0.6.24 sky version string, shipped by Desktop 26.825.6671.0.
+  '0.6.24-3B60A7E0' = [ordered]@{
+    SkyVersion = '0.6.24-premerge-pr-1369830-395ab116910c'
+    OriginalHash = '3B60A7E0746C9FCEEBC3E0735C33BF97734B4B2AA04E0ED030201251E48D1BB6'
+    PatchedHash = '8B09F9EFD541E059D6611B0D00C6984A2ACF19971B45F292DF3EE13F746009D7'
+  }
+  # First 0.6.26 helper, shipped by Desktop 26.831.1445.0 with a bare version string.
+  '0.6.26-7D9EB53D' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '7D9EB53D9C7C6AFFD05443227C9D93720B9FBD7EADF9B98D7A83D28703ACA95D'
+    PatchedHash = '79EF9E7971E3B7BBF0FFFA6D096107196F08F008BF70D73E9141D96991748228'
+  }
+  # Same code as 7D9EB53D re-signed under a prerelease version string, shipped by
+  # Desktop 26.831.2377.0. Selection needs SkyVersion equality, so it needs its own entry.
+  '0.6.26-52928CCC' = [ordered]@{
+    SkyVersion = '0.6.26-premerge-pr-1403760-d558d5ad5c81'
+    OriginalHash = '52928CCCDECCFC245661733E5903335642AEC1726A6DA4B3A8A8E683805A2769'
+    PatchedHash = '0680CEBCA4C7EB49783578BAEA42DDD0B620379EC2AAA3A4DEBC8FA21BFB832A'
+  }
+  # Same code as 7D9EB53D and 52928CCC re-signed again, shipped by Desktop 26.901.1978.0.
+  '0.6.26-71BAEAFD' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '71BAEAFD97639C170BA2954DFBF6677B6C30171E570C8105290265705C86E102'
+    PatchedHash = '06EBD6D68DF7CF3D3DAB02BD8D886D49D9D181949986DDF2F567A947F75C3A13'
+  }
+  # Fourth re-sign of the same code, shipped by Desktop 26.901.2854.0. Only the PE
+  # CheckSum field and the certificate table differ from 71BAEAFD; all 10 section
+  # bodies are byte-identical, so the five patch offsets carry over unchanged.
+  '0.6.26-243F203E' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '243F203ED85CDA954A12872A0214FF8D43FD09F265AAE172D96AF1A1C1BBFF6B'
+    PatchedHash = 'C62CBDCC42EF6238CD96FD123246D7D820DA2EA341FD63B9F1890B124A530B40'
+  }
+  '0.6.26-06EBD6D6' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '06EBD6D68DF7CF3D3DAB02BD8D886D49D9D181949986DDF2F567A947F75C3A13'
+    PatchedHash = '06EBD6D68DF7CF3D3DAB02BD8D886D49D9D181949986DDF2F567A947F75C3A13'
+  }
+  '0.6.26-6DDFB6A8' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '6DDFB6A81089954C2FC32ECD14A7B25BFB1164711C89A43D5A745BA28CFAE27F'
+    PatchedHash = '663981ACAE0893442F02376EA7090ED1CCBD4E42B3B6178E21926AA87BF0F418'
+  }
+  '0.6.26-7A2C7F70' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '7A2C7F7052EF2A8FA8B2BEF692DFA980F26392D19C64720AA42C9F4C9F480FAE'
+    PatchedHash = 'E67E847ED5D12FCD5480B9E03E00FD8F05E108A82A7A6B24FDA84D7B40110B9C'
+  }
+  '0.6.26-935D23E1' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '935D23E1DB9B0D5C492662ACAB9EBD4A8B96BCCD0DBB48C55A24E497CA79F8F3'
+    PatchedHash = '93866B85718EBEFC0C661CBE69A60B80C51133383070808352105DF615ADA98D'
+  }
+  '0.6.32-BAD605EF' = [ordered]@{
+    SkyVersion = '0.6.32'
+    OriginalHash = 'BAD605EF7A800D2E2EBE2D9205DB6F9AB73EF193524392F5CAA1FA2E1A0DAE2C'
+    PatchedHash = '977D265B145232BA30B2916D8DED6D9B30037A084CF8A90EBBEDACEC91FCBEAC'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.1-B49B8682' = [ordered]@{
+    SkyVersion = '0.7.1'
+    OriginalHash = 'B49B868226C9EB6AB0C1A00903F7B3C7188F5ECC8C59A23488F83DC6DDF1EBC4'
+    PatchedHash = '53B9DC200AFA8A1227A93F43BB5BB52EA69734BCE831339A33531762FF0AD785'
+    EndToEndValidatedDesktopVersion = '26.917.6896.0'
+  }
+  '0.6.26-4A87D459' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '4A87D45924EB67BB0D300F6D8539090BB6EC36AF4143B04DA5F0E6F5A0BE90DC'
+    PatchedHash = '8D791666A9E45336CBAA0E706BA916E8D1266682473199F38A2F65CCB673CC02'
+  }
+  '0.6.26-84B38D77' = [ordered]@{
+    SkyVersion = '0.6.26'
+    OriginalHash = '84B38D77587AD0C19E7C19ABB7E691A343897570A123728D2DBBB1147C0C39CD'
+    PatchedHash = 'F4D65FED22A1B9E46F1F3085F55B360430462010B7A530BB9BC10CF7A2A78180'
+  }
+  '0.7.1-D09A2F3F' = [ordered]@{
+    SkyVersion = '0.7.1'
+    OriginalHash = 'D09A2F3F4C144BE9C180509F5CD67D60F4B0B6FBB62E0F5A1EE131F4B653C512'
+    PatchedHash = 'F406A337F4EA6D794DB2E804DFBE880CE06BF8FBAEC565212411474D02E9545D'
+    EndToEndValidatedDesktopVersion = '26.915.4065.0'
+  }
+  '0.7.1-9493AF2C' = [ordered]@{
+    SkyVersion = '0.7.1'
+    OriginalHash = '9493AF2CEBD3C11E2E38CE692F6CCD8E00F4320BDBBCF14F242D036A9736635F'
+    PatchedHash = 'AA7DA8D22911398790EED442A22F7D747339FF89E2DD4DB49931A611E6EEDB79'
+    EndToEndValidatedDesktopVersion = $null
+  }
+  '0.7.1-2AA2A7A9' = [ordered]@{
+    SkyVersion = '0.7.1'
+    OriginalHash = '2AA2A7A93F5CF48399987CA0959DE5588293E6C7F04B68860812FA3D5412598C'
+    PatchedHash = 'D958F97F3B0D694A8472E17DE64113831A72E8F6B7D031D405A45F39949B3999'
+    EndToEndValidatedDesktopVersion = $null
+  }
+}
+$ProfileLabel = $SkyVersion
+$ExpectedSkyVersion = $Profiles[$ProfileLabel].SkyVersion
+$ExpectedOriginalHash = $Profiles[$ProfileLabel].OriginalHash
+$ExpectedPatchedHash = $Profiles[$ProfileLabel].PatchedHash
+$Patcher = Join-Path $PSScriptRoot 'patch-computer-use-helper-win10.ps1'
+
+function Assert-Equal {
+  param(
+    [object]$Actual,
+    [object]$Expected,
+    [string]$Message
+  )
+  if ([string]$Actual -cne [string]$Expected) {
+    throw "$Message / expected=$Expected actual=$Actual"
+  }
+}
+
+function Get-CodexPackageInstallLocations {
+  $locations = New-Object System.Collections.Generic.List[string]
+  foreach ($scope in @($false, $true)) {
+    try {
+      $packages = if ($scope) {
+        Get-AppxPackage -Name 'OpenAI.Codex' -AllUsers -ErrorAction Stop
+      } else {
+        Get-AppxPackage -Name 'OpenAI.Codex' -ErrorAction Stop
+      }
+    } catch {
+      continue
+    }
+    foreach ($package in ($packages | Sort-Object { [version]$_.Version } -Descending)) {
+      if (-not [string]::IsNullOrWhiteSpace($package.InstallLocation) -and -not $locations.Contains($package.InstallLocation)) {
+        $locations.Add($package.InstallLocation)
+      }
+    }
+  }
+  return $locations
+}
+
+function Resolve-OriginalHelper {
+  if (-not [string]::IsNullOrWhiteSpace($HelperPath)) {
+    return [IO.Path]::GetFullPath($HelperPath)
+  }
+
+  $runtimeRoot = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\runtimes\cua_node'
+  if (Test-Path -LiteralPath $runtimeRoot -PathType Container) {
+    $runtimeHelper = Get-ChildItem -LiteralPath $runtimeRoot -Directory -ErrorAction SilentlyContinue |
+      ForEach-Object {
+        $candidate = Join-Path $_.FullName 'bin\node_modules\@oai\sky\bin\windows\codex-computer-use.exe'
+        if ((Test-Path -LiteralPath $candidate -PathType Leaf) -and
+            (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash -eq $ExpectedOriginalHash) {
+          Get-Item -LiteralPath $candidate
+        }
+      } |
+      Sort-Object LastWriteTime -Descending |
+      Select-Object -First 1
+    if ($runtimeHelper) {
+      return $runtimeHelper.FullName
+    }
+  }
+
+  $backupRoot = Join-Path $env:USERPROFILE '.codex\backups\computer-use-helper'
+  if (Test-Path -LiteralPath $backupRoot -PathType Container) {
+    $backup = Get-ChildItem -LiteralPath $backupRoot -Recurse -Filter 'codex-computer-use.exe.original' -File -ErrorAction SilentlyContinue |
+      Where-Object { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash -eq $ExpectedOriginalHash } |
+      Sort-Object LastWriteTime -Descending |
+      Select-Object -First 1
+    if ($backup) {
+      return $backup.FullName
+    }
+  }
+
+  # A freshly published Desktop build ships its helper inside the installed package and the
+  # user-local runtime only appears after the app has been launched once, so fall back to the
+  # bundled copy. Read-only, and every candidate is still hash-pinned to the profile.
+  foreach ($installLocation in (Get-CodexPackageInstallLocations)) {
+    $candidate = Join-Path $installLocation 'app\resources\cua_node\bin\node_modules\@oai\sky\bin\windows\codex-computer-use.exe'
+    if ((Test-Path -LiteralPath $candidate -PathType Leaf) -and
+        (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash -eq $ExpectedOriginalHash) {
+      return $candidate
+    }
+  }
+
+  throw "the exact original helper for profile $ProfileLabel (@oai/sky $ExpectedSkyVersion) is unavailable for this regression test"
+}
+
+function Get-Status {
+  param(
+    [string]$Path,
+    [string]$CodexHome
+  )
+  return @(& $Patcher -HelperPath $Path -CodexHome $CodexHome) | Select-Object -Last 1
+}
+
+function Get-WindowsBuild {
+  $os = Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue
+  if ($os -and $os.BuildNumber) {
+    return [int]$os.BuildNumber
+  }
+  return [Environment]::OSVersion.Version.Build
+}
+
+if (-not (Test-Path -LiteralPath $Patcher -PathType Leaf)) {
+  throw "patcher is missing: $Patcher"
+}
+
+$sourceHelper = Resolve-OriginalHelper
+Assert-Equal (Get-FileHash -LiteralPath $sourceHelper -Algorithm SHA256).Hash $ExpectedOriginalHash 'unexpected original helper hash'
+
+$runtimeRoot = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\runtimes\cua_node'
+$sourcePackagePath = $null
+if (Test-Path -LiteralPath $runtimeRoot -PathType Container) {
+  $sourcePackagePath = Get-ChildItem -LiteralPath $runtimeRoot -Directory -ErrorAction SilentlyContinue |
+    ForEach-Object {
+      $candidate = Join-Path $_.FullName 'bin\node_modules\@oai\sky\package.json'
+      if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+        try {
+          $package = Get-Content -Raw -LiteralPath $candidate | ConvertFrom-Json
+          if ([string]$package.version -ceq $ExpectedSkyVersion) {
+            Get-Item -LiteralPath $candidate
+          }
+        } catch {
+          # Ignore incomplete runtime package metadata and continue searching.
+        }
+      }
+    } |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 1 |
+    ForEach-Object FullName
+}
+if ([string]::IsNullOrWhiteSpace($sourcePackagePath)) {
+  $sourceSkyRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $sourceHelper))
+  $sourcePackagePath = Join-Path $sourceSkyRoot 'package.json'
+}
+$hasSourcePackage = Test-Path -LiteralPath $sourcePackagePath -PathType Leaf
+if ($hasSourcePackage) {
+  Assert-Equal ([string]((Get-Content -Raw -LiteralPath $sourcePackagePath | ConvertFrom-Json).version)) $ExpectedSkyVersion 'unexpected source @oai/sky version'
+}
+
+$tempBase = [IO.Path]::GetFullPath($(if ([string]::IsNullOrWhiteSpace($env:TEMP)) { [IO.Path]::GetTempPath() } else { $env:TEMP }))
+$testRoot = Join-Path $tempBase ('codex-cua-win10-helper-test-' + [guid]::NewGuid().ToString('N'))
+$resolvedTestRoot = [IO.Path]::GetFullPath($testRoot)
+if (-not $resolvedTestRoot.StartsWith($tempBase.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) {
+  throw "test root is outside TEMP: $resolvedTestRoot"
+}
+
+try {
+  $skyRoot = Join-Path $resolvedTestRoot 'bin\node_modules\@oai\sky'
+  $testHelper = Join-Path $skyRoot 'bin\windows\codex-computer-use.exe'
+  $codexHome = Join-Path $resolvedTestRoot 'codex-home'
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $testHelper) | Out-Null
+  Copy-Item -LiteralPath $sourceHelper -Destination $testHelper -Force
+  $testPackagePath = Join-Path $skyRoot 'package.json'
+  if ($hasSourcePackage) {
+    Copy-Item -LiteralPath $sourcePackagePath -Destination $testPackagePath -Force
+  } else {
+    [IO.File]::WriteAllText($testPackagePath, ('{"version":"' + $ExpectedSkyVersion + '"}'), [Text.UTF8Encoding]::new($false))
+  }
+
+  $before = Get-Status $testHelper $codexHome
+  Assert-Equal $before.State 'original-patchable' 'original state mismatch'
+  Assert-Equal $before.Sha256 $ExpectedOriginalHash 'original status hash mismatch'
+  if ($Profiles[$ProfileLabel].Contains('EndToEndValidatedDesktopVersion')) {
+    Assert-Equal $before.EndToEndValidatedDesktopVersion $Profiles[$ProfileLabel].EndToEndValidatedDesktopVersion 'pending capture acceptance must not be reported as end-to-end validated'
+  }
+
+  $candidateHash = @(& $Patcher -HelperPath $testHelper -CodexHome $codexHome -ComputeCandidateHash) | Select-Object -Last 1
+  Assert-Equal $candidateHash $ExpectedPatchedHash 'candidate hash mismatch'
+
+  $windowsBuild = Get-WindowsBuild
+  if ($windowsBuild -lt 22000) {
+    & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Install
+    $afterInstall = Get-Status $testHelper $codexHome
+    Assert-Equal $afterInstall.State 'patched' 'patched state mismatch'
+    Assert-Equal $afterInstall.Sha256 $ExpectedPatchedHash 'patched hash mismatch'
+    Assert-Equal (Get-FileHash -LiteralPath $afterInstall.BackupPath -Algorithm SHA256).Hash $ExpectedOriginalHash 'backup hash mismatch'
+
+    & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Install
+    Assert-Equal (Get-FileHash -LiteralPath $testHelper -Algorithm SHA256).Hash $ExpectedPatchedHash 'idempotent install changed the helper'
+
+    & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Rollback
+    Assert-Equal (Get-FileHash -LiteralPath $testHelper -Algorithm SHA256).Hash $ExpectedOriginalHash 'rollback hash mismatch'
+
+    & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Rollback
+    Assert-Equal (Get-FileHash -LiteralPath $testHelper -Algorithm SHA256).Hash $ExpectedOriginalHash 'idempotent rollback changed the helper'
+  } else {
+    $platformGuardRejected = $false
+    try {
+      & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Install
+    } catch {
+      $platformGuardRejected = $_.Exception.Message -eq "this profile is limited to Windows 10; detected build $windowsBuild"
+    }
+    Assert-Equal $platformGuardRejected $true 'Windows 11 fixture install bypassed the live platform guard'
+    Assert-Equal (Get-FileHash -LiteralPath $testHelper -Algorithm SHA256).Hash $ExpectedOriginalHash 'platform guard changed the helper'
+  }
+
+  $unknownBytes = [IO.File]::ReadAllBytes($testHelper)
+  $unknownBytes[$unknownBytes.Length - 1] = $unknownBytes[$unknownBytes.Length - 1] -bxor 1
+  [IO.File]::WriteAllBytes($testHelper, $unknownBytes)
+  $unknown = Get-Status $testHelper $codexHome
+  Assert-Equal $unknown.State 'unsupported' 'unknown hash state mismatch'
+
+  $unknownRejected = $false
+  try {
+    & $Patcher -HelperPath $testHelper -CodexHome $codexHome -Install
+  } catch {
+    $unknownRejected = $_.Exception.Message -like 'unsupported helper SHA-256:*'
+  }
+  Assert-Equal $unknownRejected $true 'unknown helper hash was not rejected'
+
+  Write-Output 'ALL_TESTS_PASSED'
+} finally {
+  if (Test-Path -LiteralPath $resolvedTestRoot -PathType Container) {
+    Remove-Item -LiteralPath $resolvedTestRoot -Recurse -Force -ErrorAction SilentlyContinue
+  }
+}

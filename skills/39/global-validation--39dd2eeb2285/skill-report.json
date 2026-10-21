@@ -1,0 +1,309 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-09T11:23:50.303Z",
+    "slug": "devanb-global-validation",
+    "source_url": "https://github.com/DevanB/lucidlog/tree/master/.claude/skills/global-validation",
+    "source_ref": "master",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "12efc64dab3cc67c58adad933595b5b15c97547604bd83e8c7310f370a7cea6c",
+    "tree_hash": "a89fa118e2b2b1b07f575fbd56f0702e7517e90fc6af1c922846900b0461c389",
+    "provenance": {
+      "model_requested": "gpt-5.5:high",
+      "model_effective": "codex:gpt-5.5:high",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "model": "gpt-5.5",
+          "effort": "high",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "global-validation",
+    "description": "Provides guidance for secure input validation across forms, APIs, services, and background jobs. It emphasizes allowlists, type checks, sanitization, clear errors, and server-side enforcement.",
+    "summary": "Guide secure server-side validation across application entry points.",
+    "icon": "📦",
+    "version": "1.0.0",
+    "author": "DevanB",
+    "license": "MIT",
+    "category": "security",
+    "tags": [
+      "validation",
+      "input-sanitization",
+      "server-side-validation",
+      "api-security",
+      "laravel"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands",
+      "filesystem"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "safe",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "Two static findings are false positives: markdown code formatting and a business validation example. The parent-directory markdown link is confirmed because it directs use of a file outside the packaged skill boundary.",
+    "remediation": [
+      {
+        "issue": "Out-of-package standards reference",
+        "suggestion": "Package the referenced validation guidance inside the skill, or replace the parent-directory link with inline instructions.",
+        "severity": "high"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ]
+      },
+      {
+        "factor": "filesystem",
+        "evidence": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 12,
+        "line_end": 12,
+        "snippet": "- When creating form request classes in `app/Http/Requests/` for validation logic"
+      },
+      {
+        "id": "filesystem:SKILL.md:28:path-traversal-sequence",
+        "category": "filesystem",
+        "severity": "high",
+        "pattern": "Path traversal sequence",
+        "file": "SKILL.md",
+        "line_start": 28,
+        "line_end": 28,
+        "snippet": "[global validation](../../../agent-os/standards/global/validation.md)"
+      },
+      {
+        "id": "blocker:SKILL.md:20:system-reconnaissance",
+        "category": "blocker",
+        "severity": "low",
+        "pattern": "System reconnaissance",
+        "file": "SKILL.md",
+        "line_start": 20,
+        "line_end": 20,
+        "snippet": "- When implementing business rule validation (e.g., sufficient balance, valid date ranges)"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:SKILL.md:12:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 0.97,
+        "reason": "Line 12 contains markdown inline code for a Laravel directory path, not Ruby backtick execution. There is no command invocation or dynamic shell input."
+      },
+      {
+        "id": "filesystem:SKILL.md:28:path-traversal-sequence",
+        "verdict": "confirmed",
+        "confidence": 0.82,
+        "reason": "Line 28 links to ../../../agent-os/standards/global/validation.md outside the skill directory, and line 27 instructs readers to use it. This can cause out-of-package file access and makes marketplace review incomplete.",
+        "severity": "high"
+      },
+      {
+        "id": "blocker:SKILL.md:20:system-reconnaissance",
+        "verdict": "false_positive",
+        "confidence": 0.94,
+        "reason": "Line 20 describes business rule validation examples, such as balances and date ranges. It does not request system inventory, host discovery, or sensitive environment inspection."
+      }
+    ],
+    "semantic_findings": [],
+    "critical_findings": [],
+    "high_findings": [
+      {
+        "title": "Path traversal sequence",
+        "description": "[global validation](../../../agent-os/standards/global/validation.md)",
+        "locations": [
+          {
+            "file": "SKILL.md",
+            "line_start": 28,
+            "line_end": 28
+          }
+        ],
+        "review_kind": "capability",
+        "source_category": "filesystem",
+        "source_severity": "high",
+        "confidence": 0.82,
+        "confidence_reasoning": "Line 28 links to ../../../agent-os/standards/global/validation.md outside the skill directory, and line 27 instructs readers to use it. This can cause out-of-package file access and makes marketplace review incomplete."
+      }
+    ],
+    "medium_findings": [],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 1,
+    "total_lines": 29,
+    "audit_model": "codex",
+    "audited_at": "2026-07-09T11:23:50.303Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Strengthen Application Validation",
+    "value_statement": "Input validation gaps create security, data quality, and user experience problems. This skill guides secure validation rules, sanitization, error messages, and consistency across entry points.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "server-side validation",
+      "input validation",
+      "allowlist validation",
+      "input sanitization",
+      "Laravel form requests",
+      "API validation",
+      "secure validation"
+    ],
+    "actual_capabilities": [
+      "Guides creation of server-side validation for forms, APIs, controllers, services, and background jobs.",
+      "Encourages allowlist-based rules for accepted types, formats, ranges, and required fields.",
+      "Covers input sanitization concerns for SQL injection, XSS, and command injection.",
+      "Promotes specific validation error messages that help users correct invalid input.",
+      "Includes validation considerations for file uploads, custom validators, and business rules."
+    ],
+    "limitations": [
+      "The packaged skill is brief and delegates detailed standards to an external relative file.",
+      "It does not include ready-to-run validation code or tests.",
+      "It does not define framework-specific rule syntax beyond the Laravel request path example.",
+      "It cannot replace threat modeling, security testing, or product-specific business rule review."
+    ],
+    "use_cases": [
+      {
+        "title": "Secure API Input",
+        "description": "Design validation for request payloads before controller, service, or persistence logic uses submitted data.",
+        "target_user": "Backend engineer"
+      },
+      {
+        "title": "Improve Form Validation",
+        "description": "Add clear server-side rules and user-facing messages while keeping client-side checks as a usability layer.",
+        "target_user": "Full-stack developer"
+      },
+      {
+        "title": "Standardize Validation Reviews",
+        "description": "Review validation coverage across forms, APIs, uploads, custom validators, and background jobs.",
+        "target_user": "Engineering lead"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Add Basic Rules",
+        "prompt": "Use global-validation to add server-side validation for this form. Include required fields, type checks, allowlists, and clear error messages.",
+        "scenario": "Beginner form validation"
+      },
+      {
+        "title": "Validate API Input",
+        "prompt": "Use global-validation to validate this API endpoint. Cover payload shape, allowed values, ranges, sanitization needs, and failure messages.",
+        "scenario": "Intermediate API work"
+      },
+      {
+        "title": "Audit Existing Rules",
+        "prompt": "Use global-validation to review these validation rules. Identify missing server-side checks, weak allowlists, vague errors, and unvalidated entry points.",
+        "scenario": "Advanced validation review"
+      },
+      {
+        "title": "Design Validation Coverage",
+        "prompt": "Use global-validation to design a validation plan for forms, APIs, uploads, background jobs, and business rules in this feature.",
+        "scenario": "Advanced cross-entry planning"
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Validate a user registration form.",
+        "output": [
+          "Required name, email, password, and consent fields are checked on the server.",
+          "Email format and password length rules are explicit.",
+          "Each failure message explains the specific field problem."
+        ]
+      },
+      {
+        "input": "Review validation for a file upload endpoint.",
+        "output": [
+          "Allowed file types, maximum size, and required metadata are defined.",
+          "Server-side checks run before storage or processing.",
+          "Error messages tell users which upload rule failed."
+        ]
+      },
+      {
+        "input": "Plan validation for a payment transfer request.",
+        "output": [
+          "Amount, currency, account identifiers, and date ranges are validated.",
+          "Business rules check available balance and transfer limits.",
+          "Invalid requests fail before any account state changes."
+        ]
+      }
+    ],
+    "best_practices": [
+      "Apply validation on the server for every entry point, even when client-side checks exist.",
+      "Use allowlists for accepted values, file types, formats, and ranges.",
+      "Write specific error messages that help users fix one field at a time."
+    ],
+    "anti_patterns": [
+      "Relying only on client-side validation for security decisions.",
+      "Accepting broad free-form values when a defined allowlist is possible.",
+      "Returning vague validation errors that hide which field failed."
+    ],
+    "faq": [
+      {
+        "question": "Which AI tools can use this skill?",
+        "answer": "The report marks it as compatible with Claude, Codex, and Claude Code."
+      },
+      {
+        "question": "Is this a validation library?",
+        "answer": "No. It is guidance for adding and reviewing validation in application code."
+      },
+      {
+        "question": "Does it enforce validation automatically?",
+        "answer": "No. You still need to implement rules, sanitization, error handling, and tests in your project."
+      },
+      {
+        "question": "Can it help with Laravel projects?",
+        "answer": "Yes. The skill mentions form request classes and general validation across controllers, services, and APIs."
+      },
+      {
+        "question": "Does it cover sanitization?",
+        "answer": "Yes. It includes sanitization concerns for SQL injection, XSS, and command injection."
+      },
+      {
+        "question": "What should authors fix before publishing?",
+        "answer": "They should package the referenced standards or replace the parent-directory link with inline guidance."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 29
+    }
+  ]
+}

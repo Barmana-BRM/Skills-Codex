@@ -1,0 +1,364 @@
+{
+  "schema_version": "2.0",
+  "meta": {
+    "generated_at": "2026-07-23T23:45:19.318Z",
+    "slug": "sickn33-git-pushing",
+    "source_url": "https://github.com/sickn33/antigravity-awesome-skills/tree/main/skills/git-pushing",
+    "source_ref": "main",
+    "model": "codex",
+    "analysis_version": "3.0.0",
+    "source_type": "community",
+    "content_hash": "32a3795818eaa3bf4e46f30fc296fe1568a9ae4b9ca01f478bac150e7eb4bec6",
+    "tree_hash": "9e6e0206a086ad95fc834a3812020cc764ab896beec333d553663a8a48470cf6",
+    "provenance": {
+      "model_effective": "codex",
+      "fallback_chain": [
+        {
+          "agent": "codex",
+          "outcome": "success"
+        }
+      ],
+      "analysis_version": "3.0.0"
+    }
+  },
+  "skill": {
+    "name": "git-pushing",
+    "description": "Stages all unignored changes, creates a Git commit, and pushes the current branch to origin with upstream tracking.",
+    "summary": "Commit and push all current Git changes through one scripted workflow.",
+    "icon": "📦",
+    "author": "sickn33",
+    "license": "MIT",
+    "category": "devops",
+    "tags": [
+      "git",
+      "commit",
+      "push",
+      "automation"
+    ],
+    "supported_tools": [
+      "claude",
+      "codex",
+      "claude-code"
+    ],
+    "risk_factors": [
+      "external_commands"
+    ]
+  },
+  "security_audit": {
+    "risk_level": "medium",
+    "is_blocked": false,
+    "safe_to_publish": true,
+    "analysis_status": "ok",
+    "summary": "The five static alerts are false positives because they identify code fences, an interpreter declaration, and a hardcoded Git branch lookup. The workflow still has medium operational risk because it stages every unignored change and pushes to origin without review or confirmation.",
+    "remediation": [
+      {
+        "issue": "Bulk staging can include sensitive or unrelated files.",
+        "suggestion": "Show Git status and diff, stage selected paths, and require confirmation before committing and pushing.",
+        "severity": "medium"
+      },
+      {
+        "issue": "The script pushes the current branch to origin automatically.",
+        "suggestion": "Display the resolved remote and branch, then require explicit confirmation before Git push.",
+        "severity": "medium"
+      }
+    ],
+    "risk_factor_evidence": [
+      {
+        "factor": "external_commands",
+        "evidence": [
+          {
+            "file": "scripts/smart_commit.sh",
+            "line_start": 14,
+            "line_end": 14
+          },
+          {
+            "file": "scripts/smart_commit.sh",
+            "line_start": 1,
+            "line_end": 1
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 25,
+            "line_end": 27
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 27,
+            "line_end": 31
+          },
+          {
+            "file": "SKILL.md",
+            "line_start": 31,
+            "line_end": 33
+          }
+        ]
+      }
+    ],
+    "static_findings": [
+      {
+        "id": "external_commands:scripts/smart_commit.sh:14:shell-command-substitution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Shell command substitution",
+        "file": "scripts/smart_commit.sh",
+        "line_start": 14,
+        "line_end": 14,
+        "snippet": "BRANCH=$(git rev-parse --abbrev-ref HEAD)"
+      },
+      {
+        "id": "external_commands:scripts/smart_commit.sh:1:unix-shell-invocation",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Unix shell invocation",
+        "file": "scripts/smart_commit.sh",
+        "line_start": 1,
+        "line_end": 1,
+        "snippet": "#!/bin/bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 25,
+        "line_end": 27,
+        "snippet": "```bash"
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 27,
+        "line_end": 31,
+        "snippet": "```"
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "category": "external_commands",
+        "severity": "medium",
+        "pattern": "Ruby/shell backtick execution",
+        "file": "SKILL.md",
+        "line_start": 31,
+        "line_end": 33,
+        "snippet": "```bash"
+      }
+    ],
+    "finding_verdicts": [
+      {
+        "id": "external_commands:scripts/smart_commit.sh:14:shell-command-substitution",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "The substitution runs a fixed Git command and captures the current branch. No user-controlled text enters the command, and the result is quoted when used."
+      },
+      {
+        "id": "external_commands:scripts/smart_commit.sh:1:unix-shell-invocation",
+        "verdict": "false_positive",
+        "confidence": 0.99,
+        "reason": "This line is only the Bash interpreter declaration. It does not construct a command from untrusted input or create an independent execution risk."
+      },
+      {
+        "id": "external_commands:SKILL.md:25:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The snippet is a Markdown code-fence marker, not Ruby backtick execution. It only introduces a documented Bash command."
+      },
+      {
+        "id": "external_commands:SKILL.md:27:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The snippet is a closing Markdown code fence. It is documentation syntax and cannot execute a shell command."
+      },
+      {
+        "id": "external_commands:SKILL.md:31:ruby-shell-backtick-execution",
+        "verdict": "false_positive",
+        "confidence": 1,
+        "reason": "The snippet is a Markdown code-fence marker for the custom-message example. It is not executable Ruby or shell backtick syntax."
+      }
+    ],
+    "semantic_findings": [
+      {
+        "title": "Unreviewed Bulk Commit and Remote Push",
+        "description": "The script stages every unignored change, commits it, and pushes the current branch to origin without a diff review or confirmation. This can publish secrets, unrelated files, or unintended code.",
+        "severity": "medium",
+        "locations": [
+          {
+            "file": "scripts/smart_commit.sh",
+            "line_start": 8,
+            "line_end": 17
+          }
+        ],
+        "confidence": 0.98,
+        "confidence_reasoning": "The code directly runs git add, git commit, and git push in sequence. No review or confirmation step appears between these operations."
+      }
+    ],
+    "critical_findings": [],
+    "high_findings": [],
+    "medium_findings": [
+      {
+        "title": "Unreviewed Bulk Commit and Remote Push",
+        "description": "The script stages every unignored change, commits it, and pushes the current branch to origin without a diff review or confirmation. This can publish secrets, unrelated files, or unintended code.",
+        "locations": [
+          {
+            "file": "scripts/smart_commit.sh",
+            "line_start": 8,
+            "line_end": 17
+          }
+        ],
+        "review_kind": "security",
+        "source_category": "semantic",
+        "source_severity": "medium",
+        "confidence": 0.98,
+        "confidence_reasoning": "The code directly runs git add, git commit, and git push in sequence. No review or confirmation step appears between these operations."
+      }
+    ],
+    "low_findings": [],
+    "dangerous_patterns": [],
+    "files_scanned": 2,
+    "total_lines": 61,
+    "audit_model": "codex",
+    "audited_at": "2026-07-23T23:45:19.318Z",
+    "agent_auto_install_policy": "allowed",
+    "manual_install_policy": "allowed"
+  },
+  "content": {
+    "user_title": "Commit and Push Git Changes",
+    "value_statement": "Committing and publishing routine changes can require several Git commands. This skill stages all changes, creates one commit, and pushes the current branch.",
+    "seo_keywords": [
+      "Claude",
+      "Codex",
+      "Claude Code",
+      "Git push automation",
+      "Git commit workflow",
+      "conventional commits",
+      "branch upstream tracking",
+      "developer productivity",
+      "repository automation"
+    ],
+    "actual_capabilities": [
+      "Stages all unignored changes in the current repository.",
+      "Creates a commit using a supplied message.",
+      "Uses chore: update code when no message is supplied.",
+      "Detects the currently checked-out branch.",
+      "Pushes the branch to origin and sets upstream tracking."
+    ],
+    "limitations": [
+      "It stages every unignored change and cannot select individual files.",
+      "It does not inspect diffs, run tests, or request confirmation.",
+      "It requires Git, an origin remote, and valid push credentials.",
+      "It stops when commits, hooks, authentication, or pushes fail."
+    ],
+    "use_cases": [
+      {
+        "title": "Publish a Small Fix",
+        "description": "Commit and push a completed fix from the current branch.",
+        "target_user": "Individual developer"
+      },
+      {
+        "title": "Share Team Progress",
+        "description": "Push a reviewed feature branch with a specific conventional commit message.",
+        "target_user": "Software team member"
+      },
+      {
+        "title": "Automate Routine Updates",
+        "description": "Publish generated or maintenance changes through a consistent Git command sequence.",
+        "target_user": "Repository maintainer"
+      }
+    ],
+    "prompt_templates": [
+      {
+        "title": "Push Current Work",
+        "prompt": "Commit and push my current changes using the default message.",
+        "scenario": "Use after reviewing a small set of repository changes."
+      },
+      {
+        "title": "Use a Commit Message",
+        "prompt": "Commit and push all current changes with the message fix: correct login redirect.",
+        "scenario": "Use when the commit purpose is already clear."
+      },
+      {
+        "title": "Publish a Feature Branch",
+        "prompt": "Push this feature branch with the message feat: add account export.",
+        "scenario": "Use when publishing a completed feature to origin."
+      },
+      {
+        "title": "Complete a Reviewed Release Update",
+        "prompt": "Commit and push the reviewed release changes with the message chore: prepare version 2.4.0.",
+        "scenario": "Use after validating all staged content, remote settings, and branch protections."
+      }
+    ],
+    "output_examples": [
+      {
+        "input": "Commit and push with the message fix: handle empty search results.",
+        "output": "All unignored changes were committed and the current branch was pushed to origin."
+      },
+      {
+        "input": "Push my current work using the default message.",
+        "output": "The changes were committed as chore: update code and the branch was pushed with upstream tracking."
+      },
+      {
+        "input": "Push these changes when origin rejects the branch.",
+        "output": "The push failed, and the script stopped with the Git error for manual resolution."
+      }
+    ],
+    "best_practices": [
+      "Inspect Git status and the complete diff before invoking the skill.",
+      "Ensure .gitignore excludes credentials, local configuration, and generated files.",
+      "Provide a specific conventional commit message that describes the reviewed changes."
+    ],
+    "anti_patterns": [
+      "Do not run the skill with unrelated or unreviewed worktree changes.",
+      "Do not use it when the current branch or origin remote is uncertain.",
+      "Do not expect it to resolve hooks, conflicts, authentication, or branch protection failures."
+    ],
+    "faq": [
+      {
+        "question": "Which files does the skill stage?",
+        "answer": "It stages every unignored change under the current repository."
+      },
+      {
+        "question": "Can I provide a commit message?",
+        "answer": "Yes. Supply the complete message when requesting the commit and push."
+      },
+      {
+        "question": "What message is used by default?",
+        "answer": "The script uses chore: update code when no message is provided."
+      },
+      {
+        "question": "Which branch is pushed?",
+        "answer": "The script detects and pushes the currently checked-out branch."
+      },
+      {
+        "question": "Which remote receives the push?",
+        "answer": "The script always pushes to the remote named origin."
+      },
+      {
+        "question": "Does the skill run tests or review changes?",
+        "answer": "No. Review the diff and run required validation before invoking it."
+      }
+    ]
+  },
+  "file_structure": [
+    {
+      "name": "scripts",
+      "type": "dir",
+      "path": "scripts",
+      "children": [
+        {
+          "name": "smart_commit.sh",
+          "type": "file",
+          "path": "scripts/smart_commit.sh",
+          "lines": 20
+        }
+      ]
+    },
+    {
+      "name": "SKILL.md",
+      "type": "file",
+      "path": "SKILL.md",
+      "lines": 41
+    }
+  ]
+}
